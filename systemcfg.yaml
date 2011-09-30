@@ -1,0 +1,37 @@
+---
+Nodes:
+   - id          : mds1 
+     ip          : 192.168.200.102    
+     ctrlproto   : ssh
+     user        : root
+     pass        : Xyratex
+
+   - id           : oss1
+     ip           : 192.168.200.110
+     ctrlproto    : ssh
+     user         : root
+     pass         : Xyratex
+
+#   - id          : oss2
+#     ip          : 192.168.200.1
+#     ssh_user    : root
+#     ssh_pass    : Xyratex
+
+   - id           : client1
+     ip           : 192.168.200.150
+     ctrlproto    : ssh
+     user         : root
+     pass         : Xyratex
+
+LustreObjects:
+   - id          :
+     device      :
+     node        : mds1
+     type        : mds
+
+   - id          :
+     device      :
+     node        : client1
+     type        : client
+
+

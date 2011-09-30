@@ -1,0 +1,16 @@
+---
+groupname        : sanity
+executor         : 
+description      : Lustre sanity tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : -1
+timeout          : -1
+cleanup_max_time : -1
+options          : 
+
+Tests:
+   - id               : 1a 
+     tags             : sanity 
+
+
+

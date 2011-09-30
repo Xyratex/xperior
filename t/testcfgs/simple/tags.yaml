@@ -1,0 +1,10 @@
+---
+tags:
+    - id          : performance.io
+      name        : I/O Performance 
+      description : typical clustered filesystem performance benchmarks. Test subtypes: shared-single-file, file-per-process
+
+    - id          : performance.md 
+      name        : Metadata performance
+      description : Test subtypes by operation and pattern (eg: directory-per-client create, shared directory create)
+

@@ -1,0 +1,16 @@
+---
+groupname        : IOZone
+description      : benchmark for generating and measuring a variety of file operations. ideal for performing single client I/O throughput
+reference        : http://www.iozone.org/
+
+Tests:
+   - id               : IOZone 
+     description      : benchmark for generating and measuring a variety of file operations
+     expected_time    : -1
+     timeout          : -1
+     cleanup_max_time : -1
+     cmd              :  iozone  -x -C -R  -s 8g -r 1m -i 0 -i 1 -+n -+m lustre-clients.txt -l 1 -u 20 
+     tags             : performance.io
+
+
+

@@ -1,0 +1,16 @@
+---
+groupname        : sanity
+executor         : XTests::Executor::Noop
+description      : Lustre sanity tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10
+timeout          : -1
+cleanup_max_time : -1
+options          : 
+tags             : sanity 
+
+Tests:
+   - id               : 1 
+   - id               : 2 
+
+
