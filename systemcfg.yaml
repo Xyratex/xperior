@@ -24,14 +24,26 @@ Nodes:
      pass         : Xyratex
 
 LustreObjects:
-   - id          :
-     device      :
+   - id          : mds1 
+     device      : /dev/sda1
      node        : mds1
      type        : mds
+   
+   - id          : oos1 
+     device      : /dev/sda1
+     node        : oss1
+     type        : oss
 
-   - id          :
-     device      :
+   - id          : client1
      node        : client1
      type        : client
+     master      : yes 
 
 
+   - id          : client2
+     node        : mds1 
+     type        : client
+
+#Variables
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile

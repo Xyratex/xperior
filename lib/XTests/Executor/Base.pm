@@ -3,34 +3,50 @@
 #
 #         FILE:  Base.pm
 #
-#  DESCRIPTION:  
+#  DESCRIPTION:  Base class for execute tests 
 #
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
 #       AUTHOR:  ryg 
-#      COMPANY:  
+#      COMPANY:  Xyratex 
 #      VERSION:  1.0
 #      CREATED:  09/30/2011 01:31:34 AM
-#     REVISION:  ---
 #===============================================================================
 package XTests::Executor::Base;
-#use YAML qw "Bless Dump";
 use Moose;
 use Data::Dumper;
-#use YAML::Dumper;
-#use TAP::Parser::YAMLish::Writer;
 use YAML::Tiny;
+use File::Path;
+use Log::Log4perl qw(:easy);
+use File::Copy;
 
+use XTests::SshProcess;
+
+our $EXT = '.yaml';
 has 'test'              => ( is => 'rw');
-has 'result'            => ( is => 'rw');
+has 'options'           => ( is => 'rw');
+has 'env'               => ( is => 'rw');
 has 'result_code'       => ( is => 'rw');
+has 'result'            => ( is => 'rw');
 has 'yaml'              => ( is => 'rw');
 
+has 'steptimeout'       => ( is => 'rw');#sec
+
+#TODO looks like nee t move to one class with execute
+has cmd                 => (is=>'rw');
+has appname             => (is=>'rw');
+has remote_out          => (is=>'rw');
+has remote_err          => (is=>'rw');
+
 sub init{
-    my $self = shift;
-    my $test = shift;
+    my ($self, $test, $opt, $env) = @_;
+    
+    $self->steptimeout(5);
+
     $self->{'test'} = $test;
+    $self->{'options'} = $opt;
+    $self->{'env'}     = $env;
+    foreach my $k ( @{$test->getParamNames}){
+        $self->addYE($k,$test->getParam($k));
+    }
 }
 
 sub addYE{
@@ -41,45 +57,63 @@ sub addYE{
 sub pass{
     my ($self,$msg)  = @_;
     if( defined $msg){
-        $msg = "#".$msg 
+        $msg = " #".$msg 
     }else{
         $msg='';
     }
-    $self->{'result'} ="ok 1 $msg"; 
+    $self->{'result'} ="ok 1$msg"; 
     $self->{'result_code'} = 0;
+    $self->yaml->{'status'} = 'passed';
+    $self->yaml->{'status_code'} = 0;
 }
 
 sub fail{
     my ($self,$msg)  = @_;
     if( defined $msg){
-        $msg = "#".$msg 
+        $msg = " #".$msg 
     }else{
         $msg='';
     }
-    $self->{'result'} ="not ok 1 $msg" ;
+    $self->{'result'} ="not ok 1$msg" ;
     $self->{'result_code'} = 1;
+    $self->yaml->{'status'} = 'failed';
+    $self->yaml->{'status_code'} = 1;  
 }
 
-
-sub addLogFile{
+sub registerLogFile{
     my ($self,$key,$path)  = @_;
-    confess("Not implemented");
+    $self->addYE('log.'.$key,$path); 
+}
+
+#TODO add tests!
+sub normalizeLogPlace{
+    my ($self,$lfile,$key)  = @_;
+    move "$lfile", 
+            $self->_resourceFilePrefix."$key.log";
+}
+
+sub getNormalizedLogName{
+    my ($self,$key)  = @_;
+    $self->_createDir;
+    return $self->_resourceFilePrefix."$key.log";    
 }
 
 sub createLogFile{
-    my ($self,$key,$path)  = @_;
-    confess("Not implemented");
-    #return FD;
+    my ($self,$key)  = @_;
+    my $file = $self->_resourceFilePrefix."$key.log";
+
+    $self->_createDir;
+    my $fd;
+    open $fd, "> $file"  or confess "Cannot log  file[$file]:" . $!;
+    $self->registerLogFile($key,$file);
+    return $fd;
 }
 
 sub tap{
     my $self = shift;
-    #print STDERR "******\n".Dumper $self->{'yaml'};
     $self->addYE('result',$self->result);
-    #my $dumper = TAP::Parser::YAMLish::Writer->new;
     my $yaml='';
-    #$dumper->write($self->{'yaml'}, \$yaml );
-    $yaml = Dump($self->{'yaml'});
+    $yaml = Dump($self->yaml);
     my $out=
         "TAP version 13\n".
         "1..1\n".
@@ -87,6 +121,50 @@ sub tap{
         $yaml;
 }
 
+sub write{
+     my $self = shift;
+     my $file = $self->_reportFile;
+     $self->_createDir;
+     $self->addYE('result',     $self->result);
+     $self->addYE('result_code',$self->result_code);
+     open REP, "> $file" or confess "Cannot open report file:" . $!;
+     print REP Dump($self->yaml);
+     close REP;
+}
+
+=item * 
+Stub of execute test function. See implementations in child classes.
+=cut
+sub execute{
+    confess 'Functions is not implemented!';
+}
+
+
+
+sub _createDir{
+    my $self = shift;
+    if ( ! -d $self->_reportDir){
+        mkpath ($self->_reportDir); 
+    }
+}
+sub _reportDir{
+    my $self = shift;
+    return $self->options->{'workdir'}.'/'.
+           $self->test->getParam('groupname');
+}
+sub _reportFile{
+    my $self = shift;
+    return $self->_reportDir.'/'.
+           $self->test->getName.$EXT;
+}
+
+#TODO add test
+sub _resourceFilePrefix{
+    my $self = shift;
+    return $self->_reportDir.'/'.
+           $self->test->getName.'.';
+
+}
 __PACKAGE__->meta->make_immutable;
 
 1;

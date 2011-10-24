@@ -21,17 +21,16 @@ use YAML qw "Bless LoadFile Load";
 use Data::Dumper;
 use File::Find;
 use Moose;
-use MooseX::Storage;
+#use MooseX::Storage;
 use Carp qw( confess cluck );
 use File::Path;
 use File::chdir;
 use Module::Load;
 
-use TAP::Harness;
-use TAP::Formatter::YamlFiles;
 use XTests::Test;
 use XTests::TestEnvironment;
 
+our $VERSION = "0.0.1";
 
 has 'options'    => ( is => 'rw' );
 has 'tests'      => ( is => 'rw',isa => 'ArrayRef[]', );
@@ -39,54 +38,25 @@ has 'testgroups' => ( is => 'rw'  );
 has 'env'        => ( is => 'rw'  );
 
 
-sub runtest{
-    DEBUG "XTests::Core::runtest";
-    my ( $harness, $teststr, $args ) = @_;
-    #DEBUG "Ser data: $args";
-    my $test = XTests::Test->thaw($args);
-    DEBUG "Starting tests ".$test->getParam('id');
-    #DEBUG "Test is:". Dumper $test;
-    my $executor = createExecutor($test->getParam('executor'));
-    #XTests::Executor::LustreTests->new();
-    $executor->init($test);
-    return $executor->execute;
-     
-=begin  
-
-        <<TAP
-TAP version 13
-1..1
-ok 1 
----
-message: 'Failure message'
-client log: | 
-    == insanity test 0: Fail all nodes, independently == 12:30:06 (1313695806)
-    Failing mds1 on node mds
-    Stopping /mnt/mds1 (opts:)
-    affected facets: mds1
-    Failover mds1 to mds
-    12:30:23 (1313695823) waiting for mds network 900 secs ...
-    oss1: debug=0x33f0404
-    oss1: subsystem_debug=0xffb7e3ff
-    oss1: debug_mb=10
-    Started lustre-OST0001
-    Resetting fail_loc on all nodes...done.
-    PASS 0 (70s)    
-TAP
-=cut
-
-}
 sub createExecutor{
-#shift;
-    my $es = shift;
-    INFO "Loading module [$es]";
+    my ($self,$es) = @_;
+    DEBUG "Loading module [$es]";
     load $es;
     return $es->new;
 }
 
-##################################################
-# members
-##################################################
+sub runtest{
+    DEBUG "XTests::Core::runtest";
+    my ($self, $test ) = @_;
+    DEBUG "Starting tests ".$test->getParam('id');
+    #DEBUG "Test is:". Dumper $test;
+    my $executor = $self->createExecutor($test->getParam('executor'));
+    $executor->init($test, $self->options, $self->env);
+    $executor->execute;
+    $executor->write();
+    return $test->tap;
+}
+
 sub run {
     my $self    = shift;
     my $options = shift;
@@ -101,50 +71,28 @@ sub run {
     #TODO check tests applicability there
 
     #start testing
-    DEBUG "TAP Harness version is ". $TAP::Harness::VERSION;
-
-    #ENV{'PERL_TEST_HARNESS_DUMP_TAP'}='/tmp/wd';
     my @tests;
     my @rts = @{$self->{'tests'}};
     my %targs;
-    my $i=0;
     foreach my $test ( @rts ){
         DEBUG "Test = ".Dumper $test;
-        $tests[$i][0]     = $test->id;
-        $targs{$test->id} =   $test->freeze();
-        $tests[$i][1]     = $test->id;
-         $i++;
+        $self->runtest($test);
+        WARN 'TEST '.$test->getName .' STATUS: '.$test->results->{'status'};
     }
-    my %pargs= (
-        verbosity   => 1, #FIXME - fix Session to put YAML not only in Verbose case
-        timer       => 1,
-        show_count  => 1,
-        exec        => \&runtest ,
-        formatter_class => 'TAP::Formatter::YamlFiles',
-        #formatter_class => 'TAP::Formatter::HTML',
-        #stdout     => $REPORT,
-        workdir     => '/tmp/',
-        test_args   => \%targs, 
-    );
-    
-    #DEBUG "Tests before testing start:".Dumper \@tests;
-    #DEBUG "\n\n\nTests args  before testing start:". Dumper( \%pargs)."**********\n\n\n";
-    my $harness = TAP::Harness->new( \%pargs);
-    my $aggregate = $harness->runtests( @tests );
-    #print Dumper($aggregate);
-    #DEBUG Dumper $harness;
 }
 
 sub loadEnvCfg{
     DEBUG 'XTests::Core->loadEnvCfg';
     my $self  = shift;
-    my $fn = 'systemcfg.yaml';
+    my $fn    = shift;
+    $fn = 'systemcfg.yaml' unless defined $fn;
     INFO "Load env configuration file [ $fn ]";
     my $envcfg = LoadFile( $fn ) or confess $!;
-    DEBUG Dumper $envcfg;  
-    my $env = XTests::TestEnvironment->new;
+    #DEBUG Dumper $envcfg;  
+    my $env = undef;
+    $env = XTests::TestEnvironment->new;
     $env->init($envcfg);
-    DEBUG Dumper $env; 
+    #DEBUG Dumper $env; 
     return $env;
 }
 
@@ -175,7 +123,7 @@ sub loadTests{
        }
     }
    
-    #DEBUG 'Load tests result:'. Dumper \@tests ;
+    DEBUG 'Load tests result:'. Dumper \@tests ;
     return  \@tests ;
 }
 

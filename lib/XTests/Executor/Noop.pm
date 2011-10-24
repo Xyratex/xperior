@@ -16,7 +16,7 @@
 #===============================================================================
 package XTests::Executor::Noop;
 use Moose;
-extends 'XTests::Executor::Base';
+extends 'XTests::Executor::SingleProcessBase';
 
 our $VERSION = '0.01';
 

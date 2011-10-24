@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
-package CoreTest;
+package core;
+use strict;
 
 use Test::Able;
 use Test::More;
@@ -9,41 +10,35 @@ use Data::Dumper;
 
 my %options = ( 
     testdir => 't/testcfgs/simple/',
+    workdir => '/tmp/test_wd/',
 );
 my $testcore; 
+
 startup         some_startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
 setup           some_setup    => sub { 
     $testcore =  XTests::Core->new();
-    my %options = ( 
-        testdir => 't/testcfgs/simple/',
-    );
     $testcore->options(\%options);
 };
 
 
+
 ##################################################
-test plan => 1, yCheckRuntest          => sub {
+test plan => 1, fCheckRuntest          => sub {
     my @tests = @{$testcore->loadTests};
     #DEBUG "Executing tests";
-    my $tap = XTests::Core::runtest('harness', 'testfile',$tests[1]->freeze);
+    my $tap = $testcore->runtest($tests[1]);
     DEBUG "TAP:\n" . $tap;
-my $exp = <<TAP
-TAP version 13
-1..1
-not ok 1 
----
-message: 'Noop engine, empty test '
-testid: 2
-TAP
-;
-is($tap,$exp);
+    SKIP: {
+        skip('Not finished',1);
+        fail('TBI');
+    };
 };
 
 
 ################################################
-test plan => 1, CheckTags           => sub {
+test plan => 1, cCheckTags           => sub {
     my $cfg = $testcore->loadTags;
     my @expected =  (
                     {
@@ -57,29 +52,28 @@ test plan => 1, CheckTags           => sub {
                       'description' => 'Test subtypes by operation and pattern (eg: directory-per-client create, shared directory create)'
                     }
 );
-    is_deeply($cfg,\@expected);
+    is_deeply($cfg,\@expected, 'Check tags');
 };
 
 #################################################
-test  plan => 5, xCheckTests           => sub {
+test  plan => 5, dCheckTests           => sub {
     my @tests = @{$testcore->loadTests};
     my $tn = @tests;
-    ok ( $tn == 2 );
-    ok ( $tests[0]->getParam('id') == 1 );
-    ok ( $tests[0]->getParam('expected_time') == 10 );
-
-
-    ok ( $tests[1]->getParam('id') == 2 );
-    ok ( $tests[1]->getParam('groupname') eq 'sanity' );
+    is ( $tn, 2, 'Check test number' );
+    is ( $tests[0]->getParam('id'), 1, 'Check id');
+    is ( $tests[0]->getParam('expected_time'), 10, 'Check ex time');
+    is ( $tests[1]->getParam('id'), 2 , 'Check id');
+    is ( $tests[1]->getParam('groupname'), 'sanity' ,
+                                        'Check groupname');
     diag( "2 groupname = ". $tests[1]->getParam('groupname') );
 };
 
 ##################################################
-test plan => 1, xCheckCreateExecutor    => sub {
+test plan => 1, dCheckCreateExecutor    => sub {
 
-    my $exe = XTests::Core::createExecutor('XTests::Executor::Noop');
+    my $exe = $testcore->createExecutor('XTests::Executor::Noop');
     diag("Class reference:$exe");
-    isa_ok( $exe, 'XTests::Executor::Noop' );
+    isa_ok( $exe, 'XTests::Executor::Noop', 'Check module loading' );
 };
 
 ##################################################
@@ -87,5 +81,5 @@ test plan => 1, xCheckCreateExecutor    => sub {
 teardown        some_teardown => sub { };
 shutdown        some_shutdown => sub {  };
 
-CoreTest->run_tests;
+core->run_tests;
 
