@@ -1,0 +1,60 @@
+---
+Nodes:
+   - id          : mds1 
+     ip          : 192.168.200.102    
+     ctrlproto   : ssh
+     user        : root
+     pass        : Xyratex
+
+   - id           : oss1
+     ip           : 192.168.200.110
+     ctrlproto    : ssh
+     user         : root
+     pass         : Xyratex
+
+#   - id          : oss2
+#     ip          : 192.168.200.1
+#     ssh_user    : root
+#     ssh_pass    : Xyratex
+
+   - id           : client1
+     ip           : lclient 
+#     ip           : 192.168.200.150
+     ctrlproto    : ssh
+     user         : root 
+     pass         : Xyratex
+
+   - id           : client2
+     ip           : mds 
+#     ip           : 192.168.200.102
+     ctrlproto    : ssh
+     user         : ryg
+     pass         : Xyratex
+
+
+
+
+LustreObjects:
+   - id          : mds1 
+     device      : /dev/sda1
+     node        : mds1
+     type        : mds
+   
+   - id          : oos1 
+     device      : /dev/sda1
+     node        : oss1
+     type        : oss
+
+   - id          : client1
+     node        : client1
+     type        : client
+     master      : yes
+
+   - id          : client2
+     node        : client2
+     type        : client
+
+#Variables
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile
+

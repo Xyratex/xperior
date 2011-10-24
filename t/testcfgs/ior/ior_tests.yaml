@@ -1,0 +1,14 @@
+---
+groupname        : ior 
+executor         : XTests::Executor::IOR
+description      : IOR tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 60
+timeout          : 300 
+cleanup_max_time : -1
+iorcmd           : /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_point@/@test_file@
+tags             : benchmark ior 
+
+Tests:
+   - id               : test1 
+
