@@ -1,3 +1,7 @@
+lib/XTests
+lib/XTests/Executor
+t/testcfgs
+t/testcfgs/simple
 systemcfg.yaml
 Changes
 Makefile.PL
@@ -12,7 +16,6 @@ lib/XTests/TestEnvironment.pm
 lib/XTests/Executor
 lib/XTests/Executor/Base.pm
 lib/XTests/Executor/SingleProcessBase.pm
-lib/XTests/Executor/LustreTests.pm
 lib/XTests/Executor/Noop.pm
 lib/XTests/Utils.pm
 lib/XTests/SshProcess.pm
@@ -28,4 +31,3 @@ t/testcfgs/simple/tags.yaml
 t/core.t
 t/executors.t
 t/testenv.t
-t/lustreexec.t

@@ -18,7 +18,7 @@
 package XTests::Node;
 
 use Moose;
-use Test::Net::Service;
+#use Test::Net::Service;
 use Net::Ping;
 use Log::Log4perl qw(:easy);
 
@@ -34,6 +34,7 @@ has 'id'           => ( is => 'rw' );
 sub isReachable{
     my $self = shift;
     #TODO only ssh now is supported
+=item *
     my $host = $self->{'ip'};
     my $net_service = Test::Net::Service->new(
                 'host'  => $host,
@@ -50,6 +51,7 @@ sub isReachable{
 
 
     DEBUG "SSH check for [$host]:$res";
+=cut
 }
 
 sub ping {

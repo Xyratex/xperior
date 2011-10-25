@@ -23,6 +23,7 @@ use Carp;
 
 use XTests::Test;
 use XTests::SshProcess;
+use XTests::Utils;
 
 my $sp;
 
@@ -64,8 +65,8 @@ test plan => 3, eCreateAliveExit    => sub {
 test plan => 4, cInit    => sub {
     is($sp->host,'localhost','host');
     is($sp->user,'ryg','user');
-    is($sp->hostname,'wombat','Check on host hostname');
-    is($sp->osversion,'Linux wombat 2.6.38-11-generic #50-Ubuntu SMP Mon Sep 12 21:17:25 UTC 2011 x86_64 x86_64 x86_64 GNU/Linux','Check os version');
+    is($sp->hostname,trim `hostname`,'Check on host hostname');
+    is($sp->osversion, trim`uname -a`,'Check os version');
     #is($exe->getClients,1, 'Check clients after adding');
 };
 

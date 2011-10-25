@@ -14,7 +14,6 @@
 package XTests::Executor::SingleProcessBase;
 use Moose;
 use Data::Dumper;
-use YAML::Tiny;
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;

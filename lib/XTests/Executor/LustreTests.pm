@@ -13,7 +13,6 @@
 package XTests::Executor::LustreTests;
 use Moose;
 use Data::Dumper;
-use MooseX::Storage;
 use Carp qw( confess cluck );
 
 extends 'XTests::Executor::Base';

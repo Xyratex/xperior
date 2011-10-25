@@ -122,5 +122,45 @@ if (-d $workdir) {
 my $testcore =  XTests::Core->new();
 $testcore->run(\%options);
 
+__END__
+# Documentation for runtest.pl (XTests).
 
+=head1 NAME
+
+runtest.pl is application for executing different tests via XTests harness. This application read yaml tests descriptions,check environmental conditions, read/gather cluster config data and run tests based on it. 
+
+=head1 SYNOPSIS
+
+  export PERL5LIB=....
+  perl runtest.pl <parameters>
+  Paramaters: 
+  run perl runtest.pl 
+
+=head1 DESCRIPTION
+
+TBD!
+
+Stub documentation, created by h2xs. It looks like the
+author of the extension was negligent enough to leave the stub
+unedited.
+
+Blah blah blah.
+
+=head2 EXPORT
+
+None by default.
+
+
+=head1 SEE ALSO
+
+
+=head1 AUTHOR
+
+ryg, E<lt>Roman_Grigoryev@xyratex.com<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2011 by ryg, Xyratex
+
+=cut
 

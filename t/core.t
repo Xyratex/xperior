@@ -29,9 +29,9 @@ test plan => 1, fCheckRuntest          => sub {
     my @tests = @{$testcore->loadTests};
     #DEBUG "Executing tests";
     my $tap = $testcore->runtest($tests[1]);
-    DEBUG "TAP:\n" . $tap;
+    #DEBUG "TAP:\n" . $tap;
     SKIP: {
-        skip('Not finished',1);
+        skip('Not finished, must be tested results from runtest',1);
         fail('TBI');
     };
 };

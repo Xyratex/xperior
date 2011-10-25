@@ -18,11 +18,11 @@
 package XTests::Test;
 use Moose;
 use Data::Dumper;
-use MooseX::Storage;
+#use MooseX::Storage;
 use Log::Log4perl;
 
 our $VERSION = '0.01';
-with Storage('format' => 'JSON', 'io' => 'File');
+#with Storage('format' => 'JSON', 'io' => 'File');
 
 
 has 'testcfg'              => ( is => 'rw');

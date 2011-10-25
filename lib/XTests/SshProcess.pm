@@ -77,7 +77,7 @@ sub init {
     $self->osversion($ver);
 }
 
-
+#TODO test on it
 sub _findPid{
     my $self   = shift;
     my $mode   = shift;
@@ -95,6 +95,7 @@ sub _findPid{
     return -1;
 }    
 
+
 sub create {
     my ($self,$name,$app) = @_;
     $self->appname($name);
@@ -109,7 +110,7 @@ sub create {
     my $rd = $self->_sshSyncExec("rm ".$self->pidfile );
     DEBUG "Del remote pid file: $rd";
     my $pf = $self->pidfile;
-
+#TODO test on creating pid file
 my $ss = <<"SS";
 $app &  
 pid=\\\$!  
@@ -118,6 +119,7 @@ echo pid:[\\\$pid] > $pf
 SS
     #FIXME add temp part to name 
     #      and clean code after execution
+    #TODO test on it
     my $tef = '/tmp/remote_exec'; 
     my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
     DEBUG "Starting ............";    
