@@ -1,7 +1,3 @@
-lib/XTests
-lib/XTests/Executor
-t/testcfgs
-t/testcfgs/simple
 systemcfg.yaml
 Changes
 Makefile.PL
@@ -10,7 +6,6 @@ README
 testds/testenv.yaml
 testds/tags.yaml
 bin/runtest.pl
-lib/XTests
 lib/XTests/Core.pm
 lib/XTests/TestEnvironment.pm
 lib/XTests/Executor
@@ -23,7 +18,6 @@ lib/XTests/Test.pm
 lib/XTests/TestSuite.pm
 lib/XTests/Node.pm
 t/sshprocess.t
-t/testcfgs
 t/testcfgs/testsystemcfg.yaml
 t/testcfgs/simple
 t/testcfgs/simple/sanity_tests.yaml

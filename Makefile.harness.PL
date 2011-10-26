@@ -2,6 +2,7 @@ use 5.010001;
 use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
+`cp MANIFEST.harness MANIFEST`;
 WriteMakefile(
     NAME              => 'XTests-harness',
     VERSION_FROM      => 'lib/XTests/Core.pm', # finds $VERSION
