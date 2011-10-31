@@ -1,0 +1,160 @@
+=pod
+
+=head1 XTests harness user guide
+
+=head2 Structure of /opt/xyratex/xtests folder
+
+=over  
+
+=item *
+
+B<bin>    - this perl application
+
+=item *
+
+B<lib>    - XTests perl libraries, for overriding use PERL5LIB env variable. runtest.pl script try to find it as C<../lib> from his location
+
+=item *
+
+B<doc>    - pod help files 
+
+=item *
+
+B<html>   - html documentation from pod files after package build
+
+=item *
+
+B<testds> - test descriptions, see explanation below. 
+
+=item *
+
+B<t>      - internal unit tests for XTests::Core, allow quickly test how harness work. Could be useful for test how work after installation.
+
+=item *
+
+B<systemcfg.yaml> - default location for file with tested system description, see explanation below. 
+
+=back
+
+=head2 Test descriptor
+
+Test descriptor file must be placed in test directory (see Synopsis section). It must be yaml file. 
+
+Sample test descriptor with explanation:
+
+ ---
+groupname        : ior 
+executor         : XTests::Executor::IOR
+description      : IOR tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 60
+timeout          : 300 
+cleanup_max_time : -1
+iorcmd           : /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_pointE@/@test_fileE@
+tags             : benchmark ior 
+Tests: 
+   - id               : test1 
+
+The file contains set of tags. Main entity is test, in this sample it is single element C<id> is C<Tests> array. Every test inherit vales from common description (fields which  described out of C<Tests> array). A test can override any field or add new fields. Supported fields divided into 2 groups: common fields and executor-specific fields. See alone executor specific field C<iorcmd>  in explanation below.
+
+=over
+
+=item *
+
+C<groupname>        - name of tests group. Used as directory for test results placement.
+
+=item *
+
+C<executor>         - full qualified perl module name which implements Executor interface.
+
+=item *
+
+C<descriptor> ,C<reference> - self-documentation tags
+
+=item *
+
+C<expected_time>    - expected time for test execution. If actual test execution need more time this will be pointed in result. Not implemented.
+
+=item *
+
+C<timeout>          - after this time execution will be killed
+
+=item *
+
+C<cleanup_max_time> - timeout for cleanup system for next test. Not implemented.
+
+=item *
+
+C<iorcmd>           - command for executing, specific parameter for XTests::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are variables from system configuration, see their definition in next section.
+
+=item *
+
+C<tags>             - test tags (labels), used for simple test filtering. See also C<testds/tags.yaml>. Not implemented.
+
+=item *
+
+C<Tests:>           - array of single tests
+
+=item *
+
+C<id>               - test id. Obligatory tests attribute which cannot be inherit.
+
+=back
+
+=head2 System descriptor
+
+B<Warning!> The system descriptor is not ended, it is possible that in future new test executor will need more info about system.
+
+Descriptor is yaml file, which have 2 parts: C<Nodes> array, C<LustreObjects> and system wide variables. TBD. 
+
+ Nodes:
+   - id          : mds1 
+     ip          : 192.168.200.102    
+     ctrlproto   : ssh
+     user        : root
+     pass        : Xyratex
+........................
+   - id           : client1
+     ip           : 192.168.200.150
+     ctrlproto    : ssh
+     user         : root
+     pass         : Xyratex
+LustreObjects:
+   - id          : mds1 
+     device      : /dev/sda1
+     node        : mds1
+     type        : mds
+   
+   - id          : oos1 
+     device      : /dev/sda1
+     node        : oss1
+     type        : oss
+
+   - id          : client1
+     node        : client1
+     type        : client
+     master      : yes 
+
+   - id          : client2
+     node        : mds1 
+     type        : client
+
+ #Variables
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile
+
+=head2 Executing test internals.
+
+TBD
+
+
+=head1 See also
+
+
+Many ideas get from L<http://en.wikipedia.org/wiki/Test_Anything_Protocol>  and perl test framework based on TAP. Internally harness use yaml part of tap and also can export full TAP output.
+
+Yaml specification there: L<http://www.yaml.org/>
+
+
+=cut
+

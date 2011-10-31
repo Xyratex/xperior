@@ -1,0 +1,34 @@
+=pod
+
+=head1 XTests harness developer guide
+
+System created on Perl language, with wide using additional modules from CPAN.
+
+=head2 Structure of /opt/xyratex/xtests/lib folder
+
+=over 
+
+=item *
+
+XTests - main classes and libraries are stored there
+
+=item *
+
+XTests::Executor - wrappers for specific tests are store there
+
+=back
+
+=head2 Class diagram
+ 
+=for html <hr> <img src="classes.png">
+<p> This is a raw HTML paragraph </p>
+
+=head1 See also
+
+L<http://en.wikipedia.org/wiki/Test_Anything_Protocol> 
+
+L<http://www.yaml.org/>
+
+L<http://cpan.org>
+
+=cut

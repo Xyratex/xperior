@@ -1,0 +1,31 @@
+#!/usr/bin/perl 
+#===============================================================================
+#
+#         FILE:  gendocs.pl
+#
+#  DESCRIPTION:  
+#
+#       AUTHOR:  ryg
+#      COMPANY:  Xyratex 
+#      CREATED:  10/29/2011 11:45:44 PM
+#===============================================================================
+
+use strict;
+use warnings;
+use Pod::ProjectDocs;
+
+`autodia.pl -d lib -r  -o html/classes.png -z -D -H`;
+
+my $pd = Pod::ProjectDocs->new(
+    outroot => 'html/',
+    libroot =>  ['bin', 'lib', 'doc'],
+    title   => 'XTests',
+    forcegen => 1,
+    desc   => 'XTests harness'
+);
+$pd->gen();
+
+#or use pod2projdocs on your shell
+#pod2projdocs -out /output/directory -lib /your/project/lib/root
+
+
