@@ -6,9 +6,9 @@ README
 testds/testenv.yaml
 testds/tags.yaml
 bin/runtest.pl
+bin/gendocs.pl
 lib/XTests/Core.pm
 lib/XTests/TestEnvironment.pm
-lib/XTests/Executor
 lib/XTests/Executor/Base.pm
 lib/XTests/Executor/SingleProcessBase.pm
 lib/XTests/Executor/Noop.pm
@@ -19,9 +19,11 @@ lib/XTests/TestSuite.pm
 lib/XTests/Node.pm
 t/sshprocess.t
 t/testcfgs/testsystemcfg.yaml
-t/testcfgs/simple
 t/testcfgs/simple/sanity_tests.yaml
 t/testcfgs/simple/tags.yaml
 t/core.t
 t/executors.t
 t/testenv.t
+testds/tags.yaml
+doc/XTestsDG.pod
+doc/XTestsUG.pod

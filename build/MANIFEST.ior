@@ -1,5 +1,6 @@
 t/iorexec.t
 t/testcfgs/ior/ior_tests.yaml
+t/testcfgs/testsystemcfg.yaml
 testds/ior_tests.yaml
 lib/XTests/Executor/IOR.pm
 MANIFEST

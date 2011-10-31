@@ -107,6 +107,10 @@ sub _addCmdLogFiles{
     #TODO add random part
     my $r = int rand 1000000 ;
     my $tee = " | tee ";
+    
+    $self->options->{'cmdout'} = 0 
+        unless defined  $self->options->{'cmdout'} ;
+
     $tee = " 1>  " if  $self->options->{'cmdout'} == 0 ;
     $self->remote_err( "/tmp/test_stderr.$r.log"); 
     $self->remote_out( "/tmp/test_stdout.$r.log");

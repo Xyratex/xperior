@@ -2,12 +2,19 @@ use 5.010001;
 use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
-`cp MANIFEST.harness MANIFEST`;
+print `cp build/Makefile.harness.PL Makefile.PL` ."\n";
+print `cp build/MANIFEST.harness MANIFEST`."\n";
 WriteMakefile(
     NAME              => 'XTests-harness',
     VERSION_FROM      => 'lib/XTests/Core.pm', # finds $VERSION
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
-    ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
-      (ABSTRACT_FROM  => 'bin/runtest.pl', # retrieve abstract from module
-       AUTHOR         => 'ryg <Roman_Grigoryev@xyratex.com>') : ()),
+    ($] >= 5.10.0 ?     ## Add these new keywords supported since 5.005
+      (ABSTRACT       => 'XTests harness, system which allow execute many other tests via wrappering', 
+       AUTHOR         => 'ryg <Roman_Grigoryev@xyratex.com>') : (),
+       MAN1PODS => {
+            'bin/runtest.pl'           => 'blib/man1/runtest.1',
+            }     
+      ),
+    clean            =>     {FILES => "Makefile Makefile.old MANIFEST MYMETA.json MYMETA.yml XTests-harness*.tar.gz html "},
+
 );

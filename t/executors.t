@@ -5,14 +5,9 @@
 #
 #  DESCRIPTION:  
 #
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
 #       AUTHOR:  ryg 
-#      COMPANY:  
-#      VERSION:  1.0
+#      COMPANY:  Xyratex 
 #      CREATED:  10/03/2011 06:36:20 PM
-#     REVISION:  ---
 #===============================================================================
 #!/usr/bin/perl -w
 package executors;

@@ -21,6 +21,10 @@ use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
+#BEGIN {
+#    push @INC, '/opt/xyratex/xtests/lib/'
+#};
+
 use XTests::Test;
 use XTests::Executor::IOR;
 
@@ -52,7 +56,7 @@ shutdown        _shutdown => sub {  };
 #########################################
 test plan => 2, d_prepareCommands    => sub {
     $exe->_prepareCommands;
-my $mfexp = 'lclient,mds'; 
+    my $mfexp = 'lclient,mds'; 
 
     is($exe->machines,$mfexp,'Check machinefile');
 
@@ -62,21 +66,19 @@ my $mfexp = 'lclient,mds';
     
 };
 
-=item *
-test plan => 2, e_prepareCommandsMP    => sub {
-    $exe->_prepareCommandsMpich2;  
-my $mfexp = 
-"192.168.200.150:1\n".
-'192.168.200.102:1';
-
-    is($exe->machinefile,$mfexp,'Check machinefile');
-
-    my $exp = 'mpiexec   -machinefile /tmp/ior_machinefile -n 2  /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o /mnt/lustre//testfile';
-    is($exe->cmd,$exp,'Check that cmd is correct');
-
-    
-};
-=cut
+#test plan => 2, e_prepareCommandsMP    => sub {
+#    $exe->_prepareCommandsMpich2;  
+#my $mfexp = 
+#"192.168.200.150:1\n".
+#'192.168.200.102:1';
+#
+#    is($exe->machinefile,$mfexp,'Check machinefile');
+#
+#    my $exp = 'mpiexec   -machinefile /tmp/ior_machinefile -n 2  /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o /mnt/lustre//testfile';
+#    is($exe->cmd,$exp,'Check that cmd is correct');
+#
+#    
+#};
 
 test plan => 3, cReset    => sub {
     is($exe->getClients,0,'Check clients after init'); 
@@ -90,10 +92,11 @@ test plan => 3, cReset    => sub {
     is($exe->getClients,1, 'Check clients after adding');
 };
 
-test plan => 1, eExecute    => sub {
+test plan =>1 , e_Execute    => sub {
+    #Log::Log4perl->easy_init($INFO);   
     $exe->execute;
     DEBUG Dumper $exe->yaml;
-    is $exe->yaml->{'killed'},'no', 'Execution done';
+    is $exe->yaml->{'killed'},'no', 'Execution done check';
 };
 
 

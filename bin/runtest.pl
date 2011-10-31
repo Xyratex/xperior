@@ -1,21 +1,13 @@
 #!/usr/bin/perl 
 #===============================================================================
-#
 #         FILE:  runtest.pl
 #
-#        USAGE:  ./runtest.pl  
+#        USAGE:  ./runtest.pl <options> 
 #
-#  DESCRIPTION:  
-#
-#      OPTIONS:  ---
-# REQUIREMENTS:  ---
-#         BUGS:  ---
-#        NOTES:  ---
+#  DESCRIPTION:  Execute XTests narness
 #       AUTHOR:  ryg 
-#      COMPANY:  
-#      VERSION:  1.0
+#      COMPANY:  Xyratex
 #      CREATED:  08/31/2011 06:37:26 PM
-#     REVISION:  ---
 #===============================================================================
 
 use strict;
@@ -23,6 +15,14 @@ use warnings;
 use Getopt::Long;
 use Log::Log4perl qw(:easy);
 use Carp;
+use Pod::Usage;
+
+BEGIN {
+use Cwd 'abs_path';
+    my $p = abs_path($0);
+    $p =~s/runtest\.pl$//;
+    push @INC, $p.'/../lib/'
+};
 
 use XTests::Core;
 $|=1;
@@ -42,6 +42,7 @@ my $info       = 0;
 my $error      = 0;
 my $cmdout     = 0;
 my $helpflag;
+my $manflag;
 GetOptions(
     "config:s"     => \$configfile,
     "mode:s"       => \$mode,
@@ -55,32 +56,15 @@ GetOptions(
     "info!"        => \$info,
     "error!"       => \$error,
     "cmdout!"      => \$cmdout,
+    "help!"        => \$helpflag,
+    "man!"         => \$manflag,
 );
 
-my $hm = <<"HM";
-Help message
-
---useproccfg    : TBD
---config        : TBD path to yaml config file
-
---workid        : working dir where test log and results will be saved
---testdir       : directory where are test descriptors yaml files
---contine       : TBD
-
-Framework logging level 
---debug         : 'debug' log level
---info          : 'info'  log level
---error         : 'error' log level (default)
-
---cmdout        : show test cmd output. Default - no.
-
---help          : print this help message
-
-HM
-
 if ( ($helpflag) || ($nopts) ) {
-    print $hm;
-    exit(0);
+    pod2usage(2);
+}
+if ( $manflag) {
+    pod2usage( -verbose => 2  );
 }
 
 if( $debug){
@@ -107,10 +91,13 @@ unless(defined($workdir)){
 }
 
 if (-d $workdir) {
- INFO "Test directory [$workdir] found";
+ INFO "Test directory [$workdir] found, overwriting old results";
 }else{                                                
-    print "Cannot find test directory [$workdir]\n" ;
-    exit 1;
+    INFO "No workdir directory [$workdir] fount, cretate it.";
+    unless( mkdir $workdir){
+        print "Cannot create workdir [$workdir]\n";
+        exit 10;
+    }
 }
         
  my %options = ( 
@@ -123,40 +110,53 @@ my $testcore =  XTests::Core->new();
 $testcore->run(\%options);
 
 __END__
-# Documentation for runtest.pl (XTests).
+
+=pod
+
+=head1 XTests testing harness 
 
 =head1 NAME
 
-runtest.pl is application for executing different tests via XTests harness. This application read yaml tests descriptions,check environmental conditions, read/gather cluster config data and run tests based on it. 
+runtest.pl - executing tests via  XTests harness. 
 
-=head1 SYNOPSIS
+=head1 SYNOPSIS 
 
-  export PERL5LIB=....
-  perl runtest.pl <parameters>
-  Paramaters: 
-  run perl runtest.pl 
+    bin/runtest.pl <parameters>
+    Paramaters: 
+        --useproccfg    : TBD
+        --config        : TBD path to yaml config file
 
-=head1 DESCRIPTION
+        --workdir       : working dir where test log and results will be saved
+        --testdir       : directory where are test descriptors yaml files
+        --contine       : TBD
 
-TBD!
+    Framework logging level 
+        --debug         : 'debug' log level
+        --info          : 'info'  log level
+        --error         : 'error' log level (default)
 
-Stub documentation, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
+        --cmdout        : show test cmd output. Default - no.
 
-Blah blah blah.
-
-=head2 EXPORT
-
-None by default.
-
-
-=head1 SEE ALSO
+        --help          : print usage help
+        --man           : print long help
 
 
-=head1 AUTHOR
+=head1 Description
 
-ryg, E<lt>Roman_Grigoryev@xyratex.com<gt>
+The application is executing different specially wrapped tests via XTests harness. The application read yaml tests descriptions,check environmental conditions, read/gather cluster configuration and run tests based on it, gather logs and save report.
+
+
+=head2 Executing internal tests.
+TBD
+
+
+=head1 See also
+
+See XTests harness User Guide for detail of system configuration.
+
+=head1 Author
+
+ryg, E<lt>Roman_Grigoryev@xyratex.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 

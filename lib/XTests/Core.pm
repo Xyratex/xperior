@@ -3,16 +3,11 @@
 #
 #         FILE:  XTests::Core.pm
 #
-#  DESCRIPTION:  
+#  DESCRIPTION:  Main module for XTests harness 
 #
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
 #       AUTHOR:   ryg 
-#      COMPANY:  
-#      VERSION:  1.0
+#      COMPANY:  Xyratex 
 #      CREATED:  09/05/2011 03:23:42 PM
-#     REVISION:  ---
 #===============================================================================
 
 package XTests::Core;
