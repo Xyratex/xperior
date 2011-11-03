@@ -1,35 +1,33 @@
 #
 #===============================================================================
 #
-#         FILE:  IOR.pm
+#         FILE:  MDTest.pm
 #
-#  DESCRIPTION:  Module which contains IOR specific execution functionality. 
+#  DESCRIPTION:  Module which contains MDTest specific execution functionality. 
 #
 #       AUTHOR:   ryg 
 #      COMPANY:  Xyratex 
-#      VERSION:  1.1
-#      CREATED:  10/08/2011 
+#      CREATED:  11/01/2011 
 #===============================================================================
 =pod
 =head1 DESCRIPTION
 
-IOR wrapper module for XTests harness.
+B<mdtest> wrapper module for XTests harness. Pretty same to IOR wrapper,
+in future must be one class for both tests.
 
 =cut
 
-package XTests::Executor::IOR;
+package XTests::Executor::MDTest;
 use Moose;
 
 extends 'XTests::Executor::OpenMPIBase';
 
-
 after 'init' => sub{
     my $self    = shift;
-    $self->appname('IOR');
-    $self->cmdfield('iorcmd');
+    $self->appname('mdtest');
+    $self->cmdfield('mdtestcmd');
     $self->reset;
 };
-
 
 __PACKAGE__->meta->make_immutable;
 

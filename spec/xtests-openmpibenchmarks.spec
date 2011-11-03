@@ -1,12 +1,12 @@
 %define _unpackaged_files_terminate_build  0
 %define _missing_doc_files_terminate_build 0
-Summary: The IOR wrapper for XTests harnesss.
-Name: xtests-ior
+Summary: The MDTest and IOR wrapper for XTests harnesss.
+Name: xtests-openmpibenchmarks
 Version: 0.0.1 
 Release: 4%{?dist} 
 License: TBD 
 Group: Development/Libraries
-Source: XTests-ior-0.0.1.tar.gz
+Source: XTests-openmpibenchmarks-0.0.1.tar.gz
 Requires:  ior
 Requires:  xtests-harness 
 BuildArch: noarch
@@ -14,7 +14,7 @@ BuildArch: noarch
 %description
 TBD
 %prep
-%setup -q -n XTests-ior-%{version}
+%setup -q -n XTests-openmpibenchmarks-%{version}
 
 %build
 perl Makefile.PL 
@@ -31,11 +31,6 @@ install -D  testds/*.yaml  ${TD}/testds/
 find $TD -type f -name .packlist -exec rm -f {} \;
 find $TD -depth -type d -exec rmdir {} 2>/dev/null \;
 %{_fixperms} $RPM_BUILD_ROOT/*
-
-
-%files
-%{_bindir}/*
-%doc %attr(0444,root,root)  /usr/share/doc/ior-%{version}/*
 
 %check
 #set PERL5LIB /opt/xyratex/xtests/lib
