@@ -1,0 +1,64 @@
+IOR-2.10.3: MPI Coordinated Test of Parallel I/O
+
+Run began: Wed Nov  2 11:07:15 2011
+Command line used: /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o /mnt/lustre//testfile
+Machine: Linux lclient
+Start time skew across all tasks: 0.01 sec
+Path: /mnt/lustre
+FS: 0.4 GiB   Used FS: 13.2%   Inodes: 0.1 Mi   Used Inodes: 0.0%
+Participating tasks: 2
+Using reorderTasks '-C' (expecting block, not cyclic, task assignment)
+
+Summary:
+	api                = POSIX
+	test filename      = /mnt/lustre//testfile
+	access             = single-shared-file
+	pattern            = segmented (1 segment)
+	ordering in a file = sequential offsets
+	ordering inter file=constant task offsets = 1
+	clients            = 2 (1 per node)
+	repetitions        = 5
+	xfersize           = 4096 bytes
+	blocksize          = 10 MiB
+	aggregate filesize = 20 MiB
+
+Commencing write performance test.
+Wed Nov  2 11:07:15 2011
+
+Commencing read performance test.
+Wed Nov  2 11:07:16 2011
+
+Commencing write performance test.
+Wed Nov  2 11:07:17 2011
+
+Commencing read performance test.
+Wed Nov  2 11:07:18 2011
+
+Commencing write performance test.
+Wed Nov  2 11:07:19 2011
+
+Commencing read performance test.
+Wed Nov  2 11:07:20 2011
+
+Commencing write performance test.
+Wed Nov  2 11:07:21 2011
+
+Commencing read performance test.
+Wed Nov  2 11:07:22 2011
+
+Commencing write performance test.
+Wed Nov  2 11:07:23 2011
+
+Commencing read performance test.
+Wed Nov  2 11:07:24 2011
+
+Operation  Max (MiB)  Min (MiB)  Mean (MiB)   Std Dev  Max (OPs)  Min (OPs)  Mean (OPs)   Std Dev  Mean (s)  Op grep #Tasks tPN reps  fPP reord reordoff reordrand seed segcnt blksiz xsize aggsize
+
+---------  ---------  ---------  ----------   -------  ---------  ---------  ----------   -------  --------
+write          22.65      17.96       21.29      1.72    5799.64    4598.43     5449.42    440.96   0.94646   2 1 5 0 1 1 0 0 1 10485760 4096 20971520 -1 POSIX EXCEL
+read           23.93      14.48       18.69      3.32    6125.42    3707.47     4783.37    850.52   1.10443   2 1 5 0 1 1 0 0 1 10485760 4096 20971520 -1 POSIX EXCEL
+
+Max Write: 22.65 MiB/sec (23.76 MB/sec)
+Max Read:  23.93 MiB/sec (25.09 MB/sec)
+
+Run finished: Wed Nov  2 11:07:26 2011

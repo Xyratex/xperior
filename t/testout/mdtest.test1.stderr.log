@@ -1,0 +1,22 @@
+-- started at 11/02/2011 11:43:27 --
+
+mdtest-1.8.3 was launched with 2 total task(s) on 2 nodes
+Command line used: mdtest -u -d /mnt/lustre// -n 10 -i 10
+Path: /mnt/lustre
+FS: 0.4 GiB   Used FS: 13.2%   Inodes: 0.1 Mi   Used Inodes: 0.0%
+
+2 tasks, 20 files/directories
+
+SUMMARY: (of 10 iterations)
+   Operation                  Max        Min       Mean    Std Dev
+   ---------                  ---        ---       ----    -------
+   Directory creation:   2914.128   1441.441   2493.688    394.193
+   Directory stat    :   4186.559   3675.184   3876.226    182.426
+   Directory removal :   1735.694   1616.302   1690.302     38.365
+   File creation     :   1935.892   1039.339   1665.809    240.801
+   File stat         :   2073.206   1938.935   2009.927     35.386
+   File removal      :   1986.880   1710.285   1826.332     77.474
+   Tree creation     :   1044.919    521.355    907.121    141.129
+   Tree removal      :    520.579    402.100    449.817     38.888
+
+-- finished at 11/02/2011 11:43:28 --
