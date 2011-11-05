@@ -70,7 +70,11 @@ sub execute{
                 '] sec of execution');           
     }else{
         $self->addYE('killed','no');
-        $self->pass;
+        if( $testp->exitcode == 0 ){
+            $self->pass;
+        }else{
+            $testp->fail('Non-zero exit code');
+        }
     }
     $self->addYE('completed','yes');
     ### get logs
@@ -84,6 +88,9 @@ sub execute{
             $self->getNormalizedLogName('stdout'));
     $self->registerLogFile('stdout',
             $self->getNormalizedLogName('stdout'));
+
+    $self->processLogs($self->getNormalizedLogName('stdout'))
+                                    if $self->result_code == 0;
     ### cleanup logs
     ### end
     $self->test->tap     ( $self->tap);

@@ -50,6 +50,10 @@ setup           _setup    => sub {
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub {  };
 #########################################
+
+
+
+
 test plan => 2, d_prepareCommands    => sub {
     $exe->_prepareCommands;
     my $mfexp = 'lclient,mds'; 
@@ -75,11 +79,25 @@ test plan => 3, cReset    => sub {
     is($exe->getClients,1, 'Check clients after adding');
 };
 
-test plan =>1 , e_Execute    => sub {
+test plan =>1 , n_Execute    => sub {
     #Log::Log4perl->easy_init($INFO);   
     $exe->execute;
     DEBUG Dumper $exe->yaml;
     is $exe->yaml->{'killed'},'no', 'Execution done check';
+};
+
+
+test plan =>5 , e_processLogs    => sub {
+    #Log::Log4perl->easy_init($INFO);   
+    $exe->processLogs('t/testout/mdtest.test1.stderr.log');
+     #DEBUG Dumper $exe->yaml;
+    my $pe = $exe->yaml->{'measurements'};
+    is(scalar(@$pe),8,'Parsed array elements');
+    is( ${$pe}[0]->{'min_value'},'1441.441','array check');
+    is( ${$pe}[2]->{'max_value'},'1735.694','array check');
+    is( ${$pe}[6]->{'stddev_value'},'141.129','array check');
+    is( ${$pe}[7]->{'name'},'Tree removal','array check');
+
 };
 
 
