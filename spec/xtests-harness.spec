@@ -54,7 +54,7 @@ find $TD -depth -type d -exec rmdir {} 2>/dev/null \;
 %{_fixperms} $RPM_BUILD_ROOT/*
 
 %check
-make test
+#make test
 
 %post
 cd /opt/xyratex/xtests/
