@@ -57,6 +57,7 @@ test plan => 6, eCreateAliveExit    => sub {
     #highlevel functional test
     $sp->create('sleep','/bin/sleep 15');
     pass('App started');
+    sleep 3;
     is( -e $sp->pidfile, 1,'Pid file exists');   
     my $res = $sp->isAlive;
     my $ec  = $sp->exitcode;
