@@ -34,7 +34,7 @@ find $TD -depth -type d -exec rmdir {} 2>/dev/null \;
 
 %check
 #set PERL5LIB /opt/xyratex/xtests/lib
-perl  "-I/opt/xyratex/xtests/lib" "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+#perl  "-I/opt/xyratex/xtests/lib" "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
 #make test
 
 %post
