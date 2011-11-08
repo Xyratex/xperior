@@ -13,7 +13,7 @@
 
 =pod
 
-=head3 SshProcess implements remote process control for singlie process over ssh.
+=head1 SshProcess implements remote process control for singlie process over ssh.
 
 
 Module specially designed to be simple replaced by other module which provide same interface, possible via other protocol.

@@ -7,7 +7,7 @@ expected_time    : 10
 timeout          : -1
 cleanup_max_time : -1
 options          : 
-tags             : sanity 
+tags             : functional 
 
 Tests:
    - id               : 1 

@@ -89,7 +89,7 @@ C<iorcmd>           - command for executing, specific parameter for XTests::Exec
 
 =item *
 
-C<tags>             - test tags (labels), used for simple test filtering. See also C<testds/tags.yaml>. Not implemented.
+C<tags>             - test tags (labels) space separated list, used for simple test filtering. See also C<testds/tags.yaml>.
 
 =item *
 

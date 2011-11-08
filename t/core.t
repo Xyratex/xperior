@@ -38,7 +38,7 @@ test plan => 1, fCheckRuntest          => sub {
 
 
 ################################################
-test plan => 1, cCheckTags           => sub {
+test plan => 1, cCheckTagLoad           => sub {
     my $cfg = $testcore->loadTags;
     my @expected =  (
                     {
@@ -56,7 +56,7 @@ test plan => 1, cCheckTags           => sub {
 };
 
 #################################################
-test  plan => 5, dCheckTests           => sub {
+test  plan => 6, dCheckTests           => sub {
     my @tests = @{$testcore->loadTests};
     my $tn = @tests;
     is ( $tn, 2, 'Check test number' );
@@ -66,6 +66,11 @@ test  plan => 5, dCheckTests           => sub {
     is ( $tests[1]->getParam('groupname'), 'sanity' ,
                                         'Check groupname');
     diag( "2 groupname = ". $tests[1]->getParam('groupname') );
+    
+    my @tae = ('functional','sanity');
+    is_deeply($tests[0]->getTags,\@tae, 'Check test tags');
+#DEBUG Dumper $tests[0]->getTags;
+#DEBUG "88888888888888888888888888888888888888888";
 };
 
 ##################################################

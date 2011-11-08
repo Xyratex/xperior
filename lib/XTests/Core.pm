@@ -64,15 +64,33 @@ sub run {
     #TODO load exclude list
 
     #TODO check tests applicability there
-
+    
     #start testing
     my @tests;
     my @rts = @{$self->{'tests'}};
     my %targs;
     foreach my $test ( @rts ){
         DEBUG "Test = ".Dumper $test;
-        $self->runtest($test);
-        WARN 'TEST '.$test->getName .' STATUS: '.$test->results->{'status'};
+        
+        ##filtering        
+        my $filtered =0;
+        foreach my $tt (@{$test->getTags}){
+           foreach my $t (@{$self->options->{'skiptags'}}){
+               $filtered++ if $t eq $tt;
+           }
+        }
+        next if $filtered;
+
+        my $a = $self->options->{'action'};
+        if($a eq 'run'){
+            $self->runtest($test);
+            WARN 'TEST '.$test->getName .' STATUS: '.$test->results->{'status'};
+        }elsif( $a eq 'list'){
+            print "====================\n";
+            print $test->getDescription;
+        }else{
+            confess "Cannot selected action for : $a"
+        }
     }
 }
 
@@ -96,7 +114,7 @@ sub loadTests{
     my $self  = shift;
     my @testNames;
     my @tests;
-    INFO "Find tests in dir:[". $self->{'options'}->{'testdir'}."]";
+    INFO "Reading tests from dir:[". $self->{'options'}->{'testdir'}."]";
     find( sub { push (@testNames ,  $File::Find::name) if(  $File::Find::name =~ m/tests.yaml/)},
           $self->{'options'}->{'testdir'}
     );

@@ -3,17 +3,20 @@
 #
 #         FILE:  XTests/Test.pm
 #
-#  DESCRIPTION:  
+#  DESCRIPTION:  Class implement Test abstraction
 #
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
 #       AUTHOR:  ryg 
-#      COMPANY:  
-#      VERSION:  1.0
+#      COMPANY:  Xyratex 
 #      CREATED:  08/30/2011 11:49:56 PM
-#     REVISION:  ---
 #===============================================================================
+
+=pod
+
+=head1 Class implements Test abstraction.
+
+The class is used for describing tests and keep passive information for executors. Executor class use Test for get all information about test under execution. 
+
+=cut
 
 package XTests::Test;
 use Moose;
@@ -36,6 +39,15 @@ sub init {
     $self->{'groupcfg'}   = shift;
 }
 
+=over
+
+=item getName
+
+returns name of a test. Name could be defined as I<name> in test descriptor. Test id is returned if I<name> is not defined. 
+
+=back
+
+=cut
 
 sub getName{
     my $self = shift;
@@ -43,6 +55,15 @@ sub getName{
     return $self->testcfg->{'id'};    
 }
 
+=over
+
+=item getParamNames
+
+return list of available parameters for test (from test description and group description considering inheritance ).
+
+=back
+
+=cut
 
 sub getParamNames{
     my $self = shift;
@@ -57,6 +78,17 @@ sub getParamNames{
     return \@names;
 }
 
+
+=over
+
+=item getParam
+
+returns parameter by name. 
+
+=back
+
+=cut
+
 sub getParam{
     my $self    = shift;
     my $pname   = shift;
@@ -66,21 +98,53 @@ sub getParam{
     return undef;
 }
 
+=over
+
+=item getTags
+
+returns tags list for test. Tags list contains tags defined in test descriptor and also test group name. 
+
+=back 
+
+=cut
+
+sub getTags{
+    my $self=shift;
+    my @tags;
+    my $ts = $self->getParam('tags');
+    if(defined($ts)){
+        foreach my $t (split(/\s/,$ts)){
+            push @tags, $t;
+        }
+    }
+    push @tags, $self->getParam('groupname');
+    return \@tags;
+}
+
+=over
+
+=item getDescription
+
+returns text description for test
+
+=back
+
+=cut
+
 sub getDescription{
-
+my $self = shift;
+my $td='none';
+if(defined($self->testcfg->{'description'})){
+        $td=$self->testcfg->{'description'};
+}
+return
+"Group description : ".$self->groupcfg->{'description'}."\n".
+"Test description : ".$td."\n".
+"Test group       : ".$self->getParam('groupname')."\n".
+"Test name   : ".$self->getName."\n".
+"Test tags   : ".join(',',@{$self->getTags})."\n";
 }
 
-sub start{
-
-}
-
-sub getStatus {
-
-}
-
-sub collec{
-
-}
 
 sub clean{
 

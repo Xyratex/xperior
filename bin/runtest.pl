@@ -33,6 +33,7 @@ $nopts = 1 unless ( $ARGV[0] );
 my $configfile = "";
 my $mode       = "";
 my @suites;
+my @skiptags;
 my $task       = "";
 my $flist      = "";
 my $workdir    = '';
@@ -41,12 +42,14 @@ my $debug      = 0;
 my $info       = 0;
 my $error      = 0;
 my $cmdout     = 0;
+my $action=undef;
 my $helpflag;
 my $manflag;
 GetOptions(
     "config:s"     => \$configfile,
     "mode:s"       => \$mode,
     "suites=s@"    => \@suites,
+    "skiptags=s@"  => \@skiptags,
     "tests:s"      => \$task,
     "exclude:s"    => \$helpflag,
     "flist:s"      => \$flist,
@@ -58,6 +61,7 @@ GetOptions(
     "cmdout!"      => \$cmdout,
     "help!"        => \$helpflag,
     "man!"         => \$manflag,
+    "action:s"     => \$action,
 );
 
 if ( ($helpflag) || ($nopts) ) {
@@ -78,6 +82,15 @@ else {
 }
 
 #check test description configuration existence
+if((defined $action) &&($action ne '') ){
+    unless (($action eq 'run') ||( $action eq 'list')){
+        print "Incorrect action set : $action\n";
+        pod2usage(3);
+    }
+}else{
+    $action = 'run';
+}
+
 if (-d $testdir) {
  INFO "Test directory [$testdir] found";
 }else{
@@ -90,20 +103,24 @@ unless(defined($workdir)){
     exit 1;
 }
 
-if (-d $workdir) {
- INFO "Test directory [$workdir] found, overwriting old results";
-}else{                                                
-    INFO "No workdir directory [$workdir] fount, cretate it.";
-    unless( mkdir $workdir){
-        print "Cannot create workdir [$workdir]\n";
-        exit 10;
+if( $action eq 'run'){
+    if (-d $workdir) {
+        INFO "Test directory [$workdir] found, overwriting old results";
+    }else{                                                
+        INFO "No workdir directory [$workdir] fount, cretate it.";
+        unless( mkdir $workdir){
+            print "Cannot create workdir [$workdir]\n";
+            exit 10;
+        }
     }
 }
         
  my %options = ( 
-    testdir => $testdir,
-    workdir => $workdir,
-    cmdout  => $cmdout,
+    testdir  => $testdir,
+    workdir  => $workdir,
+    cmdout   => $cmdout,
+    skiptags => \@skiptags,
+    action   => $action,
 );
 
 my $testcore =  XTests::Core->new();
@@ -122,25 +139,34 @@ runtest.pl - executing tests via  XTests harness.
 =head1 SYNOPSIS 
 
     bin/runtest.pl <parameters>
-    Paramaters: 
-        --useproccfg    : TBD
-        --config        : TBD path to yaml config file
+    Configuration: 
+        --useproccfg       : TBD
+        --config           : TBD path to yaml config file
 
-        --workdir       : working dir where test log and results will be saved
-        --testdir       : directory where are test descriptors yaml files
-        --contine       : TBD
+        --workdir=<path>   : working dir where test log and results will be saved
+        --testdir=<path>   : directory where are test descriptors yaml files
+
+    Test filtering:
+        --skiptags=tag1 : list of tags which will be skipped. No mask or regexp allowed. Use this parameter twice or more for many tag exclusion. 
 
     Framework logging level 
-        --debug         : 'debug' log level
-        --info          : 'info'  log level
-        --error         : 'error' log level (default)
+        --debug             : 'debug' log level
+        --info              : 'info'  log level
+        --error             : 'error' log level (default)
 
-        --cmdout        : show test cmd output. Default - no.
+        --cmdout            : show test cmd output. Default - no.
 
-        --help          : print usage help
-        --man           : print long help
+        --help              : print usage help
+        --man               : print long help
 
+    Action specificator
+        --action=<action>
+            run               : run tests which selected by configuration and filters.
+            list              : see list of tests which will be ready to execution considering configuration and filters
 
+    Options        
+        --contine          : TBD       
+        
 =head1 Description
 
 The application is executing different specially wrapped tests via XTests harness. The application read yaml tests descriptions,check environmental conditions, read/gather cluster configuration and run tests based on it, gather logs and save report.
