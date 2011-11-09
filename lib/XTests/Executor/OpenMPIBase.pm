@@ -97,12 +97,14 @@ sub _prepareCommands{
     $self->machines($mf);
     my $mp = $self->env->cfg->{'client_mount_point'};
     my $tf = $self->env->cfg->{'benchmark_tests_file'};
-    
+    my $td = $self->env->cfg->{'tempdir'}
+    ;
     my $c = $self->test->getParam( $self->cmdfield );
     
     $c =~ s/\@mount_point\@/$mp/g;
     $c =~ s/\@test_file\@/$tf/g;
-     
+    $c =~ s/\@tempdir\@/$td/g;
+
     $self->cmd("/usr/lib64/openmpi/bin/mpirun  -H ".$self->machines." -pernode  --prefix /usr/lib64/openmpi/  $c");
 }
  

@@ -45,5 +45,6 @@ LustreObjects:
      type        : client
 
 #Variables
-client_mount_point      : /mnt/lustre/
+client_mount_point      : /mnt/lustre
 benchmark_tests_file    : testfile
+tempdir                 : /tmp/

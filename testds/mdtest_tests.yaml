@@ -6,7 +6,7 @@ reference        : -
 expected_time    : 60
 timeout          : 300 
 cleanup_max_time : -1
-mdtestcmd        : mdtest  -u -d @mount_point@/ -n 10 -i 10
+mdtestcmd        : mdtest  -u -d @mount_point@@tempdir@ -n 10 -i 10
 tags             : benchmark 
 
 Tests:

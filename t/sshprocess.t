@@ -69,7 +69,18 @@ test plan => 6, eCreateAliveExit    => sub {
     is($ec,  0, 'Check exit code for alive app');
 };
 
-test plan => 20, sStress    => sub {
+test plan => 3, cSynExecution => sub {
+  my $stime = time;
+  $sp->createSync('/bin/sleep 10');
+  my $etime = time;
+  is($sp->exitcode,0,"Check exit code for correct syn execution");
+  ok($etime-$stime< 15, "Check execution time");
+  $sp->createSync('ls -la /folder/which/nobody/never/creates/');
+  is($sp->exitcode,2,"Check exit code for failed syn execution");
+};
+
+
+test plan => 20, xStress    => sub {
     for(my $i=0; $i<10; $i++){ 
         $sp->create('sleep','/bin/sleep 10');
         my $res = $sp->isAlive;
@@ -80,7 +91,7 @@ test plan => 20, sStress    => sub {
     }
 };
 
-test plan => 7, cInit    => sub {
+test plan => 7, bInit    => sub {
     is($sp->host,'localhost','host');
     is($sp->user,'ryg','user');
     is($sp->hostname,trim `hostname`,'Check on host hostname');

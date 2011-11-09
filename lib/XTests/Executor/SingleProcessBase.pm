@@ -38,7 +38,18 @@ sub execute{
     $testp->init(
             $self->env->getNodeAddress($mc->{'node'}),
             $self->env->getNodeUser($mc->{'node'}));
-    
+   
+    ## create temprory dir
+    $testp->createSync
+        ('mkdir -p '.$self->env->cfg->{'client_mount_point'}
+            .$self->env->cfg->{'tempdir'});
+    #TODO add exit value check there. Now it doesn't have value.
+
+#TODO check these values on empty or undefined values.
+#$self->env->cfg->{'client_mount_point'}
+#$self->env->cfg->{'tempdir'})    
+   
+
     $testp->create($self->appname,$self->cmd);
     #all alredy started there
 
@@ -73,10 +84,16 @@ sub execute{
         if( $testp->exitcode == 0 ){
             $self->pass;
         }else{
-            $testp->fail('Non-zero exit code');
+            $self->fail('Non-zero exit code');
         }
     }
     $self->addYE('completed','yes');
+
+    #cleanup tempdir after execution
+    $testp->createSync
+        ('rm -rf '.$self->env->cfg->{'client_mount_point'}
+            .$self->env->cfg->{'tempdir'}."/*");
+
     ### get logs
 
     $testp->getFile( $self->remote_err,

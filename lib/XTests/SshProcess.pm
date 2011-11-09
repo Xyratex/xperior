@@ -17,9 +17,26 @@
 
 
 Module specially designed to be simple replaced by other module which provide same interface, possible via other protocol.
-The main functionality oriented on  create logn-time process on remote nodes. Process executed in background. Providing 
-command with capturing stderr and stdout is user reponsibility.
 
+=head2  Modules support 2 workflows
+
+Using these workflows must be serila not  parallell. User is resposible for control it.
+
+=over 2
+
+=item First workflow
+
+Create logn-time process on remote nodes. Process executed in background on target node and deattached from console, capture and download   stderr and stdout is user responsibility via providing command line with capturing.
+
+Use on this way this functions B<create>, B<kill>, B<isAlive> and fields B<exitcode> and B<pid>.
+
+=item Second workflow
+
+Create short-time process on remote nodes with capturing stderr/stdout. It behaves as perl B<``> (backtics) command.
+
+Use on this way function B<createSync> and field B<exitcode>
+
+=back
 
 =cut
 
@@ -127,11 +144,63 @@ sub _findPid{
     return -1;
 }    
 
+
+=over *
+
+=item createSync
+
+Execute remote process and catch stderr/std and exit code. Function exit when remote execution done.
+
+Function have one parameter - command for start on emote node.
+
+=back
+
+=cut
+
+sub createSync{
+    my ($self,$app) = @_;
+    $self->appcmd($app);
+    DEBUG "XTest::SshProcess createSync";
+    DEBUG "App to run [$app] on host[". $self->host . "]";
+    my $ecf= $self->ecodefile;
+
+my $ss = <<"SS";
+$app   
+echo \\\$? > $ecf 
+SS
+
+    my $tef = $self->rscrfile; 
+    my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
+  
+    DEBUG "Starting ............";    
+    my $s  =  $self->_sshSyncExec("sh $tef");    
+    DEBUG "Remote app started";
+
+    $self->exitcode(
+            trim $self->_sshSyncExec("cat ".$self->ecodefile));
+    return $self->exitcode;
+
+}
+
 =over *
 
 =item create
 
-Execute remote process with unatached stderr/stdout. Pid is saved. Exit code is saved after process end.
+Execute remote process with unatached stderr/stdout and exit. Pid is savednon remote fs. Exit code is saved after process end.
+
+=over 2
+
+Parameters:
+
+=item *
+
+appname - name of process which can be seen on remote node. Can be used in B<killall> call. Now is not used somehow. TBI.
+
+=item *
+
+app    - command line which will be executed on remote node
+
+=back
 
 =back
 
@@ -142,7 +211,6 @@ sub create {
     $self->appname($name);
     $self->appcmd($app);
     DEBUG "[$name]: XTest::SshProcess create";
-    DEBUG "[$name]: Work dir is $CWD";
     DEBUG "[$name]: App to run [$app] on host[". $self->host . "]";
 
     DEBUG "Start remote ssh process[ $app ]";
@@ -210,7 +278,8 @@ sub kill {
 
 =item isAlive
 
-Check process status on remote system via saved pid.
+Check process status on remote system via saved pid. Also this function get exit code from remote side if application is exited or killed.
+
 
 =back
 
