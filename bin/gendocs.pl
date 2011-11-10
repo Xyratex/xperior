@@ -14,7 +14,8 @@ use strict;
 use warnings;
 use Pod::ProjectDocs;
 
-`autodia.pl -d lib -r  -o html/classes.png -z -D -H`;
+mkdir 'html';
+`autodia.pl -d lib -r  -o html/classes.png -z -D -H -K`;
 
 my $pd = Pod::ProjectDocs->new(
     outroot => 'html/',
@@ -24,6 +25,7 @@ my $pd = Pod::ProjectDocs->new(
     desc   => 'XTests harness'
 );
 $pd->gen();
+
 
 #or use pod2projdocs on your shell
 #pod2projdocs -out /output/directory -lib /your/project/lib/root

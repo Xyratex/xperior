@@ -49,7 +49,20 @@ test plan => 2, dCheckIP    => sub {
     is( $cfg->getNodeAddress('mds1'),'192.168.200.102');
     is( $cfg->getNodeAddress('client1'),'lclient');
 };
-test plan => 4, cCheckLustreObjects    => sub {
+
+test plan => 3, nCheckRemoteControls => sub{
+
+    my $mc = $cfg->getNodeById($cfg->getMasterClient->{'id'});
+    #test no real numbers because it can be different
+    ok( $mc->getLFFreeSpace > 100,
+            "Check free space:".$mc->getLFFreeSpace );
+    ok( $mc->getLFFreeInodes > 100,
+            "Check free nodes:".$mc->getLFFreeInodes );
+    ok( $mc->getLFCapacity > 100,
+            "Check capacity:".$mc->getLFCapacity );
+};
+
+test plan => 5, cCheckLustreObjects    => sub {
     $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     ok (defined $cfg, "Check parsing results");
    
@@ -93,7 +106,9 @@ test plan => 4, cCheckLustreObjects    => sub {
     );
     print "Clients:".Dumper $clients;
     is_deeply($clients,\@exp3,"Check getClients");
-
+    
+    my $mc = $cfg->getMasterClient;
+    is($mc->{'node'},'client1',"Check getMasterClient");
 
 };
 #########################################

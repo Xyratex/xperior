@@ -34,6 +34,8 @@ sub execute{
     $self->_addCmdLogFiles;
     $self->addYE('cmd',$self->cmd);
 
+    $self->_saveStageInfoBeforeTest;
+
     my $testp = XTests::SshProcess->new();
     $testp->init(
             $self->env->getNodeAddress($mc->{'node'}),
@@ -88,6 +90,8 @@ sub execute{
         }
     }
     $self->addYE('completed','yes');
+    
+    $self->_saveStageInfoAfterTest;
 
     #cleanup tempdir after execution
     $testp->createSync
@@ -140,6 +144,26 @@ sub _addCmdLogFiles{
     $self->remote_out( "/tmp/test_stdout.$r.log");
     $self->cmd( $self->cmd ." 2>     ".$self->remote_err.
                             $tee.$self->remote_out);
+}
+sub _saveStageInfoBeforeTest{
+    my $self = shift;
+    $self->_saveStageInfo('before');
+}
+
+sub _saveStageInfoAfterTest{
+    my $self = shift;
+    $self->_saveStageInfo('after');
+}
+
+sub _saveStageInfo{
+    my ($self,$item) = @_;
+    my %info;
+    my $mc = $self->env->getNodeById
+        ($self->env->getMasterClient->{'id'});
+    $info{'lfs_freespace'}  = $mc->getLFFreeSpace;
+    $info{'lfs_freeinodes'} = $mc->getLFFreeInodes; 
+    $info{'lfs_capacity'}   = $mc->getLFCapacity;
+    $self->addYE($item."_execution",\%info);
 }
 
 1;

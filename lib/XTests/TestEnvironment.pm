@@ -1,19 +1,24 @@
 #
 #===============================================================================
 #
-#         FILE:  XTests::TestEnvironment.pm
+#         FILE:  XTests/TestEnvironment.pm
 #
-#  DESCRIPTION:  
+#  DESCRIPTION:  This class maintains test environment and configuration.
 #
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
 #       AUTHOR:  ryg 
-#      COMPANY:  
-#      VERSION:  1.0
+#      COMPANY:  Xyratex 
 #      CREATED:  08/30/2011 11:59:25 PM
-#     REVISION:  ---
 #===============================================================================
+
+=pod 
+
+=head1 Class maintains test environment and configuration.
+
+This class gathers cluster configuration data, disk sizes, space available, network type, cpu count, that nodes are reachable via ssh/pdsh, and Lustre basic liveness (Lustre is up and files can be created).
+
+Also this class contains and can process system configuration which is read from external file.
+
+=cut
 
 package XTests::TestEnvironment;
 
@@ -23,9 +28,9 @@ use Log::Log4perl qw(:easy);
 use Carp;
 use Data::Dumper;
 
-#This could gather cluster config data, disk sizes, space available, network type, cpu count, that nodes are reachable via ssh/pdsh, and Lustre basic liveness (Lustre is up and files can be created).
 has 'nodes'      => ( is => 'rw',isa => 'ArrayRef[]', );
 has 'cfg'    => ( is => 'rw');
+
 sub init{
     my $self = shift;
     my $yamlcfg = shift;
@@ -44,10 +49,14 @@ sub init{
 sub checkEnv{
     DEBUG "Start env check";
     my $self = shift;
+
+    #TODO
+    #check variables there
+
     foreach my $n (@{$self->{'nodes'}}){
         #$n->ping;
         #$n->isReachable;
-    }
+    }    
     INFO "Configuration check completed";
 }
 
@@ -62,7 +71,6 @@ sub getOSSs{
     }    
     return \@osss;
 }
-
 
 sub getMDSs{
     my $self = shift;
@@ -90,6 +98,20 @@ sub getClients{
 
 }
 
+sub getMasterClient{
+    my $self = shift;
+    foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
+        if(( $lo->{'type'} eq 'client')
+                &&( $lo->{'master'} eq 'yes')){
+           return $lo;              
+        }
+    }    
+    return undef;
+}
+
+
+
+
 sub getNodeAddress{
     my ($self, $id) = @_;
     foreach my $n (@{$self->nodes}){
@@ -97,6 +119,7 @@ sub getNodeAddress{
     }
     return undef;
 }
+
 sub getNodeUser{
     my ($self, $id) = @_;
     foreach my $n (@{$self->nodes}){
@@ -105,11 +128,23 @@ sub getNodeUser{
     return undef;
 }                
 
+sub getNodeById{
+    my ($self, $id) = @_;
+    foreach my $n (@{$self->nodes}){
+        return $n    if( $n->id eq $id);
+    }
+    return undef;
+
+}
+
+=begin  BlockComment  # BlockCommentNo_1
+
+
 sub getLusterConfig{
 
 }
 
-sub getDiskSizes{
+sub getDiskSize{
 }
 
 sub getFreeSpace{
@@ -118,6 +153,11 @@ sub getFreeSpace{
 
 sub getNetworkType{
 }
+
+=end    BlockComment  # BlockCommentNo_1
+
+=cut
+
 
 
 __PACKAGE__->meta->make_immutable;

@@ -54,6 +54,11 @@ sub addYE{
     $self->{'yaml'}->{$key} = $value ;
 }
 
+sub addYEE{
+    my ($self, $key1, $key2, $value) = @_;
+    $self->{'yaml'}->{$key1}->{$key2} = $value ;
+}
+
 sub pass{
     my ($self,$msg)  = @_;
     if( defined $msg){

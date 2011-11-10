@@ -178,7 +178,7 @@ SS
 
     $self->exitcode(
             trim $self->_sshSyncExec("cat ".$self->ecodefile));
-    return $self->exitcode;
+    return $s;
 
 }
 
