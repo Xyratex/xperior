@@ -99,7 +99,7 @@ sub loadEnvCfg{
     my $self  = shift;
     my $fn    = shift;
     $fn = 'systemcfg.yaml' unless defined $fn;
-    INFO "Load env configuration file [ $fn ]";
+    DEBUG  "Load env configuration file [ $fn ]";
     my $envcfg = LoadFile( $fn ) or confess $!;
     #DEBUG Dumper $envcfg;  
     my $env = undef;

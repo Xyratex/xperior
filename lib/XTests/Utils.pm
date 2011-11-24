@@ -31,7 +31,9 @@ our @EXPORT = qw(&trim &runEx);
 
 sub trim{
    my $string = shift;
-   $string =~ s/^\s+|\s+$//g;
+   if(defined( $string)){
+        $string =~ s/^\s+|\s+$//g;
+   }
    return $string;
 }
 

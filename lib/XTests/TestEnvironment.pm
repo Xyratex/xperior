@@ -54,11 +54,13 @@ sub checkEnv{
     #check variables there
 
     foreach my $n (@{$self->{'nodes'}}){
-        #$n->ping;
-        #$n->isReachable;
+        $n->ping;
+        $n->isReachable;
     }    
     INFO "Configuration check completed";
 }
+
+#yaml/descriptor functions
 
 sub getOSSs{
     my $self = shift;
@@ -110,7 +112,7 @@ sub getMasterClient{
 }
 
 
-
+#object functions
 
 sub getNodeAddress{
     my ($self, $id) = @_;

@@ -26,21 +26,21 @@ Only one pocess execute on client which marked as master.
 =cut
 sub execute{
     my $self = shift; 
-    my $mc = $self->_getMasterClient;
+    my $mcl = $self->_getMasterClient;
 
-    $self->addYE('masterclient',$mc);
-    DEBUG "MC:". Dumper $mc;
+    #saving env data
+    $self->addYE('masterclient',$mcl);
+    DEBUG "MC:". Dumper $mcl;
     $self->_prepareCommands;
     $self->_addCmdLogFiles;
     $self->addYE('cmd',$self->cmd);
-
     $self->_saveStageInfoBeforeTest;
+    
+    #get remote processor
+    my $mclo =  
+        $self->env->getNodeById($mcl->{'id'});
+    my $testp = $mclo->rconnector;
 
-    my $testp = XTests::SshProcess->new();
-    $testp->init(
-            $self->env->getNodeAddress($mc->{'node'}),
-            $self->env->getNodeUser($mc->{'node'}));
-   
     ## create temprory dir
     $testp->createSync
         ('mkdir -p '.$self->env->cfg->{'client_mount_point'}
@@ -123,6 +123,7 @@ sub execute{
 sub _getMasterClient{
     my $self = shift;
     foreach my $lc (@{$self->env->getClients}){
+        DEBUG "Check client ". Dumper $lc;
         return $lc 
             if(defined( $lc->{'master'} &&
                 ( $lc->{'master'} eq 'yes')));

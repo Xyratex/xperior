@@ -52,30 +52,12 @@ check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lu
 sub isReachable{
     my $self = shift;
     #TODO only ssh now is supported
-
-
-=begin  BlockComment  # BlockCommentNo_1
-
-    my $host = $self->{'ip'};
-    my $net_service = Test::Net::Service->new(
-                'host'  => $host,
-                'proto' => 'tcp',
-     );
-     my $res = $net_service->connect(
-                        'port'    => 22,
-                        'service' => 'ssh',
-                );
-     $res = $net_service->test_ssh(
-                        'port'    => 22,
-                        'service' => 'ssh',
-                );
-
-
-    DEBUG "SSH check for [$host]:$res";
-=end    BlockComment  # BlockCommentNo_1
-
-=cut
-
+    my $sc =$self->_getRemoteConnector;
+    unless ( defined ($sc)){
+        die "Cannot ssh host [".$self->id."]";
+    }else{
+        DEBUG $self->id ." is reachable ";
+    }
 }
 
 =over *
@@ -102,10 +84,6 @@ sub ping {
     }
 }
 
-sub checkSSH{
-
-}
-
 sub getNodeConfiguration{
 
 }
@@ -118,6 +96,7 @@ sub getLFFreeSpace{
         return $1 
             if( $str =~ m/filesystem\ssummary\:\s+\d+\s+\d+\s+(\d+)/ );
     }
+    DEBUG "getLFFreeSpace -  cannot parse:[$cmd]";
     return -1;
 }
 
@@ -129,6 +108,7 @@ sub getLFFreeInodes{
         return $1 
             if( $str =~ m/filesystem\ssummary\:\s+\d+\s+\d+\s+(\d+)/ );
     }
+    DEBUG "getLFFreeInodes -  cannot parse:[$cmd]";
     return -1;
 }
 
@@ -140,6 +120,7 @@ sub getLFCapacity{
         return $1 
             if( $str =~ m/filesystem\ssummary\:\s+(\d+)\s+\d+\s+\d+/ );
     }
+    DEBUG "getLFCapacity -  cannot parse:[$cmd]";
     return -1;
 
 }
@@ -150,7 +131,12 @@ sub _getRemoteConnector{
          if defined $self->rconnector;
     
     my $sc = XTests::SshProcess->new();
-    $sc->init($self->ip,$self->user);
+    
+    if ($sc->init($self->ip,$self->user) < 0){
+        $self->rconnector(undef);
+        return undef;
+    }
+
     $self->rconnector($sc);
     return $sc;
 }

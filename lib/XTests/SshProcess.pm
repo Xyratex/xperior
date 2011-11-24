@@ -72,10 +72,15 @@ has hostname  => (is=>'rw');
 has osversion => (is=>'rw');
 
 
+#TODO add timeout support
+#TODO speed improvement via socket sharing
 sub _sshSyncExec{
-    my ($self, $cmd, $timeout) = @_;
+    my ($self, $cmd, $timeout, $master) = @_;
     DEBUG "XTest::SshProcess->_sshSyncExec";
-    my $cc =  "ssh -f ". $self->user ."@". $self->host .                    " \"$cmd\" 2>&1 ";
+    my $cc =  "ssh -o 'BatchMode yes'  -f ". $self->user ."@". $self->host .                    " \"$cmd\" 2>&1 ";
+
+#    my $cc =  "ssh -f ". $self->user ."@". $self->host ." -S /tmp/ssh_socket_%r@%h:%p   \"$cmd\" 2>&1 ";
+
     DEBUG "Remote cmd is [$cc]";
     return `$cc`;
 }
@@ -114,16 +119,27 @@ sub init {
     $self->host(shift);
     $self->user(shift);
     $self->port(shift);
-    $self->killed(0);   
-    
-    my $ver = trim $self->_sshSyncExec("uname -a" ,1)
-      or confess "unable to check remote system: " . $_;
-    
+    $self->killed(0);
+
+    my $nocrash = shift;
+
+#    DEBUG  "ssh -o 'BatchMode yes' -M -S /tmp/ssh_socked%r@%h:%p  -f ". $self->user ."@". $self->host ." ";
+
+    my $ver = trim $self->_sshSyncExec("uname -a" ,1);
+    if(defined ($nocrash) && $nocrash){ 
+        return -99;
+    }else{
+        confess "SSH returns non-zero values on previous command:"
+            .${^CHILD_ERROR_NATIVE} 
+                if (${^CHILD_ERROR_NATIVE} != 0); 
+    }
+
     my $h = trim  $self->_sshSyncExec("hostname",1 );
     INFO "Executing on host [$h]";
     $self->hostname($h);
     DEBUG "Remote system is <$ver>";
     $self->osversion($ver);
+    return 0;
 }
 
 #TODO test on it

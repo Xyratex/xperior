@@ -6,11 +6,11 @@ Nodes:
      user        : root
      pass        : Xyratex
 
-   - id           : oss1
-     ip           : 192.168.200.110
-     ctrlproto    : ssh
-     user         : root
-     pass         : Xyratex
+#   - id           : oss1
+#     ip           : 192.168.200.110
+#     ctrlproto    : ssh
+#     user         : root
+#     pass         : Xyratex
 
 #   - id          : oss2
 #     ip          : 192.168.200.1
@@ -29,10 +29,10 @@ LustreObjects:
      node        : mds1
      type        : mds
    
-   - id          : oos1 
-     device      : /dev/sda1
-     node        : oss1
-     type        : oss
+#   - id          : oos1 
+#     device      : /dev/sda1
+#     node        : oss1
+#     type        : oss
 
    - id          : client1
      node        : client1

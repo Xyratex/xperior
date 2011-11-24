@@ -91,7 +91,7 @@ test plan => 20, xStress    => sub {
     }
 };
 
-test plan => 7, bInit    => sub {
+test plan => 10, bInit    => sub {
     is($sp->host,'localhost','host');
     is($sp->user,'ryg','user');
     is($sp->hostname,trim `hostname`,'Check on host hostname');
@@ -103,8 +103,17 @@ test plan => 7, bInit    => sub {
     isnt($pidfile,  $sp->pidfile,'Pid file is uniq');
     isnt($ecodefile,$sp->ecodefile, 'Exit code file is uniq');
     isnt($rscrfile, $sp->rscrfile, 'Script file is uniq');
-    #is($exe->getClients,1, 'Check clients after adding');
+    #is($exe->getClients,1, 'Check clients after adding')
+
+    eval{ $sp->init('localhost','ryg');};
+    is($@,'',"Connection ok");
+    #negative initialization
+    eval{ $sp->init('node_on_mars','ryg');};
+    isnt($@,''," Connection failed as expected");
+    eval{ $sp->init('localhost','ryg_on_mars');};
+    isnt($@,''," Connection failed as expected");
 };
+
 
 #TODO add stress test and sendFile, getFile
 

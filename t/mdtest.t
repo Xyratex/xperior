@@ -88,7 +88,7 @@ test plan =>1 , n_Execute    => sub {
 
 
 test plan =>5 , e_processLogs    => sub {
-    #Log::Log4perl->easy_init($INFO);   
+    Log::Log4perl->easy_init($DEBUG);   
     $exe->processLogs('t/testout/mdtest.test1.stderr.log');
      #DEBUG Dumper $exe->yaml;
     my $pe = $exe->yaml->{'measurements'};
