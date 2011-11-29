@@ -49,7 +49,7 @@ sub runtest{
     my $executor = $self->createExecutor($test->getParam('executor'));
     $executor->init($test, $self->options, $self->env);
     $executor->execute;
-    $executor->write();
+    $executor->report();
     return $test->tap;
 }
 

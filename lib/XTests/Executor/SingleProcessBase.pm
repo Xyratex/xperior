@@ -40,7 +40,7 @@ sub execute{
     #get remote processor
     my $mclo =  
         $self->env->getNodeById($mcl->{'id'});
-    my $testp = $mclo->rconnector;
+    my $testp = $mclo->_getRemoteConnector;
     unless( defined( $testp)) {
         INFO 'Master client is:'.Dumper $mclo;
         confess "SSH to master client is undef";
@@ -123,7 +123,7 @@ sub execute{
     ### end
     $self->test->tap     ( $self->tap);
     $self->test->results ($self->yaml);
-    $self->write();
+    #$self->write();
     return $self->tap();
 }
 

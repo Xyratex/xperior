@@ -38,7 +38,11 @@ has remote_err          => (is=>'rw');
 
 sub init{
     my ($self, $test, $opt, $env) = @_;
-    
+    my %th;
+    $self->yaml(\%th);
+    $self->yaml->{'status'} = 'not set';
+    $self->yaml->{'status_code'} = -1;
+   
     $self->steptimeout(5);
 
     $self->{'test'} = $test;
@@ -47,16 +51,19 @@ sub init{
     foreach my $k ( @{$test->getParamNames}){
         $self->addYE($k,$test->getParam($k));
     }
+    $self->_write;
 }
 
 sub addYE{
     my ($self, $key, $value) = @_;
     $self->{'yaml'}->{$key} = $value ;
+    $self->_write;
 }
 
 sub addYEE{
     my ($self, $key1, $key2, $value) = @_;
     $self->{'yaml'}->{$key1}->{$key2} = $value ;
+    $self->write;
 }
 
 sub pass{
@@ -126,24 +133,28 @@ sub tap{
         $yaml;
 }
 
-sub write{
+sub report{
      my $self = shift;
-     my $file = $self->_reportFile;
-     $self->_createDir;
      $self->addYE('result',     $self->result);
      $self->addYE('result_code',$self->result_code);
-     open REP, "> $file" or confess "Cannot open report file:" . $!;
-     print REP Dump($self->yaml);
-     close REP;
+     $self->_write;
 }
 
 =item * 
 Stub of execute test function. See implementations in child classes.
 =cut
 sub execute{
-    confess 'Functions is not implemented!';
+    confess 'Functions is not implemented, override it!';
 }
 
+sub _write{
+     my $self = shift;
+     my $file = $self->_reportFile;
+     $self->_createDir;
+     open REP, "> $file" or confess "Cannot open report file:" . $!;
+     print REP Dump($self->yaml);
+     close REP;
+}
 
 
 sub _createDir{
@@ -152,11 +163,13 @@ sub _createDir{
         mkpath ($self->_reportDir); 
     }
 }
+
 sub _reportDir{
     my $self = shift;
     return $self->options->{'workdir'}.'/'.
            $self->test->getParam('groupname');
 }
+
 sub _reportFile{
     my $self = shift;
     return $self->_reportDir.'/'.

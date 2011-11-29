@@ -108,7 +108,7 @@ test plan => 4, cCheckReportWriting    => sub {
 
     unlink $file;
     $exe->pass;
-    $exe->write;
+    $exe->report;
     ok(-r $file);
     SKIP:{ pass ('TODO:check report data') };
 };
