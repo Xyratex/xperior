@@ -65,7 +65,8 @@ sub processLogs{
         }
     }
     close (F);
-    $self->addYE('measurements',\@results); 
+    $self->addYE('measurements',\@results);
+    return 0;
 }
 
 __PACKAGE__->meta->make_immutable;

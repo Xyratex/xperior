@@ -28,7 +28,7 @@ use XTests::Test;
 use XTests::Executor::LustreTests;
 
 my %options = ( 
-    testdir => 't/testcfgs/simple/',
+    testdir => 't/testcfgs/lustre/',
     workdir => '/tmp/test_wd',
     
 );
@@ -52,7 +52,7 @@ setup           _setup    => sub {
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub {  };
 #########################################
-test plan => 2, cCheckSimple    => sub {
+test plan => 3, eCheckSimple    => sub {
     my $testcore =  XTests::Core->new();
     $testcore->options(\%options);      
     my $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
@@ -62,17 +62,47 @@ test plan => 2, cCheckSimple    => sub {
     my $exe = XTests::Executor::LustreTests->new();
     $exe->init($test, \%options, $cfg);
     $exe->_prepareEnvOpts;
-    print "MDS OPT:".$exe->mdsopt."\n";
+    DEBUG "MDS OPT:".$exe->mdsopt;
     is($exe->mdsopt,
-            ' MDSDEV1=/dev/sda1 mds1_HOST=192.168.200.102 ', 
+            'MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=192.168.200.102 ', 
             'Check MDS OPT');
 
 
-    print "OSS OPT:".$exe->ossopt."\n";
+    DEBUG "OSS OPT:".$exe->ossopt;
     is($exe->ossopt,
-            ' OSTDEV1=/dev/sda1 ost1_HOST=192.168.200.110 ', 
+            'OSTCOUNT=2 OSTDEV1=/dev/loop1 ost1_HOST=192.168.200.102  OSTDEV2=/dev/loop2 ost2_HOST=192.168.200.102 ', 
             'Check OSS OPT');                                
 
+    DEBUG "CLNT OPT:".$exe->clntopt;
+    is($exe->clntopt,
+            'CLIENTS=lclient RCLIENTS=\"mds\"',
+            'Check Clients options');
+};
+
+test plan =>2, gCheckLogParsing => sub{
+    my $exe = XTests::Executor::LustreTests->new();
+    my $res = $exe->processLogs('t/testout/sanity.1a.stdout.log');
+    is($res,0,'Check PASS log');
+    $res = $exe->processLogs('t/testout/sanity.1a.f.stdout.log');
+    is($res,-1,'Check no PASS log');
+
+};
+
+test plan =>3, kCheckExecution => sub{
+    my $testcore =  XTests::Core->new();
+    $testcore->options(\%options);      
+    my $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
+    my $tests  =  $testcore->loadTests;
+    my $exe = XTests::Executor::LustreTests->new();
+    $exe->init(@{$tests}[0], \%options, $cfg);
+    $exe->_prepareCommands;
+    DEBUG $exe->cmd;
+    my $excmd =  'SLOW=YES REFORMAT=YES MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=192.168.200.102  OSTCOUNT=2 OSTDEV1=/dev/loop1 ost1_HOST=192.168.200.102  OSTDEV2=/dev/loop2 ost2_HOST=192.168.200.102  CLIENTS=lclient RCLIENTS=\"mds\" ONLY=1a DIR=/mnt/lustre/tmp  PDSH=\"/usr/bin/pdsh -S -w \" /usr/lib64/lustre/tests/sanity.sh';
+    is($exe->cmd,$excmd,"Check generated cmd");
+    $exe->execute;
+    DEBUG Dumper $exe->yaml;
+    is($exe->yaml->{'result'},'ok 1', 'Check result');
+    is($exe->yaml->{ 'executor'}, 'XTests::Executor::LustreTests', 'Check result');
 };
 
 lustreexec->run_tests;

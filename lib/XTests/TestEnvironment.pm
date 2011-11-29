@@ -56,6 +56,7 @@ sub checkEnv{
     foreach my $n (@{$self->{'nodes'}}){
         $n->ping;
         $n->isReachable;
+        $n->getNodeConfiguration;
     }    
     INFO "Configuration check completed";
 }

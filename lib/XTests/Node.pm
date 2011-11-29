@@ -27,6 +27,7 @@ use Moose::Util::TypeConstraints;
 use Net::Ping;
 use Log::Log4perl qw(:easy);
 
+use XTests::Utils;
 use XTests::SshProcess;
 
 has 'ctrlproto'    => ( is => 'rw' );
@@ -34,6 +35,23 @@ has 'user'         => ( is => 'rw' );
 has 'pass'         => ( is => 'rw' );
 has 'ip'           => ( is => 'rw' );
 has 'id'           => ( is => 'rw' );
+
+has 'architecture'    => ( is => 'rw');
+has 'os'              => ( is => 'rw');
+has 'os_release'      => ( is => 'rw');
+has 'os_distribution' => ( is => 'rw');
+has 'lustre_version'  => ( is => 'rw');
+has 'lustre_net'      => ( is => 'rw');
+
+has 'memtotal'        => ( is => 'rw');
+has 'memfree'         => ( is => 'rw');
+has 'swaptotal'       => ( is => 'rw');
+has 'swapfree'        => ( is => 'rw');
+
+#has 'memtotal'        => ( is => 'rw');
+#has 'memtotal'        => ( is => 'rw');
+#has 'memtotal'        => ( is => 'rw');
+#has 'memtotal'        => ( is => 'rw');
 
 has 'rconnector'   => (
                         is => 'rw',
@@ -85,7 +103,49 @@ sub ping {
 }
 
 sub getNodeConfiguration{
+    my $self = shift;
+    my $sc = $self->_getRemoteConnector;
+    $self->architecture(trim($sc->createSync('uname -m')));
+    $self->os(trim($sc->createSync('uname -o')));
+    $self->os_release( 
+            trim( 
+                (split(':\s',$sc->createSync('lsb_release -r')))
+                [1]
+                ));
 
+    $self->os_distribution( 
+            trim(
+                (split(':\s',$sc->createSync('lsb_release -d')))
+                [1]
+                ));
+
+    $self->lustre_version( 
+            trim(
+                (split('\s', $sc->createSync('lctl lustre_build_version')))
+                    [2] ));
+    $self->lustre_net( 
+            trim(
+                (split('@', $sc->createSync('lctl list_nids ')))
+                    [1] ));
+
+    my $memout = $sc->createSync('cat /proc/meminfo');
+    foreach my $s ( split('\n',$memout)){
+        if( $s =~ m/MemTotal:\s+(\d+)/){
+            $self->memtotal($1);
+        }
+        if( $s =~ m/MemFree:\s+(\d+)/){
+            $self->memfree($1);
+        }
+        if( $s =~ m/SwapTotal:\s+(\d+)/){
+            $self->swaptotal($1);
+        }
+        if( $s =~ m/SwapFree:\s+(\d+)/){
+            $self->swapfree($1);
+        }
+    }
+
+    #TODO add CPU processor count
+    #my $cpuout = $sc->createSync('cat /proc/cpuinfo');
 }
 
 sub getLFFreeSpace{

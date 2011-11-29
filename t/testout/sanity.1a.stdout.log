@@ -1,0 +1,36 @@
+Logging to local directory: /tmp/test_logs//1322336827
+lclient: Checking config lustre mounted on /mnt/lustre
+mds: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients lclient,mds environments
+Using TIMEOUT=20
+disable quota as required
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=10
+mds: debug=0x33f0404
+192.168.200.102: debug=0x33f0404
+192.168.200.102: subsystem_debug=0xffb7e3ff
+mds: subsystem_debug=0xffb7e3ff
+192.168.200.102: debug_mb=10
+mds: debug_mb=10
+setting all flavor to null
+already have total 8 null connections
+only running test 1a
+excepting tests: 27u 42a 42b 42c 42d 45 51d 65a 65e 68b
+skipping tests SLOW=no: 24o 24v 27m 36f 36g 36h 51b 51c 60c 63 64b 68 71 73 77f 78 101 103 115 120g 124b
+preparing for tests involving mounts
+
+debug=-1
+...
+
+== sanity test 1a: mkdir .../d1; mkdir .../d1/d2 ======================= 11:47:12 (1322336832)
+mkdir: cannot create directory `/mnt/lustre/tmp/d1/d2': File exists
+/mnt/lustre/tmp/d1/d2 has type dir OK
+Resetting fail_loc on all nodes...done.
+PASS 1a (1s)
+....................................................................................................................................................................................................................................................................................................................resend_count is set to 4 4
+..........resend_count is set to 10 10
+....................................................................Pools from lustre:
+.................== sanity sanity.sh test complete, duration 6 sec == 11:47:13 (1322336833)
+debug=super warning dlmtrace error emerg ha rpctrace vfstrace config console

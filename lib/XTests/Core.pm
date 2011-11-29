@@ -24,6 +24,7 @@ use Module::Load;
 
 use XTests::Test;
 use XTests::TestEnvironment;
+use XTests::Utils;
 
 our $VERSION = "0.0.1";
 
@@ -69,18 +70,37 @@ sub run {
     my @tests;
     my @rts = @{$self->{'tests'}};
     my %targs;
+    my @includeonly = @{$self->options->{'includeonly'}};
+    my $excludelist=undef;
+    $excludelist = parseIEFile( $self->options->{'excludelist'})
+                            if defined $self->options->{'excludelist'};
+    #going over all loaded tests
     foreach my $test ( @rts ){
-        DEBUG "Test = ".Dumper $test;
+        #DEBUG "Test = ".Dumper $test;
         
         ##filtering        
         my $filtered =0;
-        foreach my $tt (@{$test->getTags}){
-           foreach my $t (@{$self->options->{'skiptags'}}){
-               $filtered++ if $t eq $tt;
-           }
+        #if includeonly set ignore all other filtering options        
+        if((scalar @includeonly) > 0){
+            $filtered = 1;
+            foreach my $iodescr (@includeonly){
+                $filtered=0 if(compareIE($iodescr, $test->getGroupName.'/'.$test->getName) > 0);
+            }
+        }else{
+            foreach my $tt (@{$test->getTags}){
+                foreach my $t (@{$self->options->{'skiptags'}}){
+                    $filtered++ if $t eq $tt;
+                }
+            }
+            if(defined $excludelist) {
+                foreach my $tmpl ( @$excludelist){
+                    $filtered=1 if (compareIE($tmpl, $test->getGroupName.'/'.$test->getName) > 0);
+                }
+            }
+            
         }
         next if $filtered;
-
+        WARN "Starting test execution";
         my $a = $self->options->{'action'};
         if($a eq 'run'){
             $self->runtest($test);

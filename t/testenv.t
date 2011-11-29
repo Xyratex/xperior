@@ -45,6 +45,47 @@ setup           _setup    => sub {
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub {  };
 #########################################
+
+test plan => 10, aGetNodeConfiguration    => sub {
+    my $osss = $cfg->getOSSs;
+    my $nid  = ((@$osss)[0])->{'node'};
+    DEBUG "OSS ID=".$nid;
+    my $node = $cfg->getNodeById($nid);
+    DEBUG "Cfg dump".$node;
+    $node->getNodeConfiguration;
+    DEBUG $node->architecture;
+    is($node->architecture,'x86_64','Check arch');
+    
+    DEBUG $node->os;
+    is($node->os,'GNU/Linux','Check os');
+    
+    DEBUG $node->lustre_version;
+    is($node->lustre_version,'jenkins-g26109ba-PRISTINE-2.6.32-131.6.1.el6.lustre.37.x86_64','Check lb');
+    
+    DEBUG $node->os_release;
+    
+    is($node->os_release,'6.0','Check os release');
+    DEBUG $node->os_distribution;
+    
+    is($node->os_distribution,'Scientific Linux release 6.0 (Carbon)','Check os distr');
+    
+    DEBUG $node->lustre_net;                                                         
+    is($node->lustre_net,'tcp','Check net');
+
+    DEBUG $node->memtotal;                 
+    is($node->memtotal,'743200','Check mem total');
+
+    DEBUG $node->memfree;                 
+    ok($node->memtotal > 100,'Check mem free');
+
+    DEBUG $node->swaptotal;                 
+    is($node->swaptotal,'1507320','Check swap total');
+
+    DEBUG $node->swapfree;                 
+    ok($node->swapfree > 100,'Check swap free');
+
+};
+
 test plan => 2, dCheckIP    => sub {
     is( $cfg->getNodeAddress('mds1'),'192.168.200.102');
     is( $cfg->getNodeAddress('client1'),'lclient');
@@ -62,8 +103,11 @@ test plan => 3, nCheckRemoteControls => sub{
             "Check capacity:".$mc->getLFCapacity );
 };
 
+
+
+
 test plan => 5, cCheckLustreObjects    => sub {
-    $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
+    #$cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     ok (defined $cfg, "Check parsing results");
    
     my $osss = $cfg->getOSSs;
@@ -73,7 +117,13 @@ test plan => 5, cCheckLustreObjects    => sub {
             'type' => 'oss',
             'id' => 'oos1',
             'node' => 'oss1',
-            'device' => '/dev/sda1'
+            'device' => '/dev/loop1'
+          },
+          {
+            'type' => 'oss',
+            'id' => 'oos2',
+            'node' => 'oss2',
+            'device' => '/dev/loop2'
           }
     );
     is_deeply($osss,\@exp1,"Check getOSSs");
@@ -84,7 +134,7 @@ test plan => 5, cCheckLustreObjects    => sub {
             'type' => 'mds',
             'id' => 'mds1',
             'node' => 'mds1',
-            'device' => '/dev/sda1'
+            'device' => '/dev/loop0'
           }
         );
     #print "MDSs:".Dumper $mdss;

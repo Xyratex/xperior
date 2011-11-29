@@ -69,7 +69,7 @@ test plan => 6, eCreateAliveExit    => sub {
     is($ec,  0, 'Check exit code for alive app');
 };
 
-test plan => 3, cSynExecution => sub {
+test plan => 6, aSynExecution => sub {
   my $stime = time;
   $sp->createSync('/bin/sleep 10');
   my $etime = time;
@@ -77,6 +77,16 @@ test plan => 3, cSynExecution => sub {
   ok($etime-$stime< 15, "Check execution time");
   $sp->createSync('ls -la /folder/which/nobody/never/creates/');
   is($sp->exitcode,2,"Check exit code for failed syn execution");
+  
+  $stime = time;
+  $sp->createSync('/bin/sleep 15',5);
+  $etime=time;
+  isnt($sp->exitcode,0,"Check exit code for failed operation");
+  DEBUG "Execution was:".($etime-$stime);
+  ok($etime-$stime < 12, "Check time of timeouted operation");
+
+  $sp->createSync('/bin/sleep 10');
+  is($sp->exitcode,0,"Check exit code for failed operation");
 };
 
 

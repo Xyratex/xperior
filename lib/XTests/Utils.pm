@@ -1,18 +1,12 @@
-#
 #===============================================================================
 #
 #         FILE:  Xtests/Utils.pm
 #
 #  DESCRIPTION:  
 #
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
 #       AUTHOR:  ryg
-#      COMPANY:  
-#      VERSION:  1.0
+#      COMPANY:  Xyratex 
 #      CREATED:  09/05/2011 03:55:22 PM
-#     REVISION:  ---
 #===============================================================================
 package XTests::Utils;
 use strict;
@@ -27,7 +21,7 @@ use File::Path;
 
 
 our @ISA = ("Exporter");
-our @EXPORT = qw(&trim &runEx);
+our @EXPORT = qw(&trim &runEx &parseIEFile &compareIE);
 
 sub trim{
    my $string = shift;
@@ -54,5 +48,36 @@ sub runEx{
     INFO "Return code is:[" . $error_code . "]";
     return $error_code;
 }
+
+sub parseIEFile{
+    my $file = shift;
+    open(F,"< $file") or confess "Cannot open file: $file";
+    my @onlyvalues;
+    while(<F>){
+        my $str=$_;
+        chomp $str;
+        my @nocomment = split (/#/,$str);
+        next unless defined $nocomment[0];
+        $nocomment[0] = trim( $nocomment[0]) if defined $nocomment[0];
+        confess "Cannot parse file, space found on string [$str]:[".$nocomment[0]."]" 
+            if $nocomment[0] =~ m/\s+/ ;
+        push(@onlyvalues, $nocomment[0]) if $nocomment[0] ne '';
+    }
+    close F;
+    return \@onlyvalues;
+}
+
+sub compareIE{
+    my ($template, $value) =@_;
+    $template = trim $template;
+    if($template =~ m/\*$/){
+        $template =~ s/\*//;
+        return 2 if( $value =~ m/^$template.*/);
+    }else{
+        return 1 if( $value =~ m/^$template$/);
+    }
+    return 0;
+}
+
 1;
 

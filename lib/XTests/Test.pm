@@ -121,6 +121,11 @@ sub getTags{
     return \@tags;
 }
 
+sub getGroupName{
+    my $self=shift;
+    return  $self->getParam('groupname');
+}
+
 =over
 
 =item getDescription

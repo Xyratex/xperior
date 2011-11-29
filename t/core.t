@@ -60,9 +60,9 @@ test  plan => 6, dCheckTests           => sub {
     my @tests = @{$testcore->loadTests};
     my $tn = @tests;
     is ( $tn, 2, 'Check test number' );
-    is ( $tests[0]->getParam('id'), 1, 'Check id');
+    is ( $tests[0]->getParam('id'), '1a', 'Check id');
     is ( $tests[0]->getParam('expected_time'), 10, 'Check ex time');
-    is ( $tests[1]->getParam('id'), 2 , 'Check id');
+    is ( $tests[1]->getParam('id'), '2b' , 'Check id');
     is ( $tests[1]->getParam('groupname'), 'sanity' ,
                                         'Check groupname');
     diag( "2 groupname = ". $tests[1]->getParam('groupname') );

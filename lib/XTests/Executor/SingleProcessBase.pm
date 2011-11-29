@@ -34,13 +34,17 @@ sub execute{
     $self->_prepareCommands;
     $self->_addCmdLogFiles;
     $self->addYE('cmd',$self->cmd);
+    
     $self->_saveStageInfoBeforeTest;
     
     #get remote processor
     my $mclo =  
         $self->env->getNodeById($mcl->{'id'});
     my $testp = $mclo->rconnector;
-
+    unless( defined( $testp)) {
+        INFO 'Master client is:'.Dumper $mclo;
+        confess "SSH to master client is undef";
+    }
     ## create temprory dir
     $testp->createSync
         ('mkdir -p '.$self->env->cfg->{'client_mount_point'}
@@ -75,20 +79,6 @@ sub execute{
     ### post processing and cleanup
     $testp->kill if($testp->isAlive == 0);
 
-    if($testp->killed > 0){
-        $self->addYE('killed','yes');
-        $self->fail(
-                'Killed by timeout after ['.
-                $testp->killed.
-                '] sec of execution');           
-    }else{
-        $self->addYE('killed','no');
-        if( $testp->exitcode == 0 ){
-            $self->pass;
-        }else{
-            $self->fail('Non-zero exit code');
-        }
-    }
     $self->addYE('completed','yes');
     
     $self->_saveStageInfoAfterTest;
@@ -110,8 +100,25 @@ sub execute{
     $self->registerLogFile('stdout',
             $self->getNormalizedLogName('stdout'));
 
-    $self->processLogs($self->getNormalizedLogName('stdout'))
+    my $pr = -1;
+    $pr = $self->processLogs($self->getNormalizedLogName('stdout'))
                                     if $self->result_code == 0;
+    #calculate results status
+    if($testp->killed > 0){
+        $self->addYE('killed','yes');
+        $self->fail(
+                'Killed by timeout after ['.
+                ($testp->killed-$starttime).
+                '] sec of execution');           
+    }else{
+        $self->addYE('killed','no');
+        if( ($testp->exitcode == 0) && ($pr == 0) ){
+            $self->pass;
+        }else{
+            $self->fail('Non-zero exit code');
+        }
+    }
+
     ### cleanup logs
     ### end
     $self->test->tap     ( $self->tap);

@@ -34,6 +34,9 @@ my $configfile = "";
 my $mode       = "";
 my @suites;
 my @skiptags;
+my @includeonly;
+my $includelist ='';
+my $excludelist ='';
 my $task       = "";
 my $flist      = "";
 my $workdir    = '';
@@ -49,9 +52,11 @@ GetOptions(
     "config:s"     => \$configfile,
     "mode:s"       => \$mode,
     "suites=s@"    => \@suites,
-    "skiptags=s@"  => \@skiptags,
+    "skiptag=s@"  =>  \@skiptags,
+    "includeonly=s@" => \@includeonly,
     "tests:s"      => \$task,
-    "exclude:s"    => \$helpflag,
+    "excludelist:s"    => \$excludelist,
+    "includelist:s"    => \$includelist, 
     "flist:s"      => \$flist,
     "workdir:s"    => \$workdir,
     "testdir:s"    => \$testdir,
@@ -120,6 +125,9 @@ if( $action eq 'run'){
     workdir  => $workdir,
     cmdout   => $cmdout,
     skiptags => \@skiptags,
+    excludelist => $excludelist,
+    includelist => $includelist,
+    includeonly => \@includeonly,
     action   => $action,
 );
 
@@ -147,7 +155,20 @@ runtest.pl - executing tests via  XTests harness.
         --testdir=<path>   : directory where are test descriptors yaml files
 
     Test filtering:
-        --skiptags=tag1 : list of tags which will be skipped. No mask or regexp allowed. Use this parameter twice or more for many tag exclusion. 
+        --skiptag=tag1     : list of tags which will be skipped. No mask or regexp allowed. Use this parameter twice or more for many tag exclusion. Ignored if --includeonly set.
+        --includeonly        : list of test for execution from command line. Use this parameter twice or more for many tests. Exclude/include lists parameters is ignored if this key pointed. Test must be pointed as <test group>/<test name>. See also include/exclude list format below.
+        --excludelist       : list of tests for exclude from execution. These tests will not be executed, no status or report will be generated. See syntax definition below. 
+        --includelist       : list of tests for execution. Only tests in the list will be executed.Same syntax as exclude list. TBI.
+
+        Exclude/include list format is simple. Every tests defined by his name and his test group. It is possible to use mask * at end of string(any continue of the string) Symbols after '#' are ignored.   
+    Sample:
+    ------------------------------------------------------
+    sanity/a1
+    mdtest* #comment
+    #comment too
+    ------------------------------------------------------
+
+
 
     Framework logging level 
         --debug             : 'debug' log level

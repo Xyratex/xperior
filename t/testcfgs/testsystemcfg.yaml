@@ -7,15 +7,16 @@ Nodes:
      pass        : Xyratex
 
    - id           : oss1
-     ip           : 192.168.200.110
+#     ip           : 192.168.200.110
+     ip           : 192.168.200.102    
      ctrlproto    : ssh
      user         : root
      pass         : Xyratex
 
-#   - id          : oss2
-#     ip          : 192.168.200.1
-#     ssh_user    : root
-#     ssh_pass    : Xyratex
+   - id          : oss2
+     ip          : 192.168.200.102
+     ssh_user    : root
+     ssh_pass    : Xyratex
 
    - id           : client1
      ip           : lclient 
@@ -26,7 +27,7 @@ Nodes:
 
    - id           : client2
      ip           : mds 
-#     ip           : 192.168.200.102
+#    ip           : 192.168.200.102
      ctrlproto    : ssh
      user         : ryg
      pass         : Xyratex
@@ -36,13 +37,18 @@ Nodes:
 
 LustreObjects:
    - id          : mds1 
-     device      : /dev/sda1
+     device      : /dev/loop0 
      node        : mds1
      type        : mds
    
    - id          : oos1 
-     device      : /dev/sda1
+     device      : /dev/loop1 
      node        : oss1
+     type        : oss
+
+   - id          : oos2 
+     device      : /dev/loop2 
+     node        : oss2
      type        : oss
 
    - id          : client1
@@ -57,4 +63,5 @@ LustreObjects:
 #Variables
 client_mount_point      : /mnt/lustre/
 benchmark_tests_file    : testfile
+tempdir                 : /tmp/
 

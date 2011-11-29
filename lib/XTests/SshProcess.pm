@@ -76,16 +76,33 @@ has osversion => (is=>'rw');
 #TODO speed improvement via socket sharing
 sub _sshSyncExec{
     my ($self, $cmd, $timeout, $master) = @_;
+    $timeout=30 unless defined $timeout;
     DEBUG "XTest::SshProcess->_sshSyncExec";
-    my $cc =  "ssh -o 'BatchMode yes'  -f ". $self->user ."@". $self->host .                    " \"$cmd\" 2>&1 ";
+    my $cc = "ssh -o 'BatchMode yes' -o 'AddressFamily inet'  -f ". 
+                    $self->user ."@". $self->host . " \"$cmd\" 2>&1 ";
+    DEBUG "Remote cmd is [$cc], timeout is [$timeout]";
 
 #    my $cc =  "ssh -f ". $self->user ."@". $self->host ." -S /tmp/ssh_socket_%r@%h:%p   \"$cmd\" 2>&1 ";
+    my $out='';
+    eval {
+        local $SIG{ALRM} = sub { die "alarm clock restart" };
+        alarm $timeout;
+        # schedule alarm in 10 seconds
+        eval {
+            $out=`$cc`;
+        };
+        alarm 0;
+        # cancel the alarm
+    };
+    alarm 0;
+    # race condition protection
+    die if $@ && $@ !~ /alarm clock restart/; # reraise
 
-    DEBUG "Remote cmd is [$cc]";
-    return `$cc`;
+    return $out;
 }
+
 sub _sshAsyncExec{
-    my ($self, $cmd, $timeout) = @_;
+    my ($self, $cmd, $timeout, $master) = @_;
     DEBUG "XTest::SshProcess->_sshAsyncExec";
     my $cc =  "ssh -f ". $self->user ."@". $self->host . 
             " \"$cmd\"  ";
@@ -145,7 +162,6 @@ sub init {
 #TODO test on it
 sub _findPid{
     my $self   = shift;
-    my $mode   = shift;
     $self->pid(-1);     
     my $out = $self->_sshSyncExec ("cat ".$self->pidfile , 1);
 
@@ -174,7 +190,7 @@ Function have one parameter - command for start on emote node.
 =cut
 
 sub createSync{
-    my ($self,$app) = @_;
+    my ($self,$app,$timeout) = @_;
     $self->appcmd($app);
     DEBUG "XTest::SshProcess createSync";
     DEBUG "App to run [$app] on host[". $self->host . "]";
@@ -189,7 +205,7 @@ SS
     my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
   
     DEBUG "Starting ............";    
-    my $s  =  $self->_sshSyncExec("sh $tef");    
+    my $s  =  $self->_sshSyncExec("sh $tef",$timeout);    
     DEBUG "Remote app started";
 
     $self->exitcode(
@@ -197,6 +213,9 @@ SS
     return $s;
 
 }
+
+
+
 
 =over *
 
@@ -228,13 +247,10 @@ sub create {
     $self->appcmd($app);
     DEBUG "[$name]: XTest::SshProcess create";
     DEBUG "[$name]: App to run [$app] on host[". $self->host . "]";
-
-    DEBUG "Start remote ssh process[ $app ]";
    
-
-    my $rd = $self->_sshSyncExec("rm -rf ".$self->pidfile );
-    DEBUG "Del remote pid file: $rd";
     my $pf = $self->pidfile;
+    my $rd = $self->_sshSyncExec("rm -rf ".$pf );
+    DEBUG "Del remote pid file: $pf";
     my $ecf= $self->ecodefile;
 my $ss = <<"SS";
 $app &  
@@ -243,14 +259,12 @@ echo pid:[\\\$pid] > $pf
 wait \\\$pid
 echo \\\$? > $ecf 
 SS
-
-    #FIXME  
-    # clean /tmp after execution and test it
+    #TODO  clean /tmp after execution and test it
     my $tef = $self->rscrfile; 
     my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
-    DEBUG "Starting ............";    
+    DEBUG "Starting async ............";    
     my $s  =  $self->_sshAsyncExec("sh $tef");    
-    DEBUG "Remote app started";
+    DEBUG "Remote async app started";
     sleep 5;
     $self->exitcode(undef);
     $self->_findPid();

@@ -76,7 +76,8 @@ sub processLogs{
         }
     }
     close (F);
-    $self->addYE('measurements',\@results); 
+    $self->addYE('measurements',\@results);
+    return 0;
 }
 
 
