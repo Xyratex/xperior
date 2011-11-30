@@ -48,6 +48,7 @@ my $cmdout     = 0;
 my $action=undef;
 my $helpflag;
 my $manflag;
+my $continue;
 GetOptions(
     "config:s"     => \$configfile,
     "mode:s"       => \$mode,
@@ -67,6 +68,7 @@ GetOptions(
     "help!"        => \$helpflag,
     "man!"         => \$manflag,
     "action:s"     => \$action,
+    "continue!"    => \$continue,
 );
 
 if ( ($helpflag) || ($nopts) ) {
@@ -129,6 +131,7 @@ if( $action eq 'run'){
     includelist => $includelist,
     includeonly => \@includeonly,
     action   => $action,
+    continue => $continue,
 );
 
 my $testcore =  XTests::Core->new();
@@ -182,11 +185,11 @@ runtest.pl - executing tests via  XTests harness.
 
     Action specificator
         --action=<action>
-            run               : run tests which selected by configuration and filters.
-            list              : see list of tests which will be ready to execution considering configuration and filters
+            run             : run tests which selected by configuration and filters.
+            list            : see list of tests which will be ready to execution considering configuration and filters
 
     Options        
-        --contine          : TBD       
+    --continue           : Continue execution in specified work directory. Execution is continued from next test after last found written, possible not completed, report. If --continue is not set then previous results in work directory are overwritten.
         
 =head1 Description
 

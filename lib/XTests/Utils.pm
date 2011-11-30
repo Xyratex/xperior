@@ -18,10 +18,11 @@ use Log::Log4perl qw(:easy);
 use Cwd qw(chdir);
 use File::chdir;
 use File::Path;
-
+use File::Find;
+use Data::Dumper;
 
 our @ISA = ("Exporter");
-our @EXPORT = qw(&trim &runEx &parseIEFile &compareIE);
+our @EXPORT = qw(&trim &runEx &parseIEFile &compareIE &getExecutedTestsFromWD);
 
 sub trim{
    my $string = shift;
@@ -70,6 +71,7 @@ sub parseIEFile{
 sub compareIE{
     my ($template, $value) =@_;
     $template = trim $template;
+    #DEBUG "Compare for exclusion: [$template] and [$value]";
     if($template =~ m/\*$/){
         $template =~ s/\*//;
         return 2 if( $value =~ m/^$template.*/);
@@ -77,6 +79,22 @@ sub compareIE{
         return 1 if( $value =~ m/^$template$/);
     }
     return 0;
+}
+
+
+sub  getExecutedTestsFromWD{
+    my $wd = shift;
+    my @testlist;
+    return \@testlist  unless -d $wd;
+    find sub {
+        my $file = $_;
+        my $path =  $File::Find::name;
+        $path =~ s/^$wd//;
+        $path =~ s/^\///;
+        push (@testlist, $path) unless ( -d $file); }, 
+        $wd; 
+    #DEBUG Dumper \@testlist;
+    return \@testlist;
 }
 
 1;

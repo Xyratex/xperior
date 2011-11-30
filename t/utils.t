@@ -61,4 +61,14 @@ test plan => 1, gLoadEIFiles    => sub {
     is_deeply($res,\@exp,'Check parsing results');
 };
 
+test plan => 1, aGetExecutedTestsFromWD => sub{
+    my $res =  getExecutedTestsFromWD('t/data/wd');
+    DEBUG Dumper $res;
+    my @exp = (
+          'mdtest/test1.yaml',
+          'sanity/0b.yaml'
+          );
+    is_deeply($res,\@exp,'Check loaded test list');
+};
+
 utils->run_tests;
