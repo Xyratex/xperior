@@ -52,13 +52,22 @@ sub checkEnv{
 
     #TODO
     #check variables there
-
+    my $problems = 0;
     foreach my $n (@{$self->{'nodes'}}){
-        $n->ping;
-        $n->isReachable;
-        $n->getNodeConfiguration;
+        $problems-- unless $n->ping;
+        $problems-- unless $n->isReachable;
     }    
     INFO "Configuration check completed";
+    return $problems;
+}
+
+sub getNodesInfo{
+    my $self = shift;
+    foreach my $n (@{$self->{'nodes'}}){
+        $n->getNodeConfiguration;
+    }    
+    INFO "Configuration configuration harvest completed";
+
 }
 
 #yaml/descriptor functions

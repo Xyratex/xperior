@@ -145,12 +145,12 @@ __END__
 
 =head1 NAME
 
-runtest.pl - executing tests via  XTests harness. 
+runtest.pl - executing tests via  XTest harness. 
 
 =head1 SYNOPSIS 
 
     bin/runtest.pl <parameters>
-    Configuration: 
+    Configuration options: 
         --useproccfg       : TBD
         --config           : TBD path to yaml config file
 
@@ -189,7 +189,14 @@ runtest.pl - executing tests via  XTests harness.
             list            : see list of tests which will be ready to execution considering configuration and filters
 
     Options        
-    --continue           : Continue execution in specified work directory. Execution is continued from next test after last found written, possible not completed, report. If --continue is not set then previous results in work directory are overwritten.
+        --continue           : Continue execution in specified work directory. Execution is continued from next test after last found written, possible not completed, report. If --continue is not set then previous results in work directory are overwritten.
+        --skipnodeinfo       : TBI
+
+    Exit codes:
+    0         :  execution done successfully , all results ready
+    10        :  execution done because of detected nodes crash or network problem
+    11        :  execution done because of failure of tests which are in critical tests list 
+    19        :  original configuration cannot pass check
         
 =head1 Description
 

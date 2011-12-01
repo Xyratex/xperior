@@ -30,7 +30,7 @@ use XTests::Utils;
 our $VERSION = "0.0.1";
 
 has 'options'    => ( is => 'rw' );
-has 'tests'      => ( is => 'rw', isa => 'ArrayRef[]', );
+has 'tests'      => ( is => 'rw' );    # isa => 'ArrayRef[]', );
 has 'testgroups' => ( is => 'rw' );
 has 'env'        => ( is => 'rw' );
 
@@ -51,7 +51,7 @@ sub runtest {
     $executor->init( $test, $self->options, $self->env );
     $executor->execute;
     $executor->report();
-    return $test->tap;
+    return $executor->result_code;
 }
 
 sub run {
@@ -60,9 +60,14 @@ sub run {
     $self->{'options'} = $options;
     DEBUG "Start framework";
     my $tags = $self->loadTags;
-    $self->{'tests'} = $self->loadTests;
-    $self->{'env'}   = $self->loadEnvCfg;
-    #$self->{'env'}->checkEnv;
+    $self->tests( $self->loadTests );
+    $self->env( $self->loadEnvCfg );
+    if ( $self->env->checkEnv < 0 ) {
+        WARN "Found problesm while testing configuration";
+        exit(19);
+    }
+
+    #$self->env->getNodesInfo;
 
     #TODO load exclude list
 
@@ -79,10 +84,12 @@ sub run {
     my $executedtests;
 
     if ( $self->options->{'continue'} ) {
-        $executedtests = getExecutedTestsFromWD($self->options->{'workdir'});
+        $executedtests = getExecutedTestsFromWD( $self->options->{'workdir'} );
     }
 
     #going over all loaded tests
+    my $snum = 0;
+    my $enum = 0;
     foreach my $test (@rts) {
 
         #DEBUG "Test = ".Dumper $test;
@@ -102,13 +109,14 @@ sub run {
             }
         }
         else {
+
             #skip tags
             foreach my $tt ( @{ $test->getTags } ) {
                 foreach my $t ( @{ $self->options->{'skiptags'} } ) {
                     $filtered++ if $t eq $tt;
                 }
             }
-            
+
             # skip exclude list
             if ( defined $excludelist ) {
                 foreach my $tmpl (@$excludelist) {
@@ -120,25 +128,46 @@ sub run {
                 }
             }
 
-            #skip already executed
-            foreach my $et (@$executedtests) {
-                $filtered = 1
-                  if (
-                    compareIE(
-                        $et, $test->getGroupName . '/' . $test->getName.'.yaml'
-                    ) == 1
-                  );
-            }
         }
-        next if $filtered;
+
+        #skip already executed for --continue
+        foreach my $et (@$executedtests) {
+            $filtered = 1
+              if (
+                compareIE( $et,
+                    $test->getGroupName . '/' . $test->getName . '.yaml' ) == 1
+              );
+        }
+
+        if ($filtered) {
+            $snum++;
+            next;
+        }
         WARN "Starting test execution";
         my $a = $self->options->{'action'};
         if ( $a eq 'run' ) {
-            $self->runtest($test);
+            my $res = $self->runtest($test);
             WARN 'TEST '
               . $test->getName
               . ' STATUS: '
               . $test->results->{'status'};
+            $enum++;
+            if ( $res != 0 ) {
+
+                #test failed, do env check
+                my $cer = $self->{'env'}->checkEnv;
+                if ( $cer < 0 ) {
+                    WARN
+"Found problesm while testing configuration after failed test, exiting";
+                    WARN "Executed $enum tests, skipped $snum";
+                    exit(10);
+                }
+                if ( $test->getParam('dangerous') eq 'yes' ) {
+                    WARN "Dangerous test failure detected, exiting";
+                    WARN "Executed $enum tests, skipped $snum";
+                    exit(11);
+                }
+            }
         }
         elsif ( $a eq 'list' ) {
             print "====================\n";
@@ -149,6 +178,7 @@ sub run {
         }
     }
     WARN "Execution completed";
+    WARN "Executed $enum tests, skipped $snum";
 }
 
 sub loadEnvCfg {
@@ -201,7 +231,7 @@ sub loadTests {
         }
     }
 
-    DEBUG 'Load tests result:' . Dumper \@tests;
+    #DEBUG 'Load tests result:' . Dumper \@tests;
     return \@tests;
 }
 

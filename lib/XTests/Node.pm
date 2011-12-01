@@ -70,11 +70,20 @@ check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lu
 sub isReachable{
     my $self = shift;
     #TODO only ssh now is supported
-    my $sc =$self->_getRemoteConnector;
+    my $sc;
+    eval{
+        $sc=$self->_getRemoteConnector;
+    };
+    if( $@){
+         WARN "Cannot connec to host".$@;
+         return 0;
+    }
     unless ( defined ($sc)){
-        die "Cannot ssh host [".$self->id."]";
+        WARN "Cannot ssh host [".$self->id."]";
+        return 0;
     }else{
         DEBUG $self->id ." is reachable ";
+        return 1;
     }
 }
 
