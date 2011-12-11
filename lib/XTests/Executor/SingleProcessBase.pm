@@ -39,7 +39,7 @@ sub execute{
     
     #get remote processor
     my $mclo =  
-        $self->env->getNodeById($mcl->{'id'});
+        $self->env->getNodeById($mcl->{'node'});
     my $testp = $mclo->_getRemoteConnector;
     unless( defined( $testp)) {
         INFO 'Master client is:'.Dumper $mclo;
@@ -101,8 +101,8 @@ sub execute{
             $self->getNormalizedLogName('stdout'));
 
     my $pr = -1;
-    $pr = $self->processLogs($self->getNormalizedLogName('stdout'))
-                                    if $self->result_code == 0;
+    $pr = $self->processLogs($self->getNormalizedLogName('stdout'));
+                                        #if $self->result_code == 0; why it was needed?
     #calculate results status
     if($testp->killed > 0){
         $self->addYE('killed','yes');
@@ -167,7 +167,7 @@ sub _saveStageInfo{
     my ($self,$item) = @_;
     my %info;
     my $mc = $self->env->getNodeById
-        ($self->env->getMasterClient->{'id'});
+        ($self->env->getMasterClient->{'node'});
     $info{'lfs_freespace'}  = $mc->getLFFreeSpace;
     $info{'lfs_freeinodes'} = $mc->getLFFreeInodes; 
     $info{'lfs_capacity'}   = $mc->getLFCapacity;

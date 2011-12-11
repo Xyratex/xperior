@@ -61,7 +61,7 @@ sub run {
     DEBUG "Start framework";
     my $tags = $self->loadTags;
     $self->tests( $self->loadTests );
-    $self->env( $self->loadEnvCfg );
+    $self->env( $self->loadEnvCfg($options->{'configfile'}) );
     if ( $self->env->checkEnv < 0 ) {
         WARN "Found problesm while testing configuration";
         exit(19);
@@ -151,6 +151,7 @@ sub run {
               . $test->getName
               . ' STATUS: '
               . $test->results->{'status'};
+            #WARN Dumper $test;
             $enum++;
             if ( $res != 0 ) {
 
@@ -162,7 +163,8 @@ sub run {
                     WARN "Executed $enum tests, skipped $snum";
                     exit(10);
                 }
-                if ( $test->getParam('dangerous') eq 'yes' ) {
+                if ( defined($test->getParam('dangerous')) 
+                        && ($test->getParam('dangerous') eq 'yes') ) {
                     WARN "Dangerous test failure detected, exiting";
                     WARN "Executed $enum tests, skipped $snum";
                     exit(11);

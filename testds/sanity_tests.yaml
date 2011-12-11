@@ -8,6 +8,8 @@ timeout          : 300
 cleanup_max_time : -1
 options          : 
 tags             : functional 
+dangerous        : yes
+
 
 Tests:
    - id               : 0b
@@ -310,14 +312,23 @@ Tests:
    - id               : 101b
    - id               : 101d
    - id               : 102a
+     dangerous        : yes
    - id               : 102b
+     dangerous        : yes
    - id               : 102c
+     dangerous        : yes
    - id               : 102d
+     dangerous        : yes
    - id               : 102f
+     dangerous        : yes
    - id               : 102h
+     dangerous        : yes
    - id               : 102i
+     dangerous        : yes
    - id               : 102j
+     dangerous        : yes
    - id               : 102k
+     dangerous        : yes
    - id               : 103 
    - id               : 104a
    - id               : 104b
@@ -343,6 +354,7 @@ Tests:
    - id               : 118j
    - id               : 118k
    - id               : 119a
+     dangerous        : yes
    - id               : 119b
    - id               : 119c
    - id               : 119d

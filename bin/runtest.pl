@@ -98,6 +98,12 @@ if((defined $action) &&($action ne '') ){
     $action = 'run';
 }
 
+if (-e $configfile) {
+ INFO "Configuration file is [$configfile]";
+}else{
+    confess "Cannot find configuration file [$configfile]" ;
+}
+
 if (-d $testdir) {
  INFO "Test directory [$testdir] found";
 }else{
@@ -132,6 +138,7 @@ if( $action eq 'run'){
     includeonly => \@includeonly,
     action   => $action,
     continue => $continue,
+    configfile => $configfile,
 );
 
 my $testcore =  XTests::Core->new();

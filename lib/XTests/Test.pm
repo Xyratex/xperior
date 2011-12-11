@@ -90,8 +90,7 @@ returns parameter by name.
 =cut
 
 sub getParam{
-    my $self    = shift;
-    my $pname   = shift;
+    my ($self,$pname)   = @_;
     return $self->testcfg->{$pname} if (defined($self->testcfg->{$pname} ));
     return $self->groupcfg->{$pname} if (defined($self->groupcfg->{$pname} ));
 

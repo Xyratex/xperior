@@ -10,4 +10,29 @@ sanity/65a # 12653
 sanity/65e # 12653
 sanity/68b # 5188
 
-sanity/27*
+#also skip list from http://jira-nss.xy01.xyratex.com:8080/browse/MRP-298
+sanity/27a 
+sanity/27c 
+sanity/27d 
+sanity/27e 
+sanity/27f 
+sanity/27g 
+sanity/27j 
+sanity/27k 
+sanity/27l 
+sanity/27m 
+sanity/27n 
+sanity/27o 
+sanity/27p 
+sanity/27q 
+sanity/27r 
+sanity/27s 
+sanity/27t 
+sanity/27u 
+sanity/27v 
+sanity/27w 
+sanity/27x 
+sanity/27y 
+sanity/27z 
+sanity/27A 
+sanity/51d 
