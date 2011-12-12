@@ -2,11 +2,11 @@
 %define _missing_doc_files_terminate_build 0
 Summary: The MDTest and IOR wrapper for XTest harnesss.
 Name: xtest-openmpibenchmarks
-Version: 0.0.1 
+Version: 0.0.2
 Release: 4%{?dist} 
 License: TBD 
 Group: Development/Libraries
-Source: XTest-openmpibenchmarks-0.0.1.tar.gz
+Source: XTest-openmpibenchmarks-0.0.2.tar.gz
 Requires:  ior
 Requires:  xtest-harness 
 BuildArch: noarch

@@ -27,7 +27,7 @@ use XTest::Test;
 use XTest::TestEnvironment;
 use XTest::Utils;
 
-our $VERSION = "0.0.1";
+our $VERSION = "0.0.2";
 
 has 'options'    => ( is => 'rw' );
 has 'tests'      => ( is => 'rw' );    # isa => 'ArrayRef[]', );

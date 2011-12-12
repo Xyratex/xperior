@@ -23,7 +23,7 @@ use Carp qw( confess cluck );
 
 extends 'XTest::Executor::SingleProcessBase';
 
-our $VERSION = "0.0.1";
+our $VERSION = "0.0.2";
 
 has mfile   => (is=>'rw');
 has clients => (

@@ -2,11 +2,11 @@
 %define _missing_doc_files_terminate_build 0
 Summary: XTest harness core.
 Name: xtest-harness
-Version: 0.0.1
+Version: 0.0.2
 Release:6%{?dist} 
 License: TBD 
 Group: Development/Libraries
-Source: XTest-harness-0.0.1.tar.gz 
+Source: XTest-harness-0.0.2.tar.gz 
 Requires: perl-Moose >= 0.94
 Requires: perl-Test-Able
 Requires: perl-Log-Log4perl

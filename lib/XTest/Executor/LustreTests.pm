@@ -17,7 +17,7 @@ use Log::Log4perl qw(:easy);
 
 extends 'XTest::Executor::SingleProcessBase';
 
-our $VERSION = "0.0.1";
+our $VERSION = "0.0.2";
 
 has 'mdsopt'  => (is=>'rw');
 has 'ossopt'  => (is=>'rw');
