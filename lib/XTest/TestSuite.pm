@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTests::TestSuite
+#         FILE:  XTest::TestSuite
 #
 #  DESCRIPTION:  
 #
@@ -14,7 +14,7 @@
 #      CREATED:  08/30/2011 11:43:34 PM
 #     REVISION:  ---
 #===============================================================================
-package XTests::TestSuite;
+package XTest::TestSuite;
 
 use Moose;
 use namespace::autoclean;

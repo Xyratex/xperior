@@ -20,9 +20,9 @@ mkdir 'html';
 my $pd = Pod::ProjectDocs->new(
     outroot => 'html/',
     libroot =>  ['bin', 'lib', 'doc'],
-    title   => 'XTests',
+    title   => 'XTest',
     forcegen => 1,
-    desc   => 'XTests harness'
+    desc   => 'XTest harness'
 );
 $pd->gen();
 

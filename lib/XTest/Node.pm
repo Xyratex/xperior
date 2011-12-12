@@ -18,7 +18,7 @@
 
 =cut
 
-package XTests::Node;
+package XTest::Node;
 
 use Moose;
 use Moose::Util::TypeConstraints;
@@ -27,8 +27,8 @@ use Moose::Util::TypeConstraints;
 use Net::Ping;
 use Log::Log4perl qw(:easy);
 
-use XTests::Utils;
-use XTests::SshProcess;
+use XTest::Utils;
+use XTest::SshProcess;
 
 has 'ctrlproto'    => ( is => 'rw' );
 has 'user'         => ( is => 'rw' );
@@ -199,7 +199,7 @@ sub _getRemoteConnector{
     return $self->rconnector 
          if defined $self->rconnector;
     
-    my $sc = XTests::SshProcess->new();
+    my $sc = XTest::SshProcess->new();
     
     if ($sc->init($self->ip,$self->user) < 0){
         $self->rconnector(undef);

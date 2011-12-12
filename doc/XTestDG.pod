@@ -1,20 +1,20 @@
 =pod
 
-=head1 XTests harness developer guide
+=head1 XTest harness developer guide
 
 System created on Perl language, with wide using additional modules from CPAN.
 
-=head2 Structure of /opt/xyratex/xtests/lib folder
+=head2 Structure of /opt/xyratex/xtest/lib folder
 
 =over 
 
 =item *
 
-XTests - main classes and libraries are stored there
+XTest - main classes and libraries are stored there
 
 =item *
 
-XTests::Executor - wrappers for specific tests are store there
+XTest::Executor - wrappers for specific tests are store there
 
 =back
 

@@ -10,7 +10,7 @@
 #      VERSION:  1.0
 #      CREATED:  09/30/2011 01:31:34 AM
 #===============================================================================
-package XTests::Executor::Base;
+package XTest::Executor::Base;
 use Moose;
 use Data::Dumper;
 use YAML::Tiny;
@@ -18,7 +18,7 @@ use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
 
-use XTests::SshProcess;
+use XTest::SshProcess;
 
 our $EXT = '.yaml';
 has 'test'              => ( is => 'rw');

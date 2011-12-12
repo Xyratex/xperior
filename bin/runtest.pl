@@ -4,7 +4,7 @@
 #
 #        USAGE:  ./runtest.pl <options> 
 #
-#  DESCRIPTION:  Execute XTests narness
+#  DESCRIPTION:  Execute XTest narness
 #       AUTHOR:  ryg 
 #      COMPANY:  Xyratex
 #      CREATED:  08/31/2011 06:37:26 PM
@@ -24,7 +24,7 @@ use Cwd 'abs_path';
     push @INC, $p.'/../lib/'
 };
 
-use XTests::Core;
+use XTest::Core;
 $|=1;
 
 my $nopts;
@@ -141,14 +141,14 @@ if( $action eq 'run'){
     configfile => $configfile,
 );
 
-my $testcore =  XTests::Core->new();
+my $testcore =  XTest::Core->new();
 $testcore->run(\%options);
 
 __END__
 
 =pod
 
-=head1 XTests testing harness 
+=head1 XTest testing harness 
 
 =head1 NAME
 
@@ -207,7 +207,7 @@ runtest.pl - executing tests via  XTest harness.
         
 =head1 Description
 
-The application is executing different specially wrapped tests via XTests harness. The application read yaml tests descriptions,check environmental conditions, read/gather cluster configuration and run tests based on it, gather logs and save report.
+The application is executing different specially wrapped tests via XTest harness. The application read yaml tests descriptions,check environmental conditions, read/gather cluster configuration and run tests based on it, gather logs and save report.
 
 
 =head2 Executing internal tests.
@@ -216,7 +216,7 @@ TBD
 
 =head1 See also
 
-See XTests harness User Guide for detail of system configuration.
+See XTest harness User Guide for detail of system configuration.
 
 =head1 Author
 

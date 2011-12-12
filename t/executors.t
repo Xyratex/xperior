@@ -15,14 +15,14 @@ package executors;
 use strict;
 use Test::Able;
 use Test::More;
-use XTests::Core;
+use XTest::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
 #use Noop for check Base functionality
-use XTests::Executor::Noop;
-use XTests::Test;
+use XTest::Executor::Noop;
+use XTest::Test;
 
 my %options = ( 
     workdir => '/tmp/test_wd',
@@ -34,7 +34,7 @@ my %th = (
      );
 
 my %gh = (
-      executor  => 'XTests::Executor::Noop',
+      executor  => 'XTest::Executor::Noop',
       groupname => 'sanity',
         );
 my $test;
@@ -45,13 +45,13 @@ startup         some_startup  => sub {
 };
 setup           some_setup    => sub { 
 
-    my $testcore =  XTests::Core->new();
+    my $testcore =  XTest::Core->new();
     $testcore->options(\%options);      
     my $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
 
-    $test = XTests::Test->new;
+    $test = XTest::Test->new;
     $test->init(\%th,\%gh);
-    $exe = XTests::Executor::Noop->new();
+    $exe = XTest::Executor::Noop->new();
     $exe->init($test, \%options, $cfg);
 };
 teardown        some_teardown => sub { };
@@ -72,7 +72,7 @@ TAP version 13
 1..1
 ok 1
 ---
-executor: XTests::Executor::Noop
+executor: XTest::Executor::Noop
 groupname: sanity
 id: 1
 inf: 'more info'

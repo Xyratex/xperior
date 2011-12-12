@@ -16,17 +16,14 @@ package iorexec;
 use strict;
 use Test::Able;
 use Test::More;
-use XTests::Core;
+use XTest::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
-#BEGIN {
-#    push @INC, '/opt/xyratex/xtests/lib/'
-#};
 
-use XTests::Test;
-use XTests::Executor::IOR;
+use XTest::Test;
+use XTest::Executor::IOR;
 
 my %options = ( 
     testdir => 't/testcfgs/ior/',
@@ -43,11 +40,11 @@ startup         _startup  => sub {
 };
 
 setup           _setup    => sub { 
-    $testcore =  XTests::Core->new();
+    $testcore =  XTest::Core->new();
     $testcore->options(\%options);      
     $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     $tests  =  $testcore->loadTests;
-    $exe = XTests::Executor::IOR->new();
+    $exe = XTest::Executor::IOR->new();
     $exe->init(@{$tests}[0], \%options, $cfg);
 
 };

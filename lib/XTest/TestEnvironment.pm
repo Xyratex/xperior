@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTests/TestEnvironment.pm
+#         FILE:  XTest/TestEnvironment.pm
 #
 #  DESCRIPTION:  This class maintains test environment and configuration.
 #
@@ -20,10 +20,10 @@ Also this class contains and can process system configuration which is read from
 
 =cut
 
-package XTests::TestEnvironment;
+package XTest::TestEnvironment;
 
 use Moose;
-use XTests::Node;
+use XTest::Node;
 use Log::Log4perl qw(:easy);
 use Carp;
 use Data::Dumper;
@@ -36,7 +36,7 @@ sub init{
     my $yamlcfg = shift;
     $self->cfg($yamlcfg);
     foreach my $n (@{$yamlcfg->{'Nodes'}}){
-        my $node = XTests::Node->new;
+        my $node = XTest::Node->new;
         $node->id($n->{'id'});
         $node->ip($n->{'ip'});
         $node->ctrlproto( $n->{'ctrlproto'});

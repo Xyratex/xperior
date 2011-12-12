@@ -1,6 +1,6 @@
 ---
 groupname        : mdtest 
-executor         : XTests::Executor::MDTest
+executor         : XTest::Executor::MDTest
 description      : MDTest tests
 reference        : - 
 expected_time    : 60

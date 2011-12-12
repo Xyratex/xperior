@@ -1,6 +1,6 @@
 #===============================================================================
 #
-#         FILE:  Xtests/Utils.pm
+#         FILE:  Xtest/Utils.pm
 #
 #  DESCRIPTION:  
 #
@@ -8,7 +8,7 @@
 #      COMPANY:  Xyratex 
 #      CREATED:  09/05/2011 03:55:22 PM
 #===============================================================================
-package XTests::Utils;
+package XTest::Utils;
 use strict;
 use warnings;
 

@@ -1,8 +1,8 @@
 =pod
 
-=head1 XTests harness user guide
+=head1 XTest harness user guide
 
-=head2 Structure of /opt/xyratex/xtests folder
+=head2 Structure of /opt/xyratex/xtest folder
 
 =over  
 
@@ -12,7 +12,7 @@ B<bin>    - this perl application
 
 =item *
 
-B<lib>    - XTests perl libraries, for overriding use PERL5LIB env variable. runtest.pl script try to find it as C<../lib> from his location
+B<lib>    - XTest perl libraries, for overriding use PERL5LIB env variable. runtest.pl script try to find it as C<../lib> from his location
 
 =item *
 
@@ -28,7 +28,7 @@ B<testds> - test descriptions, see explanation below.
 
 =item *
 
-B<t>      - internal unit tests for XTests::Core, allow quickly test how harness work. Could be useful for test how work after installation.
+B<t>      - internal unit tests for XTest::Core, allow quickly test how harness work. Could be useful for test how work after installation.
 
 =item *
 
@@ -44,7 +44,7 @@ Sample test descriptor with explanation:
 
  ---
 groupname        : ior 
-executor         : XTests::Executor::IOR
+executor         : XTest::Executor::IOR
 description      : IOR tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 60
@@ -85,7 +85,7 @@ C<cleanup_max_time> - timeout for cleanup system for next test. Not implemented.
 
 =item *
 
-C<iorcmd>           - command for executing, specific parameter for XTests::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are variables from system configuration, see their definition in next section.
+C<iorcmd>           - command for executing, specific parameter for XTest::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are variables from system configuration, see their definition in next section.
 
 =item *
 

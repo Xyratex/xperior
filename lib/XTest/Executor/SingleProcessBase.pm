@@ -11,15 +11,15 @@
 #      CREATED:  10/23/2011 06:39:29 PM
 #===============================================================================
 
-package XTests::Executor::SingleProcessBase;
+package XTest::Executor::SingleProcessBase;
 use Moose;
 use Data::Dumper;
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
 
-use XTests::SshProcess;
-extends 'XTests::Executor::Base';
+use XTest::SshProcess;
+extends 'XTest::Executor::Base';
 =item * 
 Function execute on-clients test. Remote execution done via ssh.
 Only one pocess execute on client which marked as master.

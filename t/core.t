@@ -4,7 +4,7 @@ use strict;
 
 use Test::Able;
 use Test::More;
-use XTests::Core;
+use XTest::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 
@@ -18,7 +18,7 @@ startup         some_startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
 setup           some_setup    => sub { 
-    $testcore =  XTests::Core->new();
+    $testcore =  XTest::Core->new();
     $testcore->options(\%options);
 };
 
@@ -76,9 +76,9 @@ test  plan => 6, dCheckTests           => sub {
 ##################################################
 test plan => 1, dCheckCreateExecutor    => sub {
 
-    my $exe = $testcore->createExecutor('XTests::Executor::Noop');
+    my $exe = $testcore->createExecutor('XTest::Executor::Noop');
     diag("Class reference:$exe");
-    isa_ok( $exe, 'XTests::Executor::Noop', 'Check module loading' );
+    isa_ok( $exe, 'XTest::Executor::Noop', 'Check module loading' );
 };
 
 ##################################################

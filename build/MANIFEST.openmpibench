@@ -5,8 +5,8 @@ t/testcfgs/mdtest/mdtest_tests.yaml
 t/testcfgs/testsystemcfg.yaml
 testds/ior_tests.yaml
 testds/mdtest_tests.yaml
-lib/XTests/Executor/IOR.pm
-lib/XTests/Executor/MDTest.pm
-lib/XTests/Executor/OpenMPIBase.pm
+lib/XTest/Executor/IOR.pm
+lib/XTest/Executor/MDTest.pm
+lib/XTest/Executor/OpenMPIBase.pm
 MANIFEST
 Makefile.PL

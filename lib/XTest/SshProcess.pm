@@ -39,7 +39,7 @@ Use on this way function B<createSync> and field B<exitcode>
 
 =cut
 
-package XTests::SshProcess;
+package XTest::SshProcess;
 use Moose;
 use Data::Dumper;
 use Cwd qw(chdir);
@@ -48,7 +48,7 @@ use File::Path;
 use Log::Log4perl qw(:easy);
 use Carp;
 use Proc::Simple;
-use XTests::Utils;
+use XTest::Utils;
 use Time::HiRes;
 
 has port => ( is => 'rw' );

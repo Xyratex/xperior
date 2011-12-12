@@ -1,6 +1,6 @@
 ---
 groupname        : ior 
-executor         : XTests::Executor::IOR
+executor         : XTest::Executor::IOR
 description      : IOR tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 60

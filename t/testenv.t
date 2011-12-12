@@ -19,12 +19,12 @@ package testenv;
 use strict;
 use Test::Able;
 use Test::More;
-use XTests::Core;
+use XTest::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
-use XTests::Test;
+use XTest::Test;
 
 my %options = ( 
     testdir => 't/testcfgs/simple/',
@@ -37,7 +37,7 @@ startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
 setup           _setup    => sub { 
-    $testcore =  XTests::Core->new();
+    $testcore =  XTest::Core->new();
     $testcore->options(\%options);      
     $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
 

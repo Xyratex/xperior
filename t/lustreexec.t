@@ -19,13 +19,13 @@ package lustreexec;
 use strict;
 use Test::Able;
 use Test::More;
-use XTests::Core;
+use XTest::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
-use XTests::Test;
-use XTests::Executor::LustreTests;
+use XTest::Test;
+use XTest::Executor::LustreTests;
 
 my %options = ( 
     testdir => 't/testcfgs/lustre/',
@@ -39,7 +39,7 @@ my %th = (
      );
 
 my %gh = (
-      executor  => 'XTests::Executor::LustreTests',
+      executor  => 'XTest::Executor::LustreTests',
       groupname => 'sanity',
         );
 
@@ -53,13 +53,13 @@ teardown        _teardown => sub { };
 shutdown        _shutdown => sub {  };
 #########################################
 test plan => 3, eCheckSimple    => sub {
-    my $testcore =  XTests::Core->new();
+    my $testcore =  XTest::Core->new();
     $testcore->options(\%options);      
     my $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     
-    my $test = XTests::Test->new;
+    my $test = XTest::Test->new;
     $test->init(\%th,\%gh);
-    my $exe = XTests::Executor::LustreTests->new();
+    my $exe = XTest::Executor::LustreTests->new();
     $exe->init($test, \%options, $cfg);
     $exe->_prepareEnvOpts;
     DEBUG "MDS OPT:".$exe->mdsopt;
@@ -80,7 +80,7 @@ test plan => 3, eCheckSimple    => sub {
 };
 
 test plan =>2, gCheckLogParsing => sub{
-    my $exe = XTests::Executor::LustreTests->new();
+    my $exe = XTest::Executor::LustreTests->new();
     my $res = $exe->processLogs('t/testout/sanity.1a.stdout.log');
     is($res,0,'Check PASS log');
     $res = $exe->processLogs('t/testout/sanity.1a.f.stdout.log');
@@ -89,11 +89,11 @@ test plan =>2, gCheckLogParsing => sub{
 };
 
 test plan =>3, kCheckExecution => sub{
-    my $testcore =  XTests::Core->new();
+    my $testcore =  XTest::Core->new();
     $testcore->options(\%options);      
     my $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     my $tests  =  $testcore->loadTests;
-    my $exe = XTests::Executor::LustreTests->new();
+    my $exe = XTest::Executor::LustreTests->new();
     $exe->init(@{$tests}[0], \%options, $cfg);
     $exe->_prepareCommands;
     DEBUG $exe->cmd;
@@ -102,7 +102,7 @@ test plan =>3, kCheckExecution => sub{
     $exe->execute;
     DEBUG Dumper $exe->yaml;
     is($exe->yaml->{'result'},'ok 1', 'Check result');
-    is($exe->yaml->{ 'executor'}, 'XTests::Executor::LustreTests', 'Check result');
+    is($exe->yaml->{ 'executor'}, 'XTest::Executor::LustreTests', 'Check result');
 };
 
 lustreexec->run_tests;

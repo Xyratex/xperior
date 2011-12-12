@@ -1,16 +1,16 @@
 #
 #===============================================================================
 #
-#         FILE:  XTests::Core.pm
+#         FILE:  XTest::Core.pm
 #
-#  DESCRIPTION:  Main module for XTests harness
+#  DESCRIPTION:  Main module for XTest harness
 #
 #       AUTHOR:   ryg
 #      COMPANY:  Xyratex
 #      CREATED:  09/05/2011 03:23:42 PM
 #===============================================================================
 
-package XTests::Core;
+package XTest::Core;
 use Log::Log4perl qw(:easy);
 use YAML qw "Bless LoadFile Load";
 use Data::Dumper;
@@ -23,9 +23,9 @@ use File::Path;
 use File::chdir;
 use Module::Load;
 
-use XTests::Test;
-use XTests::TestEnvironment;
-use XTests::Utils;
+use XTest::Test;
+use XTest::TestEnvironment;
+use XTest::Utils;
 
 our $VERSION = "0.0.1";
 
@@ -42,7 +42,7 @@ sub createExecutor {
 }
 
 sub runtest {
-    DEBUG "XTests::Core::runtest";
+    DEBUG "XTest::Core::runtest";
     my ( $self, $test ) = @_;
     DEBUG "Starting tests " . $test->getParam('id');
 
@@ -184,7 +184,7 @@ sub run {
 }
 
 sub loadEnvCfg {
-    DEBUG 'XTests::Core->loadEnvCfg';
+    DEBUG 'XTest::Core->loadEnvCfg';
     my $self = shift;
     my $fn   = shift;
     $fn = 'systemcfg.yaml' unless defined $fn;
@@ -193,7 +193,7 @@ sub loadEnvCfg {
 
     #DEBUG Dumper $envcfg;
     my $env = undef;
-    $env = XTests::TestEnvironment->new;
+    $env = XTest::TestEnvironment->new;
     $env->init($envcfg);
 
     #DEBUG Dumper $env;
@@ -201,7 +201,7 @@ sub loadEnvCfg {
 }
 
 sub loadTests {
-    DEBUG 'XTests::Core->loadTests';
+    DEBUG 'XTest::Core->loadTests';
     my $self = shift;
     my @testNames;
     my @tests;
@@ -225,7 +225,7 @@ sub loadTests {
         }
 
         foreach my $testcfg ( @{ $testscfg->{'Tests'} } ) {
-            my $test = XTests::Test->new;
+            my $test = XTest::Test->new;
 
             #DEBUG "groupcfg=".Dumper \%groupcfg;
             $test->init( $testcfg, \%groupcfg );
@@ -248,7 +248,7 @@ sub loadTestsFile {
 }
 
 sub loadTags {
-    DEBUG 'XTests::Core->loadTestSuites';
+    DEBUG 'XTest::Core->loadTestSuites';
     my $self = shift;
     my $file = $self->{'options'}->{'testdir'} . '/tags.yaml';
     INFO "Load tag file [ $file ]";

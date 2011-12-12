@@ -16,14 +16,14 @@ package sshprocess;
 use strict;
 use Test::Able;
 use Test::More;
-use XTests::SshProcess;
+use XTest::SshProcess;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
-use XTests::Test;
-use XTests::SshProcess;
-use XTests::Utils;
+use XTest::Test;
+use XTest::SshProcess;
+use XTest::Utils;
 
 my $sp;
 
@@ -32,7 +32,7 @@ startup         _startup  => sub {
 };
 
 setup           _setup    => sub { 
-    $sp =  XTests::SshProcess->new();
+    $sp =  XTest::SshProcess->new();
     $sp->init('localhost','ryg');
 };
 teardown        _teardown => sub { };
