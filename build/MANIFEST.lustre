@@ -1,0 +1,10 @@
+t/lustreexec.t
+t/testout/sanity.1a.stdout.log
+t/testout/sanity.1a.f.stdout.log
+t/testcfgs/lustre/sanity_tests.yaml
+t/testcfgs/lustre/tags.yaml
+t/testcfgs/testsystemcfg.yaml
+lib/XTests/Executor/LustreTests.pm
+testds/sanity_tests.yaml
+MANIFEST
+Makefile.PL
