@@ -35,10 +35,32 @@ has 'testgroups' => ( is => 'rw' );
 has 'env'        => ( is => 'rw' );
 
 sub createExecutor {
-    my ( $self, $es ) = @_;
+    my ( $self, $es, $roles ) = @_;
     DEBUG "Loading module [$es]";
     load $es;
-    return $es->new;
+    my $obj = $es->new;
+    if ( defined($roles) ) {
+        foreach my $role ( split( /\s/, $roles ) ) {
+            DEBUG "Applying roles [$role]";
+
+            if ( $role eq 'LustreClientStatus' ) {
+                use XTest::Executor::Roles::LustreClientStatus;
+                XTest::Executor::Roles::LustreClientStatus->meta->apply($obj);
+            }
+
+            if ( $role eq 'StoreSyslog' ) {
+                use XTest::Executor::Roles::StoreSyslog;
+                XTest::Executor::Roles::StoreSyslog->meta->apply($obj);
+            }
+
+            if ( $role eq 'StoreConsole' ) {
+                use XTest::Executor::Roles::StoreConsole;
+                XTest::Executor::Roles::StoreConsole->meta->apply($obj);
+            }
+
+        }
+    }
+    return $obj;
 }
 
 sub runtest {
@@ -47,10 +69,22 @@ sub runtest {
     DEBUG "Starting tests " . $test->getParam('id');
 
     #DEBUG "Test is:". Dumper $test;
-    my $executor = $self->createExecutor( $test->getParam('executor') );
+    my $executor = $self->createExecutor( $test->getParam('executor'),
+        $test->getParam('roles') );
     $executor->init( $test, $self->options, $self->env );
+    
+    #apply ext params to test
+    foreach my $param (@{$self->options->{'extopt'}}){
+        if($param =~ m/^(.+)\:(.+)$/){
+            $executor->setExtOpt($1,$2);
+        }else{
+            DEBUG "Cannot parse parameters[$param]";
+        }
+    }
+
     $executor->execute;
     $executor->report();
+    $executor->tap() if $self->options->{'tap'};
     return $executor->result_code;
 }
 
@@ -61,7 +95,7 @@ sub run {
     DEBUG "Start framework";
     my $tags = $self->loadTags;
     $self->tests( $self->loadTests );
-    $self->env( $self->loadEnvCfg($options->{'configfile'}) );
+    $self->env( $self->loadEnvCfg( $options->{'configfile'} ) );
     if ( $self->env->checkEnv < 0 ) {
         WARN "Found problesm while testing configuration";
         exit(19);
@@ -79,8 +113,11 @@ sub run {
     my %targs;
     my @includeonly = @{ $self->options->{'includeonly'} };
     my $excludelist = undef;
+
+    #DEBUG "Process defined excludelist [".$self->options->{'excludelist'}."]";
     $excludelist = parseIEFile( $self->options->{'excludelist'} )
-      if defined $self->options->{'excludelist'};
+      if ( ( defined $self->options->{'excludelist'} )
+        && ( $self->options->{'excludelist'} ne '' ) );
     my $executedtests;
 
     if ( $self->options->{'continue'} ) {
@@ -119,6 +156,8 @@ sub run {
 
             # skip exclude list
             if ( defined $excludelist ) {
+
+                #DEBUG "Process defined excludelist [$excludelist]";
                 foreach my $tmpl (@$excludelist) {
                     $filtered = 1
                       if (
@@ -151,6 +190,7 @@ sub run {
               . $test->getName
               . ' STATUS: '
               . $test->results->{'status'};
+
             #WARN Dumper $test;
             $enum++;
             if ( $res != 0 ) {
@@ -163,8 +203,9 @@ sub run {
                     WARN "Executed $enum tests, skipped $snum";
                     exit(10);
                 }
-                if ( defined($test->getParam('dangerous')) 
-                        && ($test->getParam('dangerous') eq 'yes') ) {
+                if ( defined( $test->getParam('dangerous') )
+                    && ( $test->getParam('dangerous') eq 'yes' ) )
+                {
                     WARN "Dangerous test failure detected, exiting";
                     WARN "Executed $enum tests, skipped $snum";
                     exit(11);

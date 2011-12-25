@@ -40,8 +40,11 @@ sub runEx{
 
     $dieOnFail = 0 if ( !( defined $dieOnFail ) );
 
+    my $st = time;
     my $error_code = system($cmd);
+    my $time = time - $st;
 
+    DEBUG "Execution time = $time sec";
     if ( ( $error_code != 0 ) and ( $dieOnFail == 1 ) ) {
         confess "Child process failed with error status $error_code";
     }

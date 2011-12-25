@@ -161,6 +161,23 @@ test plan => 5, cCheckLustreObjects    => sub {
     is($mc->{'node'},'client1',"Check getMasterClient");
 
 };
+
+test plan => 4, kCheckRemoteControls => sub{
+
+    my $mc = $cfg->getNodeById($cfg->getMasterClient->{'id'});
+    my $rc     = $mc->getRemoteConnector;
+    my $clone1 = $mc->getExclusiveRC;
+    my $clone2 = $mc->getExclusiveRC;
+    #test no real numbers because it can be different
+    isnt( $rc, undef, "Check alive RC");
+    isnt( $clone1, undef, "Check alive URC");
+    isnt( $rc, $clone1, "Check clone and org diff");
+    isnt( $clone2, $clone1, "Check clones diff");
+};
+
+
+
+
 #########################################
 testenv->run_tests;
 

@@ -35,6 +35,7 @@ my $mode       = "";
 my @suites;
 my @skiptags;
 my @includeonly;
+my @extopt;
 my $includelist ='';
 my $excludelist ='';
 my $task       = "";
@@ -49,26 +50,29 @@ my $action=undef;
 my $helpflag;
 my $manflag;
 my $continue;
+my $tap;
 GetOptions(
-    "config:s"     => \$configfile,
-    "mode:s"       => \$mode,
-    "suites=s@"    => \@suites,
-    "skiptag=s@"  =>  \@skiptags,
+    "config:s"       => \$configfile,
+    "mode:s"         => \$mode,
+    "suites=s@"      => \@suites,
+    "skiptag=s@"     =>  \@skiptags,
     "includeonly=s@" => \@includeonly,
-    "tests:s"      => \$task,
-    "excludelist:s"    => \$excludelist,
-    "includelist:s"    => \$includelist, 
-    "flist:s"      => \$flist,
-    "workdir:s"    => \$workdir,
-    "testdir:s"    => \$testdir,
-    "debug!"       => \$debug,
-    "info!"        => \$info,
-    "error!"       => \$error,
-    "cmdout!"      => \$cmdout,
-    "help!"        => \$helpflag,
-    "man!"         => \$manflag,
-    "action:s"     => \$action,
-    "continue!"    => \$continue,
+    "extopt=s@"      => \@extopt,
+    "tests:s"        => \$task,
+    "excludelist:s"  => \$excludelist,
+    "includelist:s"  => \$includelist, 
+    "flist:s"        => \$flist,
+    "workdir:s"      => \$workdir,
+    "testdir:s"      => \$testdir,
+    "debug!"         => \$debug,
+    "info!"          => \$info,
+    "error!"         => \$error,
+    "cmdout!"        => \$cmdout,
+    "help!"          => \$helpflag,
+    "man!"           => \$manflag,
+    "action:s"       => \$action,
+    "continue!"      => \$continue,
+    "tap!"           => \$tap,
 );
 
 if ( ($helpflag) || ($nopts) ) {
@@ -139,6 +143,8 @@ if( $action eq 'run'){
     action   => $action,
     continue => $continue,
     configfile => $configfile,
+    tap      => $tap,
+    extopt   => \@extopt,
 );
 
 my $testcore =  XTest::Core->new();
@@ -195,9 +201,14 @@ runtest.pl - executing tests via  XTest harness.
             run             : run tests which selected by configuration and filters.
             list            : see list of tests which will be ready to execution considering configuration and filters
 
-    Options        
-        --continue           : Continue execution in specified work directory. Execution is continued from next test after last found written, possible not completed, report. If --continue is not set then previous results in work directory are overwritten.
+    Options       
+        --tap                : generate also tap files in work directory
+        --continue           : continue execution in specified work directory. Execution is continued from next test after last found written, possible not completed, report. If --continue is not set then previous results in work directory are overwritten.
+
         --skipnodeinfo       : TBI
+
+        --extopt=name:value  : additional options which will be stored in test results. use the parameter many times for many parameters
+
 
     Exit codes:
     0         :  execution done successfully , all results ready

@@ -51,6 +51,8 @@ use Proc::Simple;
 use XTest::Utils;
 use Time::HiRes;
 
+with qw(MooseX::Clone);
+
 has port => ( is => 'rw' );
 has host => ( is => 'rw' );
 has user => ( is => 'rw' );
@@ -294,9 +296,18 @@ SS
     DEBUG "Starting async ............";
     my $s = $self->_sshAsyncExec("sh $tef");
     DEBUG "Remote async app started";
-    sleep 5;
+    sleep 3;
     $self->exitcode(undef);
-    $self->_findPid();
+    
+    #cycle workaround for long remote part start
+    # wait 6*5 sec for pid file on remote side
+    my $step = 0;    
+    while( $step < 6) {
+        $self->_findPid();
+        last if ($self->pid != -1);
+        sleep 5;
+        $step++;
+    }
 
     if ( $self->pid == -1 ) {
         confess "Remote process doesn't start or found in pid file";
@@ -319,19 +330,21 @@ Kill process which was created by create via saved pid.
 
 sub kill {
     DEBUG "XTest::SshProcess->kill";
-    my $self = shift;
+    my ($self,$mode) = @_;
     my $pid  = $self->pid;
     my $name = $self->appname;
-    DEBUG "[$name]: Killing job [" . $name . "] \n";
-    $self->_sshSyncExec("kill -15 $pid");
-    sleep 10;
+    $mode =0 unless defined $mode;
+
+    DEBUG "[$name]: Killing job [" . $name . "], mode[$mode] \n";
+    if($mode == 0){
+        $self->_sshSyncExec("kill -15 $pid");
+        sleep 10;
+    }
     $self->_sshSyncExec("kill -9  $pid");
     $self->killed(time);
     $self->bprocess->kill;
     DEBUG "[$name:$pid]*** Killed!";
     $self->exitcode(-99);
-
-    # trim $self->_sshSyncExec("cat ".$self->ecodefile));
 }
 
 =over *

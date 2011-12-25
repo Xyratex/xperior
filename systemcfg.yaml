@@ -5,6 +5,7 @@ Nodes:
      ctrlproto   : ssh
      user        : root
      pass        : Xyratex
+     console     : /home/ryg/work/xyratex/kvm/serial_lclient.log
 
    - id           : oss1
      ip           : mds
@@ -64,4 +65,5 @@ LustreObjects:
 #Variables
 client_mount_point      : /mnt/lustre
 benchmark_tests_file    : testfile
-tempdir                 : /tmp/
+tempdir                 : /
+#/tmp/

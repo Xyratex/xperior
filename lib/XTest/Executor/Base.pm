@@ -18,9 +18,10 @@ use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
 
-use XTest::SshProcess;
+#use XTest::SshProcess;
 
-our $EXT = '.yaml';
+our $EXT  = '.yaml';
+our $TEXT = '.tap';
 has 'test'              => ( is => 'rw');
 has 'options'           => ( is => 'rw');
 has 'env'               => ( is => 'rw');
@@ -42,7 +43,8 @@ sub init{
     $self->yaml(\%th);
     $self->yaml->{'status'} = 'not set';
     $self->yaml->{'status_code'} = -1;
-   
+    $self->yaml->{'messages'}    = '';
+
     $self->steptimeout(5);
 
     $self->{'test'} = $test;
@@ -63,7 +65,13 @@ sub addYE{
 sub addYEE{
     my ($self, $key1, $key2, $value) = @_;
     $self->{'yaml'}->{$key1}->{$key2} = $value ;
-    $self->write;
+    $self->_write;
+}
+
+sub addMessage{
+    my ($self,$data) = @_;
+    $self->yaml->{'messages'} = $self->yaml->{'messages'}
+                                    . $data."\n";
 }
 
 sub pass{
@@ -89,12 +97,21 @@ sub fail{
     $self->{'result'} ="not ok 1$msg" ;
     $self->{'result_code'} = 1;
     $self->yaml->{'status'} = 'failed';
-    $self->yaml->{'status_code'} = 1;  
+    $self->yaml->{'status_code'} = 1; 
+    $self->yaml->{'fail_reason'} = $msg;
+}
+
+
+sub setExtOpt{
+    my ($self,$key,$value) = @_;
+    $self->addYEE('extoptions',$key,$value);
 }
 
 sub registerLogFile{
     my ($self,$key,$path)  = @_;
-    $self->addYE('log.'.$key,$path); 
+    my $rd=$self->_reportDir.'/';
+    $path =~ s/$rd//;
+    $self->addYEE('log',$key,$path); 
 }
 
 #TODO add tests!
@@ -124,13 +141,23 @@ sub createLogFile{
 sub tap{
     my $self = shift;
     $self->addYE('result',$self->result);
-    my $yaml='';
-    $yaml = Dump($self->yaml);
+    my $yamlt = Dump($self->yaml);
+    #well-from dumped yaml to tap yaml
+    my $yaml = '';
+    foreach my $s( split(/\n/,$yamlt)){
+        $yaml = "$yaml   $s\n";
+    }
     my $out=
         "TAP version 13\n".
         "1..1\n".
         $self->result."\n".
         $yaml;
+     my $file = $self->_tapFile;
+     $self->_createDir;
+     open  TAP, "> $file" or confess "Cannot open report file:" . $!;
+     print TAP $out;
+     close TAP;
+     return $out;    
 }
 
 sub report{
@@ -146,6 +173,15 @@ Stub of execute test function. See implementations in child classes.
 sub execute{
     confess 'Functions is not implemented, override it!';
 }
+
+=item * 
+Stub of getReason function. See implementations in child classes. Returs short failure reason description.
+=cut
+sub getReason{
+    return "Non-zero exit code";
+}
+
+
 
 sub _write{
      my $self = shift;
@@ -175,6 +211,13 @@ sub _reportFile{
     return $self->_reportDir.'/'.
            $self->test->getName.$EXT;
 }
+
+sub _tapFile{
+    my $self = shift;
+    return $self->_reportDir.'/'.
+           $self->test->getName.$TEXT;
+}
+
 
 #TODO add test
 sub _resourceFilePrefix{

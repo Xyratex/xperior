@@ -42,6 +42,11 @@ sub init{
         $node->ctrlproto( $n->{'ctrlproto'});
         $node->user( $n->{'user'});
         $node->pass($n->{'pass'});
+        if(defined($n->{'console'})){
+            $node->console($n->{'console'});
+        }else{
+            $node->console(undef);
+        }
         push @{$self->{'nodes'}},$node;
     }
 }

@@ -8,6 +8,7 @@ License: TBD
 Group: Development/Libraries
 Source: XTest-harness-0.0.2.tar.gz 
 Requires: perl-Moose >= 0.94
+Requires: perl-MooseX-Clone
 Requires: perl-Test-Able
 Requires: perl-Log-Log4perl
 Requires: perl-File-chdir
@@ -38,8 +39,8 @@ TD=$RPM_BUILD_ROOT/opt/xyratex/xtest/
 rm -rf $RPM_BUILD_ROOT
 install -d ${TD}/bin
 install -D  -m 755  bin/*.pl      ${TD}/bin/
-install -d ${TD}/lib/XTest
-install -d ${TD}/lib/XTest/Executor
+install -d -m 755 ${TD}/lib/XTest
+install -d -m 755 ${TD}/lib/XTest/Executor
 install -D  -m 644 blib/lib/XTest/*.pm ${TD}/lib/XTest 
 install -D  -m 644 blib/lib/XTest/Executor/*.pm ${TD}/lib/XTest/Executor 
 install -d ${TD}/doc

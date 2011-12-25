@@ -38,7 +38,7 @@ setup           _setup    => sub {
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub { };
 #########################################
-test plan => 7, dCreateAliveKill    => sub {
+test plan => 7, kCreateAliveKill    => sub {
     #highlevel functional test
     is($sp->killed,0, 'Check status before start');
     $sp->create('sleep','/bin/sleep 30');
@@ -53,7 +53,7 @@ test plan => 7, dCreateAliveKill    => sub {
     isnt($sp->exitcode,0, 'Check 2 exit code after kill');
 };
 
-test plan => 6, eCreateAliveExit    => sub {
+test plan => 6, lCreateAliveExit    => sub {
     #highlevel functional test
     $sp->create('sleep','/bin/sleep 15');
     pass('App started');
@@ -69,7 +69,7 @@ test plan => 6, eCreateAliveExit    => sub {
     is($ec,  0, 'Check exit code for alive app');
 };
 
-test plan => 6, aSynExecution => sub {
+test plan => 6, fSynExecution => sub {
   my $stime = time;
   $sp->createSync('/bin/sleep 10');
   my $etime = time;
@@ -101,7 +101,7 @@ test plan => 20, xStress    => sub {
     }
 };
 
-test plan => 10, bInit    => sub {
+test plan => 10, cInit    => sub {
     is($sp->host,'localhost','host');
     is($sp->user,'ryg','user');
     is($sp->hostname,trim `hostname`,'Check on host hostname');
@@ -124,6 +124,20 @@ test plan => 10, bInit    => sub {
     isnt($@,''," Connection failed as expected");
 };
 
+
+test plan => 5, fClone    => sub {
+    my $nsp = $sp->clone;
+    #check that clones have same fields
+    is($nsp->host,'localhost','check cloned host');
+    is($nsp->user,'ryg', 'check cloned user');
+    is($nsp->osversion, trim`uname -a`,'Check cloned os version');
+    
+    #check that clones aren resf on one object
+    $nsp->host('newhost');
+    is($sp->host,'localhost','check org host');
+    is($nsp->host,'newhost','check cloned and modified host');
+
+};
 
 #TODO add stress test and sendFile, getFile
 

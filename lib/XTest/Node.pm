@@ -23,7 +23,6 @@ package XTest::Node;
 use Moose;
 use Moose::Util::TypeConstraints;
 
-#use Test::Net::Service;
 use Net::Ping;
 use Log::Log4perl qw(:easy);
 
@@ -35,6 +34,7 @@ has 'user'         => ( is => 'rw' );
 has 'pass'         => ( is => 'rw' );
 has 'ip'           => ( is => 'rw' );
 has 'id'           => ( is => 'rw' );
+has 'console'      => ( is => 'rw' );
 
 has 'architecture'    => ( is => 'rw');
 has 'os'              => ( is => 'rw');
@@ -47,11 +47,6 @@ has 'memtotal'        => ( is => 'rw');
 has 'memfree'         => ( is => 'rw');
 has 'swaptotal'       => ( is => 'rw');
 has 'swapfree'        => ( is => 'rw');
-
-#has 'memtotal'        => ( is => 'rw');
-#has 'memtotal'        => ( is => 'rw');
-#has 'memtotal'        => ( is => 'rw');
-#has 'memtotal'        => ( is => 'rw');
 
 has 'rconnector'   => (
                         is => 'rw',
@@ -72,7 +67,7 @@ sub isReachable{
     #TODO only ssh now is supported
     my $sc;
     eval{
-        $sc=$self->_getRemoteConnector;
+        $sc=$self->getRemoteConnector;
     };
     if( $@){
          WARN "Cannot connec to host".$@;
@@ -113,7 +108,7 @@ sub ping {
 
 sub getNodeConfiguration{
     my $self = shift;
-    my $sc = $self->_getRemoteConnector;
+    my $sc = $self->getRemoteConnector;
     $self->architecture(trim($sc->createSync('uname -m')));
     $self->os(trim($sc->createSync('uname -o')));
     $self->os_release( 
@@ -159,7 +154,7 @@ sub getNodeConfiguration{
 
 sub getLFFreeSpace{
     my $self = shift;
-    my $sc =$self->_getRemoteConnector;
+    my $sc =$self->getRemoteConnector;
     my $cmd = $sc->createSync("lfs df");
     foreach my $str ( split(/\n/,$cmd)){
         return $1 
@@ -171,7 +166,7 @@ sub getLFFreeSpace{
 
 sub getLFFreeInodes{
     my $self = shift;
-    my $sc =$self->_getRemoteConnector;
+    my $sc =$self->getRemoteConnector;
     my $cmd = $sc->createSync("lfs df -i");
     foreach my $str ( split(/\n/,$cmd)){
         return $1 
@@ -183,7 +178,7 @@ sub getLFFreeInodes{
 
 sub getLFCapacity{
     my $self = shift;
-    my $sc =$self->_getRemoteConnector;
+    my $sc =$self->getRemoteConnector;
     my $cmd = $sc->createSync("lfs df");
     foreach my $str ( split(/\n/,$cmd)){
         return $1 
@@ -194,7 +189,17 @@ sub getLFCapacity{
 
 }
 
-sub _getRemoteConnector{
+=over *
+
+=item getRemoteConnector
+
+Return connector for node. This connector is the main node connector and should be used for short (synchronous) execution and main single execution for avoid memory wasting. If consumer need more then one long a synchronous execution next connector can be get via connector clone or via getUncontrolledRC
+
+=back
+
+=cut
+
+sub getRemoteConnector{
     my $self = shift;
     return $self->rconnector 
          if defined $self->rconnector;
@@ -210,4 +215,25 @@ sub _getRemoteConnector{
     return $sc;
 }
 
+=over *
+
+=item getExclusiveRC
+
+Return a connector which can be used exclusively by consumer. Nobody more can get it.
+
+=back
+
+=cut
+
+
+
+sub getExclusiveRC{
+    my $self = shift;
+    my $rc = $self->getRemoteConnector;
+    my $urc = undef;
+    if( defined ( $rc)){
+        $urc = $rc->clone;
+    }
+    return $urc; 
+}
 __PACKAGE__->meta->make_immutable;

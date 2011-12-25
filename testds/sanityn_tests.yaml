@@ -1,0 +1,126 @@
+---
+groupname        : sanityn
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre sanityn tests that operate with two local client mount points (two local clients)
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10 
+timeout          : 300
+cleanup_max_time : -1
+#options          : 
+tags             : functional 
+#dangerous        : yes
+
+
+Tests:
+   - id               : 1a
+   - id               : 1b
+   - id               : 1c
+   - id               : 1d
+   - id               : 2a
+   - id               : 2b
+   - id               : 2c
+   - id               : 2d
+   - id               : 2e
+   - id               : 3
+   - id               : 4
+   - id               : 5
+   - id               : 6
+   - id               : 7
+   - id               : 8
+   - id               : 9
+   - id               : 10a
+   - id               : 10b
+   - id               : 11
+   - id               : 12
+   - id               : 13
+   - id               : 14
+   - id               : 14a
+   - id               : 14b
+   - id               : 14c
+   - id               : 14d
+   - id               : 15
+   - id               : 16
+   - id               : 17
+   - id               : 18
+   - id               : 19
+   - id               : 20
+   - id               : 21
+   - id               : 23
+   - id               : 24a
+   - id               : 24b
+   - id               : 25
+   - id               : 26a
+   - id               : 26b
+   - id               : 27
+   - id               : 28
+   - id               : 29
+   - id               : 30
+   - id               : 31a
+   - id               : 31b
+   - id               : 32a
+   - id               : 32b
+   - id               : 33a
+   - id               : 34
+   - id               : 35
+   - id               : 36
+   - id               : 37
+   - id               : 39a
+   - id               : 39b
+   - id               : 39c
+   - id               : 40a
+   - id               : 40b
+   - id               : 40c
+   - id               : 40d
+   - id               : 40e
+   - id               : 41a
+   - id               : 41b
+   - id               : 41c
+   - id               : 41d
+   - id               : 41e
+   - id               : 41f
+   - id               : 41g
+   - id               : 41h
+   - id               : 42a
+   - id               : 42b
+   - id               : 42c
+   - id               : 42d
+   - id               : 42e
+   - id               : 42f
+   - id               : 42g
+   - id               : 42h
+   - id               : 43a
+   - id               : 43b
+   - id               : 43c
+   - id               : 43d
+   - id               : 43e
+   - id               : 43f
+   - id               : 43g
+   - id               : 43h
+   - id               : 44a
+   - id               : 44b
+   - id               : 44c
+   - id               : 44d
+   - id               : 44e
+   - id               : 44f
+   - id               : 44g
+   - id               : 44h
+   - id               : 45a
+   - id               : 45b
+   - id               : 45c
+   - id               : 45d
+   - id               : 45e
+   - id               : 45f
+   - id               : 45g
+   - id               : 45h
+   - id               : 46a
+   - id               : 46b
+   - id               : 46c
+   - id               : 46d
+   - id               : 46e
+   - id               : 46f
+   - id               : 46g
+   - id               : 46h
+   - id               : 50
+
+

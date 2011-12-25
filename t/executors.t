@@ -65,23 +65,23 @@ test plan => 2, dCheckExternalLog    => sub {
     $exe->registerLogFile('test1',$file);
     $exe->pass;
     my $res = $exe->tap;
-SKIP:{
-skip "Logic was changes",1;
-my $exp = <<OUT
+
+    my $exp = <<OUT
 TAP version 13
 1..1
 ok 1
----
-executor: XTest::Executor::Noop
-groupname: sanity
-id: 1
-inf: 'more info'
-log.test1: '/tmp/test_log_file.xtest'
-result: 'ok 1'
+   ---
+   executor: XTest::Executor::Noop
+   groupname: sanity
+   id: 1
+   inf: 'more info'
+   log.test1: '/tmp/test_log_file.xtest'
+   result: 'ok 1'
+   status: passed
+   status_code: 0
 OUT
 ;
-    is($res,$exp)
-     };
+    is($res,$exp);
     close FILE;
 };
 

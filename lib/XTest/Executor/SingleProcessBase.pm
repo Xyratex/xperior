@@ -35,12 +35,12 @@ sub execute{
     $self->_addCmdLogFiles;
     $self->addYE('cmd',$self->cmd);
     
-    $self->_saveStageInfoBeforeTest;
+    #$self->_saveStageInfoBeforeTest;
     
     #get remote processor
     my $mclo =  
         $self->env->getNodeById($mcl->{'node'});
-    my $testp = $mclo->_getRemoteConnector;
+    my $testp = $mclo->getRemoteConnector;
     unless( defined( $testp)) {
         INFO 'Master client is:'.Dumper $mclo;
         confess "SSH to master client is undef";
@@ -77,11 +77,18 @@ sub execute{
     $self->addYE('starttime',$starttime);
     $self->addYE('endtime_planned',$endtime);
     ### post processing and cleanup
-    $testp->kill if($testp->isAlive == 0);
+    my $killed=0;
+    my $kt=0;
+    if($testp->isAlive == 0){
+         $testp->kill;
+         $killed=1;
+         $kt=$testp->killed;
+    }
+
 
     $self->addYE('completed','yes');
     
-    $self->_saveStageInfoAfterTest;
+    #$self->_saveStageInfoAfterTest;
 
     #cleanup tempdir after execution
     $testp->createSync
@@ -102,29 +109,30 @@ sub execute{
 
     my $pr = -1;
     $pr = $self->processLogs($self->getNormalizedLogName('stdout'));
-                                        #if $self->result_code == 0; why it was needed?
     #calculate results status
-    if($testp->killed > 0){
+    if($killed > 0){
         $self->addYE('killed','yes');
         $self->fail(
                 'Killed by timeout after ['.
-                ($testp->killed-$starttime).
+                ($kt-$starttime).
                 '] sec of execution');           
     }else{
         $self->addYE('killed','no');
         if( ($testp->exitcode == 0) && ($pr == 0) ){
             $self->pass;
         }else{
-            $self->fail('Non-zero exit code');
+            
+            $self->fail($self->getReason);
         }
     }
 
     ### cleanup logs
     ### end
-    $self->test->tap     ( $self->tap);
+    #no idea what is good result there, so no return
+    #$self->test->tap     ( $self->tap);
     $self->test->results ($self->yaml);
     #$self->write();
-    return $self->tap();
+    #return $self->tap();
 }
 
 sub _getMasterClient{
@@ -153,25 +161,5 @@ sub _addCmdLogFiles{
     $self->cmd( $self->cmd ." 2>     ".$self->remote_err.
                             $tee.$self->remote_out);
 }
-sub _saveStageInfoBeforeTest{
-    my $self = shift;
-    $self->_saveStageInfo('before');
-}
 
-sub _saveStageInfoAfterTest{
-    my $self = shift;
-    $self->_saveStageInfo('after');
-}
-
-sub _saveStageInfo{
-    my ($self,$item) = @_;
-    my %info;
-    my $mc = $self->env->getNodeById
-        ($self->env->getMasterClient->{'node'});
-    $info{'lfs_freespace'}  = $mc->getLFFreeSpace;
-    $info{'lfs_freeinodes'} = $mc->getLFFreeInodes; 
-    $info{'lfs_capacity'}   = $mc->getLFCapacity;
-    $self->addYE($item."_execution",\%info);
-}
-
-1;
+__PACKAGE__->meta->make_immutable;

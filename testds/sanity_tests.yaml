@@ -1,12 +1,13 @@
 ---
 groupname        : sanity
 executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
 description      : Lustre sanity tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 10 
 timeout          : 300
 cleanup_max_time : -1
-options          : 
+#options          : 
 tags             : functional 
 dangerous        : yes
 
@@ -280,6 +281,7 @@ Tests:
    - id               : 68b
    - id               : 69
    - id               : 71
+     timeout          : 900
    - id               : 72a
    - id               : 72b
    - id               : 73
@@ -405,6 +407,7 @@ Tests:
    - id               : 160
    - id               : 161
    - id               : 162
+     dangerous        : no
    - id               : 163
    - id               : 169
    - id               : 170
@@ -413,23 +416,41 @@ Tests:
    - id               : 180b
    - id               : 181
    - id               : 200a
+     dangerous        : no
    - id               : 200b
+     dangerous        : no
    - id               : 200c
+     dangerous        : no
    - id               : 200d
+     dangerous        : no
    - id               : 200e
+     dangerous        : no
    - id               : 200f
+     dangerous        : no
    - id               : 200g
+     dangerous        : no
    - id               : 200h
+     dangerous        : no
    - id               : 201a
+     dangerous        : no
    - id               : 201b
+     dangerous        : no
    - id               : 201c
+     dangerous        : no
    - id               : 204a
+     dangerous        : no
    - id               : 204b
+     dangerous        : no
    - id               : 204c
+     dangerous        : no
    - id               : 204d
+     dangerous        : no
    - id               : 204e
+     dangerous        : no
    - id               : 204f
+     dangerous        : no
    - id               : 204g
+     dangerous        : no
    - id               : 204h
    - id               : 212
    - id               : 213

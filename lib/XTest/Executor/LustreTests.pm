@@ -22,19 +22,30 @@ our $VERSION = "0.0.2";
 has 'mdsopt'  => (is=>'rw');
 has 'ossopt'  => (is=>'rw');
 has 'clntopt' => (is=>'rw');
+has 'reason'  => (is=>'rw');
 
 after 'init' => sub{
     my $self    = shift;
     $self->appname('sanity');
     #$self->reset;
+    $self->reason(''); 
 };
 
+
+sub getReason{
+    my $self    = shift;
+    return $self->reason;
+}
 
 sub _prepareCommands{
     my $self = shift;
     $self->_prepareEnvOpts;
-    my $tid = $self->test->testcfg->{id}; 
-    $self->cmd("SLOW=YES REFORMAT=YES ".$self->mdsopt." ".$self->ossopt." ".$self->clntopt." ONLY=$tid DIR=/mnt/lustre/tmp  PDSH=\\\"/usr/bin/pdsh -S -w \\\" /usr/lib64/lustre/tests/sanity.sh");
+    my $dir    =$self->env->cfg->{'client_mount_point'}.
+                                $self->env->cfg->{'tempdir'};
+    my $tid    = $self->test->testcfg->{id};
+    my $script = $self->test->getParam('groupname');
+#REFORMAT=YES 
+    $self->cmd("SLOW=YES  ".$self->mdsopt." ".$self->ossopt." ".$self->clntopt." ONLY=$tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -S -w \\\" /usr/lib64/lustre/tests/${script}.sh");
 }
 
 sub processLogs{
@@ -48,6 +59,9 @@ sub processLogs{
         chomp $s;
         if( $s =~ m/PASS/){
             $passed=0;
+        }
+        if( $s =~ m/FAIL:(.*)/){
+            $self->reason($1);
         }
     }
     close (F);
