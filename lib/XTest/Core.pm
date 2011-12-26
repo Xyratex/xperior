@@ -72,12 +72,13 @@ sub runtest {
     my $executor = $self->createExecutor( $test->getParam('executor'),
         $test->getParam('roles') );
     $executor->init( $test, $self->options, $self->env );
-    
+
     #apply ext params to test
-    foreach my $param (@{$self->options->{'extopt'}}){
-        if($param =~ m/^(.+)\:(.+)$/){
-            $executor->setExtOpt($1,$2);
-        }else{
+    foreach my $param ( @{ $self->options->{'extopt'} } ) {
+        if ( $param =~ m/^(.+)\:(.+)$/ ) {
+            $executor->setExtOpt( $1, $2 );
+        }
+        else {
             DEBUG "Cannot parse parameters[$param]";
         }
     }
@@ -113,17 +114,23 @@ sub run {
     my %targs;
     my @includeonly = @{ $self->options->{'includeonly'} };
     my $excludelist = undef;
+    my $includelist = undef;
 
     #DEBUG "Process defined excludelist [".$self->options->{'excludelist'}."]";
     $excludelist = parseIEFile( $self->options->{'excludelist'} )
       if ( ( defined $self->options->{'excludelist'} )
         && ( $self->options->{'excludelist'} ne '' ) );
+
+    $includelist = parseIEFile( $self->options->{'includelist'} )
+      if ( ( defined $self->options->{'includelist'} )
+        && ( $self->options->{'includelist'} ne '' ) );
+
     my $executedtests;
 
     if ( $self->options->{'continue'} ) {
         $executedtests = getExecutedTestsFromWD( $self->options->{'workdir'} );
     }
-
+    DEBUG Dumper $includelist;
     #going over all loaded tests
     my $snum = 0;
     my $enum = 0;
@@ -167,15 +174,29 @@ sub run {
                 }
             }
 
-        }
+            if ( defined $includelist ) {
+                #DEBUG "Process defined excludelist [$includelist]";
+                foreach my $it (@$includelist) {
+                    $filtered = 1
+                      if (
+                        compareIE( $it,
+                                $test->getGroupName . '/'
+                              . $test->getName
+                              . '.yaml' ) == 0
+                      );
+                }
+            }
 
-        #skip already executed for --continue
-        foreach my $et (@$executedtests) {
-            $filtered = 1
-              if (
-                compareIE( $et,
-                    $test->getGroupName . '/' . $test->getName . '.yaml' ) == 1
-              );
+            #skip already executed for --continue
+            foreach my $et (@$executedtests) {
+                $filtered = 1
+                  if (
+                    compareIE( $et,
+                        $test->getGroupName . '/' . $test->getName . '.yaml' )
+                    == 1
+                  );
+            }
+
         }
 
         if ($filtered) {

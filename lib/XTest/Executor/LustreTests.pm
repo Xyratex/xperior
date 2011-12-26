@@ -40,11 +40,12 @@ sub getReason{
 sub _prepareCommands{
     my $self = shift;
     $self->_prepareEnvOpts;
-    my $dir    =$self->env->cfg->{'client_mount_point'}.
-                                $self->env->cfg->{'tempdir'};
+    my $td = '';
+    $td = $self->env->cfg->{'tempdir'} if defined $self->env->cfg->{'tempdir'};
+    my $dir    =$self->env->cfg->{'client_mount_point'}.$td;
     my $tid    = $self->test->testcfg->{id};
     my $script = $self->test->getParam('groupname');
-#REFORMAT=YES 
+#REFORMAT=YES
     $self->cmd("SLOW=YES  ".$self->mdsopt." ".$self->ossopt." ".$self->clntopt." ONLY=$tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -S -w \\\" /usr/lib64/lustre/tests/${script}.sh");
 }
 

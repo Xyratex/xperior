@@ -55,6 +55,7 @@ sub runEx{
 
 sub parseIEFile{
     my $file = shift;
+    DEBUG "Parse [$file] as include/exclude list";
     open(F,"< $file") or confess "Cannot open file: $file";
     my @onlyvalues;
     while(<F>){
@@ -74,13 +75,14 @@ sub parseIEFile{
 sub compareIE{
     my ($template, $value) =@_;
     $template = trim $template;
-    #DEBUG "Compare for exclusion: [$template] and [$value]";
+    #DEBUG "Compare for exclusion/inclusion: [$template] and [$value]";
     if($template =~ m/\*$/){
         $template =~ s/\*//;
         return 2 if( $value =~ m/^$template.*/);
     }else{
         return 1 if( $value =~ m/^$template$/);
     }
+    #DEBUG "Not compare [$template] and [$value]";
     return 0;
 }
 

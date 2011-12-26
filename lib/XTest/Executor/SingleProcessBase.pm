@@ -46,9 +46,10 @@ sub execute{
         confess "SSH to master client is undef";
     }
     ## create temprory dir
+    my $td = $self->env->cfg->{'tempdir'}
+                if defined $self->env->cfg->{'tempdir'} ;
     $testp->createSync
-        ('mkdir -p '.$self->env->cfg->{'client_mount_point'}
-            .$self->env->cfg->{'tempdir'});
+        ('mkdir -p '.$self->env->cfg->{'client_mount_point'}.$td);
     #TODO add exit value check there. Now it doesn't have value.
 
 #TODO check these values on empty or undefined values.
@@ -65,7 +66,7 @@ sub execute{
 
     while( $endtime > time ){
         #monitoring timeout
-        sleep 5;
+        sleep 1;
         unless ( $testp->isAlive == 0 ) {
             INFO "Remote app is not alive, exiting";
             last;
