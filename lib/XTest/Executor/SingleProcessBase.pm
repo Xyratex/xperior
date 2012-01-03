@@ -46,7 +46,8 @@ sub execute{
         confess "SSH to master client is undef";
     }
     ## create temprory dir
-    my $td = $self->env->cfg->{'tempdir'}
+    my $td = '';
+    $td = $self->env->cfg->{'tempdir'}
                 if defined $self->env->cfg->{'tempdir'} ;
     $testp->createSync
         ('mkdir -p '.$self->env->cfg->{'client_mount_point'}.$td);
@@ -57,7 +58,11 @@ sub execute{
 #$self->env->cfg->{'tempdir'})    
    
 
-    $testp->create($self->appname,$self->cmd);
+    my $cr = $testp->create($self->appname,$self->cmd);
+    if($cr == 0){
+        $self->fail('Cannot start remote test process on master client');
+
+    }
     #all alredy started there
 
     my $starttime=time;
@@ -74,6 +79,7 @@ sub execute{
 
         DEBUG "Test alive, next wait cycle";
     }
+    $testp->createSync('sync',30);
     $self->addYE('endtime',time);
     $self->addYE('starttime',$starttime);
     $self->addYE('endtime_planned',$endtime);
@@ -81,6 +87,9 @@ sub execute{
     my $killed=0;
     my $kt=0;
     if($testp->isAlive == 0){
+        my $ts = $mclo->getExclusiveRC;
+        DEBUG $ts->createSync('ps afx');
+        DEBUG "Owned pid is:".$testp->pid;
          $testp->kill;
          $killed=1;
          $kt=$testp->killed;
@@ -94,22 +103,32 @@ sub execute{
     #cleanup tempdir after execution
     $testp->createSync
         ('rm -rf '.$self->env->cfg->{'client_mount_point'}
-            .$self->env->cfg->{'tempdir'}."/*");
+            .$td."/*");
 
     ### get logs
 
-    $testp->getFile( $self->remote_err,
+    my $res = $testp->getFile( $self->remote_err,
             $self->getNormalizedLogName('stderr'));
-    $self->registerLogFile('stderr',
+    if($res == 0){
+        $self->registerLogFile('stderr',
             $self->getNormalizedLogName('stderr'));
+    }else{
+        $self->addMessage(
+            'Cannot copy log file ['.$self->remote_err."]: $res");        
+    }
 
-    $testp->getFile( $self->remote_out,
+    $res = $testp->getFile( $self->remote_out,
             $self->getNormalizedLogName('stdout'));
-    $self->registerLogFile('stdout',
-            $self->getNormalizedLogName('stdout'));
-
     my $pr = -1;
-    $pr = $self->processLogs($self->getNormalizedLogName('stdout'));
+    if($res == 0){
+        $self->registerLogFile('stdout',
+            $self->getNormalizedLogName('stdout'));
+        $pr = $self->processLogs
+            ($self->getNormalizedLogName('stdout'));
+    }else{
+        $self->addMessage(
+            'Cannot copy log file ['.$self->remote_out."]: $res");
+    }
     #calculate results status
     if($killed > 0){
         $self->addYE('killed','yes');

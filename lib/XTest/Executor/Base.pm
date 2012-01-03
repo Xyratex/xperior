@@ -13,7 +13,9 @@
 package XTest::Executor::Base;
 use Moose;
 use Data::Dumper;
-use YAML::Tiny;
+#use YAML::Tiny;
+use YAML;
+#use YAML::Syck;
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
@@ -58,13 +60,13 @@ sub init{
 
 sub addYE{
     my ($self, $key, $value) = @_;
-    $self->{'yaml'}->{$key} = $value ;
+    $self->yaml->{$key} = $value ;
     $self->_write;
 }
 
 sub addYEE{
     my ($self, $key1, $key2, $value) = @_;
-    $self->{'yaml'}->{$key1}->{$key2} = $value ;
+    $self->yaml->{$key1}->{$key2} = $value ;
     $self->_write;
 }
 
@@ -187,6 +189,10 @@ sub _write{
      my $self = shift;
      my $file = $self->_reportFile;
      $self->_createDir;
+     $YAML::Stringify = 1;
+#$YAML::Syck::ImplicitTyping =1;
+#     $YAML::Syck::SingleQuote = 1;
+#     $YAML::XS::QuoteNumericStrings=0;
      open REP, "> $file" or confess "Cannot open report file:" . $!;
      print REP Dump($self->yaml);
      close REP;

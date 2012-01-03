@@ -234,6 +234,7 @@ sub getExclusiveRC{
     if( defined ( $rc)){
         $urc = $rc->clone;
     }
+    $urc->initTemp;
     return $urc; 
 }
 __PACKAGE__->meta->make_immutable;

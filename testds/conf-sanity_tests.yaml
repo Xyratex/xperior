@@ -1,0 +1,101 @@
+---
+groupname        : conf-sanity
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre conf-sanity tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 0 
+timeout          : 300
+cleanup_max_time : -1
+tags             : functional 
+dangerous        : yes
+
+
+Tests:
+   - id : 0
+   - id : 1
+   - id : 2
+   - id : 3
+   - id : 4
+   - id : 5a
+   - id : 5b
+   - id : 5c
+   - id : 5d
+   - id : 5e
+   - id : 5f
+   - id : 6
+   - id : 7
+   - id : 8
+   - id : 9
+   - id : 17
+   - id : 18
+   - id : 19a
+   - id : 19b
+   - id : 20
+   - id : 21a
+   - id : 21b
+   - id : 21c
+   - id : 21d
+   - id : 22
+   - id : 23a
+   - id : 23b
+   - id : 24a
+   - id : 24b
+   - id : 25
+   - id : 26
+   - id : 27a
+   - id : 27b
+   - id : 28
+   - id : 29
+   - id : 30a
+   - id : 30b
+   - id : 31
+   - id : 32
+   - id : 32a
+   - id : 32b
+   - id : 33a
+   - id : 33b
+   - id : 34a
+   - id : 34b
+   - id : 34c
+   - id : 35a
+   - id : 35a
+   - id : 35b
+   - id : 35b
+   - id : 36
+   - id : 37
+   - id : 38
+   - id : 39
+   - id : 40
+   - id : 41a
+   - id : 41b
+   - id : 42
+   - id : 43
+   - id : 44
+   - id : 45
+     timeout : 700
+   - id : 46a
+   - id : 47
+   - id : 48
+   - id : 49
+   - id : 50a
+   - id : 50b
+   - id : 50c
+   - id : 50d
+   - id : 50e
+   - id : 50f
+   - id : 50g
+   - id : 51
+   - id : 52
+   - id : 53a
+   - id : 53b
+   - id : 54a
+   - id : 54b
+   - id : 55
+   - id : 56
+   - id : 57a
+   - id : 57b
+   - id : 58
+   - id : 59
+   - id : 60
+
