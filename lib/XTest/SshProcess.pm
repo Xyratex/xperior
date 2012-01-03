@@ -12,30 +12,39 @@
 
 =pod
 
-=head1 SshProcess implements remote process control for singlie process over ssh.
+=head1 NAME
 
+XTest::SshProcess - implements remote process control for single process over ssh
 
-Module specially designed to be simple replaced by other module which provide same interface, possible via other protocol.
+=head1  DESCRIPTION
 
-=head2  Modules support 2 workflows
+The module is specially designed to be easily replaced by other module 
+which provide same interface, possible via other protocol.
 
-Using these workflows must be serila not  parallell. User is resposible for control it.
+Modules support two serial workflows, opposed to a parallel, that a user is resposible to control.
 
 =over 2
 
-=item First workflow
+=item Workflow 1
 
-Create logn-time process on remote nodes. Process executed in background on target node and deattached from console, capture and download   stderr and stdout is user responsibility via providing command line with capturing.
+User creates long-time process on remote nodes, the process is executed in background on a target node 
+and deattached from console.
+The stderr/stdout capturing and download is a user responsibility, that can be done, for example,
+by standard output rediction via command line.
 
-Use on this way this functions B<create>, B<kill>, B<isAlive> and fields B<exitcode> and B<pid>.
+Functions to be used: B<create>, B<kill>, B<isAlive> and fields B<exitcode> and B<pid>.
 
-=item Second workflow
+=item Workflow 2
 
 Create short-time process on remote nodes with capturing stderr/stdout. It behaves as perl B<``> (backtics) command.
 
-Use on this way function B<createSync> and field B<exitcode>
+Function to be used: B<createSync> and field B<exitcode>
 
 =back
+
+=head2 Functions
+
+=over 2
 
 =cut
 
@@ -135,13 +144,9 @@ sub _sshAsyncExec {
     return 0;
 }
 
-=over *
+=item init ($host, $user, $port)
 
-=item init
-
-Initialize module, get user,host,port. Protocol is only ssh.
-
-=back
+Initialize module. Protocol is only ssh.
 
 =cut
 
@@ -208,15 +213,11 @@ sub _findPid {
     return -1;
 }
 
-=over *
-
-=item createSync
+=item createSync ($command, $timeout)
 
 Execute remote process and catch stderr/std and exit code. Function exit when remote execution done.
 
 Function have one parameter - command for start on emote node.
-
-=back
 
 =cut
 
@@ -246,25 +247,21 @@ SS
 
 }
 
-=over *
+=item create ($name, $command)
 
-=item create
-
-Execute remote process with unatached stderr/stdout and exit. Pid is savednon remote fs. Exit code is saved after process end.
-
-=over 2
+Execute remote process with unattached stderr/stdout and exit. Pid is savednon remote fs. Exit code is saved after process end.
 
 Parameters:
 
-=item *
+=over 2
 
-appname - name of process which can be seen on remote node. Can be used in B<killall> call. Now is not used somehow. TBI.
+=item $name
 
-=item *
+name of process which can be seen on remote node. Can be used in B<killall> call. Now is not used somehow. TBI.
 
-app    - command line which will be executed on remote node
+=item $command
 
-=back
+command line which will be executed on remote node
 
 =back
 
@@ -318,13 +315,9 @@ SS
     return $self->pid;
 }
 
-=over *
-
-=item kill
+=item kill ($mode)
 
 Kill process which was created by create via saved pid.
-
-=back
 
 =cut
 
@@ -347,14 +340,9 @@ sub kill {
     $self->exitcode(-99);
 }
 
-=over *
-
 =item isAlive
 
 Check process status on remote system via saved pid. Also this function get exit code from remote side if application is exited or killed.
-
-
-=back
 
 =cut
 
@@ -390,13 +378,9 @@ sub isAlive {
 #
 #}
 
-=over *
-
-=item getFile
+=item getFile ($remote_file, $local_file)
 
 Get file from remote system. TODO add tests on it.
-
-=back
 
 =cut
 
@@ -412,5 +396,9 @@ sub getFile {
     return runEx(
         "scp -rp " . $self->user . '@' . $self->hostname . ":$rfile $lfile" );
 }
+
+=back
+
+=cut
 
 1;
