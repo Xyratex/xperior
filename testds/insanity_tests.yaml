@@ -1,0 +1,23 @@
+---
+groupname        : insanity 
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre insanity tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10 
+timeout          : 600
+cleanup_max_time : -1
+tags             : functional 
+dangerous        : yes
+Tests:
+   - id : 0
+   - id : 1
+   - id : 2
+   - id : 3
+   - id : 4
+   - id : 5
+   - id : 6
+   - id : 7
+   - id : 8
+   - id : 9
+   - id : 10

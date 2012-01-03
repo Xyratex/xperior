@@ -24,7 +24,7 @@ use Carp;
 use XTest::Test;
 use XTest::SshProcess;
 use XTest::Utils;
-
+$|=1;
 my $sp;
 
 startup         _startup  => sub {
@@ -38,6 +38,24 @@ setup           _setup    => sub {
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub { };
 #########################################
+
+test plan => 3, aCreateExitCodes     => sub{
+
+    my $res = $sp->create('sleep','/bin/sleep 30');
+    ok(($res>0),'Correct exit code');
+    sleep 10;
+
+    $res = $sp->create('sleep','ls /etc/passwd');
+    ok(($res>0),'Check result for too smal application');
+
+    $sp->host('bad_host');
+    $res = $sp->create('sleep','/bin/sleep 30');
+    is($res,-2,'Check result for bad host');
+
+
+#exit 1;
+};
+
 test plan => 7, kCreateAliveKill    => sub {
     #highlevel functional test
     is($sp->killed,0, 'Check status before start');
@@ -139,7 +157,23 @@ test plan => 5, fClone    => sub {
 
 };
 
-#TODO add stress test and sendFile, getFile
+test plan => 4, vGetFile => sub {
+    my $if = '/tmp/xxxYYYzzz';
+    my $of = '/tmp/xxxYYYwww';
+    my $nif = '/tmp/xxxYYYzzzN';
+    my $nof = '/tmp/xxxYYYwwwN';
+
+    DEBUG `touch $if`;
+    my $res = $sp->getFile($if,$of);    
+    is($res,0,"Check ok result");
+    ok (-e $of, "Check new file" );
+    $res = $sp->getFile($nif,$nof);   
+    DEBUG $res;
+    isnt($res,0,'Check not exist file copy');
+    ok ( (! -e $nof), "Check no new file for bad source" );
+};
+
+#TODO add stress test and sendFile
 
 sshprocess->run_tests;
 

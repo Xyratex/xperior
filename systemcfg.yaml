@@ -36,17 +36,17 @@ Nodes:
 
 LustreObjects:
    - id          : mds1 
-     device      : /dev/loop0
+     device      : /tmp/lustre-mdt1    
      node        : mds1
      type        : mds
    
    - id          : oos1 
-     device      : /dev/loop1
+     device      : /tmp/lustre-ost1
      node        : oss1
      type        : oss
 
    - id          : oos2 
-     device      : /dev/loop2
+     device      : /tmp/lustre-ost2
      node        : oss2
      type        : oss
 

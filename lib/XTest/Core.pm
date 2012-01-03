@@ -75,7 +75,7 @@ sub runtest {
 
     #apply ext params to test
     foreach my $param ( @{ $self->options->{'extopt'} } ) {
-        if ( $param =~ m/^(.+)\:(.+)$/ ) {
+        if ( $param =~ m/^([\w\d]+)\s*\:(.+)$/ ) {
             $executor->setExtOpt( $1, $2 );
         }
         else {

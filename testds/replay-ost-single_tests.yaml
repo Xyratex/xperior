@@ -1,0 +1,23 @@
+---
+groupname        : replay-ost-single  
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre replay-ost-single tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10 
+timeout          : 300
+cleanup_max_time : -1
+tags             : functional 
+#dangerous        : yes
+Tests:
+
+
+   - id : 0a
+   - id : 0b
+   - id : 1
+   - id : 2
+   - id : 3
+   - id : 4
+   - id : 5
+   - id : 6
+   - id : 7

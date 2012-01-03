@@ -48,10 +48,16 @@ after   'execute' => sub{
         if($self->ison->{$n->id}!=0){
             my $c = $self->ison->{$n->id};
             $c->kill(1);
-            $c->getFile( $self->tlog,
+            my $res = $c->getFile( $self->tlog,
             $self->getNormalizedLogName('messages.'.$n->id));
-            $self->registerLogFile('messages.'.$n->id,
+            if ($res == 0){
+                $self->registerLogFile('messages.'.$n->id,
                      $self->getNormalizedLogName('messages.'.$n->id));
+            }else{
+                $self->addMessage(
+                    'Cannot copy log file ['.$self->tlog."]: $res");
+
+            }
         }
     }
 
