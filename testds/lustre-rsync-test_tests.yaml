@@ -1,0 +1,26 @@
+---
+groupname        : lustre-rsync-test
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre  lustre-rsync-test tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10 
+timeout          : 600
+cleanup_max_time : -1
+tags             : functional 
+dangerous        : yes
+Tests:
+   - id : 1
+   - id : 2a
+   - id : 2b
+   - id : 2c
+   - id : 3a
+   - id : 3b
+   - id : 3c
+   - id : 4
+   - id : 5a
+   - id : 5b
+   - id : 6
+   - id : 7
+   - id : 8
+   - id : 9
