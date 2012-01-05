@@ -9,22 +9,220 @@
 #      COMPANY:  Xyratex
 #      CREATED:  08/31/2011 06:37:26 PM
 #===============================================================================
+=pod
+
+=head1 NAME
+
+xtest - execute tests via XTest harness
+
+=head1 SYNOPSIS 
+
+    xtest --action <run|list> [--continue] [<options>]
+
+=head1 DESCRIPTION
+
+The application is executing different specially wrapped tests via XTest
+harness. The application read yaml tests descriptions,check environmental
+conditions, read/gather cluster configuration and run tests based on it, gather
+logs and save report.
+
+=head1 OPTIONS
+
+=over 2
+
+=item --action=<run|list>
+
+=over 6
+
+=item run
+
+Executre tests selected in configuration and filters.
+
+=item list
+
+Print list of tests which will be ready to execution considering configuration
+and filters
+
+=back
+
+=item --help
+
+Print usage help
+
+=item --man
+
+Print long help
+
+=item --cmdout
+
+Show test cmd output. Default - no.
+
+=item --tap
+
+Generate also tap files in work directory
+
+=item --continue
+
+Continue execution in specified work directory. Execution is continued from
+next test after last found written, possible not completed, report. 
+If L<--continue> is not set then previous results in work directory are overwritten.
+
+=item --skipnodeinfo
+
+TBI
+
+=item --extopt=name:value
+
+Additional options which will be stored in test results. use the parameter many
+times for many parameters
+
+=back
+
+
+=head2 Configuration
+
+=over 2
+
+=item --useproccfg
+
+TBD
+
+=item --config=<path>
+
+TBD path to yaml config file
+
+=item --workdir=<path>
+
+Working dir where test log and results will be saved
+
+=item --testdir=<path>
+
+Directory where are test descriptors yaml files
+
+=back
+
+=head2 Filters
+
+=head3 Exclude/include lists 
+
+Every tests defined by his name and his test group. 
+It is possible to use mask * at the end of string (any continue of the string).
+Symbols after '#' are ignored.
+
+=head4 Sample
+
+    sanity/a1
+    mdtest* #comment
+    #comment too
+
+=over 2
+
+=item --excludelist
+
+List of tests for exclude from execution. These tests will not be executed, 
+no status or report will be generated. See syntax definition below.
+
+=item --includelist
+
+List of tests for execution. Only tests in the list will be executed.
+Same syntax as exclude list. TBI.
+
+=item --includeonly
+
+List of test for execution from command line. Use this parameter twice or more
+for many tests. Exclude/include lists parameters is ignored if this key
+pointed. Test must be pointed as <test group>/<test name>. See also
+include/exclude list format below.
+
+
+=item --skiptag=<tags>
+
+List of tags which will be skipped. No mask or regexp allowed. 
+Use this parameter twice or more for many tag exclusion. 
+Ignored if L<--includeonly> set.
+
+=back
+
+=head2 Logging level 
+
+=over 2
+
+=item --debug
+
+'debug' log level
+
+=item --info
+
+'info'  log level
+
+=item --error
+
+'error' log level (default)
+
+=back
+
+=head1 EXIT CODES
+
+=over 4
+
+=item 0
+
+Execution done successfully, all results ready
+
+=item 10
+
+Execution done because of detected nodes crash or network problem
+
+=item 11
+
+Execution done because of failure of tests which are in critical tests list 
+
+=item 19
+
+Original configuration cannot pass check
+
+=back
+
+=head1 RUNNING INTERNAL TESTS
+
+TBD
+
+=head1 AUTHOR
+
+ryg, E<lt>Roman_Grigoryev@xyratex.comE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (c) Xyratex, 2011
+
+=head1 SEE ALSO
+
+See XTest harness User Guide for detail of system configuration.
+
+=cut
+
+
 
 use strict;
 use warnings;
+
+use English;
+use File::Basename;
 use Getopt::Long;
 use Log::Log4perl qw(:easy);
 use Carp;
 use Pod::Usage;
+use Cwd qw(abs_path);
 
 BEGIN {
-use Cwd 'abs_path';
-    my $p = abs_path($0);
-    $p =~s/runtest\.pl$//;
-    push @INC, $p.'/../lib/'
+
+    my $XTESTBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
+    push @INC, "$XTESTBASEDIR/../lib";
+
 };
 
 use XTest::Core;
+
 $|=1;
 
 my $nopts;
@@ -51,6 +249,7 @@ my $helpflag;
 my $manflag;
 my $continue;
 my $tap;
+
 GetOptions(
     "config:s"       => \$configfile,
     "mode:s"         => \$mode,
@@ -75,12 +274,9 @@ GetOptions(
     "tap!"           => \$tap,
 );
 
-if ( ($helpflag) || ($nopts) ) {
-    pod2usage(2);
-}
-if ( $manflag) {
-    pod2usage( -verbose => 2  );
-}
+pod2usage(-verbose => 1) if ( ($helpflag) || ($nopts) );
+
+pod2usage(-verbose => 2) if ($manflag);
 
 if( $debug){
     Log::Log4perl->easy_init($DEBUG);
@@ -151,91 +347,4 @@ my $testcore =  XTest::Core->new();
 $testcore->run(\%options);
 
 __END__
-
-=pod
-
-=head1 XTest testing harness 
-
-=head1 NAME
-
-runtest.pl - executing tests via  XTest harness. 
-
-=head1 SYNOPSIS 
-
-    bin/runtest.pl <parameters>
-    Configuration options: 
-        --useproccfg       : TBD
-        --config           : TBD path to yaml config file
-
-        --workdir=<path>   : working dir where test log and results will be saved
-        --testdir=<path>   : directory where are test descriptors yaml files
-
-    Test filtering:
-        --skiptag=tag1     : list of tags which will be skipped. No mask or regexp allowed. Use this parameter twice or more for many tag exclusion. Ignored if --includeonly set.
-        --includeonly        : list of test for execution from command line. Use this parameter twice or more for many tests. Exclude/include lists parameters is ignored if this key pointed. Test must be pointed as <test group>/<test name>. See also include/exclude list format below.
-        --excludelist       : list of tests for exclude from execution. These tests will not be executed, no status or report will be generated. See syntax definition below. 
-        --includelist       : list of tests for execution. Only tests in the list will be executed.Same syntax as exclude list. TBI.
-
-        Exclude/include list format is simple. Every tests defined by his name and his test group. It is possible to use mask * at end of string(any continue of the string) Symbols after '#' are ignored.   
-    Sample:
-    ------------------------------------------------------
-    sanity/a1
-    mdtest* #comment
-    #comment too
-    ------------------------------------------------------
-
-
-
-    Framework logging level 
-        --debug             : 'debug' log level
-        --info              : 'info'  log level
-        --error             : 'error' log level (default)
-
-        --cmdout            : show test cmd output. Default - no.
-
-        --help              : print usage help
-        --man               : print long help
-
-    Action specificator
-        --action=<action>
-            run             : run tests which selected by configuration and filters.
-            list            : see list of tests which will be ready to execution considering configuration and filters
-
-    Options       
-        --tap                : generate also tap files in work directory
-        --continue           : continue execution in specified work directory. Execution is continued from next test after last found written, possible not completed, report. If --continue is not set then previous results in work directory are overwritten.
-
-        --skipnodeinfo       : TBI
-
-        --extopt=name:value  : additional options which will be stored in test results. use the parameter many times for many parameters
-
-
-    Exit codes:
-    0         :  execution done successfully , all results ready
-    10        :  execution done because of detected nodes crash or network problem
-    11        :  execution done because of failure of tests which are in critical tests list 
-    19        :  original configuration cannot pass check
-        
-=head1 Description
-
-The application is executing different specially wrapped tests via XTest harness. The application read yaml tests descriptions,check environmental conditions, read/gather cluster configuration and run tests based on it, gather logs and save report.
-
-
-=head2 Executing internal tests.
-TBD
-
-
-=head1 See also
-
-See XTest harness User Guide for detail of system configuration.
-
-=head1 Author
-
-ryg, E<lt>Roman_Grigoryev@xyratex.comE<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2011 by ryg, Xyratex
-
-=cut
 

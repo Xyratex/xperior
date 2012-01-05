@@ -1,0 +1,4 @@
+#!/bin/sh
+
+perl `dirname $0`/runtest.pl $*
+
