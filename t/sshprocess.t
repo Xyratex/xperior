@@ -122,7 +122,7 @@ test plan => 20, xStress    => sub {
 test plan => 10, cInit    => sub {
     is($sp->host,'localhost','host');
     is($sp->user,'ryg','user');
-    is($sp->hostname,trim `hostname`,'Check on host hostname');
+    is($sp->hostname,(trim `hostname`),'Check on host hostname');
     is($sp->osversion, trim`uname -a`,'Check os version');
     my $pidfile   = $sp->pidfile;
     my $ecodefile = $sp->ecodefile;

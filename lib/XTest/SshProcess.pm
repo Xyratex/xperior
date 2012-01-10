@@ -88,7 +88,15 @@ sub _sshSyncExec {
     $timeout = 30 unless defined $timeout;
     DEBUG "XTest::SshProcess->_sshSyncExec";
     my $cc =
-        "ssh -o 'BatchMode yes' -o 'AddressFamily inet'  -f "
+        "ssh -o  'BatchMode yes' "
+      . "-o 'AddressFamily inet' "
+      . "-o 'ConnectTimeout=10' "
+
+      #."-o 'StrictHostKeyChecking=no' "
+      #            ."-o 'UserKnownHostsFile=/dev/null' "
+      . "-o 'ServerAliveInterval=600' "
+      . "-o 'ServerAliveCountMax=15' "
+      #. " -f "
       . $self->user . "@"
       . $self->host
       . " \"$cmd\" 2>&1 ";
@@ -99,6 +107,7 @@ sub _sshSyncExec {
         local $SIG{ALRM} = sub {
             $self->exitcode(-100);
             $self->killed(time);
+
             #print "*******************Killed by timeout !\n";
             die "alarm clock restart";
         };
@@ -107,11 +116,12 @@ sub _sshSyncExec {
         #eval {
         #do main action
         $out = `$cc`;
+
         #        };
-        alarm 0;# cancel the alarm
+        alarm 0;    # cancel the alarm
     };
-    alarm 0;# race condition protection
-    #DEBUG "!!!!!!!!" . $@;
+    alarm 0;        # race condition protection
+                    #DEBUG "!!!!!!!!" . $@;
 
     #die if $@ && $@ !~ /alarm clock restart/; # reraise
     if ( $@ =~ m/alarm\s+clock\s+restart/ ) {
@@ -120,10 +130,11 @@ sub _sshSyncExec {
         WARN "SSH sync execution killed by timeout !\n";
         return undef;
     }
-    if( ${^CHILD_ERROR_NATIVE} != 0 ){
+    if ( ${^CHILD_ERROR_NATIVE} != 0 ) {
         $self->exitcode( ${^CHILD_ERROR_NATIVE} );
-        WARN "SSH sync exit code is !0 [".${^CHILD_ERROR_NATIVE}."]";           return undef;
-    }   
+        WARN "SSH sync exit code is !0 [" . ${^CHILD_ERROR_NATIVE} . "]";
+        return undef;
+    }
 
     return $out;
 }
@@ -131,22 +142,25 @@ sub _sshSyncExec {
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
     DEBUG "XTest::SshProcess->_sshAsyncExec";
-    my $sc=1;
-    my $alive  = 0;
-    my $cc = "ssh -f " . $self->user . "@" . $self->host . " \"$cmd\"  ";
+    my $sc    = 1;
+    my $alive = 0;
+    my $cc    = "ssh -f " . $self->user . "@" . $self->host . " \"$cmd\"  ";
     DEBUG "Remote cmd is [$cc]";
-    my $step=0;
-    #this cycle is workaround for connection problem, 
+    my $step = 0;
+
+    #this cycle is workaround for connection problem,
     #which observed too rare.
-    while( ($sc != 0)and ($step < 5) ){
+    while ( ( $sc != 0 ) and ( $step < 5 ) ) {
         $self->bprocess( Proc::Simple->new() );
         $self->bprocess->start($cc);
-        $self->bprocess->kill_on_destroy(1);     
-        DEBUG `/bin/sleep 5`; #hack, looks like perl's sleep
-                              #doesn't work there
-        $sc    = $self->bprocess->exit_status();
-        #$alive = $self->bprocess->poll; 
+        $self->bprocess->kill_on_destroy(1);
+        DEBUG `/bin/sleep 5`;    #hack, looks like perl's sleep
+                                 #doesn't work there
+        $sc = $self->bprocess->exit_status();
+
+        #$alive = $self->bprocess->poll;
         DEBUG "[$step] local result = [$sc]";
+
         #DEBUG "[$step] local alive  = [$alive]";
         $step++;
     }
@@ -159,7 +173,7 @@ Initialize module. Protocol is only ssh.
 
 =cut
 
-sub initTemp{
+sub initTemp {
     my $self = shift;
     $self->pidfile( '/tmp/xtest_pid_ssh_' . Time::HiRes::gettimeofday() );
     $self->ecodefile( '/tmp/remote_exit_code_' . Time::HiRes::gettimeofday() );
@@ -180,29 +194,38 @@ sub init {
 
     my $nocrash = shift;
 
-#    DEBUG  "ssh -o 'BatchMode yes' -M -S /tmp/ssh_socked%r@%h:%p  -f ". $self->user ."@". $self->host ." ";
-
-    my $ver = trim $self->_sshSyncExec( "uname -a", 10 );
-
-    #DEBUG "-------------------------------";
-    #DEBUG ${^CHILD_ERROR_NATIVE};
-    #DEBUG $self->exitcode;
-    #DEBUG $self->killed;
-
-    if( (${^CHILD_ERROR_NATIVE} != 0 ) || 
-        ( $self->exitcode != 0 ) || 
-        ($self->killed != 0) ){
-        WARN "SshProcess cannot be initialized";
-        if ( defined($nocrash) && $nocrash ) {
-            return -99;
-         }else {
-            confess "SSH returns non-zero values on previous command:"
-            . ${^CHILD_ERROR_NATIVE};
-            #if ( ${^CHILD_ERROR_NATIVE} != 0 );
+    my $AT  = 5;
+    my $i   = 0;
+    my $ver = 'none';
+    while ( $AT > $i ) {
+        $ver = trim $self->_sshSyncExec( "uname -a", 30 );
+        #DEBUG "-------------------------------";
+        #DEBUG ${^CHILD_ERROR_NATIVE};
+        #DEBUG $self->exitcode;
+        #DEBUG $self->killed;
+        if (   ( ${^CHILD_ERROR_NATIVE} != 0 )
+            || ( $self->exitcode != 0 )
+            || ( $self->killed != 0 ) )
+        {
+            if ( $AT < $i ) {
+                INFO "<$i>Cannot connect, retrying...";
+                $i++;
+                next;
+            }else{
+                WARN "SshProcess cannot be initialized";
+                if ( defined($nocrash) && $nocrash ) {
+                    return -99;
+                }
+                else {
+                    confess "\nSSH returns non-zero values on previous command:"
+                      . ${^CHILD_ERROR_NATIVE};
+                }
+            }
+        }else{
+            last;
         }
     }
-
-    my $h = trim $self->_sshSyncExec( "hostname", 10 );
+    my $h = trim $self->_sshSyncExec( "hostname", 15 );
     INFO "Executing on host [$h]";
     $self->hostname($h);
     DEBUG "Remote system is <$ver>";
@@ -325,26 +348,27 @@ SS
     my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
     DEBUG "Starting async ............";
     my $s = $self->_sshAsyncExec("sh $tef");
-    unless ($s == 0){
+    unless ( $s == 0 ) {
         WARN "Cannot create remote process";
         return -2;
     }
     DEBUG "Remote async app started";
     sleep 3;
     $self->exitcode(undef);
-    
+
     #cycle workaround for long remote part start
     # wait 6*5 sec for pid file on remote side
-    my $step = 0;    
-    while( $step < 6) {
+    my $step = 0;
+    while ( $step < 6 ) {
         $self->_findPid();
-        last if ($self->pid != -1);
+        last if ( $self->pid != -1 );
         sleep 5;
         $step++;
     }
 
     if ( $self->pid == -1 ) {
-        #confess 
+
+        #confess
         WARN "Remote process doesn't start or found in pid file";
         return -1;
     }
@@ -362,13 +386,13 @@ Kill process which was created by create via saved pid.
 
 sub kill {
     DEBUG "XTest::SshProcess->kill";
-    my ($self,$mode) = @_;
+    my ( $self, $mode ) = @_;
     my $pid  = $self->pid;
     my $name = $self->appname;
-    $mode =0 unless defined $mode;
+    $mode = 0 unless defined $mode;
 
     DEBUG "[$name]: Killing job [" . $name . "], mode[$mode] \n";
-    if($mode == 0){
+    if ( $mode == 0 ) {
         $self->_sshSyncExec("kill -15 $pid");
         sleep 10;
     }
@@ -405,19 +429,19 @@ Check process status on remote system via saved pid. Also this function get exit
 #    return -1;
 #}
 
-
 sub isAlive {
     DEBUG "XTest::SshProcess->isAlive";
     my $self = shift;
     my $pid  = $self->pid;
     my $name = $self->appname;
-    my $o=undef;
-    my $step = 0 ;
-    while( (! defined($o) ) and ($step < 5 )){
+    my $o    = undef;
+    my $step = 0;
+    while ( ( !defined($o) ) and ( $step < 5 ) ) {
         $o = trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
         $step++;
         sleep $step;
     }
+
     #  DEBUG "*********** $o";
     unless ( defined($o) ) {
         ERROR "unable to check remote system: [$o]";
@@ -432,9 +456,6 @@ sub isAlive {
     DEBUG "Remote process is not found! ";
     return -1;
 }
-
-
-
 
 #sub sendFile {
 #    my $localdir  = shift;

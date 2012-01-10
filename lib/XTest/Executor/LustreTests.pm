@@ -45,6 +45,11 @@ sub _prepareCommands{
     my $dir    =$self->env->cfg->{'client_mount_point'}.$td;
     my $tid    = $self->test->testcfg->{id};
     my $script = $self->test->getParam('groupname');
+    if( defined( $self->test->getParam('script'))){
+        $script = $self->test->getParam('script');
+        $tid = 1;#default test number  
+    }
+    
 #REFORMAT=YES
     $self->cmd("SLOW=YES  ".$self->mdsopt." ".$self->ossopt." ".$self->clntopt." ONLY=$tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -S -w \\\" /usr/lib64/lustre/tests/${script}.sh");
 #    $self->cmd("SLOW=YES  ".$self->mdsopt." ".$self->ossopt." ".$self->clntopt." ONLY=$tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -S -w \\\"  ACC_SM_ONLY=${script} /usr/lib64/lustre/tests/acceptance-small.sh");
