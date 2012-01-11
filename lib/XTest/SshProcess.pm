@@ -207,7 +207,7 @@ sub init {
             || ( $self->exitcode != 0 )
             || ( $self->killed != 0 ) )
         {
-            if ( $AT < $i ) {
+            if ( $AT > $i ) {
                 INFO "<$i>Cannot connect, retrying...";
                 $i++;
                 next;
@@ -238,6 +238,8 @@ sub _findPid {
     my $self = shift;
     $self->pid(-1);
     my $out = $self->_sshSyncExec( "cat " . $self->pidfile, 1 );
+    
+    return -1 unless defined $out;
 
     foreach my $s ( split( /\n/, $out ) ) {
         DEBUG "Check line for PID [$s]\n";

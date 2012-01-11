@@ -70,7 +70,7 @@ sub isReachable{
         $sc=$self->getRemoteConnector;
     };
     if( $@){
-         WARN "Cannot connec to host".$@;
+         WARN "Cannot connect to host".$@;
          return 0;
     }
     unless ( defined ($sc)){

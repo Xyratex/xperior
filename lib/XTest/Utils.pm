@@ -72,17 +72,13 @@ sub parseIEFile{
     return \@onlyvalues;
 }
 
+# 0 - different values
+# 1 - match
 sub compareIE{
     my ($template, $value) =@_;
     $template = trim $template;
     #DEBUG "Compare for exclusion/inclusion: [$template] and [$value]";
-    if($template =~ m/\*$/){
-        $template =~ s/\*//;
-        return 2 if( $value =~ m/^$template.*/);
-    }else{
-        return 1 if( $value =~ m/^$template$/);
-    }
-    #DEBUG "Not compare [$template] and [$value]";
+    return 1 if( $value =~ m/^$template$/);
     return 0;
 }
 
