@@ -81,9 +81,25 @@ has killed => ( is => 'rw' );
 has hostname  => ( is => 'rw' );
 has osversion => ( is => 'rw' );
 
-#TODO add timeout support
 #TODO speed improvement via socket sharing
+
+#do pool check status to prevent false deatch report
 sub _sshSyncExec {
+    my ( $self, $cmd, $timeout ) = @_;
+    my $step = 0;
+    my $AT   = 5;
+    my $r    = undef;
+    while ( ( !defined($r) ) and ( $step < $AT ) ) {
+        sleep $step;
+        $r = $self->_sshSyncExecS( $cmd, $timeout );
+        return $r if ((defined($self->exitcode ))
+                    and ($self->exitcode == -100));
+        $step++;
+    }
+    return $r;
+}
+
+sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
     $timeout = 30 unless defined $timeout;
     DEBUG "XTest::SshProcess->_sshSyncExec";
@@ -95,8 +111,7 @@ sub _sshSyncExec {
       #."-o 'StrictHostKeyChecking=no' "
       #            ."-o 'UserKnownHostsFile=/dev/null' "
       . "-o 'ServerAliveInterval=600' "
-      . "-o 'ServerAliveCountMax=15' "
-      #. " -f "
+      . "-o 'ServerAliveCountMax=15' " . " -f "
       . $self->user . "@"
       . $self->host
       . " \"$cmd\" 2>&1 ";
@@ -144,13 +159,19 @@ sub _sshAsyncExec {
     DEBUG "XTest::SshProcess->_sshAsyncExec";
     my $sc    = 1;
     my $alive = 0;
-    my $cc    = "ssh -f " . $self->user . "@" . $self->host . " \"$cmd\"  ";
+    my $cc =
+        "ssh  -o  'BatchMode yes' "
+      . "-o 'AddressFamily inet' "
+      . "-o 'ConnectTimeout=10' " . "-f "
+      . $self->user . "@"
+      . $self->host
+      . " \"$cmd\"  ";
     DEBUG "Remote cmd is [$cc]";
     my $step = 0;
-
+    my $AT = 5;
     #this cycle is workaround for connection problem,
     #which observed too rare.
-    while ( ( $sc != 0 ) and ( $step < 5 ) ) {
+    while ( ( $sc != 0 ) and ( $step < $AT ) ) {
         $self->bprocess( Proc::Simple->new() );
         $self->bprocess->start($cc);
         $self->bprocess->kill_on_destroy(1);
@@ -159,7 +180,7 @@ sub _sshAsyncExec {
         $sc = $self->bprocess->exit_status();
 
         #$alive = $self->bprocess->poll;
-        DEBUG "[$step] local result = [$sc]";
+        DEBUG "[$step] local async result = [$sc]";
 
         #DEBUG "[$step] local alive  = [$alive]";
         $step++;
@@ -194,37 +215,27 @@ sub init {
 
     my $nocrash = shift;
 
-    my $AT  = 5;
-    my $i   = 0;
     my $ver = 'none';
-    while ( $AT > $i ) {
-        $ver = trim $self->_sshSyncExec( "uname -a", 30 );
-        #DEBUG "-------------------------------";
-        #DEBUG ${^CHILD_ERROR_NATIVE};
-        #DEBUG $self->exitcode;
-        #DEBUG $self->killed;
-        if (   ( ${^CHILD_ERROR_NATIVE} != 0 )
-            || ( $self->exitcode != 0 )
-            || ( $self->killed != 0 ) )
-        {
-            if ( $AT > $i ) {
-                INFO "<$i>Cannot connect, retrying...";
-                $i++;
-                next;
-            }else{
-                WARN "SshProcess cannot be initialized";
-                if ( defined($nocrash) && $nocrash ) {
-                    return -99;
-                }
-                else {
-                    confess "\nSSH returns non-zero values on previous command:"
-                      . ${^CHILD_ERROR_NATIVE};
-                }
-            }
-        }else{
-            last;
+    $ver = trim $self->_sshSyncExec( "uname -a", 30 );
+
+    #DEBUG "-------------------------------";
+    #DEBUG ${^CHILD_ERROR_NATIVE};
+    #DEBUG $self->exitcode;
+    #DEBUG $self->killed;
+    if (   ( ${^CHILD_ERROR_NATIVE} != 0 )
+        || ( $self->exitcode != 0 )
+        || ( $self->killed != 0 ) )
+    {
+        WARN "SshProcess cannot be initialized";
+        if ( defined($nocrash) && $nocrash ) {
+            return -99;
+        }
+        else {
+            confess "\nSSH returns non-zero values on previous command:"
+              . ${^CHILD_ERROR_NATIVE};
         }
     }
+
     my $h = trim $self->_sshSyncExec( "hostname", 15 );
     INFO "Executing on host [$h]";
     $self->hostname($h);
@@ -238,7 +249,7 @@ sub _findPid {
     my $self = shift;
     $self->pid(-1);
     my $out = $self->_sshSyncExec( "cat " . $self->pidfile, 1 );
-    
+
     return -1 unless defined $out;
 
     foreach my $s ( split( /\n/, $out ) ) {
@@ -360,13 +371,7 @@ SS
 
     #cycle workaround for long remote part start
     # wait 6*5 sec for pid file on remote side
-    my $step = 0;
-    while ( $step < 6 ) {
-        $self->_findPid();
-        last if ( $self->pid != -1 );
-        sleep 5;
-        $step++;
-    }
+    $self->_findPid();
 
     if ( $self->pid == -1 ) {
 
@@ -387,8 +392,8 @@ Kill process which was created by create via saved pid.
 =cut
 
 sub kill {
-    DEBUG "XTest::SshProcess->kill";
     my ( $self, $mode ) = @_;
+    DEBUG "XTest::SshProcess->kill";
     my $pid  = $self->pid;
     my $name = $self->appname;
     $mode = 0 unless defined $mode;
@@ -436,13 +441,7 @@ sub isAlive {
     my $self = shift;
     my $pid  = $self->pid;
     my $name = $self->appname;
-    my $o    = undef;
-    my $step = 0;
-    while ( ( !defined($o) ) and ( $step < 5 ) ) {
-        $o = trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
-        $step++;
-        sleep $step;
-    }
+    my $o = trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
 
     #  DEBUG "*********** $o";
     unless ( defined($o) ) {

@@ -1,0 +1,20 @@
+---
+groupname        : replay-vbr  
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre replay-vbr tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10 
+timeout          : 900
+cleanup_max_time : -1
+tags             : functional 
+dangerous        : yes
+Tests:
+   - id : 1a
+   - id : 1bx
+   - id : 1c
+   - id : 2a
+   - id : 2b
+   - id : 3a
+   - id : 3b
+

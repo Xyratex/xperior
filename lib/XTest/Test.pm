@@ -142,11 +142,12 @@ if(defined($self->testcfg->{'description'})){
         $td=$self->testcfg->{'description'};
 }
 return
+"Test full name    : [".$self->getParam('groupname')."/".$self->getName."]\n".
 "Group description : ".$self->groupcfg->{'description'}."\n".
-"Test description : ".$td."\n".
-"Test group       : ".$self->getParam('groupname')."\n".
-"Test name   : ".$self->getName."\n".
-"Test tags   : ".join(',',@{$self->getTags})."\n";
+"Test description  : ".$td."\n".
+"Test group        : ".$self->getParam('groupname')."\n".
+"Test name         : ".$self->getName."\n".
+"Test tags         : ".join(',',@{$self->getTags})."\n";
 }
 
 

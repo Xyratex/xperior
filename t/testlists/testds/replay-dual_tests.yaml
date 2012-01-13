@@ -1,0 +1,16 @@
+---
+groupname        : replay-dual  
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre replay-dual  tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10 
+timeout          : 300
+cleanup_max_time : -1
+tags             : functional 
+#dangerous        : yes
+
+Tests:
+   - id : 6
+   - id : 8
+   - id : 9

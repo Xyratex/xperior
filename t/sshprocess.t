@@ -7,7 +7,6 @@
 #
 #       AUTHOR:   ryg 
 #      COMPANY:  Xyratex
-#      VERSION:  1.0
 #      CREATED:  10/08/2011 01:28:07 AM
 #===============================================================================
 
@@ -39,7 +38,7 @@ teardown        _teardown => sub { };
 shutdown        _shutdown => sub { };
 #########################################
 
-test plan => 3, aCreateExitCodes     => sub{
+test plan => 3, bCreateExitCodes     => sub{
 
     my $res = $sp->create('sleep','/bin/sleep 30');
     ok(($res>0),'Correct exit code');
@@ -99,12 +98,12 @@ test plan => 6, fSynExecution => sub {
   $stime = time;
   $sp->createSync('/bin/sleep 15',5);
   $etime=time;
-  isnt($sp->exitcode,0,"Check exit code for failed operation");
+  isnt($sp->exitcode,0,"Check exit code for failed syn operation");
   DEBUG "Execution was:".($etime-$stime);
   ok($etime-$stime < 12, "Check time of timeouted operation");
 
   $sp->createSync('/bin/sleep 10');
-  is($sp->exitcode,0,"Check exit code for failed operation");
+  is($sp->exitcode,0,"Check exit code for failed syn operation");
 };
 
 
