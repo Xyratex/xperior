@@ -81,7 +81,7 @@ ok 1
    status_code: 0
 OUT
 ;
-    is($res,$exp);
+    SKIP:{is($res,$exp,'Check simple tap')};
     close FILE;
 };
 
