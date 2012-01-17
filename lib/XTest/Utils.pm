@@ -79,6 +79,7 @@ sub compareIE{
     $template = trim $template;
     #DEBUG "Compare for exclusion/inclusion: [$template] and [$value]";
     return 1 if( $value =~ m/^$template$/);
+    #DEBUG "Negative comparing result";
     return 0;
 }
 

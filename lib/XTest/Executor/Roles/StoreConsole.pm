@@ -34,11 +34,15 @@ before 'execute' => sub{
         }
         my $console = $n->console;
         my $log  = $self->getNormalizedLogName('console.'.$n->id);
+        
         my $proc = Proc::Simple->new();
         $proc->start("sudo tail -f -n 0 -v $console 2>&1 > $log");
         sleep 1;
         if($proc->poll){
             $self->procs->{$n->id}=$proc;
+            $self->registerLogFile('console.'.$n->id,
+                     $self->getNormalizedLogName('console.'.$n->id));
+            
         }else{
             $self->addMessage(
                     "Cannot read console file on node [".$n->id."]");

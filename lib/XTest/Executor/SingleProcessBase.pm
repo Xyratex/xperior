@@ -7,7 +7,6 @@
 #
 #       AUTHOR:  ryg 
 #      COMPANY:  Xyratex
-#      VERSION:  1.0
 #      CREATED:  10/23/2011 06:39:29 PM
 #===============================================================================
 
@@ -71,7 +70,7 @@ sub execute{
 
     while( $endtime > time ){
         #monitoring timeout
-        sleep 1;
+        sleep 5;
         unless ( $testp->isAlive == 0 ) {
             INFO "Remote app is not alive, exiting";
             last;
@@ -138,6 +137,7 @@ sub execute{
                 '] sec of execution');           
     }else{
         $self->addYE('killed','no');
+        $self->addYE('exitcode',$testp->exitcode);
         if( ($testp->exitcode == 0) && ($pr == 0) ){
             $self->pass;
         }else{

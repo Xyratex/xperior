@@ -9,7 +9,7 @@ timeout          : 300
 cleanup_max_time : -1
 #options          : 
 tags             : functional 
-#dangerous        : yes
+dangerous        : yes
 
 
 Tests:

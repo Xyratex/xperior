@@ -67,14 +67,15 @@ has host => ( is => 'rw' );
 has user => ( is => 'rw' );
 has pass => ( is => 'rw' );
 
-has pidfile   => ( is => 'rw' );
-has ecodefile => ( is => 'rw' );
-has rscrfile  => ( is => 'rw' );
-has pid       => ( is => 'rw' );
-has appcmd    => ( is => 'rw' );
-has appname   => ( is => 'rw' );
-has exitcode  => ( is => 'rw' );
-has bprocess  => ( is => 'rw' );
+has pidfile      => ( is => 'rw' );
+has ecodefile    => ( is => 'rw' );
+has rscrfile     => ( is => 'rw' );
+has pid          => ( is => 'rw' );
+has appcmd       => ( is => 'rw' );
+has appname      => ( is => 'rw' );
+has exitcode     => ( is => 'rw' );
+has syncexitcode => ( is => 'rw' );
+has bprocess     => ( is => 'rw' );
 
 has killed => ( is => 'rw' );
 
@@ -83,18 +84,29 @@ has osversion => ( is => 'rw' );
 
 #TODO speed improvement via socket sharing
 
+#hint:
+#ssh exits with the exit status of the remote command which can be find with echo $? command.
+#Or value 255 is return, if an error occurred while processing request via ssh session
+#65280 - FF for script case return
+
 #do pool check status to prevent false deatch report
 sub _sshSyncExec {
     my ( $self, $cmd, $timeout ) = @_;
     my $step = 0;
     my $AT   = 5;
     my $r    = undef;
-    while ( ( !defined($r) ) and ( $step < $AT ) ) {
+    while  ( $step < $AT  ) {
         sleep $step;
+        $self->syncexitcode(undef);
         $r = $self->_sshSyncExecS( $cmd, $timeout );
-        return $r if ((defined($self->exitcode ))
-                    and ($self->exitcode == -100));
+        return $r if ((defined($self->syncexitcode ))
+                    and ($self->syncexitcode != -100) #timeout
+                    and ($self->syncexitcode != 65280) #connect
+                );
         $step++;
+        my $ec = $self->syncexitcode;
+        $ec = 'undef' unless( defined( $self->syncexitcode));
+        DEBUG "Sync attemp [$step], exit code is :[$ec], retry...";
     }
     return $r;
 }
@@ -120,37 +132,33 @@ sub _sshSyncExecS {
     my $out = '';
     eval {
         local $SIG{ALRM} = sub {
-            $self->exitcode(-100);
+            $self->syncexitcode(-100);
             $self->killed(time);
-
             #print "*******************Killed by timeout !\n";
             die "alarm clock restart";
         };
         alarm $timeout;
-
-        #eval {
         #do main action
         $out = `$cc`;
-
-        #        };
-        alarm 0;    # cancel the alarm
+        alarm 0;    # cancel the alarm asap
     };
     alarm 0;        # race condition protection
-                    #DEBUG "!!!!!!!!" . $@;
 
+    #DEBUG "****[$out]***";
+    #DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     #die if $@ && $@ !~ /alarm clock restart/; # reraise
     if ( $@ =~ m/alarm\s+clock\s+restart/ ) {
-        $self->exitcode(-100);
+        $self->syncexitcode(-100);
         $self->killed(time);
         WARN "SSH sync execution killed by timeout !\n";
         return undef;
     }
-    if ( ${^CHILD_ERROR_NATIVE} != 0 ) {
-        $self->exitcode( ${^CHILD_ERROR_NATIVE} );
-        WARN "SSH sync exit code is !0 [" . ${^CHILD_ERROR_NATIVE} . "]";
+     $self->syncexitcode( ${^CHILD_ERROR_NATIVE} );
+    if ( ${^CHILD_ERROR_NATIVE} == 0xFF00 ) {
+        WARN "SSH exit code mean connection problem  [" . ${^CHILD_ERROR_NATIVE} . "](sync mode)";
         return undef;
     }
-
+    #DEBUG "--------------";
     return $out;
 }
 
@@ -248,7 +256,7 @@ sub init {
 sub _findPid {
     my $self = shift;
     $self->pid(-1);
-    my $out = $self->_sshSyncExec( "cat " . $self->pidfile, 1 );
+    my $out = $self->_sshSyncExec( "cat " . $self->pidfile, 30 );
 
     return -1 unless defined $out;
 
@@ -278,7 +286,7 @@ sub createSync {
     DEBUG "App to run [$app] on host[" . $self->host . "]";
     my $ecf = $self->ecodefile;
     $self->killed(0);
-
+    $self->exitcode(undef);
     my $ss = <<"SS";
 $app   
 echo \\\$? > $ecf 
@@ -292,6 +300,7 @@ SS
 
     if ( $self->killed == 0 ) {
         $self->exitcode( trim $self->_sshSyncExec("cat $ecf") );
+#$self->exitcode($self->syncexitcode);
     }
     return $s;
 
@@ -398,6 +407,11 @@ sub kill {
     my $name = $self->appname;
     $mode = 0 unless defined $mode;
 
+    if( (!defined($pid)) or ($pid eq '') ){
+        INFO "PID is empty, exiting";
+        return;
+    }
+
     DEBUG "[$name]: Killing job [" . $name . "], mode[$mode] \n";
     if ( $mode == 0 ) {
         $self->_sshSyncExec("kill -15 $pid");
@@ -441,11 +455,21 @@ sub isAlive {
     my $self = shift;
     my $pid  = $self->pid;
     my $name = $self->appname;
-    my $o = trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
-
+    my $o;
+    my $step =1;
+    my $AT = 3;
+    while ($AT > $step ){
+        $o= trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
+      if((defined($o)) and ($o =~ m/^\s*$pid\s*/ )){
+          last;
+      }
+      sleep 1;
+      $step++;
+      DEBUG "<$step> recheck process status";
+    }
     #  DEBUG "*********** $o";
     unless ( defined($o) ) {
-        ERROR "unable to check remote system: [$o]";
+        ERROR "unable to check remote system, no output got";
         return -99;
     }
 
@@ -454,7 +478,7 @@ sub isAlive {
         return 0;
     }
     $self->exitcode( trim $self->_sshSyncExec( "cat " . $self->ecodefile ) );
-    DEBUG "Remote process is not found! ";
+    DEBUG "Remote process is not found, sync exit code is: [".$self->syncexitcode."], app exit code is :[.".$self->exitcode."]";
     return -1;
 }
 

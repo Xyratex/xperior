@@ -176,15 +176,17 @@ sub run {
 
             if ( defined $includelist ) {
                 #DEBUG "Process defined excludelist [$includelist]";
+                my $isincluded = 0;
                 foreach my $it (@$includelist) {
-                    $filtered = 1
                       if (
-                        compareIE( $it,
-                                $test->getGroupName . '/'
-                              . $test->getName
-                              . '.yaml' ) == 0
-                      );
+                        compareIE( $it,$test->getGroupName . '/'
+                                            . $test->getName ) 
+                            > 0 
+                      ){
+                            $isincluded = 1
+                      }
                 }
+                $filtered = 1 if( $isincluded != 1 );
             }
 
             #skip already executed for --continue

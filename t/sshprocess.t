@@ -55,7 +55,7 @@ test plan => 3, bCreateExitCodes     => sub{
 #exit 1;
 };
 
-test plan => 7, kCreateAliveKill    => sub {
+test plan => 7, aakCreateAliveKill    => sub {
     #highlevel functional test
     is($sp->killed,0, 'Check status before start');
     $sp->create('sleep','/bin/sleep 30');
@@ -68,6 +68,7 @@ test plan => 7, kCreateAliveKill    => sub {
     isnt($sp->killed,0, 'Check status after kill');
     isnt($sp->exitcode,undef, 'Check 1 exit code after kill');
     isnt($sp->exitcode,0, 'Check 2 exit code after kill');
+#    exit 1;
 };
 
 test plan => 6, lCreateAliveExit    => sub {
@@ -100,7 +101,7 @@ test plan => 6, fSynExecution => sub {
   $etime=time;
   isnt($sp->exitcode,0,"Check exit code for failed syn operation");
   DEBUG "Execution was:".($etime-$stime);
-  ok($etime-$stime < 12, "Check time of timeouted operation");
+  ok($etime-$stime < 40, "Check time of timeouted operation");
 
   $sp->createSync('/bin/sleep 10');
   is($sp->exitcode,0,"Check exit code for failed syn operation");
