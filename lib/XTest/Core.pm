@@ -98,7 +98,7 @@ sub run {
     $self->tests( $self->loadTests );
     $self->env( $self->loadEnvCfg( $options->{'configfile'} ) );
     if ( $self->env->checkEnv < 0 ) {
-        WARN "Found problesm while testing configuration";
+        WARN "Found problems while testing configuration";
         exit(19);
     }
 
@@ -222,7 +222,7 @@ sub run {
                 my $cer = $self->{'env'}->checkEnv;
                 if ( $cer < 0 ) {
                     WARN
-"Found problesm while testing configuration after failed test, exiting";
+"Found problems while testing configuration after failed test, exiting";
                     WARN "Executed $enum tests, skipped $snum";
                     exit(10);
                 }
