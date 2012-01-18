@@ -74,14 +74,16 @@ ok 1
    executor: XTest::Executor::Noop
    groupname: sanity
    id: 1
-   inf: 'more info'
-   log.test1: '/tmp/test_log_file.xtest'
-   result: 'ok 1'
+   inf: more info
+   log:
+     test1: /tmp/test_log_file.xtest
+   messages: ''
+   result: ok 1
    status: passed
    status_code: 0
 OUT
 ;
-    SKIP:{is($res,$exp,'Check simple tap')};
+    is($res,$exp,'Check simple tap');
     close FILE;
 };
 
