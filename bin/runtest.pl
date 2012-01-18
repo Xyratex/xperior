@@ -249,6 +249,7 @@ my $helpflag;
 my $manflag;
 my $continue;
 my $tap;
+my $logfile	= undef;   
 
 GetOptions(
     "config:s"       => \$configfile,
@@ -272,6 +273,7 @@ GetOptions(
     "action:s"       => \$action,
     "continue!"      => \$continue,
     "tap!"           => \$tap,
+    "log-file:s"     => \$logfile,
 );
 
 pod2usage(-verbose => 1) if ( ($helpflag) || ($nopts) );
@@ -279,13 +281,13 @@ pod2usage(-verbose => 1) if ( ($helpflag) || ($nopts) );
 pod2usage(-verbose => 2) if ($manflag);
 
 if( $debug){
-    Log::Log4perl->easy_init($DEBUG);
+    Log::Log4perl->easy_init({level => $DEBUG, file => defined $logfile ? ">$logfile" : "STDOUT"});
 }
 elsif ( $info ) {
-    Log::Log4perl->easy_init($INFO);
+    Log::Log4perl->easy_init({level => $INFO, file => defined $logfile ? ">$logfile" : "STDOUT"});
 }
 else {
-    Log::Log4perl->easy_init($ERROR);
+    Log::Log4perl->easy_init({level => $ERROR, file => defined $logfile ? ">$logfile" : "STDOUT"});
 }
 
 #check test description configuration existence
@@ -320,7 +322,7 @@ if( $action eq 'run'){
     if (-d $workdir) {
         INFO "Test directory [$workdir] found, overwriting old results";
     }else{                                                
-        INFO "No workdir directory [$workdir] fount, cretate it.";
+        INFO "No workdir directory [$workdir] found, create it.";
         unless( mkdir $workdir){
             print "Cannot create workdir [$workdir]\n";
             exit 10;
