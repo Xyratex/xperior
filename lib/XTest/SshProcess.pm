@@ -457,15 +457,15 @@ sub isAlive {
     my $name = $self->appname;
     my $o;
     my $step =1;
-    my $AT = 3;
+    my $AT = 6;
     while ($AT > $step ){
         $o= trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
       if((defined($o)) and ($o =~ m/^\s*$pid\s*/ )){
           last;
       }
-      sleep 1;
+      sleep $step;
       $step++;
-      DEBUG "<$step> recheck process status";
+      DEBUG "Proc is not found, <$step> recheck process status";
     }
     #  DEBUG "*********** $o";
     unless ( defined($o) ) {
@@ -478,7 +478,7 @@ sub isAlive {
         return 0;
     }
     $self->exitcode( trim $self->_sshSyncExec( "cat " . $self->ecodefile ) );
-    DEBUG "Remote process is not found, sync exit code is: [".$self->syncexitcode."], app exit code is :[.".$self->exitcode."]";
+    DEBUG "Remote process is not found, sync exit code is: [".$self->syncexitcode."], app exit code is :[".$self->exitcode."], \n o=[$o]";
     return -1;
 }
 
