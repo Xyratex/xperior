@@ -86,6 +86,7 @@ sub execute{
     my $killed=0;
     my $kt=0;
     if($testp->isAlive == 0){
+        WARN "Test is alive after end of test execution, kill it";
         my $ts = $mclo->getExclusiveRC;
         DEBUG $ts->createSync('ps afx');
         DEBUG "Owned pid is:".$testp->pid;
