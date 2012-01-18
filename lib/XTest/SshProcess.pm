@@ -458,9 +458,16 @@ sub isAlive {
     my $o;
     my $step =1;
     my $AT = 6;
+    my $exitcode = '';
     while ($AT > $step ){
         $o= trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
       if((defined($o)) and ($o =~ m/^\s*$pid\s*/ )){
+          last;
+      }
+      $exitcode = trim $self->_sshSyncExec( 
+                                "cat " . $self->ecodefile );
+      DEBUG "Exitcode = [$exitcode]";
+      if((defined($o)) and ($exitcode =~ m/^\d+$/ )){
           last;
       }
       sleep $step;
@@ -477,7 +484,7 @@ sub isAlive {
         DEBUG "Remote process is alive! ";
         return 0;
     }
-    $self->exitcode( trim $self->_sshSyncExec( "cat " . $self->ecodefile ) );
+    $self->exitcode( $exitcode );
     DEBUG "Remote process is not found, sync exit code is: [".$self->syncexitcode."], app exit code is :[".$self->exitcode."], \n o=[$o]";
     return -1;
 }
