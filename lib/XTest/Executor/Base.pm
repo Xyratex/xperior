@@ -10,6 +10,22 @@
 #      VERSION:  1.0
 #      CREATED:  09/30/2011 01:31:34 AM
 #===============================================================================
+=pod
+
+=head1 NAME
+
+XTest::Executor::Base - Base executor class
+
+=head1 DESCRIPTION
+
+To be done
+
+=head1 FUNCTIONS
+
+=over 2
+
+=cut
+
 package XTest::Executor::Base;
 use Moose;
 use Data::Dumper;
@@ -58,16 +74,32 @@ sub init{
     $self->_write;
 }
 
+=item addYE(KEY, VALUE) - Adds Yaml Element. 
+
+Returns 1 if the value has been overridden, otherwise returns 0.
+
+=cut
+
 sub addYE{
     my ($self, $key, $value) = @_;
+    my $overridden = defined $self->yaml->{$key};
     $self->yaml->{$key} = $value ;
     $self->_write;
+    return $overridden;
 }
 
+=item addYEE(KEY1, KEY2, VALUE) - Adds Yaml Elelement in Element. 
+
+Returns 1 if the value has been overridden, otherwise returns 0.
+
+=cut
 sub addYEE{
     my ($self, $key1, $key2, $value) = @_;
+    my $overridden = (defined $self->yaml->{$key1} and 
+                      defined $self->yaml->{$key1}->{$key2});
     $self->yaml->{$key1}->{$key2} = $value ;
     $self->_write;
+    return $overridden;
 }
 
 sub addMessage{
@@ -106,7 +138,8 @@ sub fail{
 
 sub setExtOpt{
     my ($self,$key,$value) = @_;
-    $self->addYEE('extoptions',$key,$value);
+    $self->addYEE('extoptions',$key,$value)
+        and DEBUG "Overridden YAML key [extoptions/$key] with value [$value]";
 }
 
 sub registerLogFile{
@@ -169,15 +202,20 @@ sub report{
      $self->_write;
 }
 
-=item * 
-Stub of execute test function. See implementations in child classes.
+=item execute() - Stub of execute test function. 
+
+Should be implemented in child classes.
+
 =cut
 sub execute{
     confess 'Functions is not implemented, override it!';
 }
 
-=item * 
-Stub of getReason function. See implementations in child classes. Returs short failure reason description.
+=item getReason() - Stub of getReason function.
+
+Should be implemented in child classes. 
+Should return short failure reason description.
+
 =cut
 sub getReason{
     return "Non-zero exit code";
@@ -235,4 +273,8 @@ sub _resourceFilePrefix{
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=back
+
+=cut=
 

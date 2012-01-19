@@ -73,13 +73,31 @@ sub runtest {
         $test->getParam('roles') );
     $executor->init( $test, $self->options, $self->env );
 
-    #apply ext params to test
-    foreach my $param ( @{ $self->options->{'extopt'} } ) {
-        if ( $param =~ m/^([\w\d]+)\s*\:(.+)$/ ) {
-            $executor->setExtOpt( $1, $2 );
-        }
-        else {
-            DEBUG "Cannot parse parameters[$param]";
+    # Todo: cover following code with tests
+	if (defined $self->options->{'extoptfile'})
+	{
+		INFO "Load external options from file [" . $self->options->{'extoptfile'} . "]";
+		my $extopt;
+		eval { $extopt = LoadFile($self->options->{'extoptfile'}) } 
+			or confess "$!";
+		
+		for my $opt (keys %{$extopt->{'extoptions'}})
+		{
+			$executor->setExtOpt($opt, $extopt->{'extoptions'}->{$opt});
+		}
+	}
+    # Todo: move parsing of extopt out of Core package
+	if (scalar @{ $self->options->{'extopt'} })
+	{
+        INFO "Apply external options";
+        foreach my $param ( @{ $self->options->{'extopt'} } ) {
+            if ( $param =~ m/^([\w\d]+)\s*\:(.+)$/ ) {
+                $executor->setExtOpt( $1, $2 );
+            }
+            else {
+                INFO "Cannot parse --extopt parameter [$param], ",
+                     "please, use following form '--extopt=key:value'";
+            }
         }
     }
 

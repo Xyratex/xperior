@@ -234,6 +234,7 @@ my @suites;
 my @skiptags;
 my @includeonly;
 my @extopt;
+my $extoptfile;
 my $includelist ='';
 my $excludelist ='';
 my $task       = "";
@@ -258,6 +259,7 @@ GetOptions(
     "skiptag=s@"     =>  \@skiptags,
     "includeonly=s@" => \@includeonly,
     "extopt=s@"      => \@extopt,
+    "extopt-file=s"  => \$extoptfile,
     "tests:s"        => \$task,
     "excludelist:s"  => \$excludelist,
     "includelist:s"  => \$includelist, 
@@ -343,6 +345,7 @@ if( $action eq 'run'){
     configfile => $configfile,
     tap      => $tap,
     extopt   => \@extopt,
+    extoptfile => $extoptfile,
 );
 
 my $testcore =  XTest::Core->new();
