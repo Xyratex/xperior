@@ -70,17 +70,22 @@ test plan => 2, dCheckExternalLog    => sub {
 TAP version 13
 1..1
 ok 1
-   ---
-   executor: XTest::Executor::Noop
-   groupname: sanity
-   id: 1
-   inf: more info
-   log:
-     test1: /tmp/test_log_file.xtest
-   messages: ''
-   result: ok 1
-   status: passed
-   status_code: 0
+---
+   datetime: ~
+   extensions:
+     executor: XTest::Executor::Noop
+     groupname: sanity
+     id: 1
+     inf: more info
+     log:
+       test1: /tmp/test_log_file.xtest
+     messages: ''
+     result: ok 1
+     status: passed
+     status_code: 0
+   message: ''
+   source: sanity1
+...
 OUT
 ;
     is($res,$exp,'Check simple tap');

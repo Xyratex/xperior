@@ -176,17 +176,28 @@ sub createLogFile{
 sub tap{
     my $self = shift;
     $self->addYE('result',$self->result);
-    my $yamlt = Dump($self->yaml);
+    my %tapy;
+    $tapy{'extensions'}=$self->yaml;
+    $tapy{'datetime'}  =$self->yaml->{'starttime'};
+    $tapy{'source'}    =$self->yaml->{'groupname'}.
+                            $self->yaml->{'id'};
+    $tapy{'message'}   =$self->yaml->{'messages'};
+    my $yamlt = Dump(\%tapy);
     #well-from dumped yaml to tap yaml
     my $yaml = '';
     foreach my $s( split(/\n/,$yamlt)){
-        $yaml = "$yaml   $s\n";
+        if( $s =~ m/---$/ ){
+            $yaml = "$yaml$s\n";
+        }else{
+            $yaml = "$yaml   $s\n";
+        }
     }
     my $out=
         "TAP version 13\n".
         "1..1\n".
         $self->result."\n".
-        $yaml;
+        $yaml.
+        "...\n";
      my $file = $self->_tapFile;
      $self->_createDir;
      open  TAP, "> $file" or confess "Cannot open report file:" . $!;
