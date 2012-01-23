@@ -74,7 +74,24 @@ TBI
 =item --extopt=name:value
 
 Additional options which will be stored in test results. use the parameter many
-times for many parameters
+times for many parameters. 
+Overrides values taken from external options file 
+if used simlutaneousely with L<--extop-file> option.
+For details, see L<--extopt-file>.
+
+=item --extopt-file=<path>
+
+Read external options from file in YAML format. 
+The file should contain 'extoptions' key under which 
+other options should be provided. See example:
+
+	---
+	extoptions:
+	  branch: xyratex
+	  executiontype: weekly
+
+To override options with custom values from command line, please, 
+refer L<--extopt> option.
 
 =back
 
@@ -158,6 +175,10 @@ Ignored if L<--includeonly> set.
 =item --error
 
 'error' log level (default)
+
+=item --log-file=<path>
+
+Set file path where logs will be saved. By default, logs are printed to STDOUT.
 
 =back
 
