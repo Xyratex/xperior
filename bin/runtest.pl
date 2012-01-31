@@ -106,7 +106,7 @@ TBD
 
 =item --config=<path>
 
-TBD path to yaml config file
+path to yaml config file, syntax TBD here!
 
 =item --workdir=<path>
 
@@ -123,13 +123,12 @@ Directory where are test descriptors yaml files
 =head3 Exclude/include lists 
 
 Every tests defined by his name and his test group. 
-It is possible to use mask * at the end of string (any continue of the string).
+It is possible to use regular expression which will be used for comparing string. 
 Symbols after '#' are ignored.
 
 =head4 Sample
-
+    replay-dual.* #match to any replay-dual continue
     sanity/a1
-    mdtest* #comment
     #comment too
 
 =over 2
