@@ -8,7 +8,7 @@ expected_time    : 10
 timeout          : 300
 cleanup_max_time : -1
 tags             : functional 
-#dangerous        : yes
+dangerous        : yes
 
 Tests:
    - id : 0a

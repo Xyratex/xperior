@@ -61,6 +61,11 @@ Show test cmd output. Default - no.
 
 Generate also tap files in work directory
 
+=item --html
+
+Generate also html report in work directory ( report/report.html)
+
+
 =item --continue
 
 Continue execution in specified work directory. Execution is continued from
@@ -233,10 +238,10 @@ use Log::Log4perl qw(:easy);
 use Carp;
 use Pod::Usage;
 use Cwd qw(abs_path);
-
+my $XTESTBASEDIR; 
 BEGIN {
 
-    my $XTESTBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
+    $XTESTBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
     push @INC, "$XTESTBASEDIR/../lib";
 
 };
@@ -270,6 +275,7 @@ my $helpflag;
 my $manflag;
 my $continue;
 my $tap;
+my $html;
 my $logfile	= undef;   
 
 GetOptions(
@@ -295,6 +301,7 @@ GetOptions(
     "action:s"       => \$action,
     "continue!"      => \$continue,
     "tap!"           => \$tap,
+    "html!"          => \$html,
     "log-file:s"     => \$logfile,
 );
 
@@ -352,7 +359,8 @@ if( $action eq 'run'){
     }
 }
         
- my %options = ( 
+ my %options = (
+    xtestbasedir => "$XTESTBASEDIR/../lib",
     testdir  => $testdir,
     workdir  => $workdir,
     cmdout   => $cmdout,
@@ -364,6 +372,7 @@ if( $action eq 'run'){
     continue => $continue,
     configfile => $configfile,
     tap      => $tap,
+    html     => $html,
     extopt   => \@extopt,
     extoptfile => $extoptfile,
 );
