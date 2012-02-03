@@ -433,10 +433,6 @@ sub htmlReport {
 
         $aggregate->stop;
     }
-    #print Dumper $session;
-
-    #printf "\n\tPassed: %s\n\tFailed: %s\n",
-    #  scalar $aggregate->passed, scalar $aggregate->failed;
     mkdir "$wd/report";
     $fmt->abs_file_paths( 1);
     $CWD = $libdir;
