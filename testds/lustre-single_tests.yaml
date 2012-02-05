@@ -1,0 +1,16 @@
+---
+groupname        : lustre-single
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Set  of Lustre single tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10 
+timeout          : 600
+cleanup_max_time : -1
+tags             : functional 
+dangerous        : yes
+Tests:
+#   - id : racer
+   - id : metadata-updates
+     script : metadata-updates.sh
+

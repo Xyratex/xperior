@@ -119,7 +119,7 @@ sub execute{
 
     $res = $testp->getFile( $self->remote_out,
             $self->getNormalizedLogName('stdout'));
-    my $pr = -1;
+    my $pr = 100;
     if($res == 0){
         $self->registerLogFile('stdout',
             $self->getNormalizedLogName('stdout'));
@@ -141,8 +141,9 @@ sub execute{
         $self->addYE('exitcode',$testp->exitcode);
         if( ($testp->exitcode == 0) && ($pr == 0) ){
             $self->pass;
-        }else{
-            
+        }elsif(($testp->exitcode == 0) && ($pr == 1)){
+            $self->skip(1,$self->getReason);
+        }else{            
             $self->fail($self->getReason);
         }
     }

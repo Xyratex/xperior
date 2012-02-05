@@ -19,6 +19,7 @@ XTest::Executor::Base - Base executor class
 =head1 DESCRIPTION
 
 To be done
+it is possible to use http://instanttap.appspot.com/ for check tap outputs. Doesn't work with skip.
 
 =head1 FUNCTIONS
 
@@ -115,7 +116,7 @@ sub pass{
     }else{
         $msg='';
     }
-    $self->{'result'} ="ok 1$msg"; 
+    $self->{'result'} ="ok 1 $msg"; 
     $self->{'result_code'} = 0;
     $self->yaml->{'status'} = 'passed';
     $self->yaml->{'status_code'} = 0;
@@ -128,13 +129,28 @@ sub fail{
     }else{
         $msg='';
     }
-    $self->{'result'} ="not ok 1$msg" ;
+    $self->{'result'} ="not ok 1 $msg" ;
     $self->{'result_code'} = 1;
     $self->yaml->{'status'} = 'failed';
     $self->yaml->{'status_code'} = 1; 
     $self->yaml->{'fail_reason'} = $msg;
 }
 
+sub skip{
+    #mode means type of skip - skip may 
+    # be acc-sm induced or exclude list induced 
+    my ($self,$mode,$msg)  = @_;
+    if( defined $msg){
+        $msg = " #".$msg 
+    }else{
+        $msg='';
+    }
+    $self->{'result'} ="ok 1# SKIP $msg" ;
+    $self->{'result_code'} = 2;
+    $self->yaml->{'status'} = 'skipped';
+    $self->yaml->{'status_code'} = 2; 
+    $self->yaml->{'fail_reason'} = $msg;
+}
 
 sub setExtOpt{
     my ($self,$key,$value) = @_;

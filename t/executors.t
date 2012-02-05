@@ -65,11 +65,11 @@ test plan => 2, dCheckExternalLog    => sub {
     $exe->registerLogFile('test1',$file);
     $exe->pass;
     my $res = $exe->tap;
-
+    DEBUG $res;
     my $exp = <<OUT
 TAP version 13
 1..1
-ok 1
+ok 1 
 ---
    datetime: ~
    extensions:
@@ -80,7 +80,7 @@ ok 1
      log:
        test1: /tmp/test_log_file.xtest
      messages: ''
-     result: ok 1
+     result: 'ok 1 '
      status: passed
      status_code: 0
    message: ''
@@ -88,8 +88,61 @@ ok 1
 ...
 OUT
 ;
-    is($res,$exp,'Check simple tap');
+    is($res,$exp,'Check simple pass tap');
     close FILE;
+};
+
+#########################################
+test plan => 2, aSimpleCheckTapResults => sub{
+    $exe->fail('reason');
+    my $fres = $exe->tap;
+    my $fexp = <<OUT
+TAP version 13
+1..1
+not ok 1  #reason
+---
+   datetime: ~
+   extensions:
+     executor: XTest::Executor::Noop
+     fail_reason: ' #reason'
+     groupname: sanity
+     id: 1
+     inf: more info
+     messages: ''
+     result: 'not ok 1  #reason'
+     status: failed
+     status_code: 1
+   message: ''
+   source: sanity1
+...
+OUT
+;
+    is($fres,$fres,'fail tap check');
+    $exe->skip(1,"skip reason"); 
+    my $sres = $exe->tap;
+#    DEBUG $sres;
+    my $sexp = <<OUT
+TAP version 13
+1..1
+ok 1# SKIP  #skip reason
+---
+   datetime: ~
+   extensions:
+     executor: XTest::Executor::Noop
+     fail_reason: ' #skip reason'
+     groupname: sanity
+     id: 1
+     inf: more info
+     messages: ''
+     result: 'ok 1# SKIP  #skip reason'
+     status: skipped
+     status_code: 2
+   message: ''
+   source: sanity1
+...
+OUT
+;
+    is($sres,$sres,'skip tap check');
 };
 
 #########################################
