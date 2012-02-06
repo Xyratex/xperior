@@ -236,8 +236,6 @@ sub run {
               . $test->getName
               . ' STATUS: '
               . $test->results->{'status'};
-
-            #WARN Dumper $test;
             $enum++;
             if ( $res != 0 ) {
 
@@ -257,6 +255,15 @@ sub run {
                     WARN "Executed $enum tests, skipped $snum";
                     $self->htmlReport;
                     exit(11);
+                }
+
+            }else{
+                if ( defined( $test->getParam('exitafter') &&
+                            $test->getParam('exitafter') eq 'yes' )){
+                    WARN "Test requires stop after complete, exiting";
+                    WARN "Executed $enum tests, skipped $snum";
+                    $self->htmlReport;
+                    exit(12);
                 }
             }
         }

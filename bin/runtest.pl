@@ -201,6 +201,9 @@ Execution done because of detected nodes crash or network problem
 =item 11
 
 Execution done because of failure of tests which are in critical tests list 
+=item 12
+
+Execution done because test have enabled 'exitafter' property. It means that some actions must be done after test execution.
 
 =item 19
 

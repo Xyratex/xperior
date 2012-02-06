@@ -35,7 +35,9 @@ ML
 ;
     $self->addYE('multiline1',$ml);
     $self->addYE('multiline2',"qwerty\n"."asdfgh\n\nzxcvbn");
-    return $self->tap(); 
+    $self->pass;
+    $self->test->results ($self->yaml);
+
 }
 
 1;

@@ -74,3 +74,10 @@ replay-dual/15c
 ##########
 ##insanity
 insanity/10
+
+##########
+## lustre-single
+lustre-single/metadata-updates #MRP-369
+lustre-single/runtests         #MRP-370     
+
+
