@@ -92,7 +92,7 @@ sub processLogs {
         }
         #don't see next messages after test end 
         #================== 05:28:17
-        if ( $s =~ /=+\s+\d\d:\d\d:\d\d\s+/){
+        if ( $s =~ /test\s+complete.*=+\s+\d\d:\d\d:\d\d\s+/){
             last;
         }
     }

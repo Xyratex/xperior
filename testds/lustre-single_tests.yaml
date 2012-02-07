@@ -10,9 +10,10 @@ cleanup_max_time : -1
 tags             : functional 
 dangerous        : yes
 Tests:
-   - id : runracer
-     script : runracer
+   - id : racer
+     script : racer.sh
      exitafter : yes
+     timeout : 1200
 
    - id : metadata-updates
      script : metadata-updates.sh
