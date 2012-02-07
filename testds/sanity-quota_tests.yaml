@@ -1,0 +1,52 @@
+---
+groupname        : sanity-quota  
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole
+description      : Lustre sanity-quota tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10
+timeout          : 900
+cleanup_max_time : -1
+tags             : functional 
+dangerous        : yes
+
+Tests:
+   - id : 0
+   - id : 1
+   - id : 2
+   - id : 3
+   - id : 4a	# was test_4
+   - id : 4b	# was test_4a
+   - id : 5
+   - id : 6
+   - id : 7
+   - id : 8
+   - id : 9
+   - id : 12
+   - id : 13
+   - id : 14a	# was test_14 b=12223 -- setting quota on root
+   - id : 15
+   - id : 17
+   - id : 18
+   - id : 18a
+   - id : 18b
+   - id : 18c
+   - id : 19
+   - id : 20
+   - id : 21
+   - id : 22
+   - id : 23
+   - id : 24
+   - id : 25
+   - id : 26
+   - id : 27a
+   - id : 27b
+   - id : 28
+   - id : 29
+   - id : 30
+   - id : 31
+   - id : 32
+   - id : 33
+   - id : 34
+   - id : 35
+
