@@ -143,6 +143,57 @@ LustreObjects:
 client_mount_point      : /mnt/lustre/
 benchmark_tests_file    : testfile
 
+=head2 Description of YAML test result
+
+Sample YAML result from lustre  C<sanity/101b>  test with comments. Also can be generated tap and html reports.
+
+ ---
+ cleanup_max_time: -1                                 # not used now
+ cmd: SLOW=YES  MDSCOUNT=1 MDSDEV1=/tmp/lustre-mdt1 mds1_HOST=mds
+  OSTCOUNT=2 OSTDEV1=/tmp/lustre-ost1 ost1_HOST=mds  OSTDEV2=/tmp/lustre-ost2
+  ost2_HOST=mds CLIENTS=lclient RCLIENTS=\"mds\" ONLY=101b DIR=/mnt/lustre/  
+  PDSH=\"/usr/bin/pdsh -S -w \" /usr/lib64/lustre/tests/sanity.sh 2>
+  /tmp/test_stderr.569020.log 1>  /tmp/test_stdout.569020.log # comman which will be executed
+ completed: yes  #test execution completed  
+ dangerous: yes  
+ description: Lustre sanity tests
+ endtime: 1328712096                                   # unix epoch when test execution completed
+ endtime_planned: 1328712332                           # time when execution will be interrupted by timeout 
+ executor: XTest::Executor::LustreTests
+ exitcode: 0                                           # exit code of 'cmd' program
+ expected_time: 10                                     # not used now
+ groupname: sanity                                     # test group name
+ id: 101b                                              # test id, main test identificator
+ killed: no                                            # was 'cmd' killed by timeout or not
+ log:                                                  # array of log
+   console.mds1: 101b.console.mds1.log
+   messages.client2: 101b.messages.client2.log
+   messages.mds1: 101b.messages.mds1.log
+   messages.oss1: 101b.messages.oss1.log
+   messages.oss2: 101b.messages.oss2.log
+   stderr: 101b.stderr.log
+   stdout: 101b.stdout.log
+ masterclient:                                         # node where test started
+   id: client1
+   master: yes
+   node: client1
+   type: client
+ messages: |                                           # messages from xperior
+   No console defined for node [oss1]
+   No console defined for node [oss2]
+   No console defined for node [client1]
+   No console defined for node [client2]
+   Cannot copy log file [/tmp/messageslog.1328712015.34009]: 256
+ reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+ result: 'ok 1 '                                        # tap test string result
+ roles: StoreSyslog StoreConsole
+ schema: Xperior1                                        # yaml schema id
+ starttime: 1328712032                                   # unix epoch when test execution started
+ status: passed                                          # test execution result as string
+ status_code: 0                                          # test execution result code
+ tags: functional
+ timeout: 300
+ 
 =head2 Executing test internals.
 
 TBD

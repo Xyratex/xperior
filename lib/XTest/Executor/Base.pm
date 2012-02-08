@@ -39,6 +39,7 @@ use File::Copy;
 
 #use XTest::SshProcess;
 
+our $YVERSION = 'Xperior1'; #yaml output version. other modules also can add fields.
 our $EXT  = '.yaml';
 our $TEXT = '.tap';
 has 'test'              => ( is => 'rw');
@@ -63,6 +64,8 @@ sub init{
     $self->yaml->{'status'} = 'not set';
     $self->yaml->{'status_code'} = -1;
     $self->yaml->{'messages'}    = '';
+    $self->yaml->{'schema'}    = $YVERSION;
+
 
     $self->steptimeout(5);
 
