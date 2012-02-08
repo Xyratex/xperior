@@ -69,15 +69,23 @@ sub createExecutor {
 
 sub runtest {
     DEBUG "XTest::Core::runtest";
-    my ( $self, $test ) = @_;
+    my ( $self, $test, $excluded ) = @_;
     DEBUG "Starting tests " . $test->getParam('id');
 
     #DEBUG "Test is:". Dumper $test;
-    my $executor = $self->createExecutor( $test->getParam('executor'),
-        $test->getParam('roles') );
+    my $executorname = $test->getParam('executor');
+    my $roles        =  $test->getParam('roles');
+    if (defined($excluded) and( $excluded == 1)){
+        $executorname = 'XTest::Executor::Skip';
+        $roles = '';
+    }
+    my $executor = $self->createExecutor( $executorname,
+        $roles );
+#DEBUG "excluded : $excluded";
+#exit 111;
     $executor->init( $test, $self->options, $self->env );
 
-    # Todo: cover following code with tests
+    #TODO: cover following code with tests
     if ( defined $self->options->{'extoptfile'} ) {
         INFO "Load external options from file ["
           . $self->options->{'extoptfile'} . "]";
@@ -90,7 +98,7 @@ sub runtest {
         }
     }
 
-    # Todo: move parsing of extopt out of Core package
+    #TODO: move parsing of extopt out of Core package
     if ( scalar @{ $self->options->{'extopt'} } ) {
         INFO "Apply external options";
         foreach my $param ( @{ $self->options->{'extopt'} } ) {
@@ -162,6 +170,7 @@ sub run {
 
         ##filtering
         my $filtered = 0;
+        my $excluded = 0;
 
         #if includeonly set ignore all other filtering options
         if ( ( scalar @includeonly ) > 0 ) {
@@ -188,7 +197,8 @@ sub run {
 
                 #DEBUG "Process defined excludelist [$excludelist]";
                 foreach my $tmpl (@$excludelist) {
-                    $filtered = 1
+                    #$filtered = 1
+                    $excluded = 1
                       if (
                         compareIE( $tmpl,
                             $test->getGroupName . '/' . $test->getName ) > 0
@@ -231,7 +241,7 @@ sub run {
         WARN "Starting test execution";
         my $a = $self->options->{'action'};
         if ( $a eq 'run' ) {
-            my $res = $self->runtest($test);
+            my $res = $self->runtest($test, $excluded);
             WARN 'TEST '
               . $test->getName
               . ' STATUS: '
