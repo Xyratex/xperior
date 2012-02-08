@@ -81,6 +81,7 @@ ok 1
        test1: /tmp/test_log_file.xtest
      messages: ''
      result: 'ok 1 '
+     schema: Xperior1
      status: passed
      status_code: 0
    message: ''
