@@ -60,7 +60,7 @@ sub checkEnv{
     my $problems = 0;
     foreach my $n (@{$self->{'nodes'}}){
         #TOD enable it for future
-        #$problems-- unless $n->ping;
+        $problems-- unless $n->ping;
         $problems-- unless $n->isReachable;
     }    
     INFO "Configuration check completed";
