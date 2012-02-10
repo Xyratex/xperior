@@ -1,7 +1,7 @@
 ---
 groupname        : lustre-rsync-test
 executor         : XTest::Executor::LustreTests
-roles            : StoreSyslog StoreConsole
+roles            : StoreSyslog StoreConsole  GetDiagnostics
 description      : Lustre  lustre-rsync-test tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 10 
