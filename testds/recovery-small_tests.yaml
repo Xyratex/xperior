@@ -1,7 +1,7 @@
 ---
 groupname        : recovery-small  
 executor         : XTest::Executor::LustreTests
-roles            : StoreSyslog StoreConsole
+roles            : StoreSyslog StoreConsole GetDiagnostics
 description      : Lustre recovery-small tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 10 

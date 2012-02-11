@@ -61,6 +61,12 @@ sub createExecutor {
                 use XTest::Executor::Roles::StoreConsole;
                 XTest::Executor::Roles::StoreConsole->meta->apply($obj);
             }
+            if ( $role eq 'GetDiagnostics' ) {
+                use XTest::Executor::Roles::GetDiagnostics;
+                XTest::Executor::Roles::GetDiagnostics->meta->apply($obj);
+            }
+
+
 
         }
     }

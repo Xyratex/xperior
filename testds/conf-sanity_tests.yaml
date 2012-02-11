@@ -1,7 +1,7 @@
 ---
 groupname        : conf-sanity
 executor         : XTest::Executor::LustreTests
-roles            : StoreSyslog StoreConsole
+roles            : StoreSyslog StoreConsole GetDiagnostics
 description      : Lustre conf-sanity tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 0 

@@ -1,7 +1,7 @@
 ---
 groupname        : ost-pools 
 executor         : XTest::Executor::LustreTests
-roles            : StoreSyslog StoreConsole
+roles            : StoreSyslog StoreConsole GetDiagnostics
 description      : Lustre  ost-pools tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 10 
