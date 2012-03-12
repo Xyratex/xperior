@@ -46,6 +46,10 @@ sub _prepareCommands {
     my $dir    = $self->env->cfg->{'client_mount_point'} . $td;
     my $tid    = 'ONLY=' . $self->test->testcfg->{id};
     my $script = $self->test->getParam('groupname');
+    my $eopts  = '';
+    #TODO add test on it
+    $eopts = $self->env->cfg->{extoptions} 
+                if defined $self->env->cfg->{extoptions};
     if ( defined( $self->test->getParam('script') ) ) {
         $script = $self->test->getParam('script');
         $tid    = '';                                #no default test number
@@ -57,7 +61,7 @@ sub _prepareCommands {
           . $self->mdsopt . " "
           . $self->ossopt . " "
           . $self->clntopt
-          . " $tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -S -w \\\" /usr/lib64/lustre/tests/${script}${ext}"
+          . " $eopts $tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\" /usr/lib64/lustre/tests/${script}${ext}"
     );
 
 #    $self->cmd("SLOW=YES  ".$self->mdsopt." ".$self->ossopt." ".$self->clntopt." ONLY=$tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -S -w \\\"  ACC_SM_ONLY=${script} /usr/lib64/lustre/tests/acceptance-small.sh");
@@ -74,21 +78,22 @@ sub processLogs {
     open( F, "  $file" );
 
     my $passed = 100;
-    my $reason = '';
+    my $reason = 'No_status_found';
     my @results;
     #consider only last keywords! 
     while ( defined( my $s = <F> ) ) {
         chomp $s;
         if ( $s =~ m/PASS/ ) {
             $passed = 0;
+            $reason = '';
         }
         if ( $s =~ m/FAIL:(.*)/ ) {
             $passed = 10;
-            $reason = $1;
+            $reason = $1 if defined $1;
         }
         if ( $s =~ /SKIP:(.*)/ ) {
             $passed = 1;
-            $reason = $1;
+            $reason = $1 if defined $1;;            
         }
         #don't see next messages after test end 
         #================== 05:28:17
@@ -96,7 +101,7 @@ sub processLogs {
             last;
         }
     }
-    unless ($passed) {
+    if ($passed) {
         $self->reason($reason);
     }
     close(F);
@@ -111,12 +116,18 @@ sub _prepareEnvOpts {
     $self->mdsopt('');
     my $c = 1;
     foreach my $m (@$mdss) {
+        my $md = '';
+        if((defined($m->{'device'})) 
+                and($m->{'device'} ne '')){
+            $md =  "MDSDEV$c=".$m->{'device'};
+
+        }
         $self->mdsopt( $self->mdsopt
-              . " MDSDEV$c="
-              . $m->{'device'}
-              . " mds${c}_HOST="
-              . $self->env->getNodeAddress( $m->{'node'} )
-              . ' ' );
+              . " $md mds${c}_HOST="
+              . $self->env->getNodeAddress( $m->{'node'} ).' '
+              . " mds_HOST=" 
+              . $self->env->getNodeAddress( $m->{'node'} ).' '
+              );
         $c++;
     }
     $c--;
@@ -125,10 +136,14 @@ sub _prepareEnvOpts {
     $self->ossopt('');
     $c = 1;
     foreach my $m (@$osss) {
+        my $sd = '';
+        if((defined($m->{'device'}))
+                and($m->{'device'} ne '')){
+            $sd =  " OSTDEV$c=". $m->{'device'}
+
+        }
         $self->ossopt( $self->ossopt
-              . " OSTDEV$c="
-              . $m->{'device'}
-              . " ost${c}_HOST="
+              . " $sd  ost${c}_HOST="
               . $self->env->getNodeAddress( $m->{'node'} )
               . ' ' );
         $c++;

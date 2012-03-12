@@ -66,8 +66,6 @@ sub createExecutor {
                 XTest::Executor::Roles::GetDiagnostics->meta->apply($obj);
             }
 
-
-
         }
     }
     return $obj;
@@ -80,15 +78,15 @@ sub runtest {
 
     #DEBUG "Test is:". Dumper $test;
     my $executorname = $test->getParam('executor');
-    my $roles        =  $test->getParam('roles');
-    if (defined($excluded) and( $excluded == 1)){
+    my $roles        = $test->getParam('roles');
+    if ( defined($excluded) and ( $excluded == 1 ) ) {
         $executorname = 'XTest::Executor::Skip';
-        $roles = '';
+        $roles        = '';
     }
-    my $executor = $self->createExecutor( $executorname,
-        $roles );
-#DEBUG "excluded : $excluded";
-#exit 111;
+    my $executor = $self->createExecutor( $executorname, $roles );
+
+    #DEBUG "excluded : $excluded";
+    #exit 111;
     $executor->init( $test, $self->options, $self->env );
 
     #TODO: cover following code with tests
@@ -121,7 +119,7 @@ sub runtest {
     $executor->execute;
     $executor->report();
     $executor->tap() if $self->options->{'tap'};
-    return $executor->result_code;
+    return $executor;
 }
 
 sub run {
@@ -203,6 +201,7 @@ sub run {
 
                 #DEBUG "Process defined excludelist [$excludelist]";
                 foreach my $tmpl (@$excludelist) {
+
                     #$filtered = 1
                     $excluded = 1
                       if (
@@ -247,35 +246,57 @@ sub run {
         WARN "Starting test execution";
         my $a = $self->options->{'action'};
         if ( $a eq 'run' ) {
-            my $res = $self->runtest($test, $excluded);
+            my $exe = $self->runtest( $test, $excluded );
+            my $res = $exe->result_code;
             WARN 'TEST '
               . $test->getName
               . ' STATUS: '
               . $test->results->{'status'};
             $enum++;
-            if ( $res != 0 ) {
+
+            #ignore passed and skipped results
+            if (
+                    ( $res != 0 )
+                and ( $res != 2 )
+
+              )
+            {
 
                 #test failed, do env check
                 my $cer = $self->{'env'}->checkEnv;
-                if ( $cer < 0 ) {
-                    WARN
+                  if ( $cer < 0 ) {
+                        WARN
 "Found problems while testing configuration after failed test, exiting";
-                    WARN "Executed $enum tests, skipped $snum";
-                    $self->htmlReport;
-                    exit(10);
-                }
-                if ( defined( $test->getParam('dangerous') )
-                    && ( $test->getParam('dangerous') eq 'yes' ) )
+                        WARN "Executed $enum tests, skipped $snum";
+                        $self->htmlReport;
+                        exit(10);
+                    }
+                unless (($res == 1)
+                    and ($exe->yaml->{'fail_reason'} eq 
+                                      'No_status_found')
+                    and ($exe->yaml->{'killed'} eq 'no'))
                 {
-                    WARN "Dangerous test failure detected, exiting";
-                    WARN "Executed $enum tests, skipped $snum";
-                    $self->htmlReport;
-                    exit(11);
+                    if ( defined( $test->getParam('dangerous') )
+                        && ( $test->getParam('dangerous') eq 'yes' ) )
+                    {
+                        WARN "Dangerous test failure detected, exiting";
+                        WARN "Executed $enum tests, skipped $snum";
+                        $self->htmlReport;
+                        exit(11);
+                    }
+                }else{
+                    WARN "Unclean test failure, not exiting after it";
                 }
 
-            }else{
-                if ( defined( $test->getParam('exitafter') &&
-                            $test->getParam('exitafter') eq 'yes' )){
+            }
+            else {
+                if (
+                    defined(
+                             $test->getParam('exitafter')
+                          && $test->getParam('exitafter') eq 'yes'
+                    )
+                  )
+                {
                     WARN "Test requires stop after complete, exiting";
                     WARN "Executed $enum tests, skipped $snum";
                     $self->htmlReport;
@@ -377,7 +398,7 @@ sub htmlReport {
     DEBUG 'XTest::Core->htmlReport';
 
     my $wd     = $self->{options}->{workdir};
-    my $libdir = $self->{options}->{xtestbasedir}.'/XTest/html';
+    my $libdir = $self->{options}->{xtestbasedir} . '/XTest/html';
     my @suites;
     opendir my ($dh), $wd or confess "Couldn't open dir '$wd': $!";
 
@@ -437,8 +458,8 @@ sub htmlReport {
         $data{$suite} = "TAP version 13\n" . "1..$i\n" . $mess . "\n";
 
     }
-    
-    my $fmt       = TAP::Formatter::HTML->new;
+
+    my $fmt = TAP::Formatter::HTML->new;
     $fmt->verbosity(-2);
     my $aggregate = TAP::Parser::Aggregator->new;
     my $session;
@@ -457,7 +478,7 @@ sub htmlReport {
         $aggregate->stop;
     }
     mkdir "$wd/report";
-    $fmt->abs_file_paths( 1);
+    $fmt->abs_file_paths(1);
     $CWD = $libdir;
     $fmt->template("xtest_report.tt2");
     $fmt->output_file("$wd/report/report.html");

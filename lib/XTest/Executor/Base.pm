@@ -127,7 +127,8 @@ sub pass{
 
 sub fail{
     my ($self,$msg)  = @_;
-    if( defined $msg){
+    my $pmsg = $msg;
+    if((defined $msg) and ($msg ne '')){
         $msg = " #".$msg 
     }else{
         $msg='';
@@ -136,7 +137,7 @@ sub fail{
     $self->{'result_code'} = 1;
     $self->yaml->{'status'} = 'failed';
     $self->yaml->{'status_code'} = 1; 
-    $self->yaml->{'fail_reason'} = $msg;
+    $self->yaml->{'fail_reason'} = $pmsg;
 }
 
 sub skip{
