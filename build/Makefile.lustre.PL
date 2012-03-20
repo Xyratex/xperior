@@ -6,13 +6,13 @@ use ExtUtils::Manifest;
 print `cp build/Makefile.lustre.PL Makefile.PL` ."\n";
 print `cp build/MANIFEST.lustre    MANIFEST`."\n";
 WriteMakefile(
-    NAME              => 'XTest-lustretests',
+    NAME              => 'Xperior-lustretests',
     VERSION_FROM      => 'lib/XTest/Executor/LustreTests.pm',
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT       =>  'Lustre executor runs and controls lustre  acc small test execution', 
        AUTHOR         => 'ryg <Roman_Grigoryev@xyratex.com>') : ()),
-    clean            =>     {FILES => "Makefile Makefile.old MANIFEST MYMETA.json MYMETA.yml XTest-lustre*.tar.gz html "},
+    clean            =>     {FILES => "Makefile Makefile.old MANIFEST MYMETA.json MYMETA.yml Xperior-lustre*.tar.gz html "},
     
     
 );

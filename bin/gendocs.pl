@@ -22,7 +22,7 @@ my $pd = Pod::ProjectDocs->new(
     libroot =>  ['bin', 'lib', 'doc'],
     title   => 'XTest',
     forcegen => 1,
-    desc   => 'XTest harness'
+    desc   => 'Xperior harness'
 );
 $pd->gen();
 

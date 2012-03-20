@@ -37,11 +37,11 @@ test plan => 5, dCompareIE => sub{
     $res = compareIE('sanity/1','sanity/1');
     is($res,1,"Simple check 0");
     $res = compareIE('sanity/*','sanity/1');
-    is($res,2,"Simple check 1"); 
+    is($res,0,"Simple regexp check"); 
     $res = compareIE('san*','sanity/1');   
-    is($res,2,"Simple check 3");               
+    is($res,0,"Simple regexp check 2");               
     $res = compareIE('sanity','sanity/1');   
-    is($res,0,"Simple check 3");               
+    is($res,0,"Simple regexp check 3");               
 
 };
 

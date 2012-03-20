@@ -1,10 +1,10 @@
 =pod
 
-=head1 XTest harness developer guide
+=head1 Xperior harness developer guide
 
 System created on Perl language, with wide using additional modules from CPAN.
 
-=head2 Structure of /opt/xyratex/xtest/lib folder
+=head2 Structure of /opt/xyratex/xperior/lib folder
 
 =over 
 

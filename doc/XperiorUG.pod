@@ -1,8 +1,8 @@
 =pod
 
-=head1 XTest harness user guide
+=head1 Xperior harness user guide
 
-=head2 Structure of /opt/xyratex/xtest folder
+=head2 Structure of /opt/xyratex/xperior folder
 
 =over  
 
@@ -12,7 +12,7 @@ B<bin>    - this perl application
 
 =item *
 
-B<lib>    - XTest perl libraries, for overriding use PERL5LIB env variable. runtest.pl script try to find it as C<../lib> from his location
+B<lib>    - Xperior perl libraries, for overriding use PERL5LIB env variable. runtest.pl script try to find it as C<../lib> from his location
 
 =item *
 
@@ -40,7 +40,7 @@ B<systemcfg.yaml> - default location for file with tested system description, se
 
 Test descriptor file must be placed in test directory (see Synopsis section). It must be yaml file. 
 
-Sample test descriptor with explanation:
+Sample test descriptor 1:
 
  ---
 groupname        : ior 
@@ -55,7 +55,34 @@ tags             : benchmark ior
 Tests: 
    - id               : test1 
 
+
+Sample test descriptor 2
+
+ ---
+groupname        : sanity
+executor         : XTest::Executor::LustreTests
+roles            : StoreSyslog StoreConsole GetDiagnostics
+description      : Lustre sanity tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10
+timeout          : 300
+cleanup_max_time : -1
+#options          :
+tags             : functional
+dangerous        : yes
+
+
+Tests:
+   - id               : 0b
+   - id               : 0c
+   - id               : 1a
+   - id               : 1b
+
+
 The file contains set of tags. Main entity is test, in this sample it is single element C<id> is C<Tests> array. Every test inherit vales from common description (fields which  described out of C<Tests> array). A test can override any field or add new fields. Supported fields divided into 2 groups: common fields and executor-specific fields. See alone executor specific field C<iorcmd>  in explanation below.
+
+B<groupname>, B<executor>, B<description>, B<reference>, B<roles>, B<tags> - are common fields. All other are executor-specific and used in executors. 
+
 
 =over
 

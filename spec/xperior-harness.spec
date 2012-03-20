@@ -1,12 +1,12 @@
 %define _unpackaged_files_terminate_build  0
 %define _missing_doc_files_terminate_build 0
-Summary: XTest harness core.
-Name: xtest-harness
+Summary: Xperior harness core.
+Name: xperior-harness
 Version: 0.0.2
 Release:6%{?dist} 
 License: TBD 
 Group: Development/Libraries
-Source: XTest-harness-0.0.2.tar.gz 
+Source: Xperior-harness-0.0.2.tar.gz 
 Requires: perl-Moose >= 0.94
 Requires: perl-MooseX-Clone
 Requires: perl-Test-Able
@@ -26,7 +26,7 @@ BuildArch: noarch
 TBD
 
 %prep
-%setup -q -n XTest-harness-%{version}
+%setup -q -n Xperior-harness-%{version}
 
 
 %build
@@ -35,7 +35,7 @@ make
 
 
 %install 
-TD=$RPM_BUILD_ROOT/opt/xyratex/xtest/
+TD=$RPM_BUILD_ROOT/opt/xyratex/xperior/
 rm -rf $RPM_BUILD_ROOT
 install -d ${TD}/bin
 install -D  -m 755  bin/*.pl      ${TD}/bin/
@@ -58,7 +58,7 @@ find $TD -depth -type d -exec rmdir {} 2>/dev/null \;
 #make test
 
 %post
-cd /opt/xyratex/xtest/
+cd /opt/xyratex/xperior/
 mkdir -p html
 bin/gendocs.pl
 
@@ -67,14 +67,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc %attr(0444,root,root) /opt/xyratex/xtest/doc/*
-%attr(0444,root,root) /opt/xyratex/xtest/lib/*
-%attr(0644,root,root) /opt/xyratex/xtest/testds/*
-%attr(0644,root,root) /opt/xyratex/xtest/*.yaml
-%attr(0755,root,root) /opt/xyratex/xtest/bin/*
+%doc %attr(0444,root,root) /opt/xyratex/xperior/doc/*
+%attr(0444,root,root) /opt/xyratex/xperior/lib/*
+%attr(0644,root,root) /opt/xyratex/xperior/testds/*
+%attr(0644,root,root) /opt/xyratex/xperior/*.yaml
+%attr(0755,root,root) /opt/xyratex/xperior/bin/*
 
 %changelog
-* Mon Oct 24 2011 ryg <Roman_Grigoryev@xyratex.com> 0.0.1
-     Initial package version.
+* Tue Mar 20 2012 ryg <Roman_Grigoryev@xyratex.com> 0.0.2
+    Many updates in results processing. Stable ssh module. Improved improved include/exclude list processing. Added html report. Increased test coverage. 
 * Mon Oct 24 2011 ryg <Roman_Grigoryev@xyratex.com> 0.0.1
     Added docs and docs generation after installation. 
+* Mon Oct 24 2011 ryg <Roman_Grigoryev@xyratex.com> 0.0.1
+    Initial package version.
+

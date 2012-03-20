@@ -103,7 +103,8 @@ sub runtest {
     }
 
     #TODO: move parsing of extopt out of Core package
-    if ( scalar @{ $self->options->{'extopt'} } ) {
+    if ( (defined($self->options->{'extopt'} )) 
+            && (scalar @{ $self->options->{'extopt'} } )) {
         INFO "Apply external options";
         foreach my $param ( @{ $self->options->{'extopt'} } ) {
             if ( $param =~ m/^([\w\d]+)\s*\:(.+)$/ ) {

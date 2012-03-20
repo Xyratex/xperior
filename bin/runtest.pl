@@ -4,7 +4,7 @@
 #
 #        USAGE:  ./runtest.pl <options> 
 #
-#  DESCRIPTION:  Execute XTest narness
+#  DESCRIPTION:  Start test execution in  Xperior harness
 #       AUTHOR:  ryg 
 #      COMPANY:  Xyratex
 #      CREATED:  08/31/2011 06:37:26 PM
@@ -13,15 +13,15 @@
 
 =head1 NAME
 
-xtest - execute tests via XTest harness
+Xperior - execute tests via Xperior harness (old internal name is XTest)
 
 =head1 SYNOPSIS 
 
-    xtest --action <run|list> [--continue] [<options>]
+    xper --action <run|list> [--continue] [<options>]
 
 =head1 DESCRIPTION
 
-The application is executing different specially wrapped tests via XTest
+The application is executing different specially wrapped tests via Xperior
 harness. The application read yaml tests descriptions,check environmental
 conditions, read/gather cluster configuration and run tests based on it, gather
 logs and save report.
@@ -225,7 +225,7 @@ Copyright (c) Xyratex, 2011
 
 =head1 SEE ALSO
 
-See XTest harness User Guide for detail of system configuration.
+See Xperior harness User Guide for detail of system configuration.
 
 =cut
 
