@@ -1,0 +1,10 @@
+==> /tmp/serial_mft01_out <==
+Lustre: DEBUG MARKER: only running test 18
+Lustre: DEBUG MARKER: excepting tests: 15c
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+LustreError: 10908:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+LustreError: 10908:0:(quota_ctl.c:328:client_quota_ctl()) Skipped 3 previous similar messages
+Lustre: DEBUG MARKER: == replay-dual test 18: ldlm_handle_enqueue succeeds on evicted export (3822) == 04:25:17 (1331864717)
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 13 sec == 04:25:18 (1331864718)

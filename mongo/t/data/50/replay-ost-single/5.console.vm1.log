@@ -1,0 +1,10 @@
+==> /tmp/serial_mft03_out <==
+Lustre: DEBUG MARKER: only running test 5
+Lustre: DEBUG MARKER: excepting tests:
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: 2196:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Lustre: 2196:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+LustreError: 14334:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Lustre: DEBUG MARKER: == replay-ost-single test 5: Fail OST during iozone == 17:54:23 (1333464863)
+Lustre: DEBUG MARKER: SKIP: replay-ost-single test_5 iozone missing
+Lustre: DEBUG MARKER: == replay-ost-single replay-ost-single.sh test complete, duration 1 sec == 17:54:23 (1333464863)

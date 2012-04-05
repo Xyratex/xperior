@@ -1,0 +1,12 @@
+==> /var/log/messages <==
+Apr  3 18:39:54 mft02 kernel: Lustre: DEBUG MARKER: only running test 18
+Apr  3 18:39:54 mft02 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Apr  3 18:39:55 mft02 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Apr  3 18:39:55 mft02 kernel: LustreError: 10636:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Apr  3 18:39:55 mft02 kernel: LustreError: 10636:0:(quota_ctl.c:328:client_quota_ctl()) Skipped 3 previous similar messages
+Apr  3 18:40:05 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual test 18: ldlm_handle_enqueue succeeds on evicted export (3822) == 18:40:05 (1333467605)
+Apr  3 18:40:05 mft02 kernel: LustreError: 6549:0:(fail.c:126:__cfs_fail_timeout_set()) cfs_fail_timeout id 30b sleeping for 40000ms
+Apr  3 18:40:06 mft02 kernel: Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Apr  3 18:40:06 mft02 kernel: Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Apr  3 18:40:45 mft02 kernel: LustreError: 6549:0:(fail.c:130:__cfs_fail_timeout_set()) cfs_fail_timeout id 30b awake
+Apr  3 18:40:45 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 51 sec == 18:40:45 (1333467645)

@@ -1,0 +1,74 @@
+==> /var/log/messages <==
+Apr  3 18:26:28 mft02 kernel: Lustre: DEBUG MARKER: only running test 13
+Apr  3 18:26:28 mft02 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Apr  3 18:26:28 mft02 kernel: LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Apr  3 18:26:28 mft02 kernel: LustreError: Skipped 3 previous similar messages
+Apr  3 18:26:28 mft02 kernel: Lustre: Client lustre-client has started
+Apr  3 18:26:28 mft02 kernel: Lustre: Skipped 3 previous similar messages
+Apr  3 18:26:29 mft02 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Apr  3 18:26:39 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual test 13: close resend timeout == 18:26:39 (1333466799)
+Apr  3 18:26:39 mft02 kernel: Turning device loop0 (0x700000) read-only
+Apr  3 18:26:39 mft02 kernel: Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Apr  3 18:26:39 mft02 kernel: Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769adcf8
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769adc90
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769adc28
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769adbc0
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769adb58
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769adaf0
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1df68
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1df00
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769adc90
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769bcc90
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f1af0
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f0748
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007692f0c8
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f1c90
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f1dc8
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f0678
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769ad8e8
+Apr  3 18:26:39 mft02 kernel: Release to readonly device loop0 (0x700000): [inode 33] [block 30440] [count 3] [is_meta 1]
+Apr  3 18:26:39 mft02 kernel: Release to readonly device loop0 (0x700000): [inode 34] [block 30443] [count 3] [is_meta 1]
+Apr  3 18:26:39 mft02 kernel: Release to readonly device loop0 (0x700000): [inode 44] [block 17131] [count 3] [is_meta 1]
+Apr  3 18:26:39 mft02 kernel: Release to readonly device loop0 (0x700000): [inode 43] [block 17128] [count 3] [is_meta 1]
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769ade30
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769addc8
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769add60
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1de98
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1de30
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1ddc8
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1dd60
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1dcf8
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1dc90
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1dc28
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1dbc0
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1db58
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a1daf0
+Apr  3 18:26:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769addc8
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769bce98
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769bcc90
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076965540
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f0748
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f18e8
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007692f0c8
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007692f130
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f1c90
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f16e0
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f1748
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f1bc0
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769f1c28
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769bce98
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769b7268
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769b7268
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769b7268
+Apr  3 18:26:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769bce98
+Apr  3 18:26:42 mft02 kernel: Removing read-only on unknown block (0x700000)
+Apr  3 18:26:52 mft02 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Apr  3 18:26:52 mft02 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Apr  3 18:26:52 mft02 kernel: LDISKFS-fs (loop0): 2 orphan inodes deleted
+Apr  3 18:26:52 mft02 kernel: LDISKFS-fs (loop0): recovery complete
+Apr  3 18:26:53 mft02 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Apr  3 18:26:53 mft02 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Apr  3 18:26:53 mft02 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Apr  3 18:26:53 mft02 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Apr  3 18:26:58 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 30 sec == 18:26:58 (1333466818)

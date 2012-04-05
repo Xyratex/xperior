@@ -1,0 +1,33 @@
+Logging to shared log directory: /tmp/test_logs//1331872772
+only running test 0b
+excepting tests: 
+mft01: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft01 environments
+Using TIMEOUT=20
+disable quota as required
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 5 null connections
+/mnt/lustre/d0.replay-ost-single
+stripe_count:   1 stripe_size:    1048576 stripe_offset:  0 
+.
+
+== replay-ost-single test 0b: empty replay == 06:39:33 (1331872773)
+Failing ost1 on node mft01
+Stopping /mnt/ost1 (opts:) on mft01
+affected facets: ost1
+Failover ost1 to mft01
+06:39:47 (1331872787) waiting for mft01 network 900 secs ...
+06:39:47 (1331872787) network interface is UP
+Starting ost1: -o loop  /tmp/lustre-ost1 /mnt/ost1
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-OST0000
+mft01: Warning: Permanently added the RSA host key for IP address '10.3.0.187' to the list of known hosts.
+Resetting fail_loc on all nodes...done.
+PASS 0b (82s)
+.......== replay-ost-single replay-ost-single.sh test complete, duration 83 sec == 06:40:55 (1331872855)

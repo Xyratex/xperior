@@ -1,0 +1,119 @@
+==> /tmp/serial_mft02_out <==
+Lustre: DEBUG MARKER: only running test 1
+Lustre: DEBUG MARKER: excepting tests: 15c
+LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Lustre: 6277:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 13dc46ce-337e-13bf-3d75-ae907b8d39f8@0@lo t0 exp (null) cur 1333466175 last 0
+Lustre: 6277:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 16 previous similar messages
+Lustre: Client lustre-client has started
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: 6277:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Lustre: 6277:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+LustreError: 7920:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Lustre: DEBUG MARKER: == replay-dual test 1: |X| simple create == 18:16:25 (1333466185)
+LustreError: 8229:0:(osd_handler.c:938:osd_ro()) *** setting device osd-ldiskfs read-only ***
+Turning device loop0 (0x700000) read-only
+Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934678
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934818
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934880
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769348e8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934950
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934c90
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934cf8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934d60
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934dc8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934818
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007680e0c8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482470
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800795d18e8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482e98
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482610
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482748
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800795d1610
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482678
+Lustre: Failing over lustre-MDT0000
+Lustre: Skipped 4 previous similar messages
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769340c8
+Lustre: 8274:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Lustre: 8274:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+Release to readonly device loop0 (0x700000): [inode 34] [block 17131] [count 3] [is_meta 1]
+Release to readonly device loop0 (0x700000): [inode 33] [block 17128] [count 3] [is_meta 1]
+Lustre: mdd_obd-lustre-MDT0000: shutting down for failover; client state will be preserved.
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934130
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934880
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800769348e8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934950
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934cf8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934d60
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934dc8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934e30
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934e98
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934f00
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934f68
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007694af68
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076934880
+Lustre: MGS has stopped.
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007680e3a0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007680e0c8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b0bd678
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800795d18e8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b0bd6e0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482e98
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482610
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482130
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482198
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800795d19b8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800794824d8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007680e3a0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482af0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482af0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880079482af0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007680e3a0
+Removing read-only on unknown block (0x700000)
+Lustre: server umount lustre-MDT0000 complete
+LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+LDISKFS-fs (loop0): recovery complete
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Lustre: MGS MGS started
+LustreError: 166-1: MGC10.3.0.188@tcp: Connection to service MGS via nid 0@lo was lost; in progress operations using this service will fail.
+Lustre: MGC10.3.0.188@tcp: Reactivating import
+Lustre: Skipped 1 previous similar message
+Lustre: Enabling ACL
+Lustre: Enabling user_xattr
+Lustre: lustre-MDT0000: used disk, loading
+Lustre: 8394:0:(ldlm_lib.c:1900:target_recovery_init()) RECOVERY: service lustre-MDT0000, 2 recoverable clients, last_transno 12884901891
+LustreError: 8398:0:(ldlm_lib.c:1737:target_recovery_thread()) lustre-MDT0000: started recovery thread pid 8398
+Lustre: 8394:0:(mdt_lproc.c:259:lprocfs_wr_identity_upcall()) lustre-MDT0000: identity upcall set to /usr/sbin/l_getidentity
+Lustre: 8394:0:(mds_lov.c:1004:mds_notify()) MDS mdd_obd-lustre-MDT0000: add target lustre-OST0000_UUID
+Lustre: 8394:0:(mds_lov.c:1004:mds_notify()) Skipped 1 previous similar message
+Lustre: 2307:0:(ldlm_lib.c:802:target_handle_connect()) lustre-OST0000: received new MDS connection from NID 0@lo, removing former export from same NID
+Lustre: 2307:0:(ldlm_lib.c:802:target_handle_connect()) Skipped 1 previous similar message
+Lustre: 2307:0:(filter.c:2710:filter_connect_internal()) lustre-OST0000: Received MDS connection for group 0
+Lustre: 2307:0:(filter.c:2710:filter_connect_internal()) Skipped 1 previous similar message
+Lustre: 1615:0:(mds_lov.c:1024:mds_notify()) MDS mdd_obd-lustre-MDT0000: in recovery, not resetting orphans on lustre-OST0000_UUID
+Lustre: 1615:0:(mds_lov.c:1024:mds_notify()) Skipped 1 previous similar message
+Lustre: 1614:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1333466195/real 1333466195]  req@ffff8800790ca800 x1398240341656484/t0(0) o400->lustre-MDT0000-mdc-ffff88007818f400@0@lo:12/10 lens 192/192 e 0 to 1 dl 1333466202 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+Lustre: 1614:0:(client.c:1773:ptlrpc_expire_one_request()) Skipped 1 previous similar message
+Lustre: lustre-MDT0000-mdc-ffff88007818f400: Connection to service lustre-MDT0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+Lustre: 8402:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Next recovery transno: 12884901892, current: 12884901892, replaying
+Lustre: 8402:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Skipped 104 previous similar messages
+LustreError: 1615:0:(client.c:2585:ptlrpc_replay_interpret()) @@@ status -116, old was 0  req@ffff88007aecc800 x1398240341656465/t12884901892(12884901892) o35->lustre-MDT0000-mdc-ffff88007818f400@0@lo:23/10 lens 360/424 e 0 to 0 dl 1333466209 ref 2 fl Interpret:R/4/0 rc -116/-116
+LustreError: 8398:0:(mds_lov.c:349:mds_lov_update_objids()) Unexpected gap in objids
+Lustre: lustre-MDT0000-mdc-ffff88007818f400: Connection restored to service lustre-MDT0000 using nid 0@lo.
+Lustre: lustre-MDT0000: sending delayed replies to recovered clients
+Lustre: lustre-OST0001: received MDS connection from 0@lo
+Lustre: Skipped 1 previous similar message
+Lustre: 2307:0:(lustre_log.h:471:llog_group_set_export()) lustre-OST0001: export for group 0 is changed: 0xffff88007a49a800 -> 0xffff8800374e8800
+Lustre: 2307:0:(lustre_log.h:471:llog_group_set_export()) Skipped 3 previous similar messages
+Lustre: 2307:0:(llog_net.c:168:llog_receptor_accept()) changing the import ffff880079f0e000 - ffff880078484000
+Lustre: 2307:0:(llog_net.c:168:llog_receptor_accept()) Skipped 3 previous similar messages
+Lustre: 2308:0:(filter.c:2566:filter_llog_connect()) lustre-OST0000: Recovery from log 0x1f/0x0:f004dbbe
+Lustre: MDS mdd_obd-lustre-MDT0000: lustre-OST0000_UUID now active, resetting orphans
+Lustre: Skipped 1 previous similar message
+Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 29 sec == 18:16:43 (1333466203)
+LustreError: 8685:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+LustreError: 8685:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+Lustre: client ffff880077bdf400 umount complete

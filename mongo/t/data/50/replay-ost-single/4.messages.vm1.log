@@ -1,0 +1,40 @@
+==> /var/log/messages <==
+Apr  3 17:53:45 mft03 kernel: Lustre: DEBUG MARKER: only running test 4
+Apr  3 17:53:45 mft03 kernel: Lustre: DEBUG MARKER: excepting tests:
+Apr  3 17:53:45 mft03 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Apr  3 17:53:45 mft03 kernel: Lustre: 2196:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Apr  3 17:53:45 mft03 kernel: Lustre: 2196:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+Apr  3 17:53:45 mft03 kernel: LustreError: 12546:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Apr  3 17:53:47 mft03 kernel: Lustre: DEBUG MARKER: == replay-ost-single test 4: Fail OST during read, with verification == 17:53:47 (1333464827)
+Apr  3 17:53:47 mft03 kernel: Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Apr  3 17:53:48 mft03 kernel: Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Apr  3 17:53:49 mft03 kernel: Lustre: Failing over lustre-OST0000
+Apr  3 17:53:50 mft03 kernel: Lustre: lustre-OST0000: shutting down for failover; client state will be preserved.
+Apr  3 17:53:50 mft03 kernel: Lustre: OST lustre-OST0000 has stopped.
+Apr  3 17:53:53 mft03 kernel: Lustre: server umount lustre-OST0000 complete
+Apr  3 17:53:55 mft03 kernel: LustreError: 2281:0:(ldlm_lib.c:2125:target_send_reply_msg()) @@@ processing error (-107)  req@ffff880072752800 x1398238915592924/t0(0) o400-><?>@<?>:0/0 lens 192/0 e 0 to 0 dl 1333464860 ref 1 fl Interpret:H/0/ffffffff rc -107/-1
+Apr  3 17:53:55 mft03 kernel: LustreError: 2281:0:(ldlm_lib.c:2125:target_send_reply_msg()) Skipped 3 previous similar messages
+Apr  3 17:53:55 mft03 kernel: LustreError: 11-0: an error occurred while communicating with 0@lo. The obd_ping operation failed with -107
+Apr  3 17:53:55 mft03 kernel: LustreError: Skipped 3 previous similar messages
+Apr  3 17:53:55 mft03 kernel: Lustre: lustre-OST0000-osc-ffff880037540800: Connection to service lustre-OST0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+Apr  3 17:53:55 mft03 kernel: Lustre: Skipped 1 previous similar message
+Apr  3 17:53:55 mft03 kernel: LustreError: 137-5: UUID 'lustre-OST0000_UUID' is not available  for connect (no target)
+Apr  3 17:53:55 mft03 kernel: LustreError: Skipped 1 previous similar message
+Apr  3 17:54:03 mft03 kernel: LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+Apr  3 17:54:03 mft03 kernel: LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+Apr  3 17:54:03 mft03 kernel: Lustre: 12977:0:(ldlm_lib.c:1900:target_recovery_init()) RECOVERY: service lustre-OST0000, 2 recoverable clients, last_transno 35
+Apr  3 17:54:03 mft03 kernel: LustreError: 12978:0:(ldlm_lib.c:1737:target_recovery_thread()) lustre-OST0000: started recovery thread pid 12978
+Apr  3 17:54:04 mft03 kernel: Lustre: 12977:0:(filter.c:1252:filter_prep_groups()) lustre-OST0000: initialize groups [0,0]
+Apr  3 17:54:04 mft03 kernel: Lustre: lustre-OST0000: Now serving lustre-OST0000 on /dev/loop1 with recovery enabled
+Apr  3 17:54:04 mft03 kernel: Lustre: lustre-OST0000: Will be in recovery for at least 1:00, or until 2 clients reconnect
+Apr  3 17:54:04 mft03 kernel: LustreError: 12969:0:(obd_class.h:1622:obd_notify()) obd lustre-OST0000 has no notify handler
+Apr  3 17:54:05 mft03 kernel: Lustre: 1609:0:(import.c:526:import_select_connection()) lustre-OST0000-osc-MDT0000: tried all connections, increasing latency to 21s
+Apr  3 17:54:05 mft03 kernel: Lustre: 1609:0:(import.c:526:import_select_connection()) Skipped 1 previous similar message
+Apr  3 17:54:05 mft03 kernel: Lustre: 2281:0:(filter.c:2710:filter_connect_internal()) lustre-OST0000: Received MDS connection for group 0
+Apr  3 17:54:05 mft03 kernel: Lustre: lustre-OST0000: sending delayed replies to recovered clients
+Apr  3 17:54:05 mft03 kernel: Lustre: lustre-OST0000-osc-MDT0000: Connection restored to service lustre-OST0000 using nid 0@lo.
+Apr  3 17:54:05 mft03 kernel: Lustre: Skipped 1 previous similar message
+Apr  3 17:54:05 mft03 kernel: Lustre: lustre-OST0000: received MDS connection from 0@lo
+Apr  3 17:54:05 mft03 kernel: Lustre: 2283:0:(filter.c:2566:filter_llog_connect()) lustre-OST0000: Recovery from log 0x1f/0x0:e896bf9c
+Apr  3 17:54:05 mft03 kernel: Lustre: MDS mdd_obd-lustre-MDT0000: lustre-OST0000_UUID now active, resetting orphans
+Apr  3 17:54:05 mft03 kernel: Lustre: DEBUG MARKER: == replay-ost-single replay-ost-single.sh test complete, duration 20 sec == 17:54:05 (1333464845)

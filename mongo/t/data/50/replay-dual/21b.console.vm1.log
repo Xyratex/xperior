@@ -1,0 +1,17 @@
+==> /tmp/serial_mft02_out <==
+Lustre: DEBUG MARKER: only running test 21b
+Lustre: DEBUG MARKER: excepting tests: 15c
+LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Lustre: 4117:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 1787d7fe-8e49-51a3-61ef-4c42342a5e44@0@lo t0 exp (null) cur 1333468305 last 0
+Lustre: 4117:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Lustre: Client lustre-client has started
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: 4117:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Lustre: 4117:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+LustreError: 5730:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Lustre: DEBUG MARKER: == replay-dual test 21b: commit on sharing, two clients == 18:51:56 (1333468316)
+Lustre: DEBUG MARKER: SKIP: replay-dual test_21b Need two or more clients, have 1
+Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 11 sec == 18:51:56 (1333468316)
+LustreError: 6250:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+LustreError: 6250:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+Lustre: client ffff880076fb6c00 umount complete

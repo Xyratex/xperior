@@ -1,0 +1,28 @@
+Logging to shared log directory: /tmp/test_logs//1333464581
+only running test 0a
+excepting tests: 
+mft03: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft03 environments
+Using TIMEOUT=20
+disable quota as required
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 5 null connections
+/mnt/lustre/d0.replay-ost-single
+stripe_count:   1 stripe_size:    1048576 stripe_offset:  0 
+
+== replay-ost-single test 0a: target handle mismatch (bug 5317) 17:49:45 == 17:49:45 (1333464585)
+Stopping client mft03 /mnt/lustre (opts:-f)
+fail_loc=0x80000211
+Starting client: mft03: -o user_xattr,acl,flock mft03@tcp:/lustre /mnt/lustre
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Filesystem           1K-blocks      Used Available Use% Mounted on
+mft03@tcp:/lustre       374928     49528    305336  14% /mnt/lustre
+Resetting fail_loc on all nodes...done.
+PASS 0a (10s)
+........== replay-ost-single replay-ost-single.sh test complete, duration 14 sec == 17:49:55 (1333464595)

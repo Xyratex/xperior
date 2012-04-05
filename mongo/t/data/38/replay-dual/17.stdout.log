@@ -1,0 +1,59 @@
+Logging to shared log directory: /tmp/test_logs//1331864521
+only running test 17
+excepting tests: 15c
+Starting client mft01: -o user_xattr,acl,flock mft01@tcp:/lustre /mnt/lustre2
+Started clients mft01: 
+mft01@tcp:/lustre on /mnt/lustre2 type lustre (rw,user_xattr,acl,flock)
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+mft01: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft01 environments
+Using TIMEOUT=20
+disable quota as required
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 8 null connections
+..................
+
+== replay-dual test 17: fail OST during recovery (3571) == 04:22:12 (1331864532)
+total: 25 creates in 0.03 seconds: 810.37 creates/second
+total: 1 creates in 0.05 seconds: 20.02 creates/second
+Filesystem           1K-blocks      Used Available Use% Mounted on
+mft01@tcp:/lustre       374928     49528    305272  14% /mnt/lustre
+Failing ost1 on node mft01
+Stopping /mnt/ost1 (opts:) on mft01
+affected facets: ost1
+Failover ost1 to mft01
+04:22:30 (1331864550) waiting for mft01 network 900 secs ...
+04:22:30 (1331864550) network interface is UP
+Starting ost1: -o loop  /tmp/lustre-ost1 /mnt/ost1
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-OST0000
+Failing ost1 on node mft01
+Stopping /mnt/ost1 (opts:) on mft01
+affected facets: ost1
+Failover ost1 to mft01
+04:23:05 (1331864585) waiting for mft01 network 900 secs ...
+04:23:05 (1331864585) network interface is UP
+Starting ost1: -o loop  /tmp/lustre-ost1 /mnt/ost1
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-OST0000
+ - unlinked 0 (time 1331864685 ; total 0 ; last 0)
+total: 25 unlinks in 0 seconds: inf unlinks/second
+Starting client: mft01: -o user_xattr,acl,flock mft01@tcp:/lustre /mnt/lustre2
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Resetting fail_loc on all nodes...done.
+PASS 17 (157s)
+.....== replay-dual replay-dual.sh test complete, duration 168 sec == 04:24:49 (1331864689)
+Stopping clients: mft01 /mnt/lustre2 (opts:)
+Stopping client mft01 /mnt/lustre2 opts:

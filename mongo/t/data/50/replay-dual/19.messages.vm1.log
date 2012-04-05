@@ -1,0 +1,103 @@
+==> /var/log/messages <==
+Apr  3 18:41:00 mft02 kernel: Lustre: DEBUG MARKER: only running test 19
+Apr  3 18:41:00 mft02 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Apr  3 18:41:01 mft02 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Apr  3 18:41:11 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual test 19: resend of open request == 18:41:11 (1333467671)
+Apr  3 18:41:11 mft02 kernel: LustreError: 12742:0:(osd_handler.c:938:osd_ro()) *** setting device osd-ldiskfs read-only ***
+Apr  3 18:41:11 mft02 kernel: LustreError: 12742:0:(osd_handler.c:938:osd_ro()) Skipped 2 previous similar messages
+Apr  3 18:41:11 mft02 kernel: Turning device loop0 (0x700000) read-only
+Apr  3 18:41:11 mft02 kernel: Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Apr  3 18:41:11 mft02 kernel: Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Apr  3 18:41:11 mft02 kernel: LustreError: 6549:0:(libcfs_fail.h:81:cfs_fail_check_set()) *** cfs_fail_loc=30c ***
+Apr  3 18:41:11 mft02 kernel: LustreError: 6549:0:(ldlm_lib.c:2120:target_send_reply_msg()) @@@ dropping reply  req@ffff880076124800 x1398240341660742/t81604378749(0) o101->267f2418-c530-512b-b7d9-e43d69375cb0@0@lo:0/0 lens 544/600 e 0 to 0 dl 1333467747 ref 1 fl Interpret:/0/0 rc 301/0
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf4d8
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf470
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf408
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf0c8
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf130
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf198
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf200
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf268
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf2d0
+Apr  3 18:41:17 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076aaf470
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a4f4d8
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a4f9b8
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a65950
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a61130
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a652d0
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a4f6e0
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a656e0
+Apr  3 18:41:51 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a65268
+Apr  3 18:42:38 mft02 kernel: Lustre: 12763:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1333467671/real 1333467671]  req@ffff88007a20c000 x1398240341660742/t0(0) o101->lustre-MDT0000-mdc-ffff88007818f400@0@lo:12/10 lens 544/1104 e 0 to 1 dl 1333467758 ref 2 fl Rpc:XP/0/ffffffff rc 0/-1
+Apr  3 18:42:38 mft02 kernel: Lustre: 12763:0:(client.c:1773:ptlrpc_expire_one_request()) Skipped 10 previous similar messages
+Apr  3 18:42:38 mft02 kernel: Lustre: lustre-MDT0000-mdc-ffff88007818f400: Connection to service lustre-MDT0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+Apr  3 18:42:38 mft02 kernel: Lustre: Skipped 4 previous similar messages
+Apr  3 18:42:38 mft02 kernel: Lustre: 6549:0:(ldlm_lib.c:605:target_handle_reconnect()) lustre-MDT0000: 267f2418-c530-512b-b7d9-e43d69375cb0 reconnecting
+Apr  3 18:42:38 mft02 kernel: Lustre: 6549:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 267f2418-c530-512b-b7d9-e43d69375cb0@0@lo t81604378747 exp ffff880075d3a800 cur 1333467758 last 1333467758
+Apr  3 18:42:38 mft02 kernel: Lustre: 6549:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 42 previous similar messages
+Apr  3 18:42:38 mft02 kernel: Lustre: 6549:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-MDT0000->NET_0x9000000000000_UUID netid 90000: select flavor null
+Apr  3 18:42:38 mft02 kernel: Lustre: 6549:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 75 previous similar messages
+Apr  3 18:42:38 mft02 kernel: Lustre: lustre-MDT0000-mdc-ffff88007818f400: Connection restored to service lustre-MDT0000 using nid 0@lo.
+Apr  3 18:42:38 mft02 kernel: Lustre: Skipped 4 previous similar messages
+Apr  3 18:42:38 mft02 kernel: Lustre: Failing over lustre-MDT0000
+Apr  3 18:42:38 mft02 kernel: Lustre: Skipped 21 previous similar messages
+Apr  3 18:42:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a99c28
+Apr  3 18:42:39 mft02 kernel: Lustre: mdd_obd-lustre-MDT0000: shutting down for failover; client state will be preserved.
+Apr  3 18:42:39 mft02 kernel: Lustre: Skipped 2 previous similar messages
+Apr  3 18:42:39 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a99c90
+Apr  3 18:42:39 mft02 kernel: Lustre: MGS has stopped.
+Apr  3 18:42:39 mft02 kernel: Lustre: Skipped 2 previous similar messages
+Apr  3 18:42:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a615a8
+Apr  3 18:42:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a4faf0
+Apr  3 18:42:42 mft02 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076a615a8
+Apr  3 18:42:42 mft02 kernel: Removing read-only on unknown block (0x700000)
+Apr  3 18:42:42 mft02 kernel: Lustre: server umount lustre-MDT0000 complete
+Apr  3 18:42:42 mft02 kernel: Lustre: Skipped 4 previous similar messages
+Apr  3 18:42:52 mft02 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Apr  3 18:42:52 mft02 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Apr  3 18:42:52 mft02 kernel: LDISKFS-fs (loop0): recovery complete
+Apr  3 18:42:52 mft02 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Apr  3 18:42:52 mft02 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Apr  3 18:42:52 mft02 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Apr  3 18:42:52 mft02 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Apr  3 18:42:52 mft02 kernel: Lustre: MGS MGS started
+Apr  3 18:42:52 mft02 kernel: Lustre: Skipped 3 previous similar messages
+Apr  3 18:42:52 mft02 kernel: LustreError: 166-1: MGC10.3.0.188@tcp: Connection to service MGS via nid 0@lo was lost; in progress operations using this service will fail.
+Apr  3 18:42:52 mft02 kernel: LustreError: Skipped 2 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: MGC10.3.0.188@tcp: Reactivating import
+Apr  3 18:42:52 mft02 kernel: Lustre: Skipped 7 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: Enabling ACL
+Apr  3 18:42:52 mft02 kernel: Lustre: Skipped 3 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: Enabling user_xattr
+Apr  3 18:42:52 mft02 kernel: Lustre: Skipped 3 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: lustre-MDT0000: used disk, loading
+Apr  3 18:42:52 mft02 kernel: Lustre: Skipped 2 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: 13131:0:(ldlm_lib.c:1900:target_recovery_init()) RECOVERY: service lustre-MDT0000, 2 recoverable clients, last_transno 81604378746
+Apr  3 18:42:52 mft02 kernel: Lustre: 13131:0:(ldlm_lib.c:1900:target_recovery_init()) Skipped 4 previous similar messages
+Apr  3 18:42:52 mft02 kernel: LustreError: 13135:0:(ldlm_lib.c:1737:target_recovery_thread()) lustre-MDT0000: started recovery thread pid 13135
+Apr  3 18:42:52 mft02 kernel: LustreError: 13135:0:(ldlm_lib.c:1737:target_recovery_thread()) Skipped 4 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: 13131:0:(mdt_lproc.c:259:lprocfs_wr_identity_upcall()) lustre-MDT0000: identity upcall set to /usr/sbin/l_getidentity
+Apr  3 18:42:52 mft02 kernel: Lustre: 13131:0:(mdt_lproc.c:259:lprocfs_wr_identity_upcall()) Skipped 3 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: 13131:0:(mds_lov.c:1004:mds_notify()) MDS mdd_obd-lustre-MDT0000: add target lustre-OST0000_UUID
+Apr  3 18:42:52 mft02 kernel: Lustre: 13131:0:(mds_lov.c:1004:mds_notify()) Skipped 7 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: 2306:0:(ldlm_lib.c:802:target_handle_connect()) lustre-OST0000: received new MDS connection from NID 0@lo, removing former export from same NID
+Apr  3 18:42:52 mft02 kernel: Lustre: 2306:0:(ldlm_lib.c:802:target_handle_connect()) Skipped 7 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: 2306:0:(filter.c:2710:filter_connect_internal()) lustre-OST0000: Received MDS connection for group 0
+Apr  3 18:42:52 mft02 kernel: Lustre: 2306:0:(filter.c:2710:filter_connect_internal()) Skipped 9 previous similar messages
+Apr  3 18:42:52 mft02 kernel: Lustre: 13167:0:(debug.c:326:libcfs_debug_str2mask()) You are trying to use a numerical value for the mask - this will be deprecated in a future release.
+Apr  3 18:42:52 mft02 kernel: Lustre: 13167:0:(debug.c:326:libcfs_debug_str2mask()) Skipped 35 previous similar messages
+Apr  3 18:42:53 mft02 kernel: LustreError: 13137:0:(mdt_handler.c:2785:mdt_recovery()) operation 41 on unconnected MDS from 12345-0@lo
+Apr  3 18:42:53 mft02 kernel: LustreError: 13137:0:(mdt_handler.c:2785:mdt_recovery()) Skipped 1 previous similar message
+Apr  3 18:42:53 mft02 kernel: Lustre: 13136:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Next recovery transno: 81604378747, current: 81604378747, replaying
+Apr  3 18:42:53 mft02 kernel: Lustre: 13136:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Skipped 127 previous similar messages
+Apr  3 18:42:57 mft02 kernel: LustreError: 13135:0:(mds_lov.c:349:mds_lov_update_objids()) Unexpected gap in objids
+Apr  3 18:42:57 mft02 kernel: LustreError: 13135:0:(mds_lov.c:349:mds_lov_update_objids()) Skipped 1 previous similar message
+Apr  3 18:42:57 mft02 kernel: Lustre: lustre-MDT0000: sending delayed replies to recovered clients
+Apr  3 18:42:57 mft02 kernel: Lustre: Skipped 5 previous similar messages
+Apr  3 18:42:57 mft02 kernel: Lustre: 2306:0:(lustre_log.h:471:llog_group_set_export()) lustre-OST0001: export for group 0 is changed: 0xffff88007a023c00 -> 0xffff880079cd7000
+Apr  3 18:42:57 mft02 kernel: Lustre: 2306:0:(lustre_log.h:471:llog_group_set_export()) Skipped 19 previous similar messages
+Apr  3 18:42:57 mft02 kernel: Lustre: 2306:0:(llog_net.c:168:llog_receptor_accept()) changing the import ffff880078ae8000 - ffff880079136800
+Apr  3 18:42:57 mft02 kernel: Lustre: 2306:0:(llog_net.c:168:llog_receptor_accept()) Skipped 19 previous similar messages
+Apr  3 18:42:57 mft02 kernel: Lustre: 2307:0:(filter.c:2566:filter_llog_connect()) lustre-OST0000: Recovery from log 0x1f/0x0:f004dbbe
+Apr  3 18:42:57 mft02 kernel: Lustre: 2307:0:(filter.c:2566:filter_llog_connect()) Skipped 8 previous similar messages
+Apr  3 18:42:57 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 117 sec == 18:42:57 (1333467777)

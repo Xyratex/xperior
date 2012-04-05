@@ -1,0 +1,35 @@
+Logging to shared log directory: /tmp/test_logs//1333464788
+only running test 3
+excepting tests: 
+mft03: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft03 environments
+Using TIMEOUT=20
+disable quota as required
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 5 null connections
+/mnt/lustre/d0.replay-ost-single
+stripe_count:   1 stripe_size:    1048576 stripe_offset:  0 
+....
+
+== replay-ost-single test 3: Fail OST during write, with verification == 17:53:10 (1333464790)
+Failing ost1 on node mft03
+1280+0 records in
+1280+0 records out
+5242880 bytes (5.2 MB) copied, 0.972648 s, 5.4 MB/s
+Stopping /mnt/ost1 (opts:) on mft03
+affected facets: ost1
+Failover ost1 to mft03
+17:53:27 (1333464807) waiting for mft03 network 900 secs ...
+17:53:27 (1333464807) network interface is UP
+Starting ost1: -o loop  /tmp/lustre-ost1 /mnt/ost1
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-OST0000
+Resetting fail_loc on all nodes...done.
+PASS 3 (20s)
+....== replay-ost-single replay-ost-single.sh test complete, duration 22 sec == 17:53:30 (1333464810)

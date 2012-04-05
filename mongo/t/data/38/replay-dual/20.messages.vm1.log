@@ -1,0 +1,133 @@
+==> /var/log/messages <==
+Mar 16 04:27:02 mft01 kernel: Lustre: DEBUG MARKER: only running test 20
+Mar 16 04:27:02 mft01 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Mar 16 04:27:02 mft01 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Mar 16 04:27:13 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual test 20: recovery time is not increasing == 04:27:13 (1331864833)
+Mar 16 04:27:13 mft01 kernel: Turning device loop0 (0x700000) read-only
+Mar 16 04:27:13 mft01 kernel: Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:27:13 mft01 kernel: Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5198
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5200
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5268
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c52d0
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5338
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c53a0
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5408
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5470
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c54d8
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5540
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5200
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b880
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5610
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5678
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c56e0
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5748
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c57b0
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5818
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e0c8
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e130
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e198
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e200
+Mar 16 04:27:13 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762c5678
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627b950
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b6e0
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4ba20
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627bbc0
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076242408
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b678
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b8e8
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b950
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076242470
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e3a0
+Mar 16 04:27:14 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 33] [block 18667] [count 3] [is_meta 1]
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e408
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e540
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e5a8
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e610
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e678
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e6e0
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e748
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e7b0
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e818
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e880
+Mar 16 04:27:14 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e540
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627b8e8
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627b950
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761bf130
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4ba20
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761bf198
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627bb58
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076242408
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4bb58
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4bbc0
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627b8e8
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627be30
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627be30
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627be30
+Mar 16 04:27:17 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007627b8e8
+Mar 16 04:27:17 mft01 kernel: Removing read-only on unknown block (0x700000)
+Mar 16 04:27:27 mft01 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Mar 16 04:27:27 mft01 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Mar 16 04:27:27 mft01 kernel: LDISKFS-fs (loop0): recovery complete
+Mar 16 04:27:27 mft01 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Mar 16 04:27:27 mft01 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Mar 16 04:27:27 mft01 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Mar 16 04:27:27 mft01 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Mar 16 04:27:29 mft01 kernel: LustreError: 15146:0:(ldlm_lib.c:2125:target_send_reply_msg()) @@@ processing error (-107)  req@ffff88007bbe5800 x1396559449167357/t0(0) o41-><?>@<?>:0/0 lens 192/0 e 0 to 0 dl 1331864880 ref 1 fl Interpret:/0/ffffffff rc -107/-1
+Mar 16 04:27:29 mft01 kernel: LustreError: 15146:0:(ldlm_lib.c:2125:target_send_reply_msg()) Skipped 10 previous similar messages
+Mar 16 04:27:29 mft01 kernel: LustreError: 11-0: an error occurred while communicating with 0@lo. The mds_statfs operation failed with -107
+Mar 16 04:27:29 mft01 kernel: LustreError: Skipped 11 previous similar messages
+Mar 16 04:28:59 mft01 kernel: Lustre: 15144:0:(ldlm_lib.c:1566:target_recovery_overseer()) recovery is timed out, evict stale exports
+Mar 16 04:28:59 mft01 kernel: LustreError: 15144:0:(genops.c:1270:class_disconnect_stale_exports()) lustre-MDT0000: disconnect stale client 9ce69cb4-a8d1-fb81-6f4f-c823d6595e8b@<unknown>
+Mar 16 04:28:59 mft01 kernel: LustreError: 15144:0:(mds_lov.c:349:mds_lov_update_objids()) Unexpected gap in objids
+Mar 16 04:28:59 mft01 kernel: LustreError: 15144:0:(mds_lov.c:349:mds_lov_update_objids()) Skipped 1 previous similar message
+Mar 16 04:29:00 mft01 kernel: Turning device loop0 (0x700000) read-only
+Mar 16 04:29:00 mft01 kernel: Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:29:00 mft01 kernel: Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a1200
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a1198
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a1130
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a10c8
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2f68
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2f00
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2e98
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2e30
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2dc8
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2d60
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a1198
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4ba20
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2c90
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2c28
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2bc0
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2b58
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2af0
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2a88
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2a20
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a29b8
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2950
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a28e8
+Mar 16 04:29:00 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2c28
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076242408
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4bcf8
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c0748
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b408
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4bb58
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4bc90
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b2d0
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b6e0
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4bbc0
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a26e0
+Mar 16 04:29:01 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 27] [block 19179] [count 3] [is_meta 1]
+Mar 16 04:29:01 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 33] [block 18667] [count 3] [is_meta 1]
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2678
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a25a8
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2540
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a24d8
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2470
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2408
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a23a0
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2338
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a22d0
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2268
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a2200
+Mar 16 04:29:01 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a25a8

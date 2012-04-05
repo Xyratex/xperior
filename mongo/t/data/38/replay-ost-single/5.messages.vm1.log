@@ -1,0 +1,10 @@
+==> /var/log/messages <==
+Mar 16 06:43:30 mft01 kernel: Lustre: DEBUG MARKER: only running test 5
+Mar 16 06:43:30 mft01 kernel: Lustre: DEBUG MARKER: excepting tests:
+Mar 16 06:43:30 mft01 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Mar 16 06:43:30 mft01 kernel: Lustre: 2233:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Mar 16 06:43:30 mft01 kernel: Lustre: 2233:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+Mar 16 06:43:30 mft01 kernel: LustreError: 14347:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Mar 16 06:43:31 mft01 kernel: Lustre: DEBUG MARKER: == replay-ost-single test 5: Fail OST during iozone == 06:43:31 (1331873011)
+Mar 16 06:43:31 mft01 kernel: Lustre: DEBUG MARKER: SKIP: replay-ost-single test_5 iozone missing
+Mar 16 06:43:31 mft01 kernel: Lustre: DEBUG MARKER: == replay-ost-single replay-ost-single.sh test complete, duration 1 sec == 06:43:31 (1331873011)

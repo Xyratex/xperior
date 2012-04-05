@@ -1,0 +1,17 @@
+==> /var/log/messages <==
+Apr  3 18:51:45 mft02 kernel: Lustre: DEBUG MARKER: only running test 21b
+Apr  3 18:51:45 mft02 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Apr  3 18:51:45 mft02 kernel: LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Apr  3 18:51:45 mft02 kernel: Lustre: 4117:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 1787d7fe-8e49-51a3-61ef-4c42342a5e44@0@lo t0 exp (null) cur 1333468305 last 0
+Apr  3 18:51:45 mft02 kernel: Lustre: 4117:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Apr  3 18:51:45 mft02 kernel: Lustre: Client lustre-client has started
+Apr  3 18:51:46 mft02 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Apr  3 18:51:46 mft02 kernel: Lustre: 4117:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Apr  3 18:51:46 mft02 kernel: Lustre: 4117:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+Apr  3 18:51:46 mft02 kernel: LustreError: 5730:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Apr  3 18:51:56 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual test 21b: commit on sharing, two clients == 18:51:56 (1333468316)
+Apr  3 18:51:56 mft02 kernel: Lustre: DEBUG MARKER: SKIP: replay-dual test_21b Need two or more clients, have 1
+Apr  3 18:51:56 mft02 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 11 sec == 18:51:56 (1333468316)
+Apr  3 18:51:56 mft02 kernel: LustreError: 6250:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+Apr  3 18:51:56 mft02 kernel: LustreError: 6250:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+Apr  3 18:51:56 mft02 kernel: Lustre: client ffff880076fb6c00 umount complete

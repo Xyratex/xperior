@@ -1,0 +1,42 @@
+Logging to shared log directory: /tmp/test_logs//1333466446
+only running test 8
+excepting tests: 15c
+Starting client mft02: -o user_xattr,acl,flock mft02@tcp:/lustre /mnt/lustre2
+Started clients mft02: 
+mft02@tcp:/lustre on /mnt/lustre2 type lustre (rw,user_xattr,acl,flock)
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+mft02: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft02 environments
+Using TIMEOUT=20
+disable quota as required
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 8 null connections
+........
+
+== replay-dual test 8: replay of resent request == 18:20:57 (1333466457)
+Filesystem           1K-blocks      Used Available Use% Mounted on
+mft02@tcp:/lustre       374928     49528    305272  14% /mnt/lustre
+fail_loc=0x119
+fail_loc=0
+Failing mds1 on node mft02
+Stopping /mnt/mds1 (opts:) on mft02
+affected facets: mds1
+Failover mds1 to mft02
+18:21:37 (1333466497) waiting for mft02 network 900 secs ...
+18:21:37 (1333466497) network interface is UP
+Starting mds1: -o loop,user_xattr,acl  /tmp/lustre-mdt1 /mnt/mds1
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-MDT0000
+Resetting fail_loc on all nodes...done.
+PASS 8 (46s)
+...............== replay-dual replay-dual.sh test complete, duration 57 sec == 18:21:43 (1333466503)
+Stopping clients: mft02 /mnt/lustre2 (opts:)
+Stopping client mft02 /mnt/lustre2 opts:

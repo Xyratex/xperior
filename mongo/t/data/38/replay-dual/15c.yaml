@@ -1,0 +1,30 @@
+--- 
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Lustre replay-dual  tests
+executor: XTest::Executor::LustreTests
+expected_time: 10
+extoptions: 
+  arch: x86_64
+  branch: 9777a6
+  buildurl: http://10.76.49.90:8080/jenkins/job/Luste_testing_1pc_sl61/./SUITES=replay-dual,label=kvmit/38/
+  configuration: 1VM
+  distr: SL61
+  executiontype: IT
+  ofed: builtin
+  release: '2.1'
+  sessionstarttime: '1331870103'
+  type: full
+fail_reason: " #Excluded by exclude list"
+groupname: replay-dual
+id: 15c
+messages: ''
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+result: "ok 1# SKIP  #Excluded by exclude list"
+result_code: 2
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: Xperior1
+status: skipped
+status_code: 2
+tags: functional
+timeout: 300

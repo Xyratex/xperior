@@ -1,0 +1,45 @@
+--- 
+cleanup_max_time: -1
+cmd: SLOW=YES  MDSCOUNT=1 MDSDEV1=/tmp/lustre-mdt1 mds1_HOST=mft01  mds_HOST=mft01  OSTCOUNT=2  OSTDEV1=/tmp/lustre-ost1  ost1_HOST=mft01   OSTDEV2=/tmp/lustre-ost2  ost2_HOST=mft01  CLIENTS=mft01 RCLIENTS=\"\"  ONLY=0b DIR=/mnt/lustre  PDSH=\"/usr/bin/pdsh -R ssh -S -w \" /usr/lib64/lustre/tests/replay-ost-single.sh 2>     /tmp/test_stderr.232864.log 1>  /tmp/test_stdout.232864.log
+completed: 'yes'
+description: Lustre replay-ost-single tests
+endtime: '1331880059'
+endtime_planned: '1331880282'
+executor: XTest::Executor::LustreTests
+exitcode: 0
+expected_time: 10
+extoptions: 
+  arch: x86_64
+  branch: 9777a6
+  buildurl: http://10.76.49.90:8080/jenkins/job/Luste_testing_1pc_sl61/./SUITES=replay-ost-single,label=kvmit/38/
+  configuration: 1VM
+  distr: SL61
+  executiontype: IT
+  ofed: builtin
+  release: '2.1'
+  sessionstarttime: '1331879938'
+  type: full
+groupname: replay-ost-single
+id: 0b
+killed: 'no'
+log: 
+  console.vm1: 0b.console.vm1.log
+  messages.vm1: 0b.messages.vm1.log
+  stderr: 0b.stderr.log
+  stdout: 0b.stdout.log
+masterclient: 
+  id: client1
+  master: 'yes'
+  node: vm1
+  type: client
+messages: ''
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+result: "ok 1 "
+result_code: 0
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: Xperior1
+starttime: '1331879982'
+status: passed
+status_code: 0
+tags: functional
+timeout: 300

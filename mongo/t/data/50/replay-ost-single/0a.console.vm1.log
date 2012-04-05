@@ -1,0 +1,28 @@
+==> /tmp/serial_mft03_out <==
+Lustre: DEBUG MARKER: only running test 0a
+Lustre: DEBUG MARKER: excepting tests:
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: 2196:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+LustreError: 3629:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Lustre: 3683:0:(debug.c:326:libcfs_debug_str2mask()) You are trying to use a numerical value for the mask - this will be deprecated in a future release.
+Lustre: 3683:0:(debug.c:326:libcfs_debug_str2mask()) Skipped 1 previous similar message
+Lustre: DEBUG MARKER: == replay-ost-single test 0a: target handle mismatch (bug 5317) 17:49:45 == 17:49:45 (1333464585)
+Lustre: setting import lustre-MDT0000_UUID INACTIVE by administrator request
+Lustre: client ffff88007c78e000 umount complete
+LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Lustre: 3925:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-MDT0000-mdc-ffff880037540800->10.3.0.194@tcp netid 90000: select flavor null
+Lustre: 3925:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 4 previous similar messages
+Lustre: 2196:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 6feb199b-758a-d2fa-2399-c706241609fc@0@lo t0 exp (null) cur 1333464585 last 0
+Lustre: 2196:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+LustreError: 2282:0:(libcfs_fail.h:81:cfs_fail_check_set()) *** cfs_fail_loc=211 ***
+LustreError: 2282:0:(ldlm_lib.c:2120:target_send_reply_msg()) @@@ dropping reply  req@ffff880078f36050 x1398238915592305/t0(0) o8->6feb199b-758a-d2fa-2399-c706241609fc@0@lo:0/0 lens 368/264 e 0 to 0 dl 1333464605 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: Client lustre-client has started
+Lustre: 1608:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1333464585/real 1333464585]  req@ffff88007741a000 x1398238915592305/t0(0) o8->lustre-OST0000-osc-ffff880037540800@0@lo:28/4 lens 368/512 e 0 to 1 dl 1333464590 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+Lustre: 1609:0:(import.c:526:import_select_connection()) lustre-OST0000-osc-ffff880037540800: tried all connections, increasing latency to 5s
+Lustre: 2282:0:(ldlm_lib.c:605:target_handle_reconnect()) lustre-OST0000: 6feb199b-758a-d2fa-2399-c706241609fc reconnecting
+Lustre: 2282:0:(ldlm_lib.c:873:target_handle_connect()) lustre-OST0000: connection from 6feb199b-758a-d2fa-2399-c706241609fc@0@lo t0 exp ffff88007c78e800 cur 1333464595 last 1333464585
+Lustre: 2282:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Lustre: 2282:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-OST0000->NET_0x9000000000000_UUID netid 90000: select flavor null
+Lustre: 2282:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 5 previous similar messages
+Lustre: DEBUG MARKER: == replay-ost-single replay-ost-single.sh test complete, duration 14 sec == 17:49:55 (1333464595)
+LustreError: 138-a: lustre-MDT0000: A client on nid 0@lo was evicted due to a lock blocking callback time out: rc -107

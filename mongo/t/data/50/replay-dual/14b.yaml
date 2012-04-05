@@ -1,0 +1,46 @@
+--- 
+cleanup_max_time: -1
+cmd: SLOW=YES  MDSCOUNT=1 MDSDEV1=/tmp/lustre-mdt1 mds1_HOST=mft02  mds_HOST=mft02  OSTCOUNT=2  OSTDEV1=/tmp/lustre-ost1  ost1_HOST=mft02   OSTDEV2=/tmp/lustre-ost2  ost2_HOST=mft02  CLIENTS=mft02 RCLIENTS=\"\"  ONLY=14b DIR=/mnt/lustre  PDSH=\"/usr/bin/pdsh -R ssh -S -w \" /usr/lib64/lustre/tests/replay-dual.sh 2>     /tmp/test_stderr.159174.log 1>  /tmp/test_stdout.159174.log
+completed: 'yes'
+dangerous: 'yes'
+description: Lustre replay-dual  tests
+endtime: '1333477903'
+endtime_planned: '1333478075'
+executor: XTest::Executor::LustreTests
+exitcode: 0
+expected_time: 10
+extoptions: 
+  arch: x86_64
+  branch: b4d01a3cd5
+  buildurl: http://10.76.49.90:8080/jenkins/job/Luste_testing_1pc_sl61/./SUITES=replay-dual,label=kvmit/50/
+  configuration: 1VM
+  distr: SL61
+  executiontype: IT
+  ofed: builtin
+  release: '2.1'
+  sessionstarttime: '1333476729'
+  type: full
+groupname: replay-dual
+id: 14b
+killed: 'no'
+log: 
+  console.vm1: 14b.console.vm1.log
+  messages.vm1: 14b.messages.vm1.log
+  stderr: 14b.stderr.log
+  stdout: 14b.stdout.log
+masterclient: 
+  id: client1
+  master: 'yes'
+  node: vm1
+  type: client
+messages: ''
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+result: "ok 1 "
+result_code: 0
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: Xperior1
+starttime: '1333477775'
+status: passed
+status_code: 0
+tags: functional
+timeout: 300

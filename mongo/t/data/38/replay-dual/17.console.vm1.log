@@ -1,0 +1,83 @@
+==> /tmp/serial_mft01_out <==
+Lustre: DEBUG MARKER: only running test 17
+Lustre: DEBUG MARKER: excepting tests: 15c
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == replay-dual test 17: fail OST during recovery (3571) == 04:22:12 (1331864532)
+LustreError: 8838:0:(filter.c:4624:filter_iocontrol()) *** setting device unknown-block(7,1) read-only ***
+Turning device loop1 (0x700001) read-only
+Lustre: DEBUG MARKER: ost1 REPLAY BARRIER on lustre-OST0000
+Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-OST0000
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5f00
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5e98
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5e30
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5e98
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078dd6748
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078c7ba20
+Lustre: Failing over lustre-OST0000
+Lustre: Skipped 24 previous similar messages
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b58e8
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5880
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5818
+Lustre: lustre-OST0000: shutting down for failover; client state will be preserved.
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b57b0
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5748
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b56e0
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762b5748
+Lustre: OST lustre-OST0000 has stopped.
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078dd6748
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078cb3268
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d11950
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d118e8
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d118e8
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d118e8
+Write to readonly device loop1 (0x700001) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d11950
+Removing read-only on unknown block (0x700001)
+Lustre: lustre-OST0000-osc-ffff88007710b400: Connection to service lustre-OST0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+Lustre: Skipped 3 previous similar messages
+LustreError: 137-5: UUID 'lustre-OST0000_UUID' is not available  for connect (no target)
+Lustre: 1630:0:(import.c:526:import_select_connection()) lustre-OST0000-osc-ffff88007710b400: tried all connections, increasing latency to 6s
+LustreError: 137-5: UUID 'lustre-OST0000_UUID' is not available  for connect (no target)
+LustreError: Skipped 1 previous similar message
+LDISKFS-fs (loop1): recovery complete
+LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+Lustre: 9011:0:(filter.c:1252:filter_prep_groups()) lustre-OST0000: initialize groups [0,0]
+Lustre: lustre-OST0000: Now serving lustre-OST0000 on /dev/loop1 with recovery enabled
+Lustre: lustre-OST0000: Will be in recovery for at least 1:00, or until 3 clients reconnect
+LustreError: 9003:0:(obd_class.h:1622:obd_notify()) obd lustre-OST0000 has no notify handler
+Lustre: 1630:0:(import.c:526:import_select_connection()) lustre-OST0000-osc-ffff88007710b400: tried all connections, increasing latency to 11s
+Lustre: 1630:0:(import.c:526:import_select_connection()) Skipped 1 previous similar message
+Lustre: 2301:0:(filter.c:2710:filter_connect_internal()) lustre-OST0000: Received MDS connection for group 0
+Lustre: 2301:0:(filter.c:2710:filter_connect_internal()) Skipped 9 previous similar messages
+LustreError: 9124:0:(ldlm_lib.c:1859:target_stop_recovery_thread()) lustre-OST0000: Aborting recovery
+Lustre: 9012:0:(ldlm_lib.c:1558:target_recovery_overseer()) recovery is aborted, evict exports in recovery
+Lustre: 9012:0:(ldlm_lib.c:1558:target_recovery_overseer()) Skipped 1 previous similar message
+Lustre: lustre-OST0000: shutting down for failover; client state will be preserved.
+Lustre: OST lustre-OST0000 has stopped.
+LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+Lustre: 9231:0:(filter.c:1252:filter_prep_groups()) lustre-OST0000: initialize groups [0,0]
+Lustre: lustre-OST0000: Now serving lustre-OST0000 on /dev/loop1 with recovery enabled
+Lustre: lustre-OST0000: Will be in recovery for at least 1:00, or until 3 clients reconnect
+LustreError: 9222:0:(obd_class.h:1622:obd_notify()) obd lustre-OST0000 has no notify handler
+Lustre: 1629:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1331864552/real 1331864552]  req@ffff88007936b800 x1396559449166672/t0(0) o400->lustre-OST0000-osc-ffff88007710b400@0@lo:28/4 lens 192/192 e 2 to 1 dl 1331864600 ref 1 fl Rpc:X/c0/ffffffff rc 0/-1
+Lustre: 1629:0:(client.c:1773:ptlrpc_expire_one_request()) Skipped 12 previous similar messages
+Lustre: 9232:0:(ldlm_lib.c:1566:target_recovery_overseer()) recovery is timed out, evict stale exports
+LustreError: 9232:0:(genops.c:1270:class_disconnect_stale_exports()) lustre-OST0000: disconnect stale client b87f9093-10ae-9a29-9b1b-4e0608534355@<unknown>
+Lustre: lustre-OST0000-osc-ffff88007710b400: Connection restored to service lustre-OST0000 using nid 0@lo.
+Lustre: Skipped 2 previous similar messages
+Lustre: lustre-OST0000: sending delayed replies to recovered clients
+Lustre: Skipped 4 previous similar messages
+Lustre: lustre-OST0000: received MDS connection from 0@lo
+Lustre: Skipped 9 previous similar messages
+Lustre: 2301:0:(filter.c:2566:filter_llog_connect()) lustre-OST0000: Recovery from log 0x1f/0x0:be68561c
+Lustre: 2301:0:(filter.c:2566:filter_llog_connect()) Skipped 7 previous similar messages
+Lustre: MDS mdd_obd-lustre-MDT0000: lustre-OST0000_UUID now active, resetting orphans
+Lustre: Skipped 9 previous similar messages
+Lustre: 6795:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 0c0b5934-ef4c-eb36-0de6-24ddd54bfa54@0@lo t0 exp (null) cur 1331864685 last 0
+Lustre: 6795:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 37 previous similar messages
+Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 168 sec == 04:24:49 (1331864689)
+LustreError: 9744:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+LustreError: 9744:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Skipped 7 previous similar messages
+LustreError: 9744:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+LustreError: 9744:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) Skipped 7 previous similar messages

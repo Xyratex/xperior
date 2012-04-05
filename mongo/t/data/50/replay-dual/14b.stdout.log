@@ -1,0 +1,57 @@
+Logging to shared log directory: /tmp/test_logs//1333466966
+only running test 14b
+excepting tests: 15c
+Starting client mft02: -o user_xattr,acl,flock mft02@tcp:/lustre /mnt/lustre2
+Started clients mft02: 
+mft02@tcp:/lustre on /mnt/lustre2 type lustre (rw,user_xattr,acl,flock)
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+mft02: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft02 environments
+Using TIMEOUT=20
+disable quota as required
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 8 null connections
+..............
+
+== replay-dual test 14b: delete ost orphans if gap occured in objids due to VBR == 18:29:37 (1333466977)
+Waiting for orphan cleanup...
+Waiting for destroy to be done...
+Filesystem           1K-blocks      Used Available Use% Mounted on
+mft02@tcp:/lustre       374928     49528    305272  14% /mnt/lustre
+total: 5 creates in 0.01 seconds: 778.19 creates/second
+total: 5 creates in 0.01 seconds: 898.64 creates/second
+Failing mds1 on node mft02
+Stopping /mnt/mds1 (opts:) on mft02
+affected facets: mds1
+Failover mds1 to mft02
+18:29:54 (1333466994) waiting for mft02 network 900 secs ...
+18:29:54 (1333466994) network interface is UP
+Starting mds1: -o loop,user_xattr,acl  /tmp/lustre-mdt1 /mnt/mds1
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-MDT0000
+affected facets: mds1
+mft02: *.lustre-MDT0000.recovery_status status: COMPLETE
+ - unlinked 0 (time 1333467097 ; total 0 ; last 0)
+total: 5 unlinks in 0 seconds: inf unlinks/second
+ - unlinked 0 (time 1333467097 ; total 0 ; last 0)
+total: 5 unlinks in 0 seconds: inf unlinks/second
+Starting client: mft02: -o user_xattr,acl,flock mft02@tcp:/lustre /mnt/lustre2
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Waiting for orphan cleanup...
+Waiting for destroy to be done...
+before 49528, after 49528
+Resetting fail_loc on all nodes...done.
+PASS 14b (123s)
+.........== replay-dual replay-dual.sh test complete, duration 134 sec == 18:31:40 (1333467100)
+Stopping clients: mft02 /mnt/lustre2 (opts:)
+Stopping client mft02 /mnt/lustre2 opts:

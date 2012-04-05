@@ -1,0 +1,30 @@
+==> /var/log/messages <==
+Mar 16 06:39:07 mft01 kernel: Lustre: DEBUG MARKER: only running test 0a
+Mar 16 06:39:07 mft01 kernel: Lustre: DEBUG MARKER: excepting tests:
+Mar 16 06:39:07 mft01 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Mar 16 06:39:07 mft01 kernel: Lustre: 2233:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Mar 16 06:39:07 mft01 kernel: Lustre: 2233:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+Mar 16 06:39:07 mft01 kernel: LustreError: 3666:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Mar 16 06:39:07 mft01 kernel: Lustre: 3720:0:(debug.c:326:libcfs_debug_str2mask()) You are trying to use a numerical value for the mask - this will be deprecated in a future release.
+Mar 16 06:39:07 mft01 kernel: Lustre: 3720:0:(debug.c:326:libcfs_debug_str2mask()) Skipped 1 previous similar message
+Mar 16 06:39:08 mft01 kernel: Lustre: DEBUG MARKER: == replay-ost-single test 0a: target handle mismatch (bug 5317) 06:39:08 == 06:39:08 (1331872748)
+Mar 16 06:39:08 mft01 kernel: Lustre: setting import lustre-MDT0000_UUID INACTIVE by administrator request
+Mar 16 06:39:08 mft01 kernel: Lustre: setting import lustre-OST0000_UUID INACTIVE by administrator request
+Mar 16 06:39:08 mft01 kernel: Lustre: client ffff880037526400 umount complete
+Mar 16 06:39:08 mft01 kernel: LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Mar 16 06:39:08 mft01 kernel: Lustre: 3962:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-MDT0000-mdc-ffff880074c42800->10.3.0.187@tcp netid 90000: select flavor null
+Mar 16 06:39:08 mft01 kernel: Lustre: 3962:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 4 previous similar messages
+Mar 16 06:39:08 mft01 kernel: Lustre: 2233:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from ec5f6682-a2d7-2e1c-8a2d-9adc10712b62@0@lo t0 exp (null) cur 1331872748 last 0
+Mar 16 06:39:08 mft01 kernel: Lustre: 2233:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Mar 16 06:39:08 mft01 kernel: LustreError: 2317:0:(libcfs_fail.h:81:cfs_fail_check_set()) *** cfs_fail_loc=211 ***
+Mar 16 06:39:08 mft01 kernel: LustreError: 2317:0:(ldlm_lib.c:2120:target_send_reply_msg()) @@@ dropping reply  req@ffff8800783bd400 x1396569758761070/t0(0) o8->ec5f6682-a2d7-2e1c-8a2d-9adc10712b62@0@lo:0/0 lens 368/264 e 0 to 0 dl 1331872768 ref 1 fl Interpret:/0/0 rc 0/0
+Mar 16 06:39:08 mft01 kernel: Lustre: Client lustre-client has started
+Mar 16 06:39:13 mft01 kernel: Lustre: 1627:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1331872748/real 1331872748]  req@ffff88007897b400 x1396569758761070/t0(0) o8->lustre-OST0000-osc-ffff880074c42800@0@lo:28/4 lens 368/512 e 0 to 1 dl 1331872753 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+Mar 16 06:39:18 mft01 kernel: Lustre: 1628:0:(import.c:526:import_select_connection()) lustre-OST0000-osc-ffff880074c42800: tried all connections, increasing latency to 5s
+Mar 16 06:39:18 mft01 kernel: Lustre: 2317:0:(ldlm_lib.c:605:target_handle_reconnect()) lustre-OST0000: ec5f6682-a2d7-2e1c-8a2d-9adc10712b62 reconnecting
+Mar 16 06:39:18 mft01 kernel: Lustre: 2317:0:(ldlm_lib.c:873:target_handle_connect()) lustre-OST0000: connection from ec5f6682-a2d7-2e1c-8a2d-9adc10712b62@0@lo t0 exp ffff880078917800 cur 1331872758 last 1331872748
+Mar 16 06:39:18 mft01 kernel: Lustre: 2317:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Mar 16 06:39:18 mft01 kernel: Lustre: 2317:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-OST0000->NET_0x9000000000000_UUID netid 90000: select flavor null
+Mar 16 06:39:18 mft01 kernel: Lustre: 2317:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 5 previous similar messages
+Mar 16 06:39:19 mft01 kernel: Lustre: DEBUG MARKER: == replay-ost-single replay-ost-single.sh test complete, duration 12 sec == 06:39:19 (1331872759)
+Mar 16 06:39:19 mft01 kernel: LustreError: 138-a: lustre-MDT0000: A client on nid 0@lo was evicted due to a lock blocking callback time out: rc -107

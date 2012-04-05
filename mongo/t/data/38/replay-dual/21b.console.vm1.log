@@ -1,0 +1,15 @@
+==> /tmp/serial_mft01_out <==
+Lustre: DEBUG MARKER: only running test 21b
+Lustre: DEBUG MARKER: excepting tests: 15c
+Lustre: 19440:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 489e6854-a2c1-780c-cb29-a5a25ffc39e6@0@lo t0 exp (null) cur 1331865353 last 0
+Lustre: 19440:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 41 previous similar messages
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+LustreError: 21268:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+LustreError: 21268:0:(quota_ctl.c:328:client_quota_ctl()) Skipped 3 previous similar messages
+Lustre: DEBUG MARKER: == replay-dual test 21b: commit on sharing, two clients == 04:36:11 (1331865371)
+Lustre: DEBUG MARKER: SKIP: replay-dual test_21b Need two or more clients, have 1
+Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 18 sec == 04:36:11 (1331865371)
+LustreError: 21817:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+LustreError: 21817:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Skipped 7 previous similar messages
+LustreError: 21817:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+LustreError: 21817:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) Skipped 7 previous similar messages

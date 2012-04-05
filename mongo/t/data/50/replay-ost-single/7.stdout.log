@@ -1,0 +1,46 @@
+Logging to shared log directory: /tmp/test_logs//1333464952
+only running test 7
+excepting tests: 
+mft03: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft03 environments
+Using TIMEOUT=20
+disable quota as required
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 5 null connections
+/mnt/lustre/d0.replay-ost-single
+stripe_count:   1 stripe_size:    1048576 stripe_offset:  0 
+........
+
+== replay-ost-single test 7: Fail OST before obd_destroy == 17:55:53 (1333464953)
+Waiting for orphan cleanup...
+Waiting for destroy to be done...
+1280+0 records in
+1280+0 records out
+5242880 bytes (5.2 MB) copied, 0.623105 s, 8.4 MB/s
+before: 325400 after_dd: 320280
+Filesystem           1K-blocks      Used Available Use% Mounted on
+mft03@tcp:/lustre       374928     54648    300152  16% /mnt/lustre
+Failing ost1 on node mft03
+Stopping /mnt/ost1 (opts:) on mft03
+affected facets: ost1
+Failover ost1 to mft03
+17:56:20 (1333464980) waiting for mft03 network 900 secs ...
+17:56:20 (1333464980) network interface is UP
+Starting ost1: -o loop  /tmp/lustre-ost1 /mnt/ost1
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-OST0000
+affected facets: ost1
+mft03: *.lustre-OST0000.recovery_status status: COMPLETE
+Can't lstat /mnt/lustre/d0.replay-ost-single/f7: No such file or directory
+Waiting for orphan cleanup...
+Waiting for destroy to be done...
+before: 325400 after: 325400
+Resetting fail_loc on all nodes...done.
+PASS 7 (33s)
+== replay-ost-single replay-ost-single.sh test complete, duration 34 sec == 17:56:26 (1333464986)
