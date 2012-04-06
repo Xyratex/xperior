@@ -6,7 +6,7 @@ function(k, values) {
         arch  : 0,
         type  : 0,
 		branch: 0,
-		date: 0,
+		date  : 0,
 		config: 0,
 		status: {
 			passed: 0,

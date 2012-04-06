@@ -6,7 +6,7 @@ function() {
         arch  : 0,
         type  : 0,
 		branch: 0,
-		date: 0,
+		date  : 0,        
 		config: 0,
 		status: {
 			passed: 0,
@@ -20,6 +20,8 @@ function() {
 	r.distr  = this.extoptions.distr;
 	r.arch   = this.extoptions.arch;
 	r.type   = this.extoptions.type;
+
+
 
 	r.id = this.extoptions.branch + "_"
          + this.extoptions.type   + "_"

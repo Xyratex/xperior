@@ -70,7 +70,6 @@ test  plan => 6, dCheckTests           => sub {
     my @tae = ('functional','sanity');
     is_deeply($tests[0]->getTags,\@tae, 'Check test tags');
 #DEBUG Dumper $tests[0]->getTags;
-#DEBUG "88888888888888888888888888888888888888888";
 };
 
 ##################################################

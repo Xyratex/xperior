@@ -93,7 +93,7 @@ setup setup => sub {
 
 ########################## main
 test
-  plan                => 11,
+  plan                => 12,
   cCheckProjectStatus => sub {
 
     my $cursor = doMapReduce('project_status');
@@ -101,8 +101,8 @@ test
     my $object0 = $cursor->next;
     DEBUG "Result obj is :". Dumper($object0);
     
-    is($object0->{value}->{status}->{total},33,"check total");
-    is($object0->{value}->{status}->{skipped},1,"check skipped");
+    is($object0->{value}->{configurations}->{'1VM'}->{total},33,"check total");
+    is($object0->{value}->{configurations}->{Cray_Client}->{skipped},2,"check skipped");
     
     is($object0->{value}->{branch},'9777a6', "check branch");
     is($object0->{value}->{arch},'x86_64',   "check arch");
@@ -110,8 +110,6 @@ test
 
     my $object1 = $cursor->next;
     DEBUG "Result obj is :". Dumper($object1);
-    is($object1->{value}->{status}->{passed},31,"check passed");
-    is($object1->{value}->{status}->{failed},1,"check failed");
 
     is($object1->{value}->{distr},'SL61', "check distr");
     is($object1->{value}->{type}, 'full', "check type");
@@ -124,6 +122,14 @@ test
             $object1->{value}->{arch}   . "_".
             $object1->{value}->{distr}  
             , "check id");
+
+
+    is($object1->{value}->{configurations}->{'1VM'}->{passed},31,"check passed");
+    is($object1->{value}->{configurations}->{'1VM'}->{failed},1,"check failed");
+    is($object1->{value}->{configurations}->{'1VM'}->{name},'1VM',"check config name");
+
+
+
 
     isnt($cursor->has_next, 0 ,"No more elements");
   };
