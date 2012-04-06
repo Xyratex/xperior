@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest/TestEnvironment.pm
+#         FILE:  Xperior/TestEnvironment.pm
 #
 #  DESCRIPTION:  This class maintains test environment and configuration.
 #
@@ -20,10 +20,10 @@ Also this class contains and can process system configuration which is read from
 
 =cut
 
-package XTest::TestEnvironment;
+package Xperior::TestEnvironment;
 
 use Moose;
-use XTest::Node;
+use Xperior::Node;
 use Log::Log4perl qw(:easy);
 use Carp;
 use Data::Dumper;
@@ -36,7 +36,7 @@ sub init{
     my $yamlcfg = shift;
     $self->cfg($yamlcfg);
     foreach my $n (@{$yamlcfg->{'Nodes'}}){
-        my $node = XTest::Node->new;
+        my $node = Xperior::Node->new;
         $node->id($n->{'id'});
         $node->ip($n->{'ip'});
         $node->ctrlproto( $n->{'ctrlproto'});

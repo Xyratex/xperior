@@ -6,7 +6,7 @@ dangerous: 'yes'
 description: Lustre replay-dual  tests
 endtime: '1333478903'
 endtime_planned: '1333478902'
-executor: XTest::Executor::LustreTests
+executor: Xperior::Executor::LustreTests
 expected_time: 10
 extoptions: 
   arch: x86_64

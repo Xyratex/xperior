@@ -20,7 +20,7 @@ mkdir 'html';
 my $pd = Pod::ProjectDocs->new(
     outroot => 'html/',
     libroot =>  ['bin', 'lib', 'doc'],
-    title   => 'XTest',
+    title   => 'Xperior',
     forcegen => 1,
     desc   => 'Xperior harness'
 );

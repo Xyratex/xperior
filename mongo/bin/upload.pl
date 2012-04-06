@@ -30,7 +30,7 @@ sub help_command {
     my ($target) = @_;
     print <<"__HELP__";
 
-XTests CouchDB Upload Results Tool
+Xperiors CouchDB Upload Results Tool
 
 Usage:
     Bupload-results <command> [<parameters>]

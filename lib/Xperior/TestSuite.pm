@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest::TestSuite
+#         FILE:  Xperior::TestSuite
 #
 #  DESCRIPTION:  
 #
@@ -14,7 +14,7 @@
 #      CREATED:  08/30/2011 11:43:34 PM
 #     REVISION:  ---
 #===============================================================================
-package XTest::TestSuite;
+package Xperior::TestSuite;
 
 use Moose;
 use namespace::autoclean;

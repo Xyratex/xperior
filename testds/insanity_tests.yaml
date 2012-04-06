@@ -1,6 +1,6 @@
 ---
 groupname        : insanity 
-executor         : XTest::Executor::LustreTests
+executor         : Xperior::Executor::LustreTests
 roles            : StoreSyslog StoreConsole GetDiagnostics
 description      : Lustre insanity tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code

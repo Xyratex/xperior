@@ -19,12 +19,12 @@ package testenv;
 use strict;
 use Test::Able;
 use Test::More;
-use XTest::Core;
+use Xperior::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
-use XTest::Test;
+use Xperior::Test;
 
 my %options = ( 
     testdir => 't/testcfgs/simple/',
@@ -37,7 +37,7 @@ startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
 setup           _setup    => sub { 
-    $testcore =  XTest::Core->new();
+    $testcore =  Xperior::Core->new();
     $testcore->options(\%options);      
     $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
 

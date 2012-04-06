@@ -8,7 +8,7 @@
 #      COMPANY:  Xyratex 
 #      CREATED:  09/05/2011 03:55:22 PM
 #===============================================================================
-package XTest::Utils;
+package Xperior::Utils;
 use strict;
 use warnings;
 

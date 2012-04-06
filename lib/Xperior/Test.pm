@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest/Test.pm
+#         FILE:  Xperior/Test.pm
 #
 #  DESCRIPTION:  Class implement Test abstraction
 #
@@ -18,7 +18,7 @@ The class is used for describing tests and keep passive information for executor
 
 =cut
 
-package XTest::Test;
+package Xperior::Test;
 use Moose;
 use Data::Dumper;
 #use MooseX::Storage;

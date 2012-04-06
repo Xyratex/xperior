@@ -13,15 +13,15 @@
 =pod
 =head1 DESCRIPTION
 
-IOR wrapper module for XTest harness.
+IOR wrapper module for Xperior harness.
 
 =cut
 
-package XTest::Executor::IOR;
+package Xperior::Executor::IOR;
 use Moose;
 use Log::Log4perl qw(:easy);
 
-extends 'XTest::Executor::OpenMPIBase';
+extends 'Xperior::Executor::OpenMPIBase';
 
 
 after 'init' => sub{

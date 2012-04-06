@@ -6,7 +6,7 @@ print `cp build/Makefile.harness.PL Makefile.PL` ."\n";
 print `cp build/MANIFEST.harness MANIFEST`."\n";
 WriteMakefile(
     NAME              => 'Xperior-harness',
-    VERSION_FROM      => 'lib/XTest/Core.pm', # finds $VERSION
+    VERSION_FROM      => 'lib/Xperior/Core.pm', # finds $VERSION
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
     ($] >= 5.10.0 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT       => 'Xperior harness, system which allow execute many other tests via wrappering', 

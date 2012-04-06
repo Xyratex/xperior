@@ -9,13 +9,13 @@
 #      COMPANY:  Xyratex
 #      CREATED:  09/27/2011 11:47:51 PM
 #===============================================================================
-package XTest::Executor::LustreTests;
+package Xperior::Executor::LustreTests;
 use Moose;
 use Data::Dumper;
 use Carp qw( confess cluck );
 use Log::Log4perl qw(:easy);
 
-extends 'XTest::Executor::SingleProcessBase';
+extends 'Xperior::Executor::SingleProcessBase';
 
 our $VERSION = "0.0.2";
 

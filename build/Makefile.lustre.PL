@@ -7,7 +7,7 @@ print `cp build/Makefile.lustre.PL Makefile.PL` ."\n";
 print `cp build/MANIFEST.lustre    MANIFEST`."\n";
 WriteMakefile(
     NAME              => 'Xperior-lustretests',
-    VERSION_FROM      => 'lib/XTest/Executor/LustreTests.pm',
+    VERSION_FROM      => 'lib/Xperior/Executor/LustreTests.pm',
     PREREQ_PM         => {}, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT       =>  'Lustre executor runs and controls lustre  acc small test execution', 

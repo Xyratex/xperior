@@ -1,6 +1,6 @@
 ---
 groupname        : replay-ost-single  
-executor         : XTest::Executor::LustreTests
+executor         : Xperior::Executor::LustreTests
 roles            : StoreSyslog StoreConsole GetDiagnostics
 description      : Lustre replay-ost-single tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code

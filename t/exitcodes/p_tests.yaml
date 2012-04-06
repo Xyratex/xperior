@@ -1,6 +1,6 @@
 ---
 groupname        : lustre-single
-executor         : XTest::Executor::Noop
+executor         : Xperior::Executor::Noop
 description      : Set  of Lustre single tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 10 

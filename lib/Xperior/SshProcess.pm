@@ -14,7 +14,7 @@
 
 =head1 NAME
 
-XTest::SshProcess - implements remote process control for single process over ssh
+Xperior::SshProcess - implements remote process control for single process over ssh
 
 =head1  DESCRIPTION
 
@@ -48,7 +48,7 @@ Function to be used: B<createSync> and field B<exitcode>
 
 =cut
 
-package XTest::SshProcess;
+package Xperior::SshProcess;
 use Moose;
 use Data::Dumper;
 use Cwd qw(chdir);
@@ -57,7 +57,7 @@ use File::Path;
 use Log::Log4perl qw(:easy);
 use Carp;
 use Proc::Simple;
-use XTest::Utils;
+use Xperior::Utils;
 use Time::HiRes;
 
 with qw(MooseX::Clone);
@@ -114,7 +114,7 @@ sub _sshSyncExec {
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
     $timeout = 30 unless defined $timeout;
-    DEBUG "XTest::SshProcess->_sshSyncExec";
+    DEBUG "Xperior::SshProcess->_sshSyncExec";
     my $cc =
         "ssh -o  'BatchMode yes' "
       . "-o 'AddressFamily inet' "
@@ -164,7 +164,7 @@ sub _sshSyncExecS {
 
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
-    DEBUG "XTest::SshProcess->_sshAsyncExec";
+    DEBUG "Xperior::SshProcess->_sshAsyncExec";
     my $sc    = 1;
     my $alive = 0;
     my $cc =
@@ -204,7 +204,7 @@ Initialize module. Protocol is only ssh.
 
 sub initTemp {
     my $self = shift;
-    $self->pidfile( '/tmp/xtest_pid_ssh_' . Time::HiRes::gettimeofday() );
+    $self->pidfile( '/tmp/xperior_pid_ssh_' . Time::HiRes::gettimeofday() );
     $self->ecodefile( '/tmp/remote_exit_code_' . Time::HiRes::gettimeofday() );
     $self->rscrfile(
         '/tmp/remote_script_' . Time::HiRes::gettimeofday() . '.sh' );
@@ -282,7 +282,7 @@ Function have one parameter - command for start on emote node.
 sub createSync {
     my ( $self, $app, $timeout ) = @_;
     $self->appcmd($app);
-    DEBUG "XTest::SshProcess createSync";
+    DEBUG "Xperior::SshProcess createSync";
     DEBUG "App to run [$app] on host[" . $self->host . "]";
     my $ecf = $self->ecodefile;
     $self->killed(0);
@@ -349,7 +349,7 @@ sub create {
     my ( $self, $name, $app ) = @_;
     $self->appname($name);
     $self->appcmd($app);
-    DEBUG "[$name]: XTest::SshProcess create";
+    DEBUG "[$name]: Xperior::SshProcess create";
     DEBUG "[$name]: App to run [$app] on host[" . $self->host . "]";
     $self->killed(0);
 
@@ -402,7 +402,7 @@ Kill process which was created by create via saved pid.
 
 sub kill {
     my ( $self, $mode ) = @_;
-    DEBUG "XTest::SshProcess->kill";
+    DEBUG "Xperior::SshProcess->kill";
     my $pid  = $self->pid;
     my $name = $self->appname;
     $mode = 0 unless defined $mode;
@@ -431,7 +431,7 @@ Check process status on remote system via saved pid. Also this function get exit
 =cut
 
 #sub isAlive {
-#    DEBUG "XTest::SshProcess->isAlive";
+#    DEBUG "Xperior::SshProcess->isAlive";
 #    my $self = shift;
 #    my $pid  = $self->pid;
 #    my $name = $self->appname;
@@ -451,7 +451,7 @@ Check process status on remote system via saved pid. Also this function get exit
 #}
 
 sub isAlive {
-    DEBUG "XTest::SshProcess->isAlive";
+    DEBUG "Xperior::SshProcess->isAlive";
     my $self = shift;
     my $pid  = $self->pid;
     my $name = $self->appname;

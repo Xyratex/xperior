@@ -15,14 +15,14 @@ package mdtest;
 use strict;
 use Test::Able;
 use Test::More;
-use XTest::Core;
+use Xperior::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
 
-use XTest::Test;
-use XTest::Executor::MDTest;
+use Xperior::Test;
+use Xperior::Executor::MDTest;
 
 my %options = ( 
     testdir => 't/testcfgs/mdtest/',
@@ -39,11 +39,11 @@ startup         _startup  => sub {
 };
 
 setup           _setup    => sub { 
-    $testcore =  XTest::Core->new();
+    $testcore =  Xperior::Core->new();
     $testcore->options(\%options);      
     $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     $tests  =  $testcore->loadTests;
-    $exe = XTest::Executor::MDTest->new();
+    $exe = Xperior::Executor::MDTest->new();
     $exe->init(@{$tests}[0], \%options, $cfg);
 
 };

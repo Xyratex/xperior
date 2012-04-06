@@ -16,14 +16,14 @@ package iorexec;
 use strict;
 use Test::Able;
 use Test::More;
-use XTest::Core;
+use Xperior::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
 
-use XTest::Test;
-use XTest::Executor::IOR;
+use Xperior::Test;
+use Xperior::Executor::IOR;
 
 my %options = ( 
     testdir => 't/testcfgs/ior/',
@@ -40,11 +40,11 @@ startup         _startup  => sub {
 };
 
 setup           _setup    => sub { 
-    $testcore =  XTest::Core->new();
+    $testcore =  Xperior::Core->new();
     $testcore->options(\%options);      
     $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     $tests  =  $testcore->loadTests;
-    $exe = XTest::Executor::IOR->new();
+    $exe = Xperior::Executor::IOR->new();
     $exe->init(@{$tests}[0], \%options, $cfg);
 
 };

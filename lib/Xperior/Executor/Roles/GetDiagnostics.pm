@@ -13,7 +13,7 @@
 
 =head1 NAME
 
-XTest::Executor::Roles::GetDiagnostics - gathering information on node after test failure
+Xperior::Executor::Roles::GetDiagnostics - gathering information on node after test failure
 
 =head1  DESCRIPTION
 
@@ -27,14 +27,14 @@ For enable this module for test or test group add to C<roles> property string C<
 
 =cut
 
-package XTest::Executor::Roles::GetDiagnostics;
+package Xperior::Executor::Roles::GetDiagnostics;
 
 use strict;
 use warnings;
 
 use Moose::Role;
 use Time::HiRes;
-use XTest::Utils;
+use Xperior::Utils;
 
 requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
 

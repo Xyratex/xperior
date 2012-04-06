@@ -1,6 +1,6 @@
 ---
 groupname        : sanity
-executor         : XTest::Executor::Noop
+executor         : Xperior::Executor::Noop
 description      : Lustre sanity tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 10 

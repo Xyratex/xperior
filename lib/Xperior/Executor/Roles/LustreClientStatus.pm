@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest/Executor/Roles/LustreClientStatus.pm
+#         FILE:  Xperior/Executor/Roles/LustreClientStatus.pm
 #
 #  DESCRIPTION:  Role define harvesting info from master client host 
 #
@@ -10,7 +10,7 @@
 #      CREATED:  12/20/2011 09:45:19 PM
 #===============================================================================
 
-package XTest::Executor::Roles::LustreClientStatus;
+package Xperior::Executor::Roles::LustreClientStatus;
 
 use Moose::Role;
 

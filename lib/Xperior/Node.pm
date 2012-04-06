@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest::Node.pm
+#         FILE:  Xperior::Node.pm
 #
 #  DESCRIPTION:  Node  abstraction. Allows to get info about node. 
 #
@@ -18,7 +18,7 @@
 
 =cut
 
-package XTest::Node;
+package Xperior::Node;
 
 use Moose;
 use Moose::Util::TypeConstraints;
@@ -26,8 +26,8 @@ use Moose::Util::TypeConstraints;
 use Net::Ping;
 use Log::Log4perl qw(:easy);
 
-use XTest::Utils;
-use XTest::SshProcess;
+use Xperior::Utils;
+use Xperior::SshProcess;
 
 has 'ctrlproto'    => ( is => 'rw' );
 has 'user'         => ( is => 'rw' );
@@ -204,7 +204,7 @@ sub getRemoteConnector{
     return $self->rconnector 
          if defined $self->rconnector;
     
-    my $sc = XTest::SshProcess->new();
+    my $sc = Xperior::SshProcess->new();
     
     if ($sc->init($self->ip,$self->user) < 0){
         $self->rconnector(undef);

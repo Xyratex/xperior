@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest/Executor/Roles/StoreSyslog.pm 
+#         FILE:  Xperior/Executor/Roles/StoreSyslog.pm 
 #
 #  DESCRIPTION:  Role define harvesting info from master client host 
 #
@@ -10,11 +10,11 @@
 #      CREATED:  12/21/2011 11:45:19 AM
 #===============================================================================
 
-package XTest::Executor::Roles::StoreSyslog ;
+package Xperior::Executor::Roles::StoreSyslog ;
 
 use Moose::Role;
 use Time::HiRes;
-use XTest::Utils;
+use Xperior::Utils;
 has tlog => ( is =>'rw');
 has ison => ( is =>'rw', isa => 'HashRef');
 

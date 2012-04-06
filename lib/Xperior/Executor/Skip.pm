@@ -6,9 +6,9 @@
 #      COMPANY:  Xyratex
 #      CREATED:  02/06/2012
 #===============================================================================
-package XTest::Executor::Skip;
+package Xperior::Executor::Skip;
 use Moose;
-extends 'XTest::Executor::SingleProcessBase';
+extends 'Xperior::Executor::SingleProcessBase';
 
 our $VERSION = '0.01';
 

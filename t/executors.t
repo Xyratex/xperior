@@ -15,14 +15,14 @@ package executors;
 use strict;
 use Test::Able;
 use Test::More;
-use XTest::Core;
+use Xperior::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
 #use Noop for check Base functionality
-use XTest::Executor::Noop;
-use XTest::Test;
+use Xperior::Executor::Noop;
+use Xperior::Test;
 
 my %options = ( 
     workdir => '/tmp/test_wd',
@@ -34,7 +34,7 @@ my %th = (
      );
 
 my %gh = (
-      executor  => 'XTest::Executor::Noop',
+      executor  => 'Xperior::Executor::Noop',
       groupname => 'sanity',
         );
 my $test;
@@ -45,13 +45,13 @@ startup         some_startup  => sub {
 };
 setup           some_setup    => sub { 
 
-    my $testcore =  XTest::Core->new();
+    my $testcore =  Xperior::Core->new();
     $testcore->options(\%options);      
     my $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
 
-    $test = XTest::Test->new;
+    $test = Xperior::Test->new;
     $test->init(\%th,\%gh);
-    $exe = XTest::Executor::Noop->new();
+    $exe = Xperior::Executor::Noop->new();
     $exe->init($test, \%options, $cfg);
 };
 teardown        some_teardown => sub { };
@@ -59,7 +59,7 @@ shutdown        some_shutdown => sub {  };
 #########################################
 
 test plan => 2, dCheckExternalLog    => sub {
-    my $file =  "/tmp/test_log_file.xtest";
+    my $file =  "/tmp/test_log_file.xperior";
     open FILE, ">> $file" or confess "Cannot create file:". $!;
     ok(-e $file);
     $exe->registerLogFile('test1',$file);
@@ -73,12 +73,12 @@ ok 1
 ---
    datetime: ~
    extensions:
-     executor: XTest::Executor::Noop
+     executor: Xperior::Executor::Noop
      groupname: sanity
      id: 1
      inf: more info
      log:
-       test1: /tmp/test_log_file.xtest
+       test1: /tmp/test_log_file.xperior
      messages: ''
      result: 'ok 1 '
      schema: Xperior1
@@ -104,7 +104,7 @@ not ok 1  #reason
 ---
    datetime: ~
    extensions:
-     executor: XTest::Executor::Noop
+     executor: Xperior::Executor::Noop
      fail_reason: ' #reason'
      groupname: sanity
      id: 1
@@ -129,7 +129,7 @@ ok 1# SKIP  #skip reason
 ---
    datetime: ~
    extensions:
-     executor: XTest::Executor::Noop
+     executor: Xperior::Executor::Noop
      fail_reason: ' #skip reason'
      groupname: sanity
      id: 1

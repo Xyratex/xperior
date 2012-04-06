@@ -1,6 +1,6 @@
 ---
 groupname        : replay-vbr  
-executor         : XTest::Executor::LustreTests
+executor         : Xperior::Executor::LustreTests
 roles            : StoreSyslog StoreConsole  GetDiagnostics
 description      : Lustre replay-vbr tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code

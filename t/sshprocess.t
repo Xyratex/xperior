@@ -3,7 +3,7 @@
 #
 #         FILE:  sshprocess.t
 #
-#  DESCRIPTION:  Tests for XTest::SshProcess class. Currently have hardcoded values for ryg's notebook 
+#  DESCRIPTION:  Tests for Xperior::SshProcess class. Currently have hardcoded values for ryg's notebook 
 #
 #       AUTHOR:   ryg 
 #      COMPANY:  Xyratex
@@ -15,14 +15,14 @@ package sshprocess;
 use strict;
 use Test::Able;
 use Test::More;
-use XTest::SshProcess;
+use Xperior::SshProcess;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 
-use XTest::Test;
-use XTest::SshProcess;
-use XTest::Utils;
+use Xperior::Test;
+use Xperior::SshProcess;
+use Xperior::Utils;
 $|=1;
 my $sp;
 
@@ -31,7 +31,7 @@ startup         _startup  => sub {
 };
 
 setup           _setup    => sub { 
-    $sp =  XTest::SshProcess->new();
+    $sp =  Xperior::SshProcess->new();
     $sp->init('localhost','ryg');
 };
 teardown        _teardown => sub { };

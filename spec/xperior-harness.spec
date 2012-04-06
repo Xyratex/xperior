@@ -39,10 +39,10 @@ TD=$RPM_BUILD_ROOT/opt/xyratex/xperior/
 rm -rf $RPM_BUILD_ROOT
 install -d ${TD}/bin
 install -D  -m 755  bin/*.pl      ${TD}/bin/
-install -d -m 755 ${TD}/lib/XTest
-install -d -m 755 ${TD}/lib/XTest/Executor
-install -D  -m 644 blib/lib/XTest/*.pm ${TD}/lib/XTest 
-install -D  -m 644 blib/lib/XTest/Executor/*.pm ${TD}/lib/XTest/Executor 
+install -d -m 755 ${TD}/lib/Xperior
+install -d -m 755 ${TD}/lib/Xperior/Executor
+install -D  -m 644 blib/lib/Xperior/*.pm ${TD}/lib/Xperior 
+install -D  -m 644 blib/lib/Xperior/Executor/*.pm ${TD}/lib/Xperior/Executor 
 install -d ${TD}/doc
 install -D  -m 644  README     ${TD}/doc
 install -D  -m 644  Changes    ${TD}/doc

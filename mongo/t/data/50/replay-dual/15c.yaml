@@ -2,7 +2,7 @@
 cleanup_max_time: -1
 dangerous: 'yes'
 description: Lustre replay-dual  tests
-executor: XTest::Executor::LustreTests
+executor: Xperior::Executor::LustreTests
 expected_time: 10
 extoptions: 
   arch: x86_64

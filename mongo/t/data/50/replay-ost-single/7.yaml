@@ -5,7 +5,7 @@ completed: 'yes'
 description: Lustre replay-ost-single tests
 endtime: '1333475793'
 endtime_planned: '1333476062'
-executor: XTest::Executor::LustreTests
+executor: Xperior::Executor::LustreTests
 exitcode: 0
 expected_time: 10
 extoptions: 

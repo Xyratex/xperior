@@ -13,7 +13,7 @@
 
 =head1 NAME
 
-Xperior - execute tests via Xperior harness (old internal name is XTest)
+Xperior - execute tests via Xperior harness (old internal name is Xperior)
 
 =head1 SYNOPSIS 
 
@@ -241,15 +241,15 @@ use Log::Log4perl qw(:easy);
 use Carp;
 use Pod::Usage;
 use Cwd qw(abs_path);
-my $XTESTBASEDIR; 
+my $XPERIORBASEDIR; 
 BEGIN {
 
-    $XTESTBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
-    push @INC, "$XTESTBASEDIR/../lib";
+    $XPERIORBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
+    push @INC, "$XPERIORBASEDIR/../lib";
 
 };
 
-use XTest::Core;
+use Xperior::Core;
 
 $|=1;
 
@@ -363,7 +363,7 @@ if( $action eq 'run'){
 }
         
  my %options = (
-    xtestbasedir => "$XTESTBASEDIR/../lib",
+    xperiorbasedir => "$XPERIORBASEDIR/../lib",
     testdir  => $testdir,
     workdir  => $workdir,
     cmdout   => $cmdout,
@@ -380,7 +380,7 @@ if( $action eq 'run'){
     extoptfile => $extoptfile,
 );
 
-my $testcore =  XTest::Core->new();
+my $testcore =  Xperior::Core->new();
 $testcore->run(\%options);
 
 __END__

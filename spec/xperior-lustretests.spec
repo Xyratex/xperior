@@ -1,6 +1,6 @@
 %define _unpackaged_files_terminate_build  0
 %define _missing_doc_files_terminate_build 0
-Summary: The Lustre acc small wrapper for XTest harnesss.
+Summary: The Lustre acc small wrapper for Xperior harnesss.
 Name: xperior-lustretests
 Version: 0.0.2 
 Release: 4%{?dist} 
@@ -23,10 +23,10 @@ make
 %install 
 TD=$RPM_BUILD_ROOT/opt/xyratex/xperior/
 rm -rf $RPM_BUILD_ROOT
-install -d ${TD}/lib/XTest/Executor
-install -D  -m 644 blib/lib/XTest/Executor/*.pm ${TD}/lib/XTest/Executor 
-install -d ${TD}/lib/XTest/Executor/Roles
-install -D  -m 644 blib/lib/XTest/Executor/Roles/*.pm ${TD}/lib/XTest/Executor/Roles                                             
+install -d ${TD}/lib/Xperior/Executor
+install -D  -m 644 blib/lib/Xperior/Executor/*.pm ${TD}/lib/Xperior/Executor 
+install -d ${TD}/lib/Xperior/Executor/Roles
+install -D  -m 644 blib/lib/Xperior/Executor/Roles/*.pm ${TD}/lib/Xperior/Executor/Roles                                             
 install -d ${TD}/testds
 install -D  testds/*.yaml  ${TD}/testds/
 
@@ -35,8 +35,8 @@ find $TD -depth -type d -exec rmdir {} 2>/dev/null \;
 %{_fixperms} $RPM_BUILD_ROOT/*
 
 %check
-#set PERL5LIB /opt/xyratex/xtest/lib
-#perl  "-I/opt/xyratex/xtest/lib" "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+#set PERL5LIB /opt/xyratex/xperior/lib
+#perl  "-I/opt/xyratex/xperior/lib" "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
 #make test
 
 %post

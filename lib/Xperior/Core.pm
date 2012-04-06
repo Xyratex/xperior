@@ -1,16 +1,16 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest::Core.pm
+#         FILE:  Xperior::Core.pm
 #
-#  DESCRIPTION:  Main module for XTest harness
+#  DESCRIPTION:  Main module for Xperior harness
 #
 #       AUTHOR:   ryg
 #      COMPANY:  Xyratex
 #      CREATED:  09/05/2011 03:23:42 PM
 #===============================================================================
 
-package XTest::Core;
+package Xperior::Core;
 use Log::Log4perl qw(:easy);
 use YAML qw "Bless LoadFile Load";
 use Data::Dumper;
@@ -27,9 +27,9 @@ use TAP::Formatter::HTML::Session;
 
 use Module::Load;
 
-use XTest::Test;
-use XTest::TestEnvironment;
-use XTest::Utils;
+use Xperior::Test;
+use Xperior::TestEnvironment;
+use Xperior::Utils;
 
 our $VERSION = "0.0.2";
 
@@ -48,22 +48,22 @@ sub createExecutor {
             DEBUG "Applying roles [$role]";
 
             if ( $role eq 'LustreClientStatus' ) {
-                use XTest::Executor::Roles::LustreClientStatus;
-                XTest::Executor::Roles::LustreClientStatus->meta->apply($obj);
+                use Xperior::Executor::Roles::LustreClientStatus;
+                Xperior::Executor::Roles::LustreClientStatus->meta->apply($obj);
             }
 
             if ( $role eq 'StoreSyslog' ) {
-                use XTest::Executor::Roles::StoreSyslog;
-                XTest::Executor::Roles::StoreSyslog->meta->apply($obj);
+                use Xperior::Executor::Roles::StoreSyslog;
+                Xperior::Executor::Roles::StoreSyslog->meta->apply($obj);
             }
 
             if ( $role eq 'StoreConsole' ) {
-                use XTest::Executor::Roles::StoreConsole;
-                XTest::Executor::Roles::StoreConsole->meta->apply($obj);
+                use Xperior::Executor::Roles::StoreConsole;
+                Xperior::Executor::Roles::StoreConsole->meta->apply($obj);
             }
             if ( $role eq 'GetDiagnostics' ) {
-                use XTest::Executor::Roles::GetDiagnostics;
-                XTest::Executor::Roles::GetDiagnostics->meta->apply($obj);
+                use Xperior::Executor::Roles::GetDiagnostics;
+                Xperior::Executor::Roles::GetDiagnostics->meta->apply($obj);
             }
 
         }
@@ -72,7 +72,7 @@ sub createExecutor {
 }
 
 sub runtest {
-    DEBUG "XTest::Core::runtest";
+    DEBUG "Xperior::Core::runtest";
     my ( $self, $test, $excluded ) = @_;
     DEBUG "Starting tests " . $test->getParam('id');
 
@@ -80,7 +80,7 @@ sub runtest {
     my $executorname = $test->getParam('executor');
     my $roles        = $test->getParam('roles');
     if ( defined($excluded) and ( $excluded == 1 ) ) {
-        $executorname = 'XTest::Executor::Skip';
+        $executorname = 'Xperior::Executor::Skip';
         $roles        = '';
     }
     my $executor = $self->createExecutor( $executorname, $roles );
@@ -319,7 +319,7 @@ sub run {
 }
 
 sub loadEnvCfg {
-    DEBUG 'XTest::Core->loadEnvCfg';
+    DEBUG 'Xperior::Core->loadEnvCfg';
     my $self = shift;
     my $fn   = shift;
     $fn = 'systemcfg.yaml' unless defined $fn;
@@ -328,7 +328,7 @@ sub loadEnvCfg {
 
     #DEBUG Dumper $envcfg;
     my $env = undef;
-    $env = XTest::TestEnvironment->new;
+    $env = Xperior::TestEnvironment->new;
     $env->init($envcfg);
 
     #DEBUG Dumper $env;
@@ -336,7 +336,7 @@ sub loadEnvCfg {
 }
 
 sub loadTests {
-    DEBUG 'XTest::Core->loadTests';
+    DEBUG 'Xperior::Core->loadTests';
     my $self = shift;
     my @testNames;
     my @tests;
@@ -360,7 +360,7 @@ sub loadTests {
         }
 
         foreach my $testcfg ( @{ $testscfg->{'Tests'} } ) {
-            my $test = XTest::Test->new;
+            my $test = Xperior::Test->new;
 
             #DEBUG "groupcfg=".Dumper \%groupcfg;
             $test->init( $testcfg, \%groupcfg );
@@ -383,7 +383,7 @@ sub loadTestsFile {
 }
 
 sub loadTags {
-    DEBUG 'XTest::Core->loadTestSuites';
+    DEBUG 'Xperior::Core->loadTestSuites';
     my $self = shift;
     my $file = $self->{'options'}->{'testdir'} . '/tags.yaml';
     INFO "Load tag file [ $file ]";
@@ -396,10 +396,10 @@ sub loadTags {
 sub htmlReport {
     my $self = shift;
     return unless $self->{options}->{html};
-    DEBUG 'XTest::Core->htmlReport';
+    DEBUG 'Xperior::Core->htmlReport';
 
     my $wd     = $self->{options}->{workdir};
-    my $libdir = $self->{options}->{xtestbasedir} . '/XTest/html';
+    my $libdir = $self->{options}->{xperiorbasedir} . '/Xperior/html';
     my @suites;
     opendir my ($dh), $wd or confess "Couldn't open dir '$wd': $!";
 
@@ -410,7 +410,7 @@ sub htmlReport {
     my %data;
     my %etimes;
 
-    #read yaml xtest results and generate one tap
+    #read yaml xperior results and generate one tap
     foreach my $suite (@suites) {
         my $mess = '';
         my $i    = 1;
@@ -422,7 +422,7 @@ sub htmlReport {
         closedir $dh;
 
         #generate tap for many files to
-        #show xtest test group as one tap test
+        #show xperior test group as one tap test
         foreach my $tfile (@tapfiles) {
             my $yaml = LoadFile("$wd/$suite/$tfile") or confess $!;
             if ( $yaml->{'status_code'} == 0 ) {
@@ -481,7 +481,7 @@ sub htmlReport {
     mkdir "$wd/report";
     $fmt->abs_file_paths(1);
     $CWD = $libdir;
-    $fmt->template("xtest_report.tt2");
+    $fmt->template("xperior_report.tt2");
     $fmt->output_file("$wd/report/report.html");
     $fmt->tests( \@suites );
 

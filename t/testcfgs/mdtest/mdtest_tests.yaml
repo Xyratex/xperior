@@ -1,6 +1,6 @@
 ---
 groupname        : mdtest 
-executor         : XTest::Executor::MDTest
+executor         : Xperior::Executor::MDTest
 description      : MDTest tests
 reference        : - 
 expected_time    : 60

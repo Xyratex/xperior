@@ -14,7 +14,7 @@
 
 =head1 NAME
 
-XTest::Executor::Base - Base executor class
+Xperior::Executor::Base - Base executor class
 
 =head1 DESCRIPTION
 
@@ -27,7 +27,7 @@ it is possible to use http://instanttap.appspot.com/ for check tap outputs. Does
 
 =cut
 
-package XTest::Executor::Base;
+package Xperior::Executor::Base;
 use Moose;
 use Data::Dumper;
 #use YAML::Tiny;
@@ -37,7 +37,7 @@ use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
 
-#use XTest::SshProcess;
+#use Xperior::SshProcess;
 
 our $YVERSION = 'Xperior1'; #yaml output version. other modules also can add fields.
 our $EXT  = '.yaml';

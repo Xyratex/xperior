@@ -17,7 +17,7 @@ use warnings;
 
 use Test::Able;
 use Test::More;
-use XTest::Utils;
+use Xperior::Utils;
 
 use Log::Log4perl qw(:easy);
 use Data::Dumper;

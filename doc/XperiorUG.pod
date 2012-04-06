@@ -28,7 +28,7 @@ B<testds> - test descriptions, see explanation below.
 
 =item *
 
-B<t>      - internal unit tests for XTest::Core, allow quickly test how harness work. Could be useful for test how work after installation.
+B<t>      - internal unit tests for Xperior::Core, allow quickly test how harness work. Could be useful for test how work after installation.
 
 =item *
 
@@ -44,7 +44,7 @@ Sample test descriptor 1:
 
  ---
 groupname        : ior 
-executor         : XTest::Executor::IOR
+executor         : Xperior::Executor::IOR
 description      : IOR tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 60
@@ -60,7 +60,7 @@ Sample test descriptor 2
 
  ---
 groupname        : sanity
-executor         : XTest::Executor::LustreTests
+executor         : Xperior::Executor::LustreTests
 roles            : StoreSyslog StoreConsole GetDiagnostics
 description      : Lustre sanity tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
@@ -112,7 +112,7 @@ C<cleanup_max_time> - timeout for cleanup system for next test. Not implemented.
 
 =item *
 
-C<iorcmd>           - command for executing, specific parameter for XTest::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are variables from system configuration, see their definition in next section.
+C<iorcmd>           - command for executing, specific parameter for Xperior::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are variables from system configuration, see their definition in next section.
 
 =item *
 
@@ -186,7 +186,7 @@ Sample YAML result from lustre  C<sanity/101b>  test with comments. Also can be 
  description: Lustre sanity tests
  endtime: 1328712096                                   # unix epoch when test execution completed
  endtime_planned: 1328712332                           # time when execution will be interrupted by timeout 
- executor: XTest::Executor::LustreTests
+ executor: Xperior::Executor::LustreTests
  exitcode: 0                                           # exit code of 'cmd' program
  expected_time: 10                                     # not used now
  groupname: sanity                                     # test group name

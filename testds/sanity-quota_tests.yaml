@@ -1,6 +1,6 @@
 ---
 groupname        : sanity-quota  
-executor         : XTest::Executor::LustreTests
+executor         : Xperior::Executor::LustreTests
 roles            : StoreSyslog StoreConsole
 description      : Lustre sanity-quota tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code

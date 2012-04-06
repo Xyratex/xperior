@@ -1,6 +1,6 @@
 ---
 groupname        : ior 
-executor         : XTest::Executor::IOR
+executor         : Xperior::Executor::IOR
 roles            : LustreClientStatus
 description      : IOR tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code

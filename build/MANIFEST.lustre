@@ -4,9 +4,9 @@ t/testout/sanity.1a.f.stdout.log
 t/testcfgs/lustre/sanity_tests.yaml
 t/testcfgs/lustre/tags.yaml
 t/testcfgs/testsystemcfg.yaml
-lib/XTest/Executor/LustreTests.pm
-lib/XTest/Executor/Roles/LustreClientStatus.pm
-lib/XTest/Executor/Roles/GetDiagnostics.pm
+lib/Xperior/Executor/LustreTests.pm
+lib/Xperior/Executor/Roles/LustreClientStatus.pm
+lib/Xperior/Executor/Roles/GetDiagnostics.pm
 testds/replay-single_tests.yaml
 testds/conf-sanity_tests.yaml
 testds/recovery-small_tests.yaml

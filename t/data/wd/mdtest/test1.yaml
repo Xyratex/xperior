@@ -6,7 +6,7 @@ before_execution:
 cleanup_max_time: '-1'
 cmd: "SLOW=YES REFORMAT=YES MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=mds  OSTCOUNT=2 OSTDEV1=/dev/loop1 ost1_HOST=mds  OSTDEV2=/dev/loop2 ost2_HOST=mds  CLIENTS=lclient RCLIENTS=\\\"mds\\\" ONLY=0b DIR=/mnt/lustre/tmp  PDSH=\\\"/usr/bin/pdsh -S -w \\\" /usr/lib64/lustre/tests/sanity.sh 2>     /tmp/test_stderr.69506.log 1>  /tmp/test_stdout.69506.log"
 description: 'Lustre sanity tests'
-executor: XTest::Executor::LustreTests
+executor: Xperior::Executor::LustreTests
 expected_time: 10
 groupname: sanity
 id: 0b

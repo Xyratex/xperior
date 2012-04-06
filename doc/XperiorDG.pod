@@ -10,11 +10,11 @@ System created on Perl language, with wide using additional modules from CPAN.
 
 =item *
 
-XTest - main classes and libraries are stored there
+Xperior - main classes and libraries are stored there
 
 =item *
 
-XTest::Executor - wrappers for specific tests are store there
+Xperior::Executor - wrappers for specific tests are store there
 
 =back
 

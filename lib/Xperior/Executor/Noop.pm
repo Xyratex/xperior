@@ -14,9 +14,9 @@
 #      CREATED:  09/28/2011 11:09:03 PM
 #     REVISION:  ---
 #===============================================================================
-package XTest::Executor::Noop;
+package Xperior::Executor::Noop;
 use Moose;
-extends 'XTest::Executor::SingleProcessBase';
+extends 'Xperior::Executor::SingleProcessBase';
 
 our $VERSION = '0.01';
 

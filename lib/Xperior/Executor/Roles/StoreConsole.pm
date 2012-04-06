@@ -1,7 +1,7 @@
 #
 #===============================================================================
 #
-#         FILE:  XTest/Executor/Roles/StoreConsole.pm 
+#         FILE:  Xperior/Executor/Roles/StoreConsole.pm 
 #
 #  DESCRIPTION:  Role define harvesting info from master client host 
 #
@@ -10,12 +10,12 @@
 #      CREATED:  12/21/2011 11:45:19 AM
 #===============================================================================
 
-package XTest::Executor::Roles::StoreConsole;
+package Xperior::Executor::Roles::StoreConsole;
 
 use Moose::Role;
 use Time::HiRes;
 use Proc::Simple;
-use XTest::Utils;
+use Xperior::Utils;
 
 has procs => ( is =>'rw', isa => 'HashRef');
 

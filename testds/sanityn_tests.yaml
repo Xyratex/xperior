@@ -1,6 +1,6 @@
 ---
 groupname        : sanityn
-executor         : XTest::Executor::LustreTests
+executor         : Xperior::Executor::LustreTests
 roles            : StoreSyslog StoreConsole GetDiagnostics
 description      : Lustre sanityn tests that operate with two local client mount points (two local clients)
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code

@@ -12,16 +12,16 @@
 =pod
 =head1 DESCRIPTION
 
-B<OpenMPI>  module for XTest harness. Provides fuctions for command line 
+B<OpenMPI>  module for Xperior harness. Provides fuctions for command line 
 
 =cut
 
-package XTest::Executor::OpenMPIBase;
+package Xperior::Executor::OpenMPIBase;
 use Moose;
 use Data::Dumper;
 use Carp qw( confess cluck );
 
-extends 'XTest::Executor::SingleProcessBase';
+extends 'Xperior::Executor::SingleProcessBase';
 
 our $VERSION = "0.0.2";
 
@@ -43,7 +43,7 @@ has cmdfield => (is=>'rw');
 
 =item execute
 
-I<execute> is inherit from XTest::Executor::SingleProcessBase class.
+I<execute> is inherit from Xperior::Executor::SingleProcessBase class.
 
 =back
 

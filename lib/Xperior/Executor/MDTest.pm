@@ -12,16 +12,16 @@
 =pod
 =head1 DESCRIPTION
 
-B<mdtest> wrapper module for XTest harness. Pretty same to IOR wrapper,
+B<mdtest> wrapper module for Xperior harness. Pretty same to IOR wrapper,
 in future must be one class for both tests.
 
 =cut
 
-package XTest::Executor::MDTest;
+package Xperior::Executor::MDTest;
 use Moose;
 use Log::Log4perl qw(:easy);
 
-extends 'XTest::Executor::OpenMPIBase';
+extends 'Xperior::Executor::OpenMPIBase';
 
 after 'init' => sub{
     my $self    = shift;

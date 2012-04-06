@@ -1,6 +1,6 @@
 ---
 groupname        : replay-dual  
-executor         : XTest::Executor::LustreTests
+executor         : Xperior::Executor::LustreTests
 roles            : StoreSyslog StoreConsole
 description      : Lustre replay-dual  tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
