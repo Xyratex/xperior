@@ -1,0 +1,59 @@
+Logging to shared log directory: /tmp/test_logs//1331864342
+only running test 16
+excepting tests: 15c
+Starting client mft01: -o user_xattr,acl,flock mft01@tcp:/lustre /mnt/lustre2
+Started clients mft01: 
+mft01@tcp:/lustre on /mnt/lustre2 type lustre (rw,user_xattr,acl,flock)
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+mft01: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft01 environments
+Using TIMEOUT=20
+disable quota as required
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 8 null connections
+.................
+
+== replay-dual test 16: fail MDS during recovery (3571) == 04:19:13 (1331864353)
+Filesystem           1K-blocks      Used Available Use% Mounted on
+mft01@tcp:/lustre       374928     49528    305272  14% /mnt/lustre
+total: 25 creates in 0.03 seconds: 838.00 creates/second
+total: 1 creates in 0.03 seconds: 33.48 creates/second
+Failing mds1 on node mft01
+Stopping /mnt/mds1 (opts:) on mft01
+affected facets: mds1
+Failover mds1 to mft01
+04:19:28 (1331864368) waiting for mft01 network 900 secs ...
+04:19:28 (1331864368) network interface is UP
+Starting mds1: -o loop,user_xattr,acl  /tmp/lustre-mdt1 /mnt/mds1
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-MDT0000
+Failing mds1 on node mft01
+Stopping /mnt/mds1 (opts:) on mft01
+affected facets: mds1
+Failover mds1 to mft01
+04:20:03 (1331864403) waiting for mft01 network 900 secs ...
+04:20:03 (1331864403) network interface is UP
+Starting mds1: -o loop,user_xattr,acl  /tmp/lustre-mdt1 /mnt/mds1
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Started lustre-MDT0000
+ - unlinked 0 (time 1331864503 ; total 0 ; last 0)
+total: 25 unlinks in 0 seconds: inf unlinks/second
+Starting client: mft01: -o user_xattr,acl,flock mft01@tcp:/lustre /mnt/lustre2
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+Resetting fail_loc on all nodes...done.
+PASS 16 (153s)
+......== replay-dual replay-dual.sh test complete, duration 164 sec == 04:21:46 (1331864506)
+Stopping clients: mft01 /mnt/lustre2 (opts:)
+Stopping client mft01 /mnt/lustre2 opts:

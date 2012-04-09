@@ -1,0 +1,23 @@
+Logging to shared log directory: /tmp/test_logs//1331873010
+only running test 5
+excepting tests: 
+mft01: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft01 environments
+Using TIMEOUT=20
+disable quota as required
+debug=0x33f0404
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 5 null connections
+/mnt/lustre/d0.replay-ost-single
+stripe_count:   1 stripe_size:    1048576 stripe_offset:  0 
+......
+
+== replay-ost-single test 5: Fail OST during iozone == 06:43:31 (1331873011)
+
+ SKIP: replay-ost-single test_5 iozone missing
+Resetting fail_loc on all nodes...done.
+PASS 5 (0s)
+..== replay-ost-single replay-ost-single.sh test complete, duration 1 sec == 06:43:31 (1331873011)

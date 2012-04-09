@@ -1,0 +1,29 @@
+Logging to shared log directory: /tmp/test_logs//1331865353
+only running test 21b
+excepting tests: 15c
+Starting client mft01: -o user_xattr,acl,flock mft01@tcp:/lustre /mnt/lustre2
+Started clients mft01: 
+mft01@tcp:/lustre on /mnt/lustre2 type lustre (rw,user_xattr,acl,flock)
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+mft01: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft01 environments
+Using TIMEOUT=20
+disable quota as required
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 8 null connections
+.......................
+
+== replay-dual test 21b: commit on sharing, two clients == 04:36:11 (1331865371)
+
+ SKIP: replay-dual test_21b Need two or more clients, have 1
+Resetting fail_loc on all nodes...done.
+PASS 21b (0s)
+== replay-dual replay-dual.sh test complete, duration 18 sec == 04:36:11 (1331865371)
+Stopping clients: mft01 /mnt/lustre2 (opts:)
+Stopping client mft01 /mnt/lustre2 opts:

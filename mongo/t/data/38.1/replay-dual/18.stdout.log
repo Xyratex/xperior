@@ -1,0 +1,36 @@
+Logging to shared log directory: /tmp/test_logs//1331864705
+only running test 18
+excepting tests: 15c
+Starting client mft01: -o user_xattr,acl,flock mft01@tcp:/lustre /mnt/lustre2
+Started clients mft01: 
+mft01@tcp:/lustre on /mnt/lustre2 type lustre (rw,user_xattr,acl,flock)
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+mft01: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft01 environments
+Using TIMEOUT=20
+disable quota as required
+debug=-1
+subsystem_debug=0xffb7e3ff
+debug_mb=2
+setting all flavor to null
+already have total 8 null connections
+...................
+
+== replay-dual test 18: ldlm_handle_enqueue succeeds on evicted export (3822) == 04:25:17 (1331864717)
+fail_loc=0x8000030b
+using seed 2449165217
+running for 500 iterations
+ - stat 0 (time 1331864717 ; total 0 ; last 0)
+total: 500 stats in 0 seconds: inf stats/second
+fail_loc=0x80000305
+Succeed in opening file "/mnt/lustre2/d0.replay-dual/d18/f0"(flags=O_RDONLY)
+fail_loc=0
+fail_loc=0
+Resetting fail_loc on all nodes...done.
+PASS 18 (1s)
+....== replay-dual replay-dual.sh test complete, duration 13 sec == 04:25:18 (1331864718)
+Stopping clients: mft01 /mnt/lustre2 (opts:)
+Stopping client mft01 /mnt/lustre2 opts:
