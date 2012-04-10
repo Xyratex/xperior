@@ -31,6 +31,12 @@ use Xperior::Test;
 use Xperior::TestEnvironment;
 use Xperior::Utils;
 
+use constant ERROR_CONFIG_FAILURE			=> 19;
+use constant ERROR_CONFIG_FAILURE2			=> 10;
+use constant ERROR_DANGEROUS_TEST_FAILURE	=> 11;
+use constant ERROR_TEST_BREAK_REQUIRED		=> 12;
+
+
 our $VERSION = "0.0.2";
 
 has 'options'    => ( is => 'rw' );
@@ -133,7 +139,7 @@ sub run {
     $self->env( $self->loadEnvCfg( $options->{'configfile'} ) );
     if ( $self->env->checkEnv < 0 ) {
         WARN "Found problems while testing configuration";
-        exit(19);
+        exit(ERROR_CONFIG_FAILURE);
     }
 
     #$self->env->getNodesInfo;
@@ -270,7 +276,7 @@ sub run {
 "Found problems while testing configuration after failed test, exiting";
                         WARN "Executed $enum tests, skipped $snum";
                         $self->htmlReport;
-                        exit(10);
+                        exit(ERROR_CONFIG_FAILURE2);
                     }
                 unless (($res == 1)
                     and ($exe->yaml->{'fail_reason'} eq 
@@ -283,7 +289,7 @@ sub run {
                         WARN "Dangerous test failure detected, exiting";
                         WARN "Executed $enum tests, skipped $snum";
                         $self->htmlReport;
-                        exit(11);
+                        exit(ERROR_DANGEROUS_TEST_FAILURE);
                     }
                 }else{
                     WARN "Unclean test failure, not exiting after it";
@@ -301,7 +307,7 @@ sub run {
                     WARN "Test requires stop after complete, exiting";
                     WARN "Executed $enum tests, skipped $snum";
                     $self->htmlReport;
-                    exit(12);
+                    exit(ERROR_TEST_BREAK_REQUIRED);
                 }
             }
         }
