@@ -22,8 +22,8 @@ use Data::Dumper;
 use Log::Log4perl qw(:easy);
 Log::Log4perl->easy_init( { level => $DEBUG } );
 
-my $dbname     = "tresults";
-my $collection = "lustre";     #"system.js";
+my $collection     = "tresults";
+my $dbname         = "lustre";     
 my $mdir = 'mongo/js/';
 my $rdir = 'mongo/t/data';
 my $db;
@@ -53,7 +53,7 @@ sub doMapReduce {
     my $reduce = loadFunction( $mrname . '_r' );
 
     my $cmd = Tie::IxHash->new(
-        "mapreduce" => "lustre",
+        "mapreduce" => $collection,
         "out"       => "1",
         "map"       => $map,
         "reduce"    => $reduce
@@ -87,7 +87,7 @@ setup setup => sub {
     confess "DB is not defined " unless defined $db;
     $db->${collection}->drop;
     #mean call uploader while stay in xperior root
-    DEBUG `mongo/bin/upload.pl post  $rdir`;
+    DEBUG `mongo/bin/upload.pl --post --folder='$rdir'`;
 
 };
 

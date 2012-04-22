@@ -92,6 +92,7 @@ has osversion => ( is => 'rw' );
 #do pool check status to prevent false deatch report
 sub _sshSyncExec {
     my ( $self, $cmd, $timeout ) = @_;
+    $timeout = 30 unless defined $timeout;
     my $step = 0;
     my $AT   = 5;
     my $r    = undef;
@@ -113,15 +114,13 @@ sub _sshSyncExec {
 
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
-    $timeout = 30 unless defined $timeout;
-    DEBUG "Xperior::SshProcess->_sshSyncExec";
     my $cc =
         "ssh -o  'BatchMode yes' "
       . "-o 'AddressFamily inet' "
       . "-o 'ConnectTimeout=10' "
-
-      #."-o 'StrictHostKeyChecking=no' "
-      #            ."-o 'UserKnownHostsFile=/dev/null' "
+      . "-o 'UserKnownHostsFile=/dev/null' "
+      . "-o 'StrictHostKeyChecking=no' " 
+      . "-o 'ConnectionAttempts=3' "
       . "-o 'ServerAliveInterval=600' "
       . "-o 'ServerAliveCountMax=15' " . " -f "
       . $self->user . "@"
@@ -139,7 +138,10 @@ sub _sshSyncExecS {
         };
         alarm $timeout;
         #do main action
-        $out = `$cc`;
+        my $rawout = `$cc`;
+        
+        $out = join('',grep(!/Warning:\sPermanently\sadded/,split(/\n/,$rawout)));
+
         alarm 0;    # cancel the alarm asap
     };
     alarm 0;        # race condition protection
@@ -165,11 +167,13 @@ sub _sshSyncExecS {
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
     DEBUG "Xperior::SshProcess->_sshAsyncExec";
+    my $asyncstarttimeout = 30;
     my $sc    = 1;
-    my $alive = 0;
     my $cc =
         "ssh  -o  'BatchMode yes' "
       . "-o 'AddressFamily inet' "
+      . "-o 'UserKnownHostsFile=/dev/null' "
+      . "-o 'StrictHostKeyChecking=no' " 
       . "-o 'ConnectTimeout=10' " . "-f "
       . $self->user . "@"
       . $self->host
@@ -179,18 +183,23 @@ sub _sshAsyncExec {
     my $AT = 5;
     #this cycle is workaround for connection problem,
     #which observed too rare.
-    while ( ( $sc != 0 ) and ( $step < $AT ) ) {
+    while ( ($sc != 0 ) and ( $step < $AT ) ) {
         $self->bprocess( Proc::Simple->new() );
         $self->bprocess->start($cc);
         $self->bprocess->kill_on_destroy(1);
-        DEBUG `/bin/sleep 5`;    #hack, looks like perl's sleep
-                                 #doesn't work there
+        my $time = 0;
+        while ( not defined $self->bprocess->exit_status()){
+            DEBUG 'sleep 1 '.`/bin/sleep 1`;    #hack, looks like perl's sleep
+                                     #doesn't work there
+            $sc = $self->bprocess->exit_status();
+            $time++;
+            if ($time > $asyncstarttimeout ){
+                ERROR "App alive more then timeout, kill it";
+                $self->bprocess->kill;
+            }
+        }
         $sc = $self->bprocess->exit_status();
-
-        #$alive = $self->bprocess->poll;
-        DEBUG "[$step] local async result = [$sc]";
-
-        #DEBUG "[$step] local alive  = [$alive]";
+        DEBUG "[$step] local async result = [$sc]";        
         $step++;
     }
     return $sc;
@@ -464,8 +473,9 @@ sub isAlive {
       if((defined($o)) and ($o =~ m/^\s*$pid\s*/ )){
           last;
       }
-      $exitcode = trim $self->_sshSyncExec( 
-                                "cat " . $self->ecodefile );
+      $exitcode = trim ($self->_sshSyncExec( 
+                                "cat " . $self->ecodefile ));
+        
       DEBUG "Exitcode = [$exitcode]";
       if((defined($o)) and ($exitcode =~ m/^\d+$/ )){
           last;
