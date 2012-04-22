@@ -49,7 +49,7 @@ sub runEx{
         confess "Child process failed with error status $error_code";
     }
 
-    INFO "Return code is:[" . $error_code . "]";
+    DEBUG "Return code is:[" . $error_code . "]";
     return $error_code;
 }
 
