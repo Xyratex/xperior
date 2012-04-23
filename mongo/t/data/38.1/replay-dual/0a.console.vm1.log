@@ -1,0 +1,134 @@
+==> /tmp/serial_mft01_out <==
+Lustre: DEBUG MARKER: only running test 0a
+Lustre: DEBUG MARKER: excepting tests: 15c
+LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Lustre: 3263:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-MDT0000-mdc-ffff880077adf800->10.3.0.187@tcp netid 90000: select flavor null
+Lustre: 3263:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 4 previous similar messages
+Lustre: 2217:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 7612ae0a-d05d-f960-7180-713116b3533a@0@lo t0 exp (null) cur 1331862913 last 0
+Lustre: 2217:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Lustre: Client lustre-client has started
+Lustre: 3282:0:(debug.c:326:libcfs_debug_str2mask()) You are trying to use a numerical value for the mask - this will be deprecated in a future release.
+Lustre: 3282:0:(debug.c:326:libcfs_debug_str2mask()) Skipped 1 previous similar message
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: 2217:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Lustre: 2217:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+LustreError: 3667:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Lustre: DEBUG MARKER: == replay-dual test 0a: expired recovery with lost client == 03:55:26 (1331862926)
+LustreError: 3986:0:(osd_handler.c:938:osd_ro()) *** setting device osd-ldiskfs read-only ***
+Turning device loop0 (0x700000) read-only
+Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc29b8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2a20
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2a88
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2af0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2b58
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2bc0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2c28
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2c90
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2cf8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2d60
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2dc8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2e30
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2e98
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2f00
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d6edc8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2a20
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c1470
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078da9880
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078da8338
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc0af0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc0c28
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc0e30
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc20c8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc24d8
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc26e0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2748
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078da8e30
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078da72d0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078c69af0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078c69a88
+Lustre: Failing over lustre-MDT0000
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2af0
+Lustre: 4033:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Lustre: 4033:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+Lustre: Failing over mdd_obd-lustre-MDT0000
+Lustre: mdd_obd-lustre-MDT0000: shutting down for failover; client state will be preserved.
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fc2bc0
+Lustre: MGS has stopped.
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c13a0
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078c95e98
+Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c13a0
+Removing read-only on unknown block (0x700000)
+Lustre: server umount lustre-MDT0000 complete
+Lustre: 1628:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1331862928/real 1331862928]  req@ffff880074112400 x1396559449162024/t0(0) o400->MGC10.3.0.187@tcp@0@lo:26/25 lens 192/192 e 0 to 1 dl 1331862935 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+LustreError: 166-1: MGC10.3.0.187@tcp: Connection to service MGS via nid 0@lo was lost; in progress operations using this service will fail.
+Lustre: 1628:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1331862933/real 1331862933]  req@ffff880070e8bc00 x1396559449162026/t0(0) o400->lustre-MDT0000-mdc-ffff880037ae7800@0@lo:12/10 lens 192/192 e 0 to 1 dl 1331862940 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff880037ae7800: Connection to service lustre-MDT0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+Lustre: lustre-MDT0000-mdc-ffff880077adf800: Connection to service lustre-MDT0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+LDISKFS-fs (loop0): recovery complete
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Lustre: MGS MGS started
+Lustre: 1629:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1331862935/real 1331862935]  req@ffff88007bf5dc00 x1396559449162032/t0(0) o250->MGC10.3.0.187@tcp@0@lo:26/25 lens 368/512 e 0 to 1 dl 1331862941 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+Lustre: 1629:0:(client.c:1773:ptlrpc_expire_one_request()) Skipped 1 previous similar message
+Lustre: MGC10.3.0.187@tcp: Reactivating import
+Lustre: 4128:0:(import.c:526:import_select_connection()) MGC10.3.0.187@tcp: tried all connections, increasing latency to 6s
+Lustre: 4135:0:(ldlm_lib.c:873:target_handle_connect()) MGS: connection from f3761ddb-5158-65ca-ecdf-84533b3bdbaa@0@lo t0 exp (null) cur 1331862941 last 0
+Lustre: 4135:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Lustre: 4135:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import MGS->NET_0x9000000000000_UUID netid 90000: select flavor null
+Lustre: 4135:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 5 previous similar messages
+Lustre: Enabling ACL
+Lustre: Enabling user_xattr
+Lustre: lustre-MDT0000: used disk, loading
+Lustre: 4149:0:(ldlm_lib.c:1900:target_recovery_init()) RECOVERY: service lustre-MDT0000, 2 recoverable clients, last_transno 4294967299
+LustreError: 4153:0:(ldlm_lib.c:1737:target_recovery_thread()) lustre-MDT0000: started recovery thread pid 4153
+Lustre: 4149:0:(mdt_lproc.c:259:lprocfs_wr_identity_upcall()) lustre-MDT0000: identity upcall set to /usr/sbin/l_getidentity
+Lustre: 4149:0:(mds_lov.c:1004:mds_notify()) MDS mdd_obd-lustre-MDT0000: add target lustre-OST0000_UUID
+Lustre: 2304:0:(ldlm_lib.c:802:target_handle_connect()) lustre-OST0000: received new MDS connection from NID 0@lo, removing former export from same NID
+Lustre: 2304:0:(filter.c:2710:filter_connect_internal()) lustre-OST0000: Received MDS connection for group 0
+Lustre: 1629:0:(mds_lov.c:1024:mds_notify()) MDS mdd_obd-lustre-MDT0000: in recovery, not resetting orphans on lustre-OST0000_UUID
+Lustre: 4185:0:(debug.c:326:libcfs_debug_str2mask()) You are trying to use a numerical value for the mask - this will be deprecated in a future release.
+Lustre: 4185:0:(debug.c:326:libcfs_debug_str2mask()) Skipped 3 previous similar messages
+Lustre: 2304:0:(ldlm_lib.c:802:target_handle_connect()) lustre-OST0001: received new MDS connection from NID 0@lo, removing former export from same NID
+Lustre: 1629:0:(mds_lov.c:1024:mds_notify()) MDS mdd_obd-lustre-MDT0000: in recovery, not resetting orphans on lustre-OST0001_UUID
+Lustre: 1629:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1331862940/real 1331862940]  req@ffff880077c5f000 x1396559449162039/t0(0) o38->lustre-MDT0000-mdc-ffff880037ae7800@0@lo:12/10 lens 368/512 e 0 to 1 dl 1331862946 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+Lustre: 1630:0:(import.c:526:import_select_connection()) lustre-MDT0000-mdc-ffff880037ae7800: tried all connections, increasing latency to 6s
+Lustre: 4155:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 8572f9f1-5f2d-6ad7-1efd-6be0b93d382e@0@lo recovering/t4294967301 exp ffff880079e39800 cur 1331862951 last 1331862941
+Lustre: 4155:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 2 previous similar messages
+Lustre: 4157:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Next recovery transno: 4294967300, current: 4294967300, replaying
+LustreError: 1629:0:(client.c:2585:ptlrpc_replay_interpret()) @@@ status -116, old was 0  req@ffff880077219400 x1396559449161857/t4294967300(4294967300) o35->lustre-MDT0000-mdc-ffff880077adf800@0@lo:23/10 lens 360/424 e 0 to 0 dl 1331862963 ref 2 fl Interpret:R/4/0 rc -116/-116
+Lustre: 4155:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Next recovery transno: 4294967301, current: 4294967301, replaying
+LustreError: 1629:0:(libcfs_fail.h:81:cfs_fail_check_set()) *** cfs_fail_loc=514 ***
+Lustre: lustre-MDT0000-mdc-ffff880077adf800: Connection restored to service lustre-MDT0000 using nid 0@lo.
+Lustre: 4153:0:(ldlm_lib.c:1566:target_recovery_overseer()) recovery is timed out, evict stale exports
+LustreError: 4153:0:(genops.c:1270:class_disconnect_stale_exports()) lustre-MDT0000: disconnect stale client 7612ae0a-d05d-f960-7180-713116b3533a@0@lo
+Lustre: 4153:0:(ldlm_lib.c:1819:target_recovery_thread()) too long recovery - read logs
+Lustre: lustre-MDT0000-mdc-ffff880037ae7800: Connection restored to service lustre-MDT0000 using nid 0@lo.
+Lustre: setting import lustre-MDT0000_UUID INACTIVE by administrator request
+LustreError: dumping log to /tmp/lustre-log.1331863018.4153
+Lustre: setting import lustre-OST0001_UUID INACTIVE by administrator request
+Lustre: Skipped 1 previous similar message
+Lustre: lustre-MDT0000: sending delayed replies to recovered clients
+Lustre: 4153:0:(mds_lov.c:1024:mds_notify()) MDS mdd_obd-lustre-MDT0000: in recovery, not resetting orphans on lustre-OST0000_UUID
+Lustre: client ffff880077adf800 umount complete
+Lustre: lustre-OST0001: received MDS connection from 0@lo
+Lustre: 2304:0:(lustre_log.h:471:llog_group_set_export()) lustre-OST0001: export for group 0 is changed: 0xffff88007719c800 -> 0xffff880070e8b400
+Lustre: 2304:0:(llog_net.c:168:llog_receptor_accept()) changing the import ffff880077218000 - ffff880078a43000
+Lustre: 2304:0:(lustre_log.h:471:llog_group_set_export()) lustre-OST0001: export for group 1 is changed: 0xffff88007719c800 -> 0xffff880070e8b400
+Lustre: 2304:0:(llog_net.c:168:llog_receptor_accept()) changing the import ffff880077218000 - ffff880078a43000
+Lustre: MDS mdd_obd-lustre-MDT0000: lustre-OST0000_UUID now active, resetting orphans
+LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Lustre: 4405:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-MDT0000-mdc-ffff880077adf800->10.3.0.187@tcp netid 90000: select flavor null
+Lustre: 4405:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 6 previous similar messages
+Lustre: 4229:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from f92ae63a-b5f5-df75-f384-4c263fb31726@0@lo t0 exp (null) cur 1331863019 last 0
+Lustre: 4229:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 1 previous similar message
+Lustre: Client lustre-client has started
+Lustre: 4418:0:(debug.c:326:libcfs_debug_str2mask()) You are trying to use a numerical value for the mask - this will be deprecated in a future release.
+Lustre: 4418:0:(debug.c:326:libcfs_debug_str2mask()) Skipped 1 previous similar message
+Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 106 sec == 03:56:59 (1331863019)
+LustreError: 4624:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+LustreError: 4624:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+Lustre: client ffff880077adf800 umount complete

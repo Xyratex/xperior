@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 #===============================================================================
 
-#use strict;
+use strict;
 use warnings;
 use MongoDB;
 use MongoDB::OID;
@@ -14,7 +14,7 @@ use POSIX;
 use Data::Dumper;
 use File::Find;
 use File::Basename;
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case );
 
 use YAML::Syck;
 local $YAML::Syck::ImplicitTyping = 1;
@@ -22,32 +22,41 @@ local $YAML::Syck::ImplicitTyping = 1;
 use Log::Log4perl qw(:easy);
 Log::Log4perl->easy_init( { level => $DEBUG } );
 
-my $DBNAME      = "tresults";
-my $COLLECTION  = "lustre";
-my %COMMAND_MAP = ( 'help' => 'help_command', 'post' => 'post_command' );
+my $dbname     = "lustre";   # default name which used in tests
+my $collection = "tresults"; # default db which used in tests
+my $host       = "localhost";
 
-sub help_command {
-    my ($target) = @_;
-    print <<"__HELP__";
+my $helpmessage = <<"__HELP__";
 
-Xperiors CouchDB Upload Results Tool
+Xperiors MongoDB Upload Results Tool
 
 Usage:
-    Bupload-results <command> [<parameters>]
+    upload-results  [<parameters>] [<actions>]
 
-Commands:
-  post <folder>      Post document from folder
-  TODO connection parameters
-  help               Show this message
+Options:
+    --dry     ( -n )  - do all witout real upload to database
+    --host       ( -H )  - host where database is up on default port ('localhost' if not set)
+    --database   ( -D )  - Mongo databse name ('$dbname' if not set)
+    --collection ( -C )  - Mongo collection name ('$collection' if not set)
+    --folder     ( -f )  - folder with results, obligatory for --post. 
+Actions
+    --help       ( -h )  - help (default action)
+    --post       ( -p )  - Post document from folder (see --folder opton)
+
 
 __HELP__
+
+sub help {
+    my ($target) = @_;
+    print $helpmessage;
+
 }
 
 sub opendb {
     INFO "Connecting to MongoDB";
-    my $conn = MongoDB::Connection->new( host => 'localhost' )
+    my $conn = MongoDB::Connection->new( host => $host )
       or die "The server cannot be reached";
-    my $db = $conn ->${DBNAME};
+    my $db = $conn ->${dbname};
     my $stat = $db->run_command( { serverStatus => -1 } );
     INFO "MongoDB ver: " . $stat->{version} . "\n";
 
@@ -59,14 +68,16 @@ sub iterate_hash {
     my $hash = shift;
     while ( my ( $key, $value ) = each %$hash ) {
         if ( 'HASH' eq ref $value ) {
-            iterate_hash( $value);
+            iterate_hash($value);
         }
         else {
-            #convert 
-            if($key =~ m/\./){
-                delete ( $hash->{$key} );
+
+            #convert
+            if ( $key =~ m/\./ ) {
+                delete( $hash->{$key} );
                 $key =~ s/\./_pnt_/g;
                 $hash->{$key} = $value;
+
                 #DEBUG "new value: [".$hash->{$key}."]";
             }
         }
@@ -80,7 +91,7 @@ sub validate_doc_data {
 
     # Forcing id to be string value
     #$data->{id} = "$data->{id}";
-    iterate_hash($data)
+    iterate_hash($data);
 }
 
 sub post_yaml_doc {
@@ -91,20 +102,17 @@ sub post_yaml_doc {
     my $yaml_data = YAML::Syck::LoadFile($path);
     validate_doc_data($yaml_data);
 
-    #my $json   = to_json( $yaml_data, { ascii => 1, pretty => 1 } );
 
-    #print Dumper $yaml_data;
-    $db ->${COLLECTION}->insert($yaml_data);    #,safe=>1);
+    $db ->${collection}->insert($yaml_data);    #,safe=>1);
 
     my $err = $db->last_error();
+
     #INFO "Last error". Dumper $err;
-
     #TODO atach files
-
     #INFO "Added document [$doc->{id}]";
 }
 
-sub post_command {
+sub post {
     my ( $start_folder, @params ) = @_;
 
     my $test_results_db = opendb();
@@ -128,15 +136,44 @@ sub post_command {
 
 ############################## main
 
-my $dryrun;
-GetOptions( "dryrun|dry" => \$dryrun );
-my $command = shift @ARGV;
-if ( defined( $COMMAND_MAP{$command} ) ) {
-    DEBUG "Command: $COMMAND_MAP{$command}";
-    &{ $COMMAND_MAP{$command} }(@ARGV);
-}
-else {
-    ERROR "Uknown command '$command'";
+my ( $dryrun, $help, $post, $folder );
+
+GetOptions(
+    "dry|n"          => \$dryrun,
+    "database|D:s"   => \$dbname,
+    "collection|C:s" => \$collection,
+    "host|H:s"       => \$host,
+    "folder|f:s"     => \$folder,
+
+    "help|h" => \$help,
+    "post|p" => \$post
+);
+
+
+INFO "Dry mode enbaled !" if defined $dryrun;
+INFO "Folde is set to : [$folder] " if defined $folder;
+DEBUG "Databse    = $dbname ";
+DEBUG "Collection = $collection";
+DEBUG "Host       = $host";
+
+
+if ( ( not defined $help ) && ( not defined $post ) ) {
+    ERROR "No action set";
+    help;
     exit 1;
+}
+
+if ( defined $help ) {
+    help;
+}
+elsif ( defined($post) ) {
+    unless ( defined $folder ) {
+        ERROR "No folder with yaml results set!";
+        help;
+        exit 1;
+    }
+
+    DEBUG "Do post";
+    post($folder);
 }
 

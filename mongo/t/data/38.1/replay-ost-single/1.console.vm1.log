@@ -1,0 +1,39 @@
+==> /tmp/serial_mft01_out <==
+Lustre: DEBUG MARKER: only running test 1
+Lustre: DEBUG MARKER: excepting tests:
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: 2233:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Lustre: 2233:0:(quota_master.c:793:close_quota_files()) Skipped 1 previous similar message
+LustreError: 7222:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Lustre: 7276:0:(debug.c:326:libcfs_debug_str2mask()) You are trying to use a numerical value for the mask - this will be deprecated in a future release.
+Lustre: 7276:0:(debug.c:326:libcfs_debug_str2mask()) Skipped 3 previous similar messages
+Lustre: DEBUG MARKER: == replay-ost-single test 1: touch == 06:41:11 (1331872871)
+Lustre: Failing over lustre-OST0000
+Lustre: lustre-OST0000: shutting down for failover; client state will be preserved.
+Lustre: OST lustre-OST0000 has stopped.
+Lustre: server umount lustre-OST0000 complete
+LustreError: 2320:0:(ldlm_lib.c:2125:target_send_reply_msg()) @@@ processing error (-107)  req@ffff88007a808c00 x1396569758761277/t0(0) o400-><?>@<?>:0/0 lens 192/0 e 0 to 0 dl 1331872903 ref 1 fl Interpret:H/0/ffffffff rc -107/-1
+LustreError: 11-0: an error occurred while communicating with 0@lo. The obd_ping operation failed with -107
+Lustre: lustre-OST0000-osc-ffff880074c42800: Connection to service lustre-OST0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+LustreError: 137-5: UUID 'lustre-OST0000_UUID' is not available  for connect (no target)
+LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+LDISKFS-fs (loop1): mounted filesystem with ordered data mode
+Lustre: 7636:0:(ldlm_lib.c:1900:target_recovery_init()) RECOVERY: service lustre-OST0000, 2 recoverable clients, last_transno 3
+LustreError: 7637:0:(ldlm_lib.c:1737:target_recovery_thread()) lustre-OST0000: started recovery thread pid 7637
+Lustre: 7636:0:(filter.c:1252:filter_prep_groups()) lustre-OST0000: initialize groups [0,0]
+Lustre: lustre-OST0000: Now serving lustre-OST0000 on /dev/loop1 with recovery enabled
+Lustre: lustre-OST0000: Will be in recovery for at least 1:00, or until 2 clients reconnect
+LustreError: 7616:0:(obd_class.h:1622:obd_notify()) obd lustre-OST0000 has no notify handler
+Lustre: 1628:0:(import.c:526:import_select_connection()) lustre-OST0000-osc-MDT0000: tried all connections, increasing latency to 11s
+Lustre: 1628:0:(import.c:526:import_select_connection()) Skipped 1 previous similar message
+Lustre: 2320:0:(ldlm_lib.c:873:target_handle_connect()) lustre-OST0000: connection from lustre-MDT0000-mdtlov_UUID@0@lo recovering/t0 exp ffff8800777ccc00 cur 1331872888 last 1331872887
+Lustre: 2320:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 1 previous similar message
+Lustre: 2320:0:(filter.c:2710:filter_connect_internal()) lustre-OST0000: Received MDS connection for group 0
+Lustre: 2317:0:(sec.c:1474:sptlrpc_import_sec_adapt()) import lustre-OST0000->NET_0x9000000000000_UUID netid 90000: select flavor null
+Lustre: 2317:0:(sec.c:1474:sptlrpc_import_sec_adapt()) Skipped 1 previous similar message
+Lustre: lustre-OST0000: sending delayed replies to recovered clients
+Lustre: lustre-OST0000-osc-MDT0000: Connection restored to service lustre-OST0000 using nid 0@lo.
+Lustre: lustre-OST0000: received MDS connection from 0@lo
+Lustre: 2317:0:(filter.c:2566:filter_llog_connect()) lustre-OST0000: Recovery from log 0x1f/0x0:2889b42f
+Lustre: MDS mdd_obd-lustre-MDT0000: lustre-OST0000_UUID now active, resetting orphans
+Lustre: DEBUG MARKER: == replay-ost-single replay-ost-single.sh test complete, duration 21 sec == 06:41:29 (1331872889)

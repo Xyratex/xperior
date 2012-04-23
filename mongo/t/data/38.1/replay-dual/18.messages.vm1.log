@@ -1,0 +1,10 @@
+==> /var/log/messages <==
+Mar 16 04:25:06 mft01 kernel: Lustre: DEBUG MARKER: only running test 18
+Mar 16 04:25:06 mft01 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Mar 16 04:25:06 mft01 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Mar 16 04:25:06 mft01 kernel: LustreError: 10908:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Mar 16 04:25:06 mft01 kernel: LustreError: 10908:0:(quota_ctl.c:328:client_quota_ctl()) Skipped 3 previous similar messages
+Mar 16 04:25:17 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual test 18: ldlm_handle_enqueue succeeds on evicted export (3822) == 04:25:17 (1331864717)
+Mar 16 04:25:18 mft01 kernel: Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Mar 16 04:25:18 mft01 kernel: Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Mar 16 04:25:18 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 13 sec == 04:25:18 (1331864718)

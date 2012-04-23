@@ -1,0 +1,124 @@
+==> /var/log/messages <==
+Mar 16 04:04:38 mft01 kernel: Lustre: DEBUG MARKER: only running test 8
+Mar 16 04:04:38 mft01 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Mar 16 04:04:39 mft01 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Mar 16 04:04:41 mft01 kernel: Lustre: 1628:0:(client.c:1773:ptlrpc_expire_one_request()) @@@ Request  sent has timed out for slow reply: [sent 1331863450/real 1331863450]  req@ffff880077c69c00 x1396559449163536/t0(0) o400->lustre-MDT0000-mdc-ffff88007710b400@0@lo:12/10 lens 192/192 e 0 to 1 dl 1331863481 ref 1 fl Rpc:XN/0/ffffffff rc 0/-1
+Mar 16 04:04:41 mft01 kernel: Lustre: 1628:0:(client.c:1773:ptlrpc_expire_one_request()) Skipped 3 previous similar messages
+Mar 16 04:04:49 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual test 8: replay of resent request == 04:04:49 (1331863489)
+Mar 16 04:04:50 mft01 kernel: LustreError: 19937:0:(osd_handler.c:938:osd_ro()) *** setting device osd-ldiskfs read-only ***
+Mar 16 04:04:50 mft01 kernel: Turning device loop0 (0x700000) read-only
+Mar 16 04:04:50 mft01 kernel: Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:04:50 mft01 kernel: Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:04:50 mft01 kernel: LustreError: 18175:0:(libcfs_fail.h:81:cfs_fail_check_set()) *** cfs_fail_loc=119 ***
+Mar 16 04:04:50 mft01 kernel: LustreError: 18175:0:(ldlm_lib.c:2120:target_send_reply_msg()) @@@ dropping reply  req@ffff880077b9a000 x1396559449163676/t38654705668(0) o36->c0f21b44-ed26-7b8b-59e5-2eada293cad7@0@lo:0/0 lens 456/416 e 0 to 0 dl 1331863520 ref 1 fl Interpret:/0/0 rc 0/0
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119b58
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119bc0
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119c28
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119c90
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761190c8
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119130
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119198
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119200
+Mar 16 04:04:56 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119bc0
+Mar 16 04:05:21 mft01 kernel: Lustre: lustre-MDT0000-mdc-ffff88007710b400: Connection to service lustre-MDT0000 via nid 0@lo was lost; in progress operations using this service will wait for recovery to complete.
+Mar 16 04:05:21 mft01 kernel: Lustre: Skipped 3 previous similar messages
+Mar 16 04:05:21 mft01 kernel: Lustre: 18175:0:(ldlm_lib.c:605:target_handle_reconnect()) lustre-MDT0000: c0f21b44-ed26-7b8b-59e5-2eada293cad7 reconnecting
+Mar 16 04:05:21 mft01 kernel: Lustre: lustre-MDT0000-mdc-ffff88007710b400: Connection restored to service lustre-MDT0000 using nid 0@lo.
+Mar 16 04:05:21 mft01 kernel: Lustre: Skipped 1 previous similar message
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007616af68
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619aa88
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619aaf0
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fe4200
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d7d540
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619a338
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619a818
+Mar 16 04:05:21 mft01 kernel: Lustre: Failing over lustre-MDT0000
+Mar 16 04:05:21 mft01 kernel: Lustre: Skipped 4 previous similar messages
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119610
+Mar 16 04:05:21 mft01 kernel: Lustre: 20073:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Mar 16 04:05:21 mft01 kernel: Lustre: 20073:0:(quota_master.c:793:close_quota_files()) Skipped 9 previous similar messages
+Mar 16 04:05:21 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 36] [block 17131] [count 3] [is_meta 1]
+Mar 16 04:05:21 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 27] [block 17128] [count 3] [is_meta 1]
+Mar 16 04:05:21 mft01 kernel: Lustre: mdd_obd-lustre-MDT0000: shutting down for failover; client state will be preserved.
+Mar 16 04:05:21 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 33] [block 30440] [count 3] [is_meta 1]
+Mar 16 04:05:21 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 37] [block 30443] [count 3] [is_meta 1]
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119678
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761196e0
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119748
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761197b0
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076119818
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6f68
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6f00
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6e98
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6e30
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6dc8
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6d60
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6cf8
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761b6c90
+Mar 16 04:05:21 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800761196e0
+Mar 16 04:05:21 mft01 kernel: Lustre: MGS has stopped.
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007616af00
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007616af68
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007616b748
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619aaf0
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619adc8
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fe4198
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fe4200
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d7d540
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619a950
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007619abc0
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fbaa88
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fbaa20
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007616af00
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fcba88
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fcba88
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fcba88
+Mar 16 04:05:24 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007616af00
+Mar 16 04:05:24 mft01 kernel: Removing read-only on unknown block (0x700000)
+Mar 16 04:05:24 mft01 kernel: Lustre: server umount lustre-MDT0000 complete
+Mar 16 04:05:33 mft01 kernel: LustreError: 166-1: MGC10.3.0.187@tcp: Connection to service MGS via nid 0@lo was lost; in progress operations using this service will fail.
+Mar 16 04:05:34 mft01 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Mar 16 04:05:34 mft01 kernel: LDISKFS-fs (loop0): 2 orphan inodes deleted
+Mar 16 04:05:34 mft01 kernel: LDISKFS-fs (loop0): recovery complete
+Mar 16 04:05:34 mft01 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Mar 16 04:05:34 mft01 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Mar 16 04:05:34 mft01 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Mar 16 04:05:34 mft01 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Mar 16 04:05:34 mft01 kernel: Lustre: MGS MGS started
+Mar 16 04:05:39 mft01 kernel: Lustre: MGC10.3.0.187@tcp: Reactivating import
+Mar 16 04:05:39 mft01 kernel: Lustre: Skipped 1 previous similar message
+Mar 16 04:05:39 mft01 kernel: Lustre: 20180:0:(import.c:526:import_select_connection()) MGC10.3.0.187@tcp: tried all connections, increasing latency to 6s
+Mar 16 04:05:39 mft01 kernel: Lustre: 20180:0:(import.c:526:import_select_connection()) Skipped 1 previous similar message
+Mar 16 04:05:39 mft01 kernel: Lustre: 20187:0:(ldlm_lib.c:873:target_handle_connect()) MGS: connection from f3761ddb-5158-65ca-ecdf-84533b3bdbaa@0@lo t0 exp (null) cur 1331863539 last 0
+Mar 16 04:05:39 mft01 kernel: Lustre: 20187:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 40 previous similar messages
+Mar 16 04:05:39 mft01 kernel: Lustre: Enabling ACL
+Mar 16 04:05:39 mft01 kernel: Lustre: Enabling user_xattr
+Mar 16 04:05:39 mft01 kernel: Lustre: lustre-MDT0000: used disk, loading
+Mar 16 04:05:39 mft01 kernel: Lustre: 20202:0:(ldlm_lib.c:1900:target_recovery_init()) RECOVERY: service lustre-MDT0000, 2 recoverable clients, last_transno 38654705665
+Mar 16 04:05:39 mft01 kernel: LustreError: 20206:0:(ldlm_lib.c:1737:target_recovery_thread()) lustre-MDT0000: started recovery thread pid 20206
+Mar 16 04:05:39 mft01 kernel: Lustre: 20202:0:(mdt_lproc.c:259:lprocfs_wr_identity_upcall()) lustre-MDT0000: identity upcall set to /usr/sbin/l_getidentity
+Mar 16 04:05:39 mft01 kernel: Lustre: 20202:0:(mds_lov.c:1004:mds_notify()) MDS mdd_obd-lustre-MDT0000: add target lustre-OST0000_UUID
+Mar 16 04:05:39 mft01 kernel: Lustre: 20202:0:(mds_lov.c:1004:mds_notify()) Skipped 3 previous similar messages
+Mar 16 04:05:39 mft01 kernel: Lustre: 2304:0:(ldlm_lib.c:802:target_handle_connect()) lustre-OST0000: received new MDS connection from NID 0@lo, removing former export from same NID
+Mar 16 04:05:39 mft01 kernel: Lustre: 2304:0:(ldlm_lib.c:802:target_handle_connect()) Skipped 3 previous similar messages
+Mar 16 04:05:39 mft01 kernel: Lustre: 2304:0:(filter.c:2710:filter_connect_internal()) lustre-OST0000: Received MDS connection for group 0
+Mar 16 04:05:39 mft01 kernel: Lustre: 2304:0:(filter.c:2710:filter_connect_internal()) Skipped 3 previous similar messages
+Mar 16 04:05:41 mft01 kernel: LustreError: 20208:0:(mdt_handler.c:2785:mdt_recovery()) operation 41 on unconnected MDS from 12345-0@lo
+Mar 16 04:05:41 mft01 kernel: LustreError: 20208:0:(mdt_handler.c:2785:mdt_recovery()) Skipped 1 previous similar message
+Mar 16 04:05:41 mft01 kernel: Lustre: 20210:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Next recovery transno: 38654705666, current: 38654705665, replaying
+Mar 16 04:05:41 mft01 kernel: Lustre: 20210:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Skipped 9 previous similar messages
+Mar 16 04:05:41 mft01 kernel: LustreError: 1629:0:(client.c:2585:ptlrpc_replay_interpret()) @@@ status -116, old was 0  req@ffff880074387000 x1396559449163564/t38654705665(38654705665) o35->lustre-MDT0000-mdc-ffff88007710b400@0@lo:23/10 lens 360/424 e 0 to 0 dl 1331863548 ref 2 fl Interpret:R/4/0 rc -116/-116
+Mar 16 04:05:44 mft01 kernel: Lustre: lustre-MDT0000: sending delayed replies to recovered clients
+Mar 16 04:05:44 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 66 sec == 04:05:44 (1331863544)
+Mar 16 04:05:44 mft01 kernel: LustreError: 20479:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+Mar 16 04:05:44 mft01 kernel: LustreError: 20479:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+Mar 16 04:05:44 mft01 kernel: Lustre: lustre-OST0001: received MDS connection from 0@lo
+Mar 16 04:05:44 mft01 kernel: Lustre: Skipped 3 previous similar messages
+Mar 16 04:05:44 mft01 kernel: Lustre: 2304:0:(lustre_log.h:471:llog_group_set_export()) lustre-OST0001: export for group 0 is changed: 0xffff880079abec00 -> 0xffff88003758c000
+Mar 16 04:05:44 mft01 kernel: Lustre: 2304:0:(lustre_log.h:471:llog_group_set_export()) Skipped 3 previous similar messages
+Mar 16 04:05:44 mft01 kernel: Lustre: 2304:0:(llog_net.c:168:llog_receptor_accept()) changing the import ffff880076c9b800 - ffff880076efd800
+Mar 16 04:05:44 mft01 kernel: Lustre: 2304:0:(llog_net.c:168:llog_receptor_accept()) Skipped 3 previous similar messages
+Mar 16 04:05:44 mft01 kernel: Lustre: 2303:0:(filter.c:2566:filter_llog_connect()) lustre-OST0000: Recovery from log 0x1f/0x0:be68561c
+Mar 16 04:05:44 mft01 kernel: Lustre: 2303:0:(filter.c:2566:filter_llog_connect()) Skipped 1 previous similar message
+Mar 16 04:05:44 mft01 kernel: Lustre: MDS mdd_obd-lustre-MDT0000: lustre-OST0000_UUID now active, resetting orphans
+Mar 16 04:05:44 mft01 kernel: Lustre: Skipped 3 previous similar messages

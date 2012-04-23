@@ -1,0 +1,42 @@
+==> /var/log/messages <==
+Mar 16 04:35:42 mft01 yum[17940]: Updated: 1:dbus-libs-1.2.24-5.el6_1.x86_64
+Mar 16 04:35:43 mft01 yum[17940]: Updated: tcp_wrappers-libs-7.6-57.el6.x86_64
+Mar 16 04:35:43 mft01 yum[17940]: Updated: libblkid-2.17.2-12.4.el6.x86_64
+Mar 16 04:35:44 mft01 yum[17940]: Updated: apr-1.3.9-3.el6_1.2.x86_64
+Mar 16 04:35:44 mft01 yum[17940]: Updated: plymouth-scripts-0.8.3-24.el6.centos.x86_64
+Mar 16 04:35:45 mft01 yum[17940]: Updated: libselinux-utils-2.0.94-5.2.el6.x86_64
+Mar 16 04:35:45 mft01 yum[17940]: Updated: libsemanage-2.0.43-4.1.el6.x86_64
+Mar 16 04:35:46 mft01 yum[17940]: Updated: perl-Compress-Raw-Zlib-2.023-119.el6_1.1.x86_64
+Mar 16 04:35:47 mft01 yum[17940]: Updated: perl-IO-Compress-Base-2.020-119.el6_1.1.x86_64
+Mar 16 04:35:47 mft01 yum[17940]: Updated: libgpg-error-1.7-4.el6.x86_64
+Mar 16 04:35:48 mft01 yum[17940]: Updated: newt-0.52.11-3.el6.x86_64
+Mar 16 04:35:49 mft01 yum[17940]: Updated: pciutils-libs-3.1.4-11.el6.x86_64
+Mar 16 04:35:50 mft01 yum[17940]: Updated: which-2.19-6.el6.x86_64
+Mar 16 04:35:53 mft01 kernel: Lustre: DEBUG MARKER: only running test 21b
+Mar 16 04:35:53 mft01 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Mar 16 04:35:53 mft01 kernel: Lustre: 19440:0:(ldlm_lib.c:873:target_handle_connect()) lustre-MDT0000: connection from 489e6854-a2c1-780c-cb29-a5a25ffc39e6@0@lo t0 exp (null) cur 1331865353 last 0
+Mar 16 04:35:53 mft01 kernel: Lustre: 19440:0:(ldlm_lib.c:873:target_handle_connect()) Skipped 41 previous similar messages
+Mar 16 04:35:58 mft01 yum[17940]: Updated: freetype-2.3.11-6.el6_1.7.x86_64
+Mar 16 04:35:59 mft01 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Mar 16 04:35:59 mft01 kernel: LustreError: 21268:0:(quota_ctl.c:328:client_quota_ctl()) ptlrpc_queue_wait failed, rc: -114
+Mar 16 04:35:59 mft01 kernel: LustreError: 21268:0:(quota_ctl.c:328:client_quota_ctl()) Skipped 3 previous similar messages
+Mar 16 04:36:00 mft01 yum[17940]: Updated: libgcrypt-1.4.5-9.el6.x86_64
+Mar 16 04:36:01 mft01 yum[17940]: Updated: perl-IO-Compress-Zlib-2.020-119.el6_1.1.x86_64
+Mar 16 04:36:04 mft01 yum[17940]: Updated: net-tools-1.60-109.el6.x86_64
+Mar 16 04:36:07 mft01 yum[17940]: Updated: procps-3.2.8-21.el6.x86_64
+Mar 16 04:36:08 mft01 yum[17940]: Updated: nss-softokn-3.12.9-11.el6.x86_64
+Mar 16 04:36:10 mft01 yum[17940]: Updated: nss-3.13.1-7.el6_2.x86_64
+Mar 16 04:36:11 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual test 21b: commit on sharing, two clients == 04:36:11 (1331865371)
+Mar 16 04:36:11 mft01 kernel: Lustre: DEBUG MARKER: SKIP: replay-dual test_21b Need two or more clients, have 1
+Mar 16 04:36:11 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 18 sec == 04:36:11 (1331865371)
+Mar 16 04:36:11 mft01 kernel: LustreError: 21817:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Got rc -108 from cancel RPC: canceling anyway
+Mar 16 04:36:11 mft01 kernel: LustreError: 21817:0:(ldlm_request.c:1172:ldlm_cli_cancel_req()) Skipped 7 previous similar messages
+Mar 16 04:36:11 mft01 kernel: LustreError: 21817:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -108
+Mar 16 04:36:11 mft01 kernel: LustreError: 21817:0:(ldlm_request.c:1799:ldlm_cli_cancel_list()) Skipped 7 previous similar messages
+Mar 16 04:36:11 mft01 yum[17940]: Updated: nss-sysinit-3.13.1-7.el6_2.x86_64
+Mar 16 04:36:12 mft01 yum[17940]: Updated: openldap-2.4.23-20.el6.x86_64
+Mar 16 04:36:13 mft01 yum[17940]: Updated: 1:perl-ExtUtils-ParseXS-2.2003.0-119.el6_1.1.x86_64
+Mar 16 04:36:14 mft01 yum[17940]: Updated: perl-ExtUtils-MakeMaker-6.55-119.el6_1.1.x86_64
+Mar 16 04:36:14 mft01 yum[17940]: Updated: 4:perl-devel-5.10.1-119.el6_1.1.x86_64
+Mar 16 04:36:19 mft01 yum[17940]: Updated: perl-Test-Harness-3.17-119.el6_1.1.x86_64
+Mar 16 04:36:21 mft01 yum[17940]: Installed: perl-YAML-Syck-1.07-4.el6.x86_64

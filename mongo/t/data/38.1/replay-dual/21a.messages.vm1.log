@@ -1,0 +1,116 @@
+==> /var/log/messages <==
+Mar 16 04:31:13 mft01 kernel: Lustre: DEBUG MARKER: only running test 21a
+Mar 16 04:31:13 mft01 kernel: Lustre: DEBUG MARKER: excepting tests: 15c
+Mar 16 04:31:15 mft01 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Mar 16 04:31:15 mft01 kernel: Lustre: 15917:0:(quota_master.c:793:close_quota_files()) quota[0] is off already
+Mar 16 04:31:15 mft01 kernel: Lustre: 15917:0:(quota_master.c:793:close_quota_files()) Skipped 19 previous similar messages
+Mar 16 04:31:26 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual test 21a: commit on sharing == 04:31:26 (1331865086)
+Mar 16 04:31:26 mft01 kernel: Turning device loop0 (0x700000) read-only
+Mar 16 04:31:26 mft01 kernel: Lustre: DEBUG MARKER: mds1 REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:31:26 mft01 kernel: Lustre: DEBUG MARKER: local REPLAY BARRIER on lustre-MDT0000
+Mar 16 04:31:26 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c0748
+Mar 16 04:31:26 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fdec28
+Mar 16 04:31:26 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a7af0
+Mar 16 04:31:26 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a7a20
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d71338
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d712d0
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d71268
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d71200
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d71198
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d71130
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d712d0
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762a7338
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8ec28
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762acf00
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762978e8
+Mar 16 04:31:27 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880076297540
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d72c28
+Mar 16 04:31:28 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 45] [block 27883] [count 3] [is_meta 1]
+Mar 16 04:31:28 mft01 kernel: Release to readonly device loop0 (0x700000): [inode 27] [block 19179] [count 3] [is_meta 1]
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d72b58
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d72af0
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d72a88
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d72a20
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d730c8
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d73130
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d73198
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d73200
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d73268
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d732d0
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d73338
+Mar 16 04:31:28 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880072d72af0
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c0c90
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c0748
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078cb6268
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078fdec28
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b610
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8e7b0
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078d8ec28
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff8800762acf00
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b3a0
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880078f4b338
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c0c90
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880075fc62d0
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880075fc62d0
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff880075fc62d0
+Mar 16 04:31:31 mft01 kernel: Write to readonly device loop0 (0x700000) bi_flags: f000000000000001, bi_vcnt: 1, bi_idx: 0, bi->size: 4096, bi_cnt: 2, bi_private: ffff88007b3c0c90
+Mar 16 04:31:31 mft01 kernel: Removing read-only on unknown block (0x700000)
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs (loop0): 1 orphan inode deleted
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs (loop0): recovery complete
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs warning (device loop0): ldiskfs_fill_super: extents feature not enabled on this filesystem, use tune2fs.
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs (loop0): warning: maximal mount count reached, running e2fsck is recommended
+Mar 16 04:31:41 mft01 kernel: LDISKFS-fs (loop0): mounted filesystem with ordered data mode
+Mar 16 04:31:51 mft01 kernel: Lustre: 19388:0:(import.c:526:import_select_connection()) MGC10.3.0.187@tcp: tried all connections, increasing latency to 11s
+Mar 16 04:31:55 mft01 kernel: Lustre: 19442:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Next recovery transno: 94489280518, current: 94489280516, replaying
+Mar 16 04:31:55 mft01 kernel: Lustre: 19442:0:(ldlm_lib.c:2026:target_queue_recovery_request()) Skipped 64 previous similar messages
+Mar 16 04:31:55 mft01 kernel: LustreError: 1629:0:(client.c:2585:ptlrpc_replay_interpret()) @@@ status -116, old was 0  req@ffff88007bdb1000 x1396559449167848/t94489280516(94489280516) o35->lustre-MDT0000-mdc-ffff88007710b400@0@lo:23/10 lens 360/424 e 0 to 0 dl 1331865122 ref 2 fl Interpret:R/4/0 rc -116/-116
+Mar 16 04:32:23 mft01 yum[17940]: Updated: libgcc-4.4.6-3.el6.x86_64
+Mar 16 04:32:31 mft01 yum[17940]: Updated: setup-2.8.14-13.el6.noarch
+Mar 16 04:32:32 mft01 yum[17940]: Updated: hwdata-0.233-7.6.el6.noarch
+Mar 16 04:32:34 mft01 yum[17940]: Updated: filesystem-2.4.30-3.el6.x86_64
+Mar 16 04:32:34 mft01 yum[17940]: Updated: mailcap-2.1.31-2.el6.noarch
+Mar 16 04:32:46 mft01 yum[17940]: Updated: tzdata-2011l-4.el6.noarch
+Mar 16 04:32:47 mft01 yum[17940]: Updated: bash-4.1.2-8.el6.centos.x86_64
+Mar 16 04:32:47 mft01 yum[17940]: Updated: nss-softokn-freebl-3.12.9-11.el6.x86_64
+Mar 16 04:33:23 mft01 yum[17940]: Updated: glibc-common-2.12-1.47.el6.x86_64
+Mar 16 04:33:26 mft01 kernel: Lustre: 19438:0:(ldlm_lib.c:1566:target_recovery_overseer()) recovery is timed out, evict stale exports
+Mar 16 04:33:26 mft01 kernel: LustreError: 19438:0:(genops.c:1270:class_disconnect_stale_exports()) lustre-MDT0000: disconnect stale client 06eb8b76-a75d-f64d-6af9-c5ec5310ebc8@<unknown>
+Mar 16 04:33:26 mft01 kernel: LustreError: 152-6: Ignoring deprecated mount option 'acl'.
+Mar 16 04:33:26 mft01 kernel: LustreError: Skipped 8 previous similar messages
+Mar 16 04:33:26 mft01 kernel: Lustre: Client lustre-client has started
+Mar 16 04:33:26 mft01 kernel: Lustre: Skipped 8 previous similar messages
+Mar 16 04:33:48 mft01 yum[17940]: Updated: glibc-2.12-1.47.el6.x86_64
+Mar 16 04:33:50 mft01 yum[17940]: Updated: libattr-2.4.44-7.el6.x86_64
+Mar 16 04:33:52 mft01 yum[17940]: Updated: libcap-2.16-5.5.el6.x86_64
+Mar 16 04:33:55 mft01 yum[17940]: Updated: zlib-1.2.3-27.el6.x86_64
+Mar 16 04:33:58 mft01 yum[17940]: Updated: 1:perl-Pod-Escapes-1.04-119.el6_1.1.x86_64
+Mar 16 04:34:01 mft01 yum[17940]: Updated: 1:perl-Pod-Simple-3.13-119.el6_1.1.x86_64
+Mar 16 04:34:04 mft01 yum[17940]: Updated: 3:perl-version-0.77-119.el6_1.1.x86_64
+Mar 16 04:34:05 mft01 yum[17940]: Updated: 1:perl-Module-Pluggable-3.90-119.el6_1.1.x86_64
+Mar 16 04:34:08 mft01 kernel: Lustre: DEBUG MARKER: == replay-dual replay-dual.sh test complete, duration 175 sec == 04:34:08 (1331865248)
+Mar 16 04:34:08 mft01 kernel: Lustre: client ffff880079c34800 umount complete
+Mar 16 04:34:08 mft01 kernel: Lustre: Skipped 8 previous similar messages
+Mar 16 04:34:09 mft01 yum[17940]: Updated: 4:perl-libs-5.10.1-119.el6_1.1.x86_64
+Mar 16 04:34:38 mft01 yum[17940]: Updated: 4:perl-5.10.1-119.el6_1.1.x86_64
+Mar 16 04:34:41 mft01 yum[17940]: Updated: nspr-4.8.9-3.el6_2.x86_64
+Mar 16 04:34:44 mft01 yum[17940]: Updated: audit-libs-2.1.3-3.el6.x86_64
+Mar 16 04:34:46 mft01 yum[17940]: Updated: libcom_err-1.41.90.wc3-7.el6.x86_64
+Mar 16 04:34:48 mft01 yum[17940]: Updated: nss-util-3.13.1-3.el6_2.x86_64
+Mar 16 04:34:49 mft01 yum[17940]: Updated: libacl-2.2.49-6.el6.x86_64
+Mar 16 04:34:51 mft01 yum[17940]: Updated: libsepol-2.0.41-4.el6.x86_64
+Mar 16 04:34:54 mft01 yum[17940]: Updated: libselinux-2.0.94-5.2.el6.x86_64
+Mar 16 04:35:03 mft01 yum[17940]: Updated: 2:shadow-utils-4.1.4.2-13.el6.x86_64
+Mar 16 04:35:06 mft01 yum[17940]: Updated: sed-4.2.1-7.el6.x86_64
+Mar 16 04:35:10 mft01 yum[17940]: Updated: coreutils-libs-8.4-16.el6.x86_64
+Mar 16 04:35:27 mft01 yum[17940]: Updated: coreutils-8.4-16.el6.x86_64
+Mar 16 04:35:31 mft01 yum[17940]: Updated: pam-1.1.1-10.el6.x86_64
+Mar 16 04:35:32 mft01 yum[17940]: Updated: libuuid-2.17.2-12.4.el6.x86_64
+Mar 16 04:35:33 mft01 yum[17940]: Updated: file-libs-5.04-11.el6.x86_64
+Mar 16 04:35:33 mft01 yum[17940]: Updated: libstdc++-4.4.6-3.el6.x86_64
+Mar 16 04:35:34 mft01 yum[17940]: Updated: cyrus-sasl-lib-2.1.23-13.el6.x86_64
+Mar 16 04:35:36 mft01 yum[17940]: Updated: libudev-147-2.40.el6.x86_64
+Mar 16 04:35:39 mft01 yum[17940]: Updated: redhat-logos-60.0.14-10.el6.centos.noarch
+Mar 16 04:35:40 mft01 yum[17940]: Updated: 2:libpng-1.2.46-1.el6_1.x86_64
