@@ -1,44 +1,4 @@
 
-sanity/27u # 13297 
-sanity/42a # 2108
-sanity/42b # 9789
-sanity/42c # 3637
-sanity/42d # 9789
-sanity/45  # 3561
-sanity/51d # 12622
-sanity/65a # 12653
-sanity/65e # 12653
-sanity/68b # 5188
-
-#also skip list from http://jira-nss.xy01.xyratex.com:8080/browse/MRP-298
-sanity/27a 
-sanity/27c 
-sanity/27d 
-sanity/27e 
-sanity/27f 
-sanity/27g 
-sanity/27j 
-sanity/27k 
-sanity/27l 
-sanity/27m 
-sanity/27n 
-sanity/27o 
-sanity/27p 
-sanity/27q 
-sanity/27r 
-sanity/27s 
-sanity/27t 
-sanity/27u 
-sanity/27v 
-sanity/27w 
-sanity/27x 
-sanity/27y 
-sanity/27z 
-sanity/27A 
-sanity/51d 
-
-#sanity special
-sanity/62
 # commented in script code
 # This test is now irrelevant (as of bug 10718 inclusion), we no longer
 # match every page all of the time.
@@ -51,31 +11,6 @@ sanityn/1c #MRP-335
 sanityn/1d #MRP-335
 
 
-#sanityn from ALWAYS_EXCEPT
-sanityn/14b
-sanityn/19
-sanityn/28
-sanityn/29
-sanityn/35 
-
-########### replay single
-replay-single/61d
-replay-single/33a
-replay-single/33b
-
-############ recovery-small 
-recovery-small/24
-recovery-small/52
-
-#############
-####replay-dual
-replay-dual/15c 
-
-##########
-##insanity
-insanity/10
-
-##########
 ## lustre-single
 lustre-single/metadata-updates #MRP-369
 lustre-single/runtests         #MRP-370     

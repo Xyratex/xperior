@@ -529,7 +529,11 @@ sub getFile {
       . $lfile;
 
     return runEx(
-        "scp -rp " . $self->user . '@' . $self->hostname . ":$rfile $lfile" );
+      "scp -rp "
+      ."-o 'UserKnownHostsFile=/dev/null' "
+      ."-o 'StrictHostKeyChecking=no' " 
+      ."-o 'ConnectionAttempts=3' "  
+      . $self->user . '@' . $self->hostname . ":$rfile $lfile" );
 }
 
 =back
