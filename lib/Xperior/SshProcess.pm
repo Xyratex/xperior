@@ -96,17 +96,19 @@ sub _sshSyncExec {
     my $step = 0;
     my $AT   = 5;
     my $r    = undef;
-    while  ( $step < $AT  ) {
+    while ( $step < $AT ) {
         sleep $step;
         $self->syncexitcode(undef);
         $r = $self->_sshSyncExecS( $cmd, $timeout );
-        return $r if ((defined($self->syncexitcode ))
-                    and ($self->syncexitcode != -100) #timeout
-                    and ($self->syncexitcode != 65280) #connect
-                );
+        return $r
+          if (
+                ( defined( $self->syncexitcode ) )
+            and ( $self->syncexitcode != -100 )     #timeout
+            and ( $self->syncexitcode != 65280 )    #connect
+          );
         $step++;
         my $ec = $self->syncexitcode;
-        $ec = 'undef' unless( defined( $self->syncexitcode));
+        $ec = 'undef' unless ( defined( $self->syncexitcode ) );
         DEBUG "Sync attemp [$step], exit code is :[$ec], retry...";
     }
     return $r;
@@ -119,7 +121,7 @@ sub _sshSyncExecS {
       . "-o 'AddressFamily inet' "
       . "-o 'ConnectTimeout=10' "
       . "-o 'UserKnownHostsFile=/dev/null' "
-      . "-o 'StrictHostKeyChecking=no' " 
+      . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectionAttempts=3' "
       . "-o 'ServerAliveInterval=600' "
       . "-o 'ServerAliveCountMax=15' " . " -f "
@@ -137,14 +139,27 @@ sub _sshSyncExecS {
             die "alarm clock restart";
         };
         alarm $timeout;
-        #do main action
-        my $rawout = `$cc`;
-        
-        $out = join('',grep(!/Warning:\sPermanently\sadded/,split(/\n/,$rawout)));
 
-        alarm 0;    # cancel the alarm asap
+        #do main action
+        my $rawout = '';    # `$cc`;
+
+        open( CMD, "$cc|" ) || confess "Execution failed: $!";
+        while (<CMD>) {
+            my $s = $_;     # chomp;
+            $rawout = $rawout . $s;
+            unless ( $s =~ m/Warning:\sPermanently\sadded/ ) {
+                $out = $out . $s;
+                DEBUG "RO:$_";
+            }
+        }
+        close CMD;
+
+        #TODO rechec in future difference between  $? and CHILD_ERROR_NATIVE
+        #my $code = $?;
+
+        alarm 0;            # cancel the alarm asap
     };
-    alarm 0;        # race condition protection
+    alarm 0;                # race condition protection
 
     #DEBUG "****[$out]***";
     #DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
@@ -155,11 +170,14 @@ sub _sshSyncExecS {
         WARN "SSH sync execution killed by timeout !\n";
         return undef;
     }
-     $self->syncexitcode( ${^CHILD_ERROR_NATIVE} );
+    $self->syncexitcode( ${^CHILD_ERROR_NATIVE} );
     if ( ${^CHILD_ERROR_NATIVE} == 0xFF00 ) {
-        WARN "SSH exit code mean connection problem  [" . ${^CHILD_ERROR_NATIVE} . "](sync mode)";
+        WARN "SSH exit code mean connection problem  ["
+          . ${^CHILD_ERROR_NATIVE}
+          . "](sync mode)";
         return undef;
     }
+
     #DEBUG "--------------";
     return $out;
 }
@@ -168,38 +186,39 @@ sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
     DEBUG "Xperior::SshProcess->_sshAsyncExec";
     my $asyncstarttimeout = 30;
-    my $sc    = 1;
+    my $sc                = 1;
     my $cc =
         "ssh  -o  'BatchMode yes' "
       . "-o 'AddressFamily inet' "
       . "-o 'UserKnownHostsFile=/dev/null' "
-      . "-o 'StrictHostKeyChecking=no' " 
+      . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectTimeout=10' " . "-f "
       . $self->user . "@"
       . $self->host
       . " \"$cmd\"  ";
     DEBUG "Remote cmd is [$cc]";
     my $step = 0;
-    my $AT = 5;
+    my $AT   = 5;
+
     #this cycle is workaround for connection problem,
     #which observed too rare.
-    while ( ($sc != 0 ) and ( $step < $AT ) ) {
+    while ( ( $sc != 0 ) and ( $step < $AT ) ) {
         $self->bprocess( Proc::Simple->new() );
         $self->bprocess->start($cc);
         $self->bprocess->kill_on_destroy(1);
         my $time = 0;
-        while ( not defined $self->bprocess->exit_status()){
-            DEBUG 'sleep 1 '.`/bin/sleep 1`;    #hack, looks like perl's sleep
-                                     #doesn't work there
+        while ( not defined $self->bprocess->exit_status() ) {
+            DEBUG 'sleep 1 ' . `/bin/sleep 1`;    #hack, looks like perl's sleep
+                                                  #doesn't work there
             $sc = $self->bprocess->exit_status();
             $time++;
-            if ($time > $asyncstarttimeout ){
+            if ( $time > $asyncstarttimeout ) {
                 ERROR "App alive more then timeout, kill it";
                 $self->bprocess->kill;
             }
         }
         $sc = $self->bprocess->exit_status();
-        DEBUG "[$step] local async result = [$sc]";        
+        DEBUG "[$step] local async result = [$sc]";
         $step++;
     }
     return $sc;
@@ -308,8 +327,11 @@ SS
     DEBUG "Remote app completed";
 
     if ( $self->killed == 0 ) {
-        $self->exitcode( trim $self->_sshSyncExec("cat $ecf") );
-#$self->exitcode($self->syncexitcode);
+        my $ecfc = $self->_sshSyncExec("cat $ecf");
+        DEBUG "Exit code is [$ecfc]";
+        $self->exitcode( trim $ecfc );
+
+        #$self->exitcode($self->syncexitcode);
     }
     return $s;
 
@@ -416,7 +438,7 @@ sub kill {
     my $name = $self->appname;
     $mode = 0 unless defined $mode;
 
-    if( (!defined($pid)) or ($pid eq '') ){
+    if ( ( !defined($pid) ) or ( $pid eq '' ) ) {
         INFO "PID is empty, exiting";
         return;
     }
@@ -465,25 +487,25 @@ sub isAlive {
     my $pid  = $self->pid;
     my $name = $self->appname;
     my $o;
-    my $step =1;
-    my $AT = 6;
+    my $step     = 1;
+    my $AT       = 6;
     my $exitcode = '';
-    while ($AT > $step ){
-        $o= trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
-      if((defined($o)) and ($o =~ m/^\s*$pid\s*/ )){
-          last;
-      }
-      $exitcode = trim ($self->_sshSyncExec( 
-                                "cat " . $self->ecodefile ));
-        
-      DEBUG "Exitcode = [$exitcode]";
-      if((defined($o)) and ($exitcode =~ m/^\d+$/ )){
-          last;
-      }
-      sleep $step;
-      $step++;
-      DEBUG "Proc is not found, <$step> recheck process status";
+    while ( $AT > $step ) {
+        $o = trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
+        if ( ( defined($o) ) and ( $o =~ m/^\s*$pid\s*/ ) ) {
+            last;
+        }
+        $exitcode = trim( $self->_sshSyncExec( "cat " . $self->ecodefile ) );
+
+        DEBUG "Exitcode = [$exitcode]";
+        if ( ( defined($o) ) and ( $exitcode =~ m/^\d+$/ ) ) {
+            last;
+        }
+        sleep $step;
+        $step++;
+        DEBUG "Proc is not found, <$step> recheck process status";
     }
+
     #  DEBUG "*********** $o";
     unless ( defined($o) ) {
         ERROR "unable to check remote system, no output got";
@@ -494,8 +516,12 @@ sub isAlive {
         DEBUG "Remote process is alive! ";
         return 0;
     }
-    $self->exitcode( $exitcode );
-    DEBUG "Remote process is not found, sync exit code is: [".$self->syncexitcode."], app exit code is :[".$self->exitcode."], \n o=[$o]";
+    $self->exitcode($exitcode);
+    DEBUG "Remote process is not found, sync exit code is: ["
+      . $self->syncexitcode
+      . "], app exit code is :["
+      . $self->exitcode
+      . "], \n o=[$o]";
     return -1;
 }
 
@@ -528,12 +554,13 @@ sub getFile {
       . $rfile . ' to '
       . $lfile;
 
-    return runEx(
-      "scp -rp "
-      ."-o 'UserKnownHostsFile=/dev/null' "
-      ."-o 'StrictHostKeyChecking=no' " 
-      ."-o 'ConnectionAttempts=3' "  
-      . $self->user . '@' . $self->hostname . ":$rfile $lfile" );
+    return runEx( "scp -rp "
+          . "-o 'UserKnownHostsFile=/dev/null' "
+          . "-o 'StrictHostKeyChecking=no' "
+          . "-o 'ConnectionAttempts=3' "
+          . $self->user . '@'
+          . $self->hostname
+          . ":$rfile $lfile" );
 }
 
 =back

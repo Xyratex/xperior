@@ -47,25 +47,33 @@ sub createExecutor {
         foreach my $role ( split( /\s/, $roles ) ) {
             DEBUG "Applying roles [$role]";
 
-            if ( $role eq 'LustreClientStatus' ) {
+            if ( $role eq 'LustreClientStatus' ) {                
                 use Xperior::Executor::Roles::LustreClientStatus;
                 Xperior::Executor::Roles::LustreClientStatus->meta->apply($obj);
+                DEBUG 'ok';
             }
 
             if ( $role eq 'StoreSyslog' ) {
                 use Xperior::Executor::Roles::StoreSyslog;
                 Xperior::Executor::Roles::StoreSyslog->meta->apply($obj);
+                DEBUG 'ok';
             }
 
             if ( $role eq 'StoreConsole' ) {
                 use Xperior::Executor::Roles::StoreConsole;
                 Xperior::Executor::Roles::StoreConsole->meta->apply($obj);
+                DEBUG 'ok';
             }
             if ( $role eq 'GetDiagnostics' ) {
                 use Xperior::Executor::Roles::GetDiagnostics;
                 Xperior::Executor::Roles::GetDiagnostics->meta->apply($obj);
+                DEBUG 'ok';
             }
-
+            if ( $role eq 'ReformatBefore' ) {
+                use Xperior::Executor::Roles::ReformatBefore;
+                Xperior::Executor::Roles::ReformatBefore->meta->apply($obj);
+                DEBUG 'ok';
+            }
         }
     }
     return $obj;
@@ -103,8 +111,9 @@ sub runtest {
     }
 
     #TODO: move parsing of extopt out of Core package
-    if ( (defined($self->options->{'extopt'} )) 
-            && (scalar @{ $self->options->{'extopt'} } )) {
+    if (   ( defined( $self->options->{'extopt'} ) )
+        && ( scalar @{ $self->options->{'extopt'} } ) )
+    {
         INFO "Apply external options";
         foreach my $param ( @{ $self->options->{'extopt'} } ) {
             if ( $param =~ m/^([\w\d]+)\s*\:(.+)$/ ) {
@@ -265,17 +274,16 @@ sub run {
 
                 #test failed, do env check
                 my $cer = $self->{'env'}->checkEnv;
-                  if ( $cer < 0 ) {
-                        WARN
+                if ( $cer < 0 ) {
+                    WARN
 "Found problems while testing configuration after failed test, exiting";
-                        WARN "Executed $enum tests, skipped $snum";
-                        $self->htmlReport;
-                        exit(10);
-                    }
-                unless (($res == 1)
-                    and ($exe->yaml->{'fail_reason'} eq 
-                                      'No_status_found')
-                    and ($exe->yaml->{'killed'} eq 'no'))
+                    WARN "Executed $enum tests, skipped $snum";
+                    $self->htmlReport;
+                    exit(10);
+                }
+                unless (( $res == 1 )
+                    and ( $exe->yaml->{'fail_reason'} eq 'No_status_found' )
+                    and ( $exe->yaml->{'killed'} eq 'no' ) )
                 {
                     if ( defined( $test->getParam('dangerous') )
                         && ( $test->getParam('dangerous') eq 'yes' ) )
@@ -285,7 +293,8 @@ sub run {
                         $self->htmlReport;
                         exit(11);
                     }
-                }else{
+                }
+                else {
                     WARN "Unclean test failure, not exiting after it";
                 }
 
