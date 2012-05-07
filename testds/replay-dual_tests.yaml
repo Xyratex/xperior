@@ -1,38 +1,63 @@
----
-groupname        : replay-dual  
-executor         : Xperior::Executor::LustreTests
-roles            : StoreSyslog StoreConsole GetDiagnostics
-description      : Lustre replay-dual  tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 10 
-timeout          : 300
-cleanup_max_time : -1
-tags             : functional 
-dangerous        : yes
-
-Tests:
-   - id : 0a
-   - id : 0b
-   - id : 1
-   - id : 2
-   - id : 3
-   - id : 4
-   - id : 5
-   - id : 6
-   - id : 8
-   - id : 9
-   - id : 10
-   - id : 11
-   - id : 12
-   - id : 13
-   - id : 15a
-   - id : 14b
-   - id : 15a
-   - id : 15c
-   - id : 16
-   - id : 17
-   - id : 18
-   - id : 19
-   - id : 20
-   - id : 21a
-   - id : 21b
+--- 
+Tests: 
+  - 
+    id: 0a
+  - 
+    id: 0b
+  - 
+    id: 1
+  - 
+    id: 2
+  - 
+    id: 3
+  - 
+    id: 4
+  - 
+    id: 5
+  - 
+    id: 6
+  - 
+    id: 8
+  - 
+    id: 9
+  - 
+    id: 10
+  - 
+    id: 11
+  - 
+    id: 12
+  - 
+    id: 13
+  - 
+    id: 15a
+  - 
+    id: 14b
+  - 
+    id: 15a
+  - 
+    id: 15c
+  - 
+    id: 16
+  - 
+    id: 17
+  - 
+    id: 18
+  - 
+    id: 19
+  - 
+    id: 20
+  - 
+    id: 21a
+  - 
+    id: 21b
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Lustre replay-dual  tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: replay-dual
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 300

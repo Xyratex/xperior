@@ -180,5 +180,5 @@ groupname: conf-sanity
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
-tags: functional
+tags_bad: functional
 timeout: 300

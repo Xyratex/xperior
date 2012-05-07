@@ -1,138 +1,248 @@
----
-groupname        : replay-single 
-executor         : Xperior::Executor::LustreTests
-roles            : StoreSyslog StoreConsole GetDiagnostics
-description      : Lustre replay-single tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 10 
-timeout          : 300
-cleanup_max_time : -1
-tags             : functional 
-dangerous        : yes
-Tests:
-   - id : 0a
-   - id : 0b
-   - id : 0d
-   - id : 1
-   - id : 2a
-   - id : 2b
-   - id : 3a
-   - id : 3b
-   - id : 3c
-   - id : 4a
-   - id : 4b
-   - id : 5
-   - id : 6a
-   - id : 6b
-   - id : 7
-   - id : 8
-   - id : 9
-   - id : 10
-   - id : 11
-   - id : 12
-   - id : 13
-   - id : 14
-   - id : 15
-   - id : 16
-   - id : 17
-   - id : 18
-   - id : 11
-   - id : 19
-   - id : 20a
-   - id : 20b
-   - id : 20c
-   - id : 21
-   - id : 22
-   - id : 23
-   - id : 24
-   - id : 25
-   - id : 26
-   - id : 27
-   - id : 28
-   - id : 29
-   - id : 30
-   - id : 31
-   - id : 32
-   - id : 33a
-   - id : 33b
-   - id : 34
-   - id : 35
-   - id : 36
-   - id : 37
-   - id : 38
-   - id : 39
-   - id : 40
-   - id : 41
-   - id : 42
-   - id : 43
-#   - id : 44a SLOW, 63 min
-#     timeout: 600
-   - id : 44b
-     timeout: 600
-   - id : 44c
-   - id : 45
-   - id : 46
-   - id : 47
-   - id : 48
-   - id : 50
-   - id : 52
-   - id : 53a
-   - id : 53b
-   - id : 53c
-   - id : 53d
-   - id : 53e
-   - id : 53f
-   - id : 53g
-   - id : 53h
-   - id : 55
-   - id : 56
-   - id : 57
-   - id : 58a
-   - id : 58b
-   - id : 58c
-   - id : 59
-   - id : 60
-   - id : 61a
-   - id : 61b
-   - id : 61c
-   - id : 61d
-   - id : 62
-   - id : 65a
-     timeout: 600  
-   - id : 65b
-     timeout: 600  
-   - id : 66a
-     timeout: 600  
-   - id : 66b
-     timeout: 600  
-   - id : 67a
-     timeout: 600
-   - id : 67b
-     timeout: 600
-   - id : 68
-     timeout: 600
-   - id : 70a
-   - id : 70b
-     timeout: 600
-   - id : 73a
-   - id : 73b
-   - id : 73c
-   - id : 74
-   - id : 80a
-   - id : 80b
-   - id : 81a
-   - id : 82a
-   - id : 82b
-   - id : 83a
-   - id : 83b
-   - id : 84a
-   - id : 85a
-   - id : 85b
-   - id : 86
-   - id : 87
-   - id : 87b
-   - id : 88
-   - id : 89
-   - id : 90
-
-
+--- 
+Tests: 
+  - 
+    id: 0a
+  - 
+    id: 0b
+  - 
+    id: 0d
+  - 
+    id: 1
+  - 
+    id: 2a
+  - 
+    id: 2b
+  - 
+    id: 3a
+  - 
+    id: 3b
+  - 
+    id: 3c
+  - 
+    id: 4a
+  - 
+    id: 4b
+  - 
+    id: 5
+  - 
+    id: 6a
+  - 
+    id: 6b
+  - 
+    id: 7
+  - 
+    id: 8
+  - 
+    id: 9
+  - 
+    id: 10
+  - 
+    id: 11
+  - 
+    id: 12
+  - 
+    id: 13
+  - 
+    id: 14
+  - 
+    id: 15
+  - 
+    id: 16
+  - 
+    id: 17
+  - 
+    id: 18
+  - 
+    id: 11
+  - 
+    id: 19
+  - 
+    id: 20a
+  - 
+    id: 20b
+  - 
+    id: 20c
+  - 
+    id: 21
+  - 
+    id: 22
+  - 
+    id: 23
+  - 
+    id: 24
+  - 
+    id: 25
+  - 
+    id: 26
+  - 
+    id: 27
+  - 
+    id: 28
+  - 
+    id: 29
+  - 
+    id: 30
+  - 
+    id: 31
+  - 
+    id: 32
+  - 
+    id: 33a
+  - 
+    id: 33b
+  - 
+    id: 34
+  - 
+    id: 35
+  - 
+    id: 36
+  - 
+    id: 37
+  - 
+    id: 38
+  - 
+    id: 39
+  - 
+    id: 40
+  - 
+    id: 41
+  - 
+    id: 42
+  - 
+    id: 43
+  - 
+    id: 44b
+    timeout: 600
+  - 
+    id: 44c
+  - 
+    id: 45
+  - 
+    id: 46
+  - 
+    id: 47
+  - 
+    id: 48
+  - 
+    id: 50
+  - 
+    id: 52
+  - 
+    id: 53a
+  - 
+    id: 53b
+  - 
+    id: 53c
+  - 
+    id: 53d
+  - 
+    id: 53e
+  - 
+    id: 53f
+  - 
+    id: 53g
+  - 
+    id: 53h
+  - 
+    id: 55
+  - 
+    id: 56
+  - 
+    id: 57
+  - 
+    id: 58a
+  - 
+    id: 58b
+  - 
+    id: 58c
+  - 
+    id: 59
+  - 
+    id: 60
+  - 
+    id: 61a
+  - 
+    id: 61b
+  - 
+    id: 61c
+  - 
+    id: 61d
+  - 
+    id: 62
+  - 
+    id: 65a
+    timeout: 600
+  - 
+    id: 65b
+    timeout: 600
+  - 
+    id: 66a
+    timeout: 600
+  - 
+    id: 66b
+    timeout: 600
+  - 
+    id: 67a
+    timeout: 600
+  - 
+    id: 67b
+    timeout: 600
+  - 
+    id: 68
+    timeout: 600
+  - 
+    id: 70a
+  - 
+    id: 70b
+    timeout: 600
+  - 
+    id: 73a
+  - 
+    id: 73b
+  - 
+    id: 73c
+  - 
+    id: 74
+  - 
+    id: 80a
+  - 
+    id: 80b
+  - 
+    id: 81a
+  - 
+    id: 82a
+  - 
+    id: 82b
+  - 
+    id: 83a
+  - 
+    id: 83b
+  - 
+    id: 84a
+  - 
+    id: 85a
+  - 
+    id: 85b
+  - 
+    id: 86
+  - 
+    id: 87
+  - 
+    id: 87b
+  - 
+    id: 88
+  - 
+    id: 89
+  - 
+    id: 90
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Lustre replay-single tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: replay-single
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 300

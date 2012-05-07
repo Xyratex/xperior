@@ -1,43 +1,75 @@
----
-groupname        : ost-pools 
-executor         : Xperior::Executor::LustreTests
-roles            : StoreSyslog StoreConsole GetDiagnostics
-description      : Lustre  ost-pools tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 10 
-timeout          : 600
-cleanup_max_time : -1
-tags             : functional 
-dangerous        : yes
-Tests:
-   - id : 1
-   - id : 2a
-   - id : 2b
-   - id : 2c
-   - id : 2d
-   - id : 2e
-   - id : 3a
-   - id : 3b
-   - id : 3c
-   - id : 3d
-   - id : 4a
-   - id : 4b
-   - id : 4c
-   - id : 5
-   - id : 6
-   - id : 11
-   - id : 12
-   - id : 13
-   - id : 14
-   - id : 15
-   - id : 16
-   - id : 17
-   - id : 18
-   - id : 19
-   - id : 20
-   - id : 21
-   - id : 22
-   - id : 23
-   - id : 24
-   - id : 25
-   - id : 26
+--- 
+Tests: 
+  - 
+    id: 1
+  - 
+    id: 2a
+  - 
+    id: 2b
+  - 
+    id: 2c
+  - 
+    id: 2d
+  - 
+    id: 2e
+  - 
+    id: 3a
+  - 
+    id: 3b
+  - 
+    id: 3c
+  - 
+    id: 3d
+  - 
+    id: 4a
+  - 
+    id: 4b
+  - 
+    id: 4c
+  - 
+    id: 5
+  - 
+    id: 6
+  - 
+    id: 11
+  - 
+    id: 12
+  - 
+    id: 13
+  - 
+    id: 14
+  - 
+    id: 15
+  - 
+    id: 16
+  - 
+    id: 17
+  - 
+    id: 18
+  - 
+    id: 19
+  - 
+    id: 20
+  - 
+    id: 21
+  - 
+    id: 22
+  - 
+    id: 23
+  - 
+    id: 24
+  - 
+    id: 25
+  - 
+    id: 26
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Lustre  ost-pools tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: ost-pools
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 600

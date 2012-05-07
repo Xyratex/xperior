@@ -1,23 +1,35 @@
----
-groupname        : insanity 
-executor         : Xperior::Executor::LustreTests
-roles            : StoreSyslog StoreConsole GetDiagnostics
-description      : Lustre insanity tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 10 
-timeout          : 600
-cleanup_max_time : -1
-tags             : functional 
-dangerous        : yes
-Tests:
-   - id : 0
-   - id : 1
-   - id : 2
-   - id : 3
-   - id : 4
-   - id : 5
-   - id : 6
-   - id : 7
-   - id : 8
-   - id : 9
-   - id : 10
+--- 
+Tests: 
+  - 
+    id: 0
+  - 
+    id: 1
+  - 
+    id: 2
+  - 
+    id: 3
+  - 
+    id: 4
+  - 
+    id: 5
+  - 
+    id: 6
+  - 
+    id: 7
+  - 
+    id: 8
+  - 
+    id: 9
+  - 
+    id: 10
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Lustre insanity tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: insanity
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 600

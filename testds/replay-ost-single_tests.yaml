@@ -1,23 +1,30 @@
----
-groupname        : replay-ost-single  
-executor         : Xperior::Executor::LustreTests
-roles            : StoreSyslog StoreConsole GetDiagnostics
-description      : Lustre replay-ost-single tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 10 
-timeout          : 300
-cleanup_max_time : -1
-tags             : functional 
-#dangerous        : yes
-Tests:
-
-
-   - id : 0a
-   - id : 0b
-   - id : 1
-   - id : 2
-   - id : 3
-   - id : 4
-   - id : 5
-   - id : 6
-   - id : 7
+--- 
+Tests: 
+  - 
+    id: 0a
+  - 
+    id: 0b
+  - 
+    id: 1
+  - 
+    id: 2
+  - 
+    id: 3
+  - 
+    id: 4
+  - 
+    id: 5
+  - 
+    id: 6
+  - 
+    id: 7
+cleanup_max_time: -1
+description: Lustre replay-ost-single tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: replay-ost-single
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 300
