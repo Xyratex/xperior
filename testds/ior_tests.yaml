@@ -1,15 +1,15 @@
----
-groupname        : ior 
-executor         : Xperior::Executor::IOR
-roles            : LustreClientStatus
-description      : IOR tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 60
-timeout          : 300 
-cleanup_max_time : -1
-iorcmd           : /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_point@/@test_file@
-tags             : benchmark 
-
-Tests:
-   - id               : test1 
-
+--- 
+Tests: 
+  - 
+    id: test1
+cleanup_max_time: -1
+description: IOR tests
+executor: Xperior::Executor::IOR
+expected_time: 60
+groupname: ior
+iorcmd: /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_point@/@test_file@
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: LustreClientStatus
+schema: data/schemas/testds.yaml
+tags: benchmark
+timeout: 300

@@ -1,14 +1,14 @@
----
-groupname        : mdtest 
-executor         : Xperior::Executor::MDTest
-description      : MDTest tests
-reference        : - 
-expected_time    : 60
-timeout          : 300 
-cleanup_max_time : -1
-mdtestcmd        : mdtest  -u -d @mount_point@@tempdir@ -n 10 -i 10
-tags             : benchmark 
-
-Tests:
-   - id               : test1 
-
+--- 
+Tests: 
+  - 
+    id: test1
+cleanup_max_time: -1
+description: MDTest tests
+executor: Xperior::Executor::MDTest
+expected_time: 60
+groupname: mdtest
+mdtestcmd: mdtest  -u -d @mount_point@@tempdir@ -n 10 -i 10
+reference: ---
+schema: data/schemas/testds.yaml
+tags: benchmark
+timeout: 300

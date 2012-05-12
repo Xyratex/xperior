@@ -1,23 +1,24 @@
----
-groupname        : lustre-single
-executor         : Xperior::Executor::LustreTests
-roles            : StoreSyslog StoreConsole  GetDiagnostics
-description      : Set  of Lustre single tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 10 
-timeout          : 600
-cleanup_max_time : -1
-tags             : functional 
-dangerous        : yes
-Tests:
-   - id : racer
-     script : racer.sh
-     exitafter : yes
-     timeout : 1200
-
-   - id : metadata-updates
-     script : metadata-updates.sh
-
-   - id : runtests
-     script : runtests
-
+--- 
+Tests: 
+  - 
+    exitafter: 'yes'
+    id: racer
+    script: racer.sh
+    timeout: 1200
+  - 
+    id: metadata-updates
+    script: metadata-updates.sh
+  - 
+    id: runtests
+    script: runtests
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Set  of Lustre single tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: lustre-single
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole  GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 600

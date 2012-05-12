@@ -1,0 +1,43 @@
+---
+#======================================================================
+# FILE: schemas/testds.yaml
+#
+# DESCRIPTION:  Rx schema for test descriptor files
+#
+#      AUTHOR:  ryg
+#      COMPANY:  Xyratex
+#      CREATED:  05/05/2012 09:21:46 AM
+#
+#======================================================================
+
+type: //rec
+required:
+   schema       : //str
+   groupname    : //str
+   executor     : //str
+   description  : //str
+   reference    : //str
+   tags         : //str       
+   timeout      : //int
+   Tests        :
+      type         : //arr
+      contents     :
+         type        : //rec
+         required    :
+            id          : //str
+         optional:
+            timeout     : //int
+            dangerous   : //str
+            exitafter   : //str
+            script      : //str
+
+optional:
+   cleanup_max_time : //int
+   dangerous        : //str
+   expected_time    : //int
+   roles            : //str
+   exitafter        : //str
+# for specific executors
+   iorcmd           : //str
+   mdtestcmd        : //one
+
