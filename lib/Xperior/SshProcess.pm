@@ -119,7 +119,7 @@ sub _sshSyncExecS {
     my $cc =
         "ssh -o  'BatchMode yes' "
       . "-o 'AddressFamily inet' "
-      . "-o 'ConnectTimeout=10' "
+      . "-o 'ConnectTimeout=25' "
       . "-o 'UserKnownHostsFile=/dev/null' "
       . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectionAttempts=3' "
@@ -192,7 +192,7 @@ sub _sshAsyncExec {
       . "-o 'AddressFamily inet' "
       . "-o 'UserKnownHostsFile=/dev/null' "
       . "-o 'StrictHostKeyChecking=no' "
-      . "-o 'ConnectTimeout=10' " . "-f "
+      . "-o 'ConnectTimeout=25' " . "-f "
       . $self->user . "@"
       . $self->host
       . " \"$cmd\"  ";
@@ -328,8 +328,13 @@ SS
 
     if ( $self->killed == 0 ) {
         my $ecfc = $self->_sshSyncExec("cat $ecf");
-        DEBUG "Exit code is [$ecfc]";
-        $self->exitcode( trim $ecfc );
+        if(defined($ecfc)){
+            DEBUG "Exit code is [$ecfc]";
+            $self->exitcode( trim $ecfc );
+        }else{
+            WARN "No remote exit code is get, looks like connection problem observed, set undef";
+            $self->exitcode( undef );
+        }
 
         #$self->exitcode($self->syncexitcode);
     }
@@ -491,7 +496,10 @@ sub isAlive {
     my $AT       = 6;
     my $exitcode = '';
     while ( $AT > $step ) {
-        $o = trim $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
+        $o =  $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
+        if(defined($o)){
+            $o = trim $o;
+        }
         if ( ( defined($o) ) and ( $o =~ m/^\s*$pid\s*/ ) ) {
             last;
         }
@@ -505,7 +513,7 @@ sub isAlive {
         $step++;
         DEBUG "Proc is not found, <$step> recheck process status";
     }
-
+    DEBUG "Alive check cycle done";
     #  DEBUG "*********** $o";
     unless ( defined($o) ) {
         ERROR "unable to check remote system, no output got";
@@ -558,6 +566,7 @@ sub getFile {
           . "-o 'UserKnownHostsFile=/dev/null' "
           . "-o 'StrictHostKeyChecking=no' "
           . "-o 'ConnectionAttempts=3' "
+          . "-o 'ConnectTimeout=25' " 
           . $self->user . '@'
           . $self->hostname
           . ":$rfile $lfile" );

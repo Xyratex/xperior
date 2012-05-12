@@ -56,15 +56,18 @@ sub execute{
 #$self->env->cfg->{'client_mount_point'}
 #$self->env->cfg->{'tempdir'})    
    
+    my $starttime=time;
+    $self->addYE('starttime',$starttime);
 
     my $cr = $testp->create($self->appname,$self->cmd);
-    if($cr == 0){
+    if($cr < 0){
         $self->fail('Cannot start remote test process on master client');
-
+        $self->addMessage(
+           'Cannot start remote process, network or remote host problem.');
+        $self->test->results ($self->yaml);
+        return;
     }
     #all alredy started there
-
-    my $starttime=time;
     my $endtime= $starttime 
         + $self->test->getParam('timeout');
 
@@ -80,7 +83,6 @@ sub execute{
     }
     $testp->createSync('sync',30);
     $self->addYE('endtime',time);
-    $self->addYE('starttime',$starttime);
     $self->addYE('endtime_planned',$endtime);
     ### post processing and cleanup
     my $killed=0;
