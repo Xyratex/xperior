@@ -25,7 +25,7 @@ our @EXPORT;
 
 BEGIN {
     @ISA           = ("Exporter");
-    @EXPORT        = qw(&writeTagsFile &writeGeneratedTestSuiteFile &getGeneratedTestSuite);
+    @EXPORT        = qw(&writeGeneratedTagsFile &writeGeneratedTestSuiteFile &getGeneratedTestSuite);
     $XPERIORBINDIR = dirname( Cwd::abs_path($PROGRAM_NAME) );
     push @INC, "$XPERIORBINDIR/../lib";
     Log::Log4perl->easy_init( { level => $DEBUG } );

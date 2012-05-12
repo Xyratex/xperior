@@ -3,16 +3,11 @@
 #
 #         FILE:  Xception.pm
 #
-#  DESCRIPTION:
+#  DESCRIPTION:  Xperior exceptions
 #
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
-#       AUTHOR:  YOUR NAME (),
-#      COMPANY:
-#      VERSION:  1.0
+#       AUTHOR:  ryg
+#      COMPANY:  Xyratex
 #      CREATED:  05/07/2012 03:44:02 PM
-#     REVISION:  ---
 #===============================================================================
 
 package Xperior::Xception;
