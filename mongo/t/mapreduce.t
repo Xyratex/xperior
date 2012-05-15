@@ -52,7 +52,8 @@ sub loadFunction {
 }
 
 sub doMapReduce {
-    my $mrname = shift;
+    my ($mrname,$col) = @_;
+    $col = 0  unless defined $col;
 
     my $map    = loadFunction( $mrname . '_m' );
     my $reduce = loadFunction( $mrname . '_r' );
@@ -74,6 +75,7 @@ sub doMapReduce {
 
     my $res_coll = $result->{'result'};
     DEBUG "result collection is $res_coll\n";
+    return $res_coll if ($col == 1);
 
     my $cl = $db->get_collection($res_coll);
     my $c = $cl->query( {}, { limit => 1000 } );
@@ -193,6 +195,37 @@ test
         '1VM', "check config name" );
 
     isnt( $cursor->has_next, 0, "No more elements" );
+  };
+
+test
+  plan                => 5,
+  aCheckProjectStatus => sub {
+
+    my $col = doMapReduce('branch_status',1);
+    my $cursor = $db ->${col}->find( {_id => qr/^b4d01a3cd5_/}  );
+    my $object0 = $cursor->next;
+    #DEBUG "Result obj0 is :" . Dumper($object0);
+     is( $object0->{value}->{status}->{'config'},
+        '1VM', "check config name" );
+
+    is( $object0->{value}->{status}->{'total'},
+        24, "check total" );
+
+
+    my $object1 = $cursor->next;
+    DEBUG "Result obj1 is :" . Dumper($object1);
+    is( $object1->{value}->{branch},
+        'b4d01a3cd5', "check config name" );
+
+    is( $object1->{value}->{status}->{'total'},
+        9, "check total" );
+
+
+   my $object2 = $cursor->next;
+    DEBUG "Result obj1 is :" . Dumper($object2);
+
+    is($object2,undef,"Check no more results");
+
   };
 
 teardown some_teardown => sub { };
