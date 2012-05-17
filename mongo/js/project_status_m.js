@@ -33,6 +33,7 @@ function() {
 	r.configurations[cfg].passed = 0;
 	r.configurations[cfg].failed = 0;
 	r.configurations[cfg].skipped = 0;
+	r.configurations[cfg].total = 1;
 
 	if (this.status_code == 0) {
 		r.configurations[cfg]['passed'] = 1;

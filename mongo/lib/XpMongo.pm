@@ -155,7 +155,7 @@ sub post {
     return;
 }
 
-sub remove_by_sessionstarttime{
+sub remove_by_sessionstarttime_old{
     my ($dry, $sessionstarttime ) = @_;
     DEBUG "dry=[$dry], sessionstarttime=[$sessionstarttime]";
     my $db = opendb();
@@ -168,11 +168,18 @@ sub remove_by_sessionstarttime{
 my $map = <<MAP;
 function() {
     var r = this.extoptions;
-    emit(this.extoptions.sessionstarttime, r);
+
+    var id =  
+          this.extoptions.branch + "_"
+        + this.extoptions.type + "_" 
+        + this.extoptions.ofed + "_" 
+        + this.extoptions.arch + "_" 
+        + this.extoptions.sessionstarttime;
+    emit(id, r);
 }
-   
 MAP
 ;
+
 my $reduce = <<REDUCE;
 function(k, values) {
     return values[0];
@@ -233,6 +240,7 @@ REDUCE
             $grid->delete($a) if $dry > 0;;
         }
         #remove result
+        INFO "Remove record  [$res->{_id}]";
         $db->$collection->remove({_id => $res->{_id}}) if $dry > 0;
         my $err = $db->last_error();
         if( (not defined( $err)) or ($err->{ok} != 1)){
@@ -243,5 +251,35 @@ REDUCE
     INFO "Deleted $c records";
 }
 
-1;
+sub remove_by_sessionstarttime{
+    my ($dry, $sessionstarttime ) = @_;
+    DEBUG "dry=[$dry], sessionstarttime=[$sessionstarttime]";
+    my $db = opendb();
+    my $grid = $db->get_gridfs;
+    my $c=0;
+    #get list of items
+
+    my $cursor = $db->${collection}->find(
+    {'extoptions.sessionstarttime'  => $sessionstarttime});
+    #{'extoptions.executiontype' => "IT"});           
+    #iterate over all results
+     while ($cursor->has_next) {        
+        my $res = $cursor->next;
+        #iterate of attachments
+        foreach my $a(@{$res->{'attachments_ids'}}){
+            #remove attachemnt
+            DEBUG "Remove attachement $a";
+            $grid->delete($a) if $dry > 0;;
+        }
+        #remove result
+        INFO "Remove record  [$res->{_id}]";
+        $db->$collection->remove({_id => $res->{_id}}) if $dry > 0;
+        my $err = $db->last_error();
+        if( (not defined( $err)) or ($err->{ok} != 1)){
+            ERROR "Error is:".Dumper $err;
+        }
+        $c++;
+    }
+    INFO "Deleted $c records";
+}
 

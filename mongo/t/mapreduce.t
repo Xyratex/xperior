@@ -136,18 +136,18 @@ test
 
 test
   plan           => 3,
-  dCheckRemoving => sub {
+  adCheckRemoving => sub {
     my $num = $db ->${collection}->count;
     is( $num, 99, "initial count of records" );
 
     DEBUG "Removing:"
-      . `mongo/bin/remove.pl --database='$dbname' --sessionstarttime='1331870104'`."\n";
+      . `mongo/bin/remove.pl --database='$dbname' --sessionstarttime=1331870104`."\n";
     my $nnum = $db ->${collection}->count;
     is( $nnum, ( 99 - 24 ), "count of records after removing" );
 
     #second removing
     DEBUG "Removing:"
-      . `mongo/bin/remove.pl --database='$dbname' --sessionstarttime='1331870104'`."\n";
+      . `mongo/bin/remove.pl --database='$dbname' --sessionstarttime=1331870104`."\n";
     my $nnum2 = $db ->${collection}->count;
     is( $nnum2, ( 99 - 24 ), "count of records after second removing" );
   };

@@ -41,10 +41,10 @@ function(k, values) {
 
 			};
 
-			r.configurations[cfgr].passed += value.configurations[cfgr].passed;
-			r.configurations[cfgr].failed += value.configurations[cfgr].failed;
+			r.configurations[cfgr].passed  += value.configurations[cfgr].passed;
+			r.configurations[cfgr].failed  += value.configurations[cfgr].failed;
 			r.configurations[cfgr].skipped += value.configurations[cfgr].skipped;
-			r.configurations[cfgr].total += 1;
+			r.configurations[cfgr].total   += value.configurations[cfgr].total ;
 		};
 
 		/*

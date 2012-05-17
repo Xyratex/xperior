@@ -58,7 +58,7 @@ GetOptions(
     "collection|C:s" => \$collection,
     "host|H:s"       => \$host,
 
-    "sessionstarttime:s"     => \$sessionstarttime,
+    "sessionstarttime:i"     => \$sessionstarttime,
 
     "help|h" => \$help,
 );
