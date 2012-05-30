@@ -80,6 +80,14 @@ sub createExecutor {
                 Xperior::Executor::Roles::ReformatBefore->meta->apply($obj);
                 DEBUG 'ok';
             }
+
+            if ( $role eq 'GetCoverage' ) {
+                use Xperior::Executor::Roles::GetCoverage;
+                Xperior::Executor::Roles::GetCoverage->meta->apply($obj);
+                DEBUG 'ok';
+            }
+
+
         }
     }
     return $obj;

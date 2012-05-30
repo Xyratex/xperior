@@ -18,9 +18,8 @@ use Time::HiRes;
 use Xperior::Utils;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
-has procs => ( is => 'rw', isa => 'HashRef' );
 
-requires 'env', 'addMessage', 'getNormalizedLogName';
+requires 'env';
 
 before 'execute' => sub {
     my $self = shift;
