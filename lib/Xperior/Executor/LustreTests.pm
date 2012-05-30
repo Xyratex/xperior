@@ -78,7 +78,8 @@ sub processLogs {
     open( F, "  $file" );
 
     my $passed = 100;
-    my $reason = 'No_status_found';
+    my $defreason = 'No_status_found';
+    my $reason = $defreason;
     my @results;
     #consider only last keywords! 
     while ( defined( my $s = <F> ) ) {
@@ -89,7 +90,11 @@ sub processLogs {
         }
         if ( $s =~ m/FAIL:(.*)/ ) {
             $passed = 10;
-            $reason = $1 if defined $1;
+            if( $reason eq $defreason){ 
+                $reason = $1 if defined $1;
+            }else{
+                $reason = "$reason\n$1" if defined $1;
+            }
         }
         if ( $s =~ /SKIP:(.*)/ ) {
             $passed = 1;
