@@ -48,9 +48,9 @@ after   'execute' => sub{
         DEBUG $c->createSync(
                  " lcov --no-checksum --ignore-errors source "
                 ." -b /root/cov/lustre-wc-rel/ "#fixed lustre paths
-                ." --capture --output-file /tmp/coverage.$n->{id} 2&>1 > /dev/null ",
+                ." --capture --output-file /tmp/coverage.$n->{id}  1>/dev/null 2>&1 ",
                 300 );
-       my  $syncres = $c->syncexitcode;
+       my  $syncres = $c->exitcode;
         if ($syncres != 0){
             DEBUG "Cannot collect kernel lcov data, exit code is [$syncres]";
             exit 99;
@@ -81,9 +81,9 @@ after   'execute' => sub{
                 ." -d /root/cov/lustre-wc-rel/ "
                 ." -k /lib/modules/2.6.32/build/ " #fixed kernel
                 #."--remove fullcoverage.trace '*kernel*' "
-                ." --capture --output-file /tmp/usercoverage.$n->{id} 2&>1 > /dev/null ",
+                ." --capture --output-file /tmp/usercoverage.$n->{id} -q ",
                 300 );
-        $syncres = $c->syncexitcode;
+        $syncres = $c->exitcode;
         if ($syncres != 0){
             DEBUG "Cannot collect user lcov data, exit code is [$syncres]";
             exit 99;

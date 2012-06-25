@@ -46,7 +46,7 @@ after 'execute' => sub {
         my $td = '/tmp/xpdiagnostic.'
                     .Time::HiRes::gettimeofday().'.xml';
         
-        $c->createSync("/usr/sbin/lustre-diagnostics -x $td",60);
+        $c->createSync("/usr/sbin/lustre-diagnostics -x $td",300);
 
         my $res = $c->getFile( $td,
             $self->getNormalizedLogName('diagnostic.xml.'.$n->id));
