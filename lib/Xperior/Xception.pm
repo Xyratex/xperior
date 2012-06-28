@@ -32,7 +32,6 @@ use base qw(Xperior::Xception);
 1;
 
 package CannotPassSchemaException;
-use base qw(Xperior::Xception
-        );
+use base qw(Xperior::Xception);
 1;
 
