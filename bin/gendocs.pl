@@ -15,7 +15,7 @@ use warnings;
 use Pod::ProjectDocs;
 
 mkdir 'html';
-`autodia.pl -d lib -r  -o html/classes.png -z -D -H -K`;
+`autodia.pl -d lib/Xperior -r  -o html/classes.png -z -D -H -K`;
 
 my $pd = Pod::ProjectDocs->new(
     outroot => 'html/',
