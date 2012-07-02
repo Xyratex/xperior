@@ -22,7 +22,7 @@ use File::Find;
 use Data::Dumper;
 
 our @ISA = ("Exporter");
-our @EXPORT = qw(&trim &runEx &parseIEFile &compareIE &getExecutedTestsFromWD);
+our @EXPORT = qw(&trim &runEx &parseFilterFile &compareIE &getExecutedTestsFromWD);
 
 sub trim{
    my $string = shift;
@@ -53,7 +53,7 @@ sub runEx{
     return $error_code;
 }
 
-sub parseIEFile{
+sub parseFilterFile{
     my $file = shift;
     DEBUG "Parse [$file] as include/exclude list";
     open(F,"< $file") or confess "Cannot open file: $file";

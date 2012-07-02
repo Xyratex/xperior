@@ -3,7 +3,7 @@
 #
 #         FILE:  SshProcess.pm
 #
-#  DESCRIPTION: Module which implements remote process control for singlie process over ssh
+#  DESCRIPTION: Module which implements remote process control for singlie process over ssh. Can be used without Xperior.
 #
 #       AUTHOR:  ryg
 #      COMPANY:  Xyratex
@@ -114,6 +114,7 @@ sub _sshSyncExec {
     return $r;
 }
 
+
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
     my $cc =
@@ -129,7 +130,7 @@ sub _sshSyncExecS {
       . $self->host
       . " \"$cmd\" 2>&1 ";
     DEBUG "Remote cmd is [$cc], timeout is [$timeout]";
-
+    
     my $out = '';
     eval {
         local $SIG{ALRM} = sub {

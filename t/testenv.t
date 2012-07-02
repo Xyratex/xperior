@@ -39,7 +39,7 @@ startup         _startup  => sub {
 setup           _setup    => sub { 
     $testcore =  Xperior::Core->new();
     $testcore->options(\%options);      
-    $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
+    $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
 
 };
 teardown        _teardown => sub { };
@@ -52,7 +52,7 @@ test plan => 10, aGetNodeConfiguration    => sub {
     DEBUG "OSS ID=".$nid;
     my $node = $cfg->getNodeById($nid);
     DEBUG "Cfg dump".$node;
-    $node->getNodeConfiguration;
+    $node->getConfig;
     DEBUG $node->architecture;
     is($node->architecture,'x86_64','Check arch');
     
@@ -107,7 +107,6 @@ test plan => 3, nCheckRemoteControls => sub{
 
 
 test plan => 5, cCheckLustreObjects    => sub {
-    #$cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
     ok (defined $cfg, "Check parsing results");
    
     my $osss = $cfg->getOSSs;

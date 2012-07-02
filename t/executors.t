@@ -47,7 +47,7 @@ setup           some_setup    => sub {
 
     my $testcore =  Xperior::Core->new();
     $testcore->options(\%options);      
-    my $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
+    my $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
 
     $test = Xperior::Test->new;
     $test->init(\%th,\%gh);

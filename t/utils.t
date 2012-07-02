@@ -47,7 +47,7 @@ test plan => 5, dCompareIE => sub{
 
 
 test plan => 1, gLoadEIFiles    => sub {
-    my $res = parseIEFile("t/data/iefile");
+    my $res = parseFilterFile("t/data/iefile");
     DEBUG Dumper $res;
     my @exp = (
           'sanity/1',

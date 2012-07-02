@@ -20,6 +20,7 @@
 
 package Xperior::Node;
 
+use Error qw(:try);
 use Moose;
 use Moose::Util::TypeConstraints;
 
@@ -106,7 +107,7 @@ sub ping {
     }
 }
 
-sub getNodeConfiguration{
+sub getConfig{
     my $self = shift;
     my $sc = $self->getRemoteConnector;
     $self->architecture(trim($sc->createSync('uname -m')));
@@ -150,6 +151,7 @@ sub getNodeConfiguration{
 
     #TODO add CPU processor count
     #my $cpuout = $sc->createSync('cat /proc/cpuinfo');
+    return;
 }
 
 sub getLFFreeSpace{
@@ -189,6 +191,54 @@ sub getLFCapacity{
 
 }
 
+=over * 
+
+=item run(cmd,timeout)
+
+Execute command on node which associated with object.
+
+Function throws execption if ssh problem detected
+
+=back
+
+=cut
+#TODO add test on it
+sub run 
+{
+    my ( $self, $cmd, $timeout ) = @_;    
+    my $ssh = $self->getExclusiveRC;
+    throw Xperior::Xception::NullObjectException
+        ("Cannot create ssh object") 
+            unless defined $ssh;
+    DEBUG $ssh->createSync($cmd, $timeout); 
+    throw Xperior::Xception::CannotConnectException
+        ("Cannot execute command on remote sied")
+            unless defined  $ssh->exitcode;
+    return $ssh->exitcode;
+}
+
+=over * 
+
+=item getFile(src,dst)
+
+Get file from node which associated with object.
+
+Return Xperior::SshProcess->getFile exit code
+
+=back
+
+=cut
+#TODO add test on it
+sub getFile
+{
+    my ($self, $src, $dst) = @_;
+    my $ssh = $self->getRemoteConnector;
+    return 254 unless defined $ssh;
+    return $ssh->getFile($src,$dst);
+}
+
+
+
 =over *
 
 =item getRemoteConnector
@@ -225,8 +275,6 @@ Return a connector which can be used exclusively by consumer. Nobody more can ge
 
 =cut
 
-
-
 sub getExclusiveRC{
     my $self = shift;
     my $rc = $self->getRemoteConnector;
@@ -237,4 +285,11 @@ sub getExclusiveRC{
     $urc->initTemp;
     return $urc; 
 }
+
+
+#sub isNode
+
+
+
 __PACKAGE__->meta->make_immutable;
+1;

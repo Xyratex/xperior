@@ -9,6 +9,17 @@
 #      COMPANY:  Xyratex
 #      CREATED:  09/05/2011 03:23:42 PM
 #===============================================================================
+=pod
+
+=head1 NAME
+
+Xperior::Core
+
+=head1 DESCRIPTION
+
+The module implements main execution cycle, test object creation, include/exclude list processing, simple HTML report generation and configuration reading.
+
+=cut
 
 package Xperior::Core;
 use Log::Log4perl qw(:easy);
@@ -31,11 +42,32 @@ use Xperior::Test;
 use Xperior::TestEnvironment;
 use Xperior::Utils;
 
-use constant ERROR_CONFIG_FAILURE			=> 19;
-use constant ERROR_CONFIG_FAILURE2			=> 10;
-use constant ERROR_DANGEROUS_TEST_FAILURE	=> 11;
-use constant ERROR_TEST_BREAK_REQUIRED		=> 12;
+=head Exit codes
 
+=over 4
+
+=item 19
+
+Configuration cannot pass testing on initialization step
+
+=item 10
+
+Configuration cannot pass testing on after test
+
+=item 12
+
+Dangerous test failed.
+
+=item 12
+
+Test failed with error.
+
+=cut
+
+use constant ERROR_CONFIG_FAILURE         => 19;
+use constant ERROR_CONFIG_FAILURE2        => 10;
+use constant ERROR_DANGEROUS_TEST_FAILURE => 11;
+use constant ERROR_TEST_BREAK_REQUIRED    => 12;
 
 our $VERSION = "0.0.2";
 
@@ -44,7 +76,7 @@ has 'tests'      => ( is => 'rw' );    # isa => 'ArrayRef[]', );
 has 'testgroups' => ( is => 'rw' );
 has 'env'        => ( is => 'rw' );
 
-sub createExecutor {
+sub _createExecutor {
     my ( $self, $es, $roles ) = @_;
     DEBUG "Loading module [$es]";
     load $es;
@@ -53,7 +85,7 @@ sub createExecutor {
         foreach my $role ( split( /\s/, $roles ) ) {
             DEBUG "Applying roles [$role]";
 
-            if ( $role eq 'LustreClientStatus' ) {                
+            if ( $role eq 'LustreClientStatus' ) {
                 use Xperior::Executor::Roles::LustreClientStatus;
                 Xperior::Executor::Roles::LustreClientStatus->meta->apply($obj);
                 DEBUG 'ok';
@@ -87,14 +119,13 @@ sub createExecutor {
                 DEBUG 'ok';
             }
 
-
         }
     }
     return $obj;
 }
 
-sub runtest {
-    DEBUG "Xperior::Core::runtest";
+sub _runtest {
+    DEBUG "Xperior::Core::_runtest";
     my ( $self, $test, $excluded ) = @_;
     DEBUG "Starting tests " . $test->getParam('id');
 
@@ -105,7 +136,7 @@ sub runtest {
         $executorname = 'Xperior::Executor::Skip';
         $roles        = '';
     }
-    my $executor = $self->createExecutor( $executorname, $roles );
+    my $executor = $self->_createExecutor( $executorname, $roles );
 
     #DEBUG "excluded : $excluded";
     #exit 111;
@@ -146,6 +177,12 @@ sub runtest {
     return $executor;
 }
 
+=item run
+
+Execution enter point 
+
+=cut
+
 sub run {
     my $self    = shift;
     my $options = shift;
@@ -153,7 +190,7 @@ sub run {
     DEBUG "Start framework";
     my $tags = $self->loadTags;
     $self->tests( $self->loadTests );
-    $self->env( $self->loadEnvCfg( $options->{'configfile'} ) );
+    $self->env( $self->loadEnv( $options->{'configfile'} ) );
     if ( $self->env->checkEnv < 0 ) {
         WARN "Found problems while testing configuration";
         exit(ERROR_CONFIG_FAILURE);
@@ -174,11 +211,11 @@ sub run {
     my $includelist = undef;
 
     #DEBUG "Process defined excludelist [".$self->options->{'excludelist'}."]";
-    $excludelist = parseIEFile( $self->options->{'excludelist'} )
+    $excludelist = parseFilterFile( $self->options->{'excludelist'} )
       if ( ( defined $self->options->{'excludelist'} )
         && ( $self->options->{'excludelist'} ne '' ) );
 
-    $includelist = parseIEFile( $self->options->{'includelist'} )
+    $includelist = parseFilterFile( $self->options->{'includelist'} )
       if ( ( defined $self->options->{'includelist'} )
         && ( $self->options->{'includelist'} ne '' ) );
 
@@ -270,7 +307,7 @@ sub run {
         WARN "Starting test execution";
         my $a = $self->options->{'action'};
         if ( $a eq 'run' ) {
-            my $exe = $self->runtest( $test, $excluded );
+            my $exe = $self->_runtest( $test, $excluded );
             my $res = $exe->result_code;
             WARN 'TEST '
               . $test->getName
@@ -291,21 +328,20 @@ sub run {
                 if ( $cer < 0 ) {
                     WARN
 "Found problems while testing configuration after failed test, exiting";
-                        WARN "Executed $enum tests, skipped $snum";
-                        $self->htmlReport;
-                        exit(ERROR_CONFIG_FAILURE2);
-                    }
-                unless (($res == 1)
-                    and ($exe->yaml->{'fail_reason'} eq 
-                                      'No_status_found')
-                    and ($exe->yaml->{'killed'} eq 'no'))
+                    WARN "Executed $enum tests, skipped $snum";
+                    $self->_htmlReport;
+                    exit(ERROR_CONFIG_FAILURE2);
+                }
+                unless (( $res == 1 )
+                    and ( $exe->yaml->{'fail_reason'} eq 'No_status_found' )
+                    and ( $exe->yaml->{'killed'} eq 'no' ) )
                 {
                     if ( defined( $test->getParam('dangerous') )
                         && ( $test->getParam('dangerous') eq 'yes' ) )
                     {
                         WARN "Dangerous test failure detected, exiting";
                         WARN "Executed $enum tests, skipped $snum";
-                        $self->htmlReport;
+                        $self->_htmlReport;
                         exit(ERROR_DANGEROUS_TEST_FAILURE);
                     }
                 }
@@ -324,7 +360,7 @@ sub run {
                 {
                     WARN "Test requires stop after complete, exiting";
                     WARN "Executed $enum tests, skipped $snum";
-                    $self->htmlReport;
+                    $self->_htmlReport;
                     exit(ERROR_TEST_BREAK_REQUIRED);
                 }
             }
@@ -337,17 +373,27 @@ sub run {
             confess "Cannot selected action for : $a";
         }
     }
-    $self->htmlReport;
+    $self->_htmlReport;
     WARN "Execution completed";
     WARN "Executed $enum tests, skipped $snum";
 }
 
-sub loadEnvCfg {
-    DEBUG 'Xperior::Core->loadEnvCfg';
+
+
+=item loadEnv
+
+Class method
+Load data from file (parameter). The file must be Xperior configuration
+file. See Xperior user guide.
+
+=cut
+
+sub loadEnv {
+    DEBUG 'Xperior::Core->loadEnv';
     my $self = shift;
     my $fn   = shift;
     $fn = 'systemcfg.yaml' unless defined $fn;
-    DEBUG "Load env configuration file [ $fn ]";
+    INFO "Load env configuration file [ $fn ]";
     my $envcfg = LoadFile($fn) or confess $!;
 
     #DEBUG Dumper $envcfg;
@@ -417,10 +463,10 @@ sub loadTags {
     return $cfg->{'tags'};
 }
 
-sub htmlReport {
+sub _htmlReport {
     my $self = shift;
     return unless $self->{options}->{html};
-    DEBUG 'Xperior::Core->htmlReport';
+    DEBUG 'Xperior::Core->_htmlReport';
 
     my $wd     = $self->{options}->{workdir};
     my $libdir = $self->{options}->{xperiorbasedir} . '/Xperior/html';

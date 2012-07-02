@@ -35,3 +35,16 @@ package CannotPassSchemaException;
 use base qw(Xperior::Xception);
 1;
 
+package KVMException;
+use base qw(Xperior::Xception);
+1;
+
+package NullObjectException;
+use base qw(Xperior::Xception);
+1;
+
+package CannotConnectException;
+use base qw(Xperior::Xception);
+1;
+
+

@@ -31,6 +31,17 @@ use Data::Dumper;
 has 'nodes'      => ( is => 'rw',isa => 'ArrayRef[]', );
 has 'cfg'    => ( is => 'rw');
 
+=item init(yamlobj)
+
+Class initialization method
+
+The yamlobj must be Xperior configuration
+yaml data. See Xperior user guide.
+
+Return
+
+=cut
+
 sub init{
     my $self = shift;
     my $yamlcfg = shift;
@@ -56,10 +67,10 @@ sub checkEnv{
     my $self = shift;
 
     #TODO
-    #check variables there
+    #check variables before execution
+
     my $problems = 0;
     foreach my $n (@{$self->{'nodes'}}){
-        #TOD enable it for future
         $problems-- unless $n->ping;
         $problems-- unless $n->isReachable;
     }    
@@ -70,7 +81,7 @@ sub checkEnv{
 sub getNodesInfo{
     my $self = shift;
     foreach my $n (@{$self->{'nodes'}}){
-        $n->getNodeConfiguration;
+        $n->getConfig;
     }    
     INFO "Configuration configuration harvest completed";
 

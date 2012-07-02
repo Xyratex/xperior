@@ -42,7 +42,7 @@ startup         _startup  => sub {
 setup           _setup    => sub { 
     $testcore =  Xperior::Core->new();
     $testcore->options(\%options);      
-    $cfg = $testcore->loadEnvCfg('t/testcfgs/testsystemcfg.yaml');
+    $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
     $tests  =  $testcore->loadTests;
     $exe = Xperior::Executor::IOR->new();
     $exe->init(@{$tests}[0], \%options, $cfg);
