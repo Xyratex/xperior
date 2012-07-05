@@ -75,36 +75,29 @@ sub _mergeWithPreconfig {
     }
     my $pcfg = LoadFile($pcfgscr);
 
-    #go over only
-    #use Data::Dumper;
     foreach my $key ( keys %{$pcfg} ) {
         if ( $key eq 'Tests' ) {
-            my $i = 0;
             foreach my $t ( @{ $pcfg->{$key} } ) {
                 my $tid = $t->{'id'};
-                #print "test descr is" . Dumper $t;
-                DEBUG "Check test $tid description\n";
+                DEBUG "Check test $tid description";
 
                 my $nto = undef;
                 foreach my $ntk ( @{ $ts->{$key} } ) {
-                    if ( $ntk->{'id'} eq $tid ) {
-                        $nto = $ntk;
-                        last;
-                    }
+                    next unless ( $ntk->{'id'} eq $tid );
+                    $nto = $ntk;
+                    last;
                 }
                 unless ( defined($nto) ) {
-                    INFO "\n Skip preconfigured object for test [$tid \n";
+                    INFO "Skip preconfigured object for test [$tid]";
                     next;
                 }
 
                 foreach my $tk ( keys %{$t} ) {
                     unless ( defined( $nto->{$tk} ) ) {
-                        DEBUG "Found not set key {$tk} "
-                          . "for test $t->{'id'} \n";
+                        DEBUG "Found unset key {$tk} for test [$tid]";
                         $nto->{$tk} = $t->{$tk};
                     }
                 }
-                $i++;
             }
         }
         else {
