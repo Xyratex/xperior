@@ -6,9 +6,9 @@
 sanity/71 #too long for it
 
 #by ryg because fail in ONLY mode
-sanityn/1b #MRP-335
-sanityn/1c #MRP-335
-sanityn/1d #MRP-335
+#sanityn/1b #MRP-335 fixed
+#sanityn/1c #MRP-335 fixed
+#sanityn/1d #MRP-335 fixed
 
 
 ## lustre-single
