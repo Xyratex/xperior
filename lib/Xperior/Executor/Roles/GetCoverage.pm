@@ -30,7 +30,6 @@ before 'execute' => sub {
         my $c = $n->getExclusiveRC;
         DEBUG $c->createSync( 
                 " mount -t debugfs none /sys/kernel/debug", 60 );
-        
         DEBUG $c->createSync( 
                 " lcov --zerocounters ", 60 );
         last;
@@ -44,7 +43,7 @@ after   'execute' => sub{
     foreach my $nid ( @{ $self->env->getMDSs } ) {
         my $n = $self->env->getNodeById($nid->{'node'});
         my $c = $n->getExclusiveRC;
-
+        DEBUG $c->createSync('find /root/cov -name \\"*.gcda\\"  -type l   -exec rm -f -v \\"{}\\" \\\;',120); 
         DEBUG $c->createSync(
                  " lcov --no-checksum --ignore-errors source "
                 ." -b /root/cov/lustre-wc-rel/ "#fixed lustre paths
