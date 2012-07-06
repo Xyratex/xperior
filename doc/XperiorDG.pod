@@ -23,7 +23,68 @@ Xperior::Executor - wrappers for specific tests are store there
 =for html <hr> <img src="classes.png">
 <p> This is a raw HTML paragraph </p>
 
-=head1 See also
+=head2 How run tests and configure node for run them
+
+This order is suggested for test execution.
+
+=head3 Tests which doesn't need configurations
+
+=over 5
+
+=item t/executors.t
+
+=item t/utils.t
+
+=item t/core.t
+
+=item t/checkyaml.t
+
+=item t/compatlustretests.t
+
+=back
+
+=head3 Test which need basic configuration
+
+First group need simple configuration and check base for second group.
+
+These tests need:
+
+- user 'tomcat' and passwordless login to it from user which run tests on local host
+
+=over 4
+
+=item t/sshprocess.t
+
+=item t/launcher.t
+
+=item 
+
+=item t/ielists.t
+
+=back
+
+=head3 Tests which need distributed configuration
+
+These tests need virtual machines with specific lustre setup and password less sudo.
+
+=over 1
+
+=item t/kvmnode.t 
+need only one kvm node which called mds and passwordless sudo 
+
+=back
+
+=head3 Test which need very specific configuration which should not be used until developer provides his own setup
+
+=over
+
+=item ipminode.t
+
+The test needs node which have IPMI and which could be safely rebooted
+
+=back
+
+=head2 See also
 
 L<http://en.wikipedia.org/wiki/Test_Anything_Protocol> 
 

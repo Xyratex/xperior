@@ -1,0 +1,59 @@
+---
+Nodes:
+   - id          : mds1 
+     ip          : 127.0.0.1    
+     ctrlproto   : ssh
+     user        : tomcat
+
+   - id           : oss1
+     ip           : 127.0.0.1    
+     ctrlproto    : ssh
+     user         : tomcat
+
+   - id          : oss2
+     ip          : 127.0.0.1
+     user        : tomcat
+
+   - id           : client1
+     ip           : localhost
+     ctrlproto    : ssh
+     user         : tomcat
+
+   - id           : client2
+     ip           : localhost
+     ctrlproto    : ssh
+     user         : tomcat
+
+
+
+
+LustreObjects:
+   - id          : mds1 
+     device      : /dev/loop0 
+     node        : mds1
+     type        : mds
+   
+   - id          : oos1 
+     device      : /dev/loop1 
+     node        : oss1
+     type        : oss
+
+   - id          : oos2 
+     device      : /dev/loop2 
+     node        : oss2
+     type        : oss
+
+   - id          : client1
+     node        : client1
+     type        : client
+     master      : yes
+
+   - id          : client2
+     node        : client2
+     type        : client
+
+#Variables
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile
+tempdir                 : /tmp/
+

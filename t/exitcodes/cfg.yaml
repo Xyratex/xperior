@@ -3,7 +3,7 @@ Nodes:
    - id           : vm1
      ip           : localhost
      ctrlproto    : ssh
-     user         : ryg
+     user         : tomcat 
      pass         : Xyratex
      console      : /tmp/serial_${vm}_out 
 
