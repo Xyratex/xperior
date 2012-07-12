@@ -1,7 +1,7 @@
 ---
 Nodes:
    - id          : mds1 
-     ip          : 192.168.200.102    
+     ip          : mds    
      ctrlproto   : ssh
      user        : root
      pass        : Xyratex

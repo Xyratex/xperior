@@ -19,8 +19,9 @@ use Test::More;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
-use Error qw(:try);
+use Error qw(try finally except otherwise);
 use Xperior::Xception; 
+use Xperior::Node;
 
 startup         some_startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
@@ -33,9 +34,13 @@ shutdown        some_shutdown => sub {  };
 #########################################
 
 test plan =>3, dCheckStartHalt => sub {
-    my $obj = Xperior::Nodes::IPMINode->new(
+    my $obj = Xperior::Node->new(
             ipmi=>'10.76.50.53',
-            host=>'10.76.50.51');
+            ip  =>'10.76.50.51',
+            id  => 'testipmi',
+            user=>'root',
+            nodetype=>'IPMINode'
+            );
     $obj->start;
     my $r = $obj->isAlive;
     is($r,1,"Is vm active");

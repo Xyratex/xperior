@@ -20,17 +20,17 @@ use File::Copy;
 use Exporter;
 use Carp;
 use Net::Ping;
-use Error qw(:try);
+use Error qw(try finally except otherwise);;
 
 use Xperior::SshProcess;
 use Xperior::Utils;
 use Xperior::Xception;
 
-use Moose;
+use Moose::Role;
 
 with qw( Xperior::Nodes::NodeManager );
 
-has 'ipmi' => ( is => 'ro', isa => 'Str' );
+has 'ipmi' => ( is => 'rw', isa => 'Str' );
 
 use constant PMITERATIONS  => 5;    
 use constant SLEEPAFTEROFF => 30;    #sec
@@ -41,7 +41,7 @@ sub sync{
 
 sub isAlive {
     my ($self) = @_;
-    DEBUG "Check " . $self->host;
+    DEBUG "Check " . $self->ip;
     my $res = $self->_powermanDo('stat');
     return 1 if $res eq 'on';
     return 0;
@@ -49,13 +49,13 @@ sub isAlive {
 
 sub halt {
     my ($self) = @_;
-    DEBUG "Stopping host=" . $self->host . " ipmi=" . $self->ipmi;
+    DEBUG "Stopping host=" . $self->ip . " ipmi=" . $self->ipmi;
     $self->_powermanDo('stop');
 }
 
 sub start {
     my ($self) = @_;
-    DEBUG "Starting host=" . $self->host . " ipmi=" . $self->ipmi;
+    DEBUG "Starting host=" . $self->ip . " ipmi=" . $self->ipmi;
 
     #$self->getIpmiInfo;
     $self->_powermanDo('start');
@@ -81,12 +81,12 @@ sub _powermanDo {
             DEBUG "Exec result is [$onr]";
             next if $self->_isBMCError($onr);
             if ( $onr =~ m/\:\s+ok\s*$/ ) {
-                INFO "Node [" . $self->host . "] started";
+                INFO "Node [" . $self->ip . "] started";
                 return 0;
             }
             else {
                 confess "Cannot power on node Node ["
-                  . $self->host . "]:["
+                  . $self->ip . "]:["
                   . $self->ipmi
                   . "]=[$onr]";
             }
@@ -102,16 +102,16 @@ sub _powermanDo {
             DEBUG "Exec result is [$statr]";
             next if$self->_isBMCError($statr);
             if ( $statr =~ m/\:\s+on\s*$/ ) {
-                INFO "Node [" . $self->host . "] on";
+                INFO "Node [" . $self->ip . "] on";
                 return 'on';
             }
             elsif ( $statr =~ m/\:\s+off\s*$/ ) {
-                INFO "Node [" . $self->host . "] off";
+                INFO "Node [" . $self->ip . "] off";
                 return 'off';
             }
             else {
                 confess "Cannot check power status for node ["
-                  . $self->host . "]:["
+                  . $self->ip . "]:["
                   . $self->ipmi
                   . "]=[$statr]";
             }
@@ -128,12 +128,12 @@ sub _powermanDo {
             DEBUG "Exec result is [$offr]";
             next if $self->_isBMCError($offr);
             if ( $offr =~ m/\:\s+ok\s*$/ ) {
-                INFO "Node [" . $self->host . "] started";
+                INFO "Node [" . $self->ip . "] started";
                 return 0;
             }
             else {
                 confess "Cannot power down node Node ["
-                  . $self->host . "]:["
+                  . $self->ip . "]:["
                   . $self->ipmi
                   . "]=[$offr]";
             }
@@ -153,7 +153,7 @@ sub _isBMCError {
 
 sub getIpmiInfo {
     my ($self) = shift;
-    my $node   = $self->host;
+    my $node   = $self->ip;
     my $fru    = `ipmitool -A PASSWORD  -U admin -P admin  -H $node fru `;
     INFO "FRU info:\n$fru";
 
@@ -165,5 +165,4 @@ sub getIpmiInfo {
     INFO "MC GUID:\n $mcg";
 }
 
-__PACKAGE__->meta->make_immutable;
 1;

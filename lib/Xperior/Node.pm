@@ -14,14 +14,11 @@
 
 =head1 Class implements different functions to work with node and get information about them.
 
-
-
 =cut
 
 package Xperior::Node;
-
-use Error qw(:try);
-use Moose;
+use Moose; 
+use Error  qw(try finally except otherwise);
 use Moose::Util::TypeConstraints;
 
 use Net::Ping;
@@ -29,32 +26,16 @@ use Log::Log4perl qw(:easy);
 
 use Xperior::Utils;
 use Xperior::SshProcess;
+use Xperior::Nodes::KVMNode;
+use Xperior::Nodes::BasicNode;
+use Xperior::Nodes::IPMINode;
 
-has 'ctrlproto'    => ( is => 'rw' );
-has 'user'         => ( is => 'rw' );
-has 'pass'         => ( is => 'rw' );
-has 'ip'           => ( is => 'rw' );
-has 'id'           => ( is => 'rw' );
-has 'console'      => ( is => 'rw' );
 
-has 'architecture'    => ( is => 'rw');
-has 'os'              => ( is => 'rw');
-has 'os_release'      => ( is => 'rw');
-has 'os_distribution' => ( is => 'rw');
-has 'lustre_version'  => ( is => 'rw');
-has 'lustre_net'      => ( is => 'rw');
-
-has 'memtotal'        => ( is => 'rw');
-has 'memfree'         => ( is => 'rw');
-has 'swaptotal'       => ( is => 'rw');
-has 'swapfree'        => ( is => 'rw');
-
-has 'rconnector'   => (
-                        is => 'rw',
-                        default => undef);
-
+use constant DEFAULT_PROTO     => 'ssh';
+use constant DEFAULT_NODE      => 'BasicNode';
+use constant DEFAULT_UP_TIME_SEC   =>  300; #sec 
 =over *
-
+Public fields and supported constructor parameters
 =item isReachable
 
 check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lustre is up and files can be created).  
@@ -63,47 +44,96 @@ check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lu
 
 =cut
 
-sub isReachable{
-    my $self = shift;
-    #TODO only ssh now is supported
-    my $sc;
-    eval{
-        $sc=$self->getRemoteConnector;
-    };
-    if( $@){
-         WARN "Cannot connect to host".$@;
-         return 0;
-    }
-    unless ( defined ($sc)){
-        WARN "Cannot ssh host [".$self->id."]";
-        return 0;
+has 'ctrlproto'    => ( is => 'rw' );
+has 'user'         => ( is => 'rw' );
+has 'pass'         => ( is => 'rw' );
+has 'ip'           => ( is => 'rw' );
+has 'id'           => ( is => 'rw' );
+has 'console'      => ( is => 'rw' );
+has 'nodetype'     => ( is => 'rw' );
+
+#has '_ssh'         => ( is => 'rw'); # isa => 'Xperior::SshProcess');
+has '_pinger'      => ( is => 'rw', isa => 'Net::Ping');
+has '_node'        => ( is => 'rw' );
+
+#machined/os static info
+has 'architecture'    => ( is => 'rw');
+has 'os'              => ( is => 'rw');
+has 'os_release'      => ( is => 'rw');
+has 'os_distribution' => ( is => 'rw');
+has 'lustre_version'  => ( is => 'rw');
+has 'lustre_net'      => ( is => 'rw');
+
+#mem/disk info
+has 'memtotal'        => ( is => 'rw');
+has 'memfree'         => ( is => 'rw');
+has 'swaptotal'       => ( is => 'rw');
+has 'swapfree'        => ( is => 'rw');
+
+has 'rconnector'   => (
+                        is => 'rw',
+                        default => undef
+                    );
+has 'crashdir'     => (
+                        is => 'ro',
+                        default => '/var/crash/',
+                        isa => 'Str'
+                    );
+
+sub BUILD {
+    my $self   = shift;
+    my $params = shift;
+    $self->ctrlproto(DEFAULT_PROTO)
+                unless defined $self->ctrlproto;
+    $self->nodetype(DEFAULT_NODE)
+                        unless defined $self->nodetype;
+    
+    DEBUG "Apply role [".$self->nodetype."]";
+    if($self->nodetype eq 'KVMNode'){
+        Xperior::Nodes::KVMNode->meta->apply($self);
+        $self->kvmdomain($params->{'kvmdomain'});
+        $self->kvmimage($params->{'kvmimage'});
+        $self->restoretimeout( $params->{'restoretimeout'})
+            if defined $params ->{'restoretimeout'};
+
+    }elsif($self->nodetype eq 'BasicNode'){
+        Xperior::Nodes::BasicNode->meta->apply($self);
+    }elsif($self->nodetype eq 'IPMINode'){
+        Xperior::Nodes::IPMINode->meta->apply($self);
+        $self->ipmi($params->{'ipmi'});
     }else{
-        DEBUG $self->id ." is reachable ";
-        return 1;
+        confess "Cannot find nodetype [".$self->nodetype."]";
     }
 }
 
 =over *
 
-=item ping
+=item isReachable
 
-check that node is reachable via ping
+check that node is reachable via ssh (pdsh - TBI), and Lustre basic 
+liveness (Lustre is up and files can be created).  
 
 =back
 
 =cut
 
-
-sub ping {
+sub isReachable{
     my $self = shift;
-    my $p = Net::Ping->new();
-    INFO "PING host ".$self->{'ip'};
-    if ($p->ping($self->{'ip'})){
-        INFO "host is alive.\n";
-        return 1;
-    }else{
-        ERROR "host is unreachable.\n";
+    #TODO only ssh now is supported
+    my $rcon;
+    eval{
+        $rcon=$self->getRemoteConnector;
+    };
+    if( $@){
+         WARN "Cannot connect to host".$@;
+         return 0;
+    }
+    unless ( defined ($rcon)){
+        WARN "Cannot ssh host [".$self->id."]";
         return 0;
+    }else{
+        DEBUG $self->id ." is reachable ";
+        return 1;
     }
 }
 
@@ -207,12 +237,12 @@ sub run
 {
     my ( $self, $cmd, $timeout ) = @_;    
     my $ssh = $self->getExclusiveRC;
-    throw Xperior::Xception::NullObjectException
+    throw NullObjectException
         ("Cannot create ssh object") 
             unless defined $ssh;
     DEBUG $ssh->createSync($cmd, $timeout); 
-    throw Xperior::Xception::CannotConnectException
-        ("Cannot execute command on remote sied")
+    throw CannotConnectException
+        ("Cannot execute command on remote side")
             unless defined  $ssh->exitcode;
     return $ssh->exitcode;
 }
@@ -224,6 +254,7 @@ sub run
 Get file from node which associated with object.
 
 Return Xperior::SshProcess->getFile exit code
+Return 0 if file copied and exit code if error occurred.
 
 =back
 
@@ -286,10 +317,175 @@ sub getExclusiveRC{
     return $urc; 
 }
 
+=over *
 
-#sub isNode
+=item storeKernelDump($file)
+
+Store kernel crash dump core in file which pointed.
+
+Paramaters:
+
+$file - file which where will store vmcore file.
+
+Return 0 if file copied, -1 if no dump files found and exit code if error occurred.
+
+=back
+
+=cut
+
+sub storeKernelDump {
+    my ($self, $storefile) = @_;
+    my $rc = $self->getRemoteConnector;
+    return -2 unless defined $rc ;
+    my @found = grep (/vmcore/, split(/\n/,$rc->createSync("find  ".$self->crashdir,10)));
+    my $kdump=undef;
+    if(scalar(@found) eq 1){
+        $kdump = $found[0];
+    }elsif(scalar(@found) > 1){
+        WARN "More then one kernel dump found, selecting last by directory name date";
+        INFO "Please use Node->cleanCrashDir for reliable results";
+        my @sorted =  sort {$b cmp $a} @found;
+        $kdump = $sorted[0];
+    }else{
+        ERROR "No kernel dump found at host: [".$self->ip."]";
+        return -1;
+    }
+    DEBUG "Found kernel dump file:[".$kdump."]";
+    return $rc->getFile($kdump,$storefile);
+}
+
+=over *
+
+=item cleanCrashDir  
+
+Remove all previosly stored kernel dumpes on local filesytems on remote node
+Return remote command exit code.
+
+=back
+
+=cut
+
+sub cleanCrashDir{
+    my ($self) = @_;
+    my $rc = $self->getRemoteConnector;
+    DEBUG "Crashdir is [". $self->crashdir."]";
+    confess "Crashdir is not set" unless(
+                              (defined($self->crashdir))and 
+                              ($self->crashdir ne '') and
+                              ($self->crashdir ne '/'));
+    my $res = $rc->createSync("rm -rf  ".$self->crashdir."/*");
+    ERROR "Cannot remove dump files:".$res 
+                    if( $rc->exitcode != 0);
+    return $rc->exitcode;
+}
+
+=ovr *
+
+=item waitDown($timeout)
+
+default timeout is 300 sec
+
+Exit code:
+
+0 - host is down until timeout is exceed
+
+1 - host is up after timeout
+
+=back
+
+=cut
+
+sub waitDown{
+    my ($self,$timeout) = @_;
+    my $starttime = time;
+    $timeout = 300 unless defined $timeout;
+    #mean wait while kore dumped
+    while(( $starttime + $timeout ) > time ){
+        unless($self->isAlive){
+            last;
+            DEBUG "Host is down";
+            return 0;   
+        }
+        sleep 10;
+    }
+    ERROR "System still up";
+    return 1;
+}
+
+=over *
+
+=item waitUp($timeout)
+
+Wait until node up (available via ssh) and set ssh member, return ssh object.
+If node is not up until $timeout or ssh connection failed return undef.
+
+=back
+
+=cut
+
+sub waitUp {
+    my ($self, $timeout) = @_;
+    $timeout = DEFAULT_UP_TIME_SEC unless defined $timeout; 
+    $self->rconnector($self->_waitForNodeUp( $self->ip,$self->user, $timeout ));
+    return $self->rconnector;
+}
 
 
+=over *
+
+=item ping
+
+Ping node.
+
+Returns a success flag. If the hostname cannot be found or there 
+is a problem with the IP number, the success flag returned will 
+be undef. Otherwise, the success flag will be 1 if the host is 
+reachable and 0 if it is not.
+
+=back
+
+=cut
+
+sub ping {
+ my $self = shift;
+ $self->_pinger(Net::Ping->new()) unless defined $self->_pinger;
+ DEBUG "Ping host [".$self->{ip}."]";
+ return $self->_pinger->ping($self->ip);
+}
+
+sub _waitForNodeUp {
+    my ($self, $node, $user, $timeout ) = @_;
+    my $sp;
+    my $up = 0;
+    my $starttime = time;
+    my $p = Net::Ping->new();
+    INFO "Wait until node [$node] up";
+
+    while ( ( $starttime + $timeout ) > time ) {
+        if ( $self->ping ) {
+            INFO "host is alive, check ssh\n";
+            $sp = Xperior::SshProcess->new();
+            my $ss = $sp->init( $node, $user, 22, 1 );
+            if ( $ss == 0 ) {
+                INFO "ssh is up\n";
+                $up = 1;
+                last;
+            }
+            else {
+                ERROR "ssh is down,wait.\n";
+            }
+        }
+        else {
+            ERROR "host is unreachable,wait.\n";
+        }
+        sleep 15;
+    }
+    unless ($up) {
+        WARN "Node is not up in [".(time - $starttime)."] sec";
+        return undef;
+    }
+    return $sp;
+}
 
 __PACKAGE__->meta->make_immutable;
 1;

@@ -18,32 +18,25 @@ use File::chdir;
 use File::Copy;
 use Exporter;
 use Carp;
-use Net::Ping;
-use Error qw(:try);
+use Error qw(try finally except otherwise);
 use List::Util qw(min max);
+use Proc::Simple;
+use XML::Simple qw(:strict);
 
 use Xperior::SshProcess;
 use Xperior::Utils;
 use Xperior::Xception;
-
-use Moose;
-
+use Xperior::Utils;
+use Moose::Role;
 with qw( Xperior::Nodes::NodeManager );
 
-has 'kvmdomain' => ( is => 'ro', isa => 'Str' );
+has 'kvmdomain' => ( is => 'rw', isa => 'Str' );
 has 'kvmimage'  => ( is => 'rw', isa => 'Str' );
-has 'restoretimeout' => ( is => 'rw', isa => 'Int');
-
+has 'restoretimeout' => ( is => 'rw', isa => 'Int', default => 700);
+has '_proc' => (is =>'rw');
+has '_consolefile' => ( is => 'rw');
 use constant SLEEP_AFTER_DESTROY         => 10;  #sec
-use constant DEFAULT_RESTORE_TIMEOUT     => 700; #sec
 use constant SLEEP_AFTER_START           => 15;  #sec
-sub BUILD {
-    my $self   = shift;
-    my $params = shift;
-    $self->restoretimeout(DEFAULT_RESTORE_TIMEOUT)
-                unless defined $self->restoretimeout;
-    DEBUG "Constructor params: $params->{kvmdomain}";
-}
 
 sub sync{
     sleep max(SLEEP_AFTER_DESTROY,  SLEEP_AFTER_START);
@@ -59,6 +52,8 @@ sub halt {
     my ($self) = @_;
     return $self->_virshDo( 'destroy', $self->{kvmdomain} );
 }
+
+
 
 sub restoreSystem{
     my ($self, $image) = @_;
@@ -85,6 +80,55 @@ sub start {
 #sub _restartLibvirt {
 #    return runExternalApp( 'sudo /etc/init.d/libvirtd restart', 1 );
 #}
+
+
+sub getConfg{
+    my ($self) =@_;
+    my $kd = $self->kvmdomain;
+    unless (defined ($self->nodedescriptor)){
+        my $xml = `sudo virsh dumpxml $kd`;
+        $self->nodedescriptor($xml);
+    }
+    return $self->nodedescriptor;
+}
+
+sub startStoreConsole{
+    my($self,$file) = @_;
+    throw NullObjectException ("console path is not set for  KVMNode")
+        if defined ;
+    my $proc = Proc::Simple->new();
+    $proc->kill_on_destroy(1);
+    $self->_findSerialFile;
+    $proc->start("sudo tail -f -n 0 -v ".$self->_consolefile." 1>$file 2>&1 ");
+    $self->_proc($proc); 
+}
+
+sub stopStoreConsole{
+    my $self = shift;
+    #$self->_proc->kill;
+    runEx("sudo kill -TERM -".$self->_proc->pid);
+    $self->_proc(undef);
+}
+
+sub _findSerialFile{
+    my $self = shift;
+    throw NullObjectException("No console set") unless defined $self->console;
+    DEBUG "Searchin console [".$self->console."] definition in kvm [".$self->kvmdomain."]";
+    my $consolefile = undef;
+    my $xml = XMLin($self->getConfg,  KeyAttr => { device => "+type" } , ForceArray => 2);
+    foreach my $serial ( @{$xml->{devices}->[0]->{serial}}){
+        if((defined $serial->{target}[0]->{port} ) and
+            ($serial->{target}[0]->{port} eq $self->console )){
+            $consolefile = $serial->{source}[0]->{path};
+        }
+    }
+
+    throw NullObjectException("Cannot find console [".
+            $self->console."] definition in kvm [".$self->kvmdomain."]")
+                unless defined $consolefile;
+    $self->_consolefile($consolefile);
+    return $consolefile;
+}
 
 sub _virshDo {
     my ( $self, $action, $vm ) = @_;
@@ -168,6 +212,4 @@ sub _isDomainActive {
     return $status;
 }
 
-
-__PACKAGE__->meta->make_immutable;
 1;

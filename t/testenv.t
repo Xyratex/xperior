@@ -87,7 +87,7 @@ test plan => 10, aGetNodeConfiguration    => sub {
 };
 
 test plan => 2, dCheckIP    => sub {
-    is( $cfg->getNodeAddress('mds1'),'192.168.200.102');
+    is( $cfg->getNodeAddress('mds1'),'mds');
     is( $cfg->getNodeAddress('client1'),'lclient');
 };
 
