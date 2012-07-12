@@ -28,7 +28,7 @@ setup           some_setup    => sub {
 test plan => 1, fCheckRuntest          => sub {
     my @tests = @{$testcore->loadTests};
     #DEBUG "Executing tests";
-    my $tap = $testcore->runtest($tests[1]);
+    my $tap = $testcore->_runtest($tests[1]);
     #DEBUG "TAP:\n" . $tap;
     SKIP: {
         skip('Not finished, must be tested results from runtest',1);
@@ -75,7 +75,7 @@ test  plan => 6, dCheckTests           => sub {
 ##################################################
 test plan => 1, dCheckCreateExecutor    => sub {
 
-    my $exe = $testcore->createExecutor('Xperior::Executor::Noop');
+    my $exe = $testcore->_createExecutor('Xperior::Executor::Noop');
     diag("Class reference:$exe");
     isa_ok( $exe, 'Xperior::Executor::Noop', 'Check module loading' );
 };

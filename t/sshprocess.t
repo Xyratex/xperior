@@ -32,7 +32,7 @@ startup         _startup  => sub {
 
 setup           _setup    => sub { 
     $sp =  Xperior::SshProcess->new();
-    $sp->init('localhost','ryg');
+    $sp->init('localhost','tomcat');
 };
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub { };
@@ -121,22 +121,22 @@ test plan => 20, xStress    => sub {
 
 test plan => 10, cInit    => sub {
     is($sp->host,'localhost','host');
-    is($sp->user,'ryg','user');
+    is($sp->user,'tomcat','user');
     is($sp->hostname,(trim `hostname`),'Check on host hostname');
     is($sp->osversion, trim`uname -a`,'Check os version');
     my $pidfile   = $sp->pidfile;
     my $ecodefile = $sp->ecodefile;
     my $rscrfile  = $sp->rscrfile;   
-    $sp->init('localhost','ryg');
+    $sp->init('localhost','tomcat');
     isnt($pidfile,  $sp->pidfile,'Pid file is uniq');
     isnt($ecodefile,$sp->ecodefile, 'Exit code file is uniq');
     isnt($rscrfile, $sp->rscrfile, 'Script file is uniq');
     #is($exe->getClients,1, 'Check clients after adding')
 
-    eval{ $sp->init('localhost','ryg');};
+    eval{ $sp->init('localhost','tomcat');};
     is($@,'',"Connection ok");
     #negative initialization
-    eval{ $sp->init('node_on_mars','ryg');};
+    eval{ $sp->init('node_on_mars','tomcat');};
     isnt($@,''," Connection failed as expected");
     eval{ $sp->init('localhost','ryg_on_mars');};
     isnt($@,''," Connection failed as expected");
@@ -147,7 +147,7 @@ test plan => 5, fClone    => sub {
     my $nsp = $sp->clone;
     #check that clones have same fields
     is($nsp->host,'localhost','check cloned host');
-    is($nsp->user,'ryg', 'check cloned user');
+    is($nsp->user,'tomcat', 'check cloned user');
     is($nsp->osversion, trim`uname -a`,'Check cloned os version');
     
     #check that clones aren resf on one object

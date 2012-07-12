@@ -44,7 +44,7 @@ shutdown        _shutdown => sub {};
 
 test plan => 1, cFullList => sub {
 
-    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=systemcfg.yaml --testdir=t/testlists/testds`;
+    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml  --testdir=t/testlists/testds`;
     my $tts = getTests(\@out);
     my @exp = (
           'replay-vbr/1a',
@@ -66,7 +66,7 @@ test plan => 1, cFullList => sub {
 
 test plan => 2, eIncludeList => sub {
 
-    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=systemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list`;   
+    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list`;   
     my $tts = getTests(\@out); 
     
     print "Ready results:".Dumper $tts;
@@ -78,7 +78,7 @@ test plan => 2, eIncludeList => sub {
     is_deeply($tts,\@exp,"Simple include list ");   
    
 
-    my @out1 = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=systemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list`;
+    my @out1 = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list`;
     my $tts1 = getTests(\@out1);
 
     my @exp1 = (
@@ -92,7 +92,7 @@ test plan => 2, eIncludeList => sub {
 
 test plan => 3, alIELists => sub {
 
-    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=systemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list               --excludelist=t/testlists/exclude.list`;   
+    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list               --excludelist=t/testlists/exclude.list`;   
     my $tts = getTests(\@out); 
     
     #print "Ready results:".Dumper $tts;
@@ -103,7 +103,7 @@ test plan => 3, alIELists => sub {
 
     is_deeply($tts,\@exp,"Simple include list/exclude list 1");   
 
-    @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=systemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list               --excludelist=t/testlists/exclude.list`;   
+    @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list               --excludelist=t/testlists/exclude.list`;   
     $tts = getTests(\@out); 
     
     #print "Ready results:".Dumper $tts;
@@ -115,7 +115,7 @@ test plan => 3, alIELists => sub {
 
     is_deeply($tts,\@exp,"Simple include list/exclude list 2");   
 
-    my @out1 = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=systemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list     --excludelist=t/testlists/exclude_r.list`;  
+    my @out1 = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list     --excludelist=t/testlists/exclude_r.list`;  
     my $tts1 = getTests(\@out1);
     
     #print "Ready results:".Dumper $tts1;
