@@ -136,7 +136,7 @@ sub _sshSyncExecS {
         local $SIG{ALRM} = sub {
             $self->syncexitcode(-100);
             $self->killed(time);
-            #print "*******************Killed by timeout !\n";
+            print "*******************Killed by timeout !\n";
             die "alarm clock restart";
         };
         alarm $timeout;
@@ -144,8 +144,8 @@ sub _sshSyncExecS {
         #do main action
         my $rawout = '';    # `$cc`;
 
-        open( CMD, "$cc|" ) || confess "Execution failed: $!";
-        while (<CMD>) {
+        open( my $cmd, "$cc|" ) || confess "Execution failed: $!";
+        while (<$cmd>) {
             my $s = $_;     # chomp;
             $rawout = $rawout . $s;
             unless ( $s =~ m/Warning:\sPermanently\sadded/ ) {
@@ -153,7 +153,7 @@ sub _sshSyncExecS {
                 DEBUG "RO:$_";
             }
         }
-        close CMD;
+        close $cmd;
 
         #TODO rechec in future difference between  $? and CHILD_ERROR_NATIVE
         #my $code = $?;
@@ -253,7 +253,8 @@ sub init {
     my $nocrash = shift;
 
     my $ver = 'none';
-    $ver = trim $self->_sshSyncExec( "uname -a", 30 );
+    $ver = $self->_sshSyncExec( "uname -a", 30 );
+    chomp $ver;
 
     #DEBUG "-------------------------------";
     #DEBUG ${^CHILD_ERROR_NATIVE};
@@ -261,13 +262,13 @@ sub init {
     #DEBUG $self->killed;
     if (   ( ${^CHILD_ERROR_NATIVE} != 0 )
         || ( $self->exitcode != 0 )
-        || ( $self->killed != 0 ) )
+        || ( $self->killed != 0 )
+        || ( $ver eq '') )
     {
         WARN "SshProcess cannot be initialized";
         if ( defined($nocrash) && $nocrash ) {
             return -99;
-        }
-        else {
+        } else {
             confess "\nSSH returns non-zero values on previous command:"
               . ${^CHILD_ERROR_NATIVE};
         }
@@ -330,6 +331,7 @@ SS
     if ( $self->killed == 0 ) {
         my $ecfc = $self->_sshSyncExec("cat $ecf");
         if(defined($ecfc)){
+            chomp $ecfc;
             DEBUG "Exit code is [$ecfc]";
             $self->exitcode( trim $ecfc );
         }else{
@@ -550,7 +552,7 @@ sub isAlive {
 
 Get file from remote system. TODO add tests on it.
 
-Return 0 if file copied and string if error occurred.
+Return 0 if file copied and scp exit code if error occurred.
 
 =cut
 

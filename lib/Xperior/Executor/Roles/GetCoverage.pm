@@ -3,7 +3,9 @@
 #
 #         FILE:  GetCoverage.pm
 #
-#  DESCRIPTION:  Role define coverage storing via lcov. Special calls are done before and after test execution. Only one-node cluster supported.
+#  DESCRIPTION:  Role define coverage storing via lcov. Special calls are done 
+#  before and after test execution. Only one-node cluster supported. Lock on 
+#  well-know environment.
 #
 #       AUTHOR:  ryg 
 #      COMPANY:  Xyratex
