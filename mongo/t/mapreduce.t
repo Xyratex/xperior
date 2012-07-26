@@ -106,7 +106,7 @@ setup setup => sub {
 
 ########################## tests
 test
-  plan         => 4,
+  plan         => 7,
   cCheckUpload => sub {
 
     #$db->dropDatabase();
@@ -123,20 +123,34 @@ test
 
     #DEBUG "Cursor is :". Dumper($cursor);
     my $object0 = $cursor->next;
-    DEBUG "Result obj is :" . Dumper($object0);
+    #DEBUG "Result obj is :" . Dumper($object0);
     is( $object0->{id},                               '21b', "Check obj id" );
     is( scalar( @{ $object0->{'attachments_ids'} } ), 4,     "Attach number" );
 
-    #foreach my $aid ( @{$object0->{'attachments_ids'}}){
-    #    DEBUG "Process attachement [".$aid->{value}."]";
-    #    my $file = $grid->get($aid);
-    #    DEBUG "file is:".Dumper $file->info;
-    #}
+    my $af = 0;
+    foreach my $aid ( @{$object0->{'attachments_ids'}}){
+         my $file = $grid->get($aid);
+        if($file->info->{filename} eq '21b.messages.vm1.log'){
+            INFO "21b.messages.vm1.log attachemnt found";
+            DEBUG "Process attachement [".$aid->{value}."]";
+            my $file = $grid->get($aid);
+            DEBUG "file is:".Dumper $file->info;
+            is($file->info->{test}, '21b', "check test id");
+            is($file->info->{test}, '21b', "check test id");
+            my $all   = $file->slurp;
+            like($all,qr/Installed: perl-YAML-Syck-1.07-4.el6.x86_64/,
+                    "Check file end");
+            $af =1;
+        };
+    }
+    if( $af == 0){
+        fail("Cannot check test id: node attachemnt found");
+    }
   };
 
 test
   plan           => 3,
-  adCheckRemoving => sub {
+  dCheckRemoving => sub {
     my $num = $db ->${collection}->count;
     is( $num, 99, "initial count of records" );
 
