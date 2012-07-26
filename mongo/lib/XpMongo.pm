@@ -97,12 +97,14 @@ sub _post_yaml_doc {
     my $grid = $db->get_gridfs;
     my @aids;
     foreach my $a (@{$ats}){
-        my $fh = IO::File->new($a, "r") or confess "Cannot open file [$a]";
+        my $fh = IO::File->new($a, "r") or confess "Cannot open attachement file [$a]";
         my $sa= 'no_name';        
         if($a =~ m/[\/\\]([^\/\\]+)$/){
             $sa = $1;
         }
-        my $id = $grid->insert($fh, {"filename" => $sa,"test"=> $yaml_data->{'id'}});        
+        my $id = $grid->insert($fh, {"filename" => $sa,"test"=> $yaml_data->{'id'}, "starttime" => $yaml_data->{'starttime'}});
+        DEBUG "Added attachemnt [".$yaml_data->{'id'}.
+                "] for test [".$yaml_data->{'id'}."]";
         push @aids,$id;
     }
     $yaml_data->{attachments_ids}=\@aids;;
