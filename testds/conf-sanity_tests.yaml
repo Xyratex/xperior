@@ -171,6 +171,9 @@ Tests:
     id: 59
   - 
     id: 60
+  - 
+    id: 61
+    timeout: 600
 cleanup_max_time: -1
 dangerous: 'yes'
 description: Lustre conf-sanity tests
