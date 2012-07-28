@@ -3,11 +3,11 @@
 #
 #         FILE:  GetCoverage.pm
 #
-#  DESCRIPTION:  Role define coverage storing via lcov. Special calls are done 
-#  before and after test execution. Only one-node cluster supported. Lock on 
+#  DESCRIPTION:  Role define coverage storing via lcov. Special calls are done
+#  before and after test execution. Only one-node cluster supported. Lock on
 #  well-know environment.
 #
-#       AUTHOR:  ryg 
+#       AUTHOR:  ryg
 #      COMPANY:  Xyratex
 #      CREATED:  05/23/2012 03:34:15 PM
 #===============================================================================
@@ -22,90 +22,142 @@ use Xperior::Utils;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 
-requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
+requires 'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile', '_reportDir';
+
+use constant LDIR => '/root/cov/lustre-wc-rel/';
 
 before 'execute' => sub {
     my $self = shift;
     foreach my $nid ( @{ $self->env->getMDSs } ) {
-        my $n = $self->env->getNodeById($nid->{'node'});
-        DEBUG "Target node:".$n->ip;
+        my $n = $self->env->getNodeById( $nid->{'node'} );
+        DEBUG "Target node:" . $n->ip;
         my $c = $n->getExclusiveRC;
-        DEBUG $c->createSync( 
-                " mount -t debugfs none /sys/kernel/debug", 60 );
-        DEBUG $c->createSync( 
-                " lcov --zerocounters ", 60 );
-        last;
-    }
+        DEBUG $c->createSync( " mount -t debugfs none /sys/kernel/debug", 60 );
+        DEBUG $c->createSync( " lcov --zerocounters ",                    60 );
 
-};
+        #this is hack and bad way
+        #only because coverage collection is pretty specific work
+        #this code is written
 
-
-after   'execute' => sub{
-    my $self    = shift;
-    foreach my $nid ( @{ $self->env->getMDSs } ) {
-        my $n = $self->env->getNodeById($nid->{'node'});
-        my $c = $n->getExclusiveRC;
-        DEBUG $c->createSync('find /root/cov -name \\"*.gcda\\"  -type l   -exec rm -f -v \\"{}\\" \\\;',120); 
-        DEBUG $c->createSync(
-                 " lcov --no-checksum --ignore-errors source "
-                ." -b /root/cov/lustre-wc-rel/ "#fixed lustre paths
-                ." --capture --output-file /tmp/coverage.$n->{id}  1>/dev/null 2>&1 ",
-                300 );
-       my  $syncres = $c->exitcode;
-        if ($syncres != 0){
-            DEBUG "Cannot collect kernel lcov data, exit code is [$syncres]";
-            exit 99;
-        }
-
-        DEBUG `rm -rf "/tmp/coverage.$n->{id}"`;
-        my $res = $c->getFile( "/tmp/coverage.$n->{id}","/tmp/coverage.$n->{id}");
-
-        my $cmd = 
-                "perl ".$ENV{'WORKSPACE'}."/scripts/coverage/lcov_filter.pl "
-                ." -s /tmp/coverage.$n->{id} "
-                ." -o ".$self->getNormalizedLogName('coverage.'.$n->id)
-                ." -p 'lnet'  -p 'libcfs' -p 'lustre-wc-rel.lustre'  ";
-        DEBUG `$cmd`;
-
+        #create dir is not exits
+        $self->getNormalizedLogName('coverage.'.$n->{id});
         
-        if ($res == 0){
-            $self->registerLogFile('coverage.'.$n->id,
-                $self->getNormalizedLogName('coverage.'.$n->id));
-        }else{
-            $self->addMessage(
-                "Cannot attach coverage file log [coverage.$n->{id}]: $res");
+        #manually  constrcut resource name
+        my $initcov =  
+           $self->_reportDir.
+           "/init.coverage.$n->{id}.log"; 
+
+        my $initusercov =  
+           $self->_reportDir.
+           "/init.usercoverage.$n->{id}.log"; 
+
+        #generate init info only one per session
+        unless ( -e $initcov ) {
+            $self->getCoverage( $c, $n->{id}, $initcov , $initusercov,' --initial ' );
         }
-
-        DEBUG $c->createSync(
-                 "lcov --no-checksum "
-                #."-b /root/cov/lustre-wc-rel/ "#fixed lustre paths
-                ." -d /root/cov/lustre-wc-rel/ "
-                ." -k /lib/modules/2.6.32/build/ " #fixed kernel
-                #."--remove fullcoverage.trace '*kernel*' "
-                ." --capture --output-file /tmp/usercoverage.$n->{id} -q ",
-                300 );
-        $syncres = $c->exitcode;
-        if ($syncres != 0){
-            DEBUG "Cannot collect user lcov data, exit code is [$syncres]";
-            exit 99;
+        else {
+            DEBUG "Init coverage file [$initcov] exists";
         }
+        last;
+    }
 
-        $res = $c->getFile( "/tmp/usercoverage.$n->{id}",
-            $self->getNormalizedLogName('usercoverage.'.$n->id));
-        if ($res == 0){
-            $self->registerLogFile('usercoverage.'.$n->id,
-                $self->getNormalizedLogName('usercoverage.'.$n->id));
-        }else{
-            $self->addMessage(
-                "Cannot attach coverage file log [usercoverage.$n->{id}]: $res");
+};
 
-        }
+after 'execute' => sub {
+    my $self = shift;
+    foreach my $nid ( @{ $self->env->getMDSs } ) {
+        my $n = $self->env->getNodeById( $nid->{'node'} );
+        my $c = $n->getExclusiveRC;
 
+        $self->getCoverage( 
+                $c, $n->{id}, 
+                $self->getNormalizedLogName( 'coverage.' . $n->{id} ),
+                $self->getNormalizedLogName( 'usercoverage.' . $n->{id} ),        
+                '' );
         last;
     }
 };
 
+sub getCoverage {
+    my ( $self, $ssh, $node, $logcov, $logusercov,  $moreparams ) = @_;
+    DEBUG "Collect coverage for test [$node]";
+    #workaround of lcov bug. sometimes gcda filea stops code covrage
+    DEBUG $ssh->createSync(
+'find /root/cov -name \\"*.gcda\\"  -type l   -exec rm -f -v \\"{}\\" \\\;',
+        120
+    );
+
+    DEBUG $ssh->createSync(
+        " lcov $moreparams --no-checksum --ignore-errors source " . " -b "
+          . LDIR . " "
+          . " --capture --output-file /tmp/coverage.$node  1>/dev/null 2>&1 ",
+        300
+    );
+    my $syncres = $ssh->exitcode;
+    if ( $syncres != 0 ) {
+        DEBUG "Cannot collect kernel lcov data, exit code is [$syncres]";
+        exit 99;
+    }
+
+    DEBUG `rm -rf "/tmp/coverage.$node"`;
+    my $res = $ssh->getFile( "/tmp/coverage.$node", "/tmp/coverage.$node" );
+
+    my $cmd = "perl "
+
+      #use Jenkins env var
+      . $ENV{'WORKSPACE'}
+      . "/scripts/coverage/lcov_filter.pl "
+      . " -s /tmp/coverage.$node " . " -o "
+      . $logcov
+      . " -p 'lnet'  -p 'libcfs' -p 'lustre-wc-rel.lustre'  ";
+    DEBUG "Executing $cmd";
+    DEBUG `$cmd`;
+
+    if ( $res == 0 ) {
+        if( $moreparams =~ m/--initial/ ){
+            WARN "[$logcov] is not attached to test result";
+        }else{
+            $self->registerLogFile( 'coverage.' . $node, $logcov );
+            
+        }
+    }
+    else {
+        $self->addMessage(
+            "Cannot attach coverage file log [coverage.$node]: $res");
+    }
+
+    DEBUG $ssh->createSync(
+        "lcov $moreparams --no-checksum "
+
+          #."-b /root/cov/lustre-wc-rel/ "#fixed lustre paths
+          . " -d " . LDIR . " "
+          . " -k /lib/modules/2.6.32/build/ "    #fixed kernel
+              #."--remove fullcoverage.trace '*kernel*' "
+          . " --capture --output-file /tmp/usercoverage.$node -q ",
+        300
+    );
+    $syncres = $ssh->exitcode;
+    if ( $syncres != 0 ) {
+        DEBUG "Cannot collect user lcov data, exit code is [$syncres]";
+        exit 99;
+    }
+
+    $res =
+      $ssh->getFile( "/tmp/usercoverage.$node",$logusercov );
+    if ( $res == 0 ) {
+        if( $moreparams =~ m/--initial/ ){
+            WARN "[$logusercov] is not attached to test result";
+        }else{
+            $self->registerLogFile( 'usercoverage.' . $node, $logusercov );
+        }
+    }
+    else {
+        $self->addMessage(
+            "Cannot attach coverage file log [usercoverage.$node]: $res" );
+
+    }
+
+}
 
 1;
-
 
