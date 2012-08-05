@@ -18,14 +18,15 @@ use File::Basename;
 use English;
 use Carp;
 use Cwd;
-use YAML qw "Bless LoadFile Load Dump";
+use YAML qw "Bless LoadFile Load Dump DumpFile";
 my $XPERIORBINDIR;
 our @ISA;
 our @EXPORT;
 
 BEGIN {
-    @ISA           = ("Exporter");
-    @EXPORT        = qw(&writeGeneratedTagsFile &writeGeneratedTestSuiteFile &getGeneratedTestSuite);
+    @ISA = ("Exporter");
+    @EXPORT =
+      qw(&writeGeneratedTagsFile &writeGeneratedTestSuiteFile &writeTestSuiteExclude  &getGeneratedTestSuite &getGeneratedTestSuiteExclude);
     $XPERIORBINDIR = dirname( Cwd::abs_path($PROGRAM_NAME) );
     push @INC, "$XPERIORBINDIR/../lib";
     Log::Log4perl->easy_init( { level => $DEBUG } );
@@ -33,29 +34,54 @@ BEGIN {
 }
 use constant LUSTRETESTS => '/usr/lib64/lustre/tests';
 
-=item  writeTestSuiteFile($testdir, $testsuite, $predefineddir, $sourcedir)
-    $testdir       - where store new test descriptor
+=item writeTestSuiteExclude ($outputDir, $suiteName, $predefinedList, $lustreTestsDir) 
+    $outputDir        - where store new exclude list
     
-    $testsuite     - name of test suite (test group) whose descriptor will                    be generated
+    $suiteName      - name of test suite (test group) which descriptor will
+                     be generated
     
-    $predefineddir - directory, where stored test descriptor, values from                     whose will be added to new test suite descriptor
+    $predefinedList - predefined exclude list file, which will be merged with data from suites
 
-    $sourcedir     - where original lustre test scripts are
+    $lustreTestsDir      - where original lustre test scripts are
+
+=cut
+
+sub writeTestSuiteExclude {
+    my ( $outputDir, $suiteName, $predefinedList, $lustreTestsDir ) = @_;
+    my $excludelist = getGeneratedTestSuiteExclude( $suiteName, $predefinedList,
+        $lustreTestsDir );
+    open( EX, " > $outputDir/${suiteName}_exclude.list" )
+      or confess "Cannot create exclude list: " . $!;
+    print EX $excludelist;
+    close EX;
+}    ## --- end sub writeTestSuiteExclude
+
+=item  writeTestSuiteFile($outputDir, $suiteName, $predefinedDir, $lustreTestsDir)
+    $outputDir        - where store new test descriptor
+    
+    $suiteName        - name of test suite (test group) whose descriptor will
+                     be generated
+    
+    $predefinedDir   - directory, where stored test descriptor, values from
+                    whose will be added to new test suite descriptor
+
+    $lustreTestsDir   - where original lustre test scripts are
 
 =cut
 
 sub writeGeneratedTestSuiteFile {
-    my ($testdir, $tsname, $pdir, $sdir ) = @_;
-    my $yaml = getGeneratedTestSuite($tsname, $pdir, $sdir);
+    my ( $outputDir, $suiteName, $predefinedDir, $lustreTestsDir ) = @_;
+    my $yaml =
+      getGeneratedTestSuite( $suiteName, $predefinedDir, $lustreTestsDir );
     $YAML::Stringify = 1;
-    my $file = "$testdir/${tsname}_tests.yaml";
-    open REP, "> $file" or confess "Cannot open report file:" . $!;
+    my $file = "$outputDir/${suiteName}_tests.yaml";
+    open REP, "> $file" or confess "Cannot create report file:" . $!;
     print REP Dump($yaml);
     close REP;
 }
 
-sub getGeneratedTestSuite{
-    my ($tsname, $pdir, $sdir ) = @_;
+sub getGeneratedTestSuite {
+    my ( $tsname, $pdir, $sdir ) = @_;
     my $script = "$sdir/$tsname.sh";
 
     unless ( -e "$script" ) {
@@ -66,12 +92,79 @@ sub getGeneratedTestSuite{
     return $ts;
 }
 
+sub getGeneratedTestSuiteExclude {
+    my ( $tsname, $predefinedlist, $sdir ) = @_;
+    my $script = "$sdir/$tsname.sh";
+
+    unless ( -e "$script" ) {
+        confess "Cannot open test script [$script]";
+    }
+    my $excludeTests = _generateTestSuiteExclude( $tsname, $script );
+    my $exclist =
+      _mergeWithPredefinedExclude( $excludeTests, $tsname, $predefinedlist );
+    return $exclist;
+}    ## --- end sub getGeneratedTestSuiteExclude
+
+sub _generateTestSuiteExclude {
+    my ( $tsname, $script ) = @_;
+    INFO "Reading $script";
+    my @excluded;
+    open( SCRIPT, "<$script" ) or confess "Cannot read file $script";
+    DEBUG "Read file [$script]";
+    while (<SCRIPT>) {
+        my $str = $_;
+        chomp $str;
+        if ( $str =~ m/ALWAYS_EXCEPT.*=.*\"(.+)\"/ ) {
+            DEBUG "ALWAYS_EXCEPT found in string [$str]";
+            my @splitted = split /\s+/, $1;
+            foreach my $t (@splitted) {
+                if ( $t =~ m/\d+\w*/ ) {
+                    push @excluded, "$tsname/$t";
+                    DEBUG "Found [$tsname: $t]";
+                }
+            }
+            last;
+        }
+    }
+    close SCRIPT;
+    INFO "Found excluded tests: ", scalar @excluded;
+    return \@excluded;
+}    ## --- end sub _generateTestSuiteExclude
+
+sub _mergeWithPredefinedExclude {
+    my ( $excludedtests_arr, $tsname, $predefinedlist ) = @_;
+
+    my $excludedtests = join( "\n", @{$excludedtests_arr} );
+    my $pre = '';
+    open PF, '<', $predefinedlist
+      or confess "failed to open  input file '$predefinedlist' : $!\n";
+    while (<PF>) {
+        $pre = $pre . $_;
+    }
+    close PF
+      or warn "failed to close input file '$predefinedlist' : $!\n";
+
+    my $res = << "MERGED"
+#########################################################
+### test from suite '$tsname'
+$excludedtests
+
+#########################################################
+### add non-tests excluded tests from 
+$pre
+
+MERGED
+      ;
+
+    return $res;
+}    ## --- end sub _mergeWithPreconfigExclude
+
 sub _mergeWithPreconfig {
-    my ( $ts, $tsname, $pdir ) = @_;
-    my $pcfgscr = "$pdir/${tsname}_tests.yaml";
+    my ( $tests, $suiteName, $lustreTestsDir ) = @_;
+    my $pcfgscr = "$lustreTestsDir/${suiteName}_tests.yaml";
     unless ( -e $pcfgscr ) {
         WARN "Cannot open file [$pcfgscr], no merge done";
-        return $ts;
+        return $tests;
     }
     my $pcfg = LoadFile($pcfgscr);
 
@@ -82,10 +175,11 @@ sub _mergeWithPreconfig {
                 DEBUG "Check test $tid description";
 
                 my $nto = undef;
-                foreach my $ntk ( @{ $ts->{$key} } ) {
-                    next unless ( $ntk->{'id'} eq $tid );
-                    $nto = $ntk;
-                    last;
+                foreach my $ntk ( @{ $tests->{$key} } ) {
+                    if ( $ntk->{'id'} eq $tid ) {
+                        $nto = $ntk;
+                        last;
+                    }
                 }
                 unless ( defined($nto) ) {
                     INFO "Skip preconfigured object for test [$tid]";
@@ -101,12 +195,12 @@ sub _mergeWithPreconfig {
             }
         }
         else {
-            unless ( defined( $ts->{$key} ) ) {
-                $ts->{$key} = $pcfg->{$key};
+            unless ( defined( $tests->{$key} ) ) {
+                $tests->{$key} = $pcfg->{$key};
             }
         }
     }
-    return $ts;
+    return $tests;
 }
 
 #TODO create tests for it
@@ -137,7 +231,7 @@ sub _generateTestSuite {
 
 #TODO write tests for it
 sub writeGeneratedTagsFile {
-    my ($testdir ) = @_;
+    my ($testdir) = @_;
     my $yaml = _getTags();
     $YAML::Stringify = 1;
     my $file = "$testdir/tags.yaml";
