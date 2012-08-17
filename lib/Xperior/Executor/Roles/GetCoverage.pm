@@ -102,18 +102,8 @@ sub getCoverage {
     DEBUG `rm -rf "/tmp/coverage.$node"`;
     my $res = $ssh->getFile( "/tmp/coverage.$node", "/tmp/coverage.$node" );
 
-    my $cmd = "perl "
-
-      #use Jenkins env var
-      . $ENV{'WORKSPACE'}
-      . "/scripts/coverage/lcov_filter.pl "
-      . " -s /tmp/coverage.$node " . " -o "
-      . $logcov
-      . " -p 'lnet'  -p 'libcfs' -p 'lustre-wc-rel.lustre'  ";
-    DEBUG "Executing $cmd";
-    DEBUG `$cmd`;
-
     if ( $res == 0 ) {
+        filter( "/tmp/coverage.$node",$logcov);
         if( $moreparams =~ m/--initial/ ){
             WARN "[$logcov] is not attached to test result";
         }else{
@@ -143,8 +133,10 @@ sub getCoverage {
     }
 
     $res =
-      $ssh->getFile( "/tmp/usercoverage.$node",$logusercov );
+      $ssh->getFile( "/tmp/usercoverage.$node",
+                            "/tmp/usercoverage.$node");
     if ( $res == 0 ) {
+        filter( "/tmp/usercoverage.$node",$logusercov);
         if( $moreparams =~ m/--initial/ ){
             WARN "[$logusercov] is not attached to test result";
         }else{
@@ -159,5 +151,17 @@ sub getCoverage {
 
 }
 
+sub filter {
+    my ($inputfile, $outputfile)= @_;
+    my $cmd = "perl "
+      #use Jenkins env var
+      . $ENV{'WORKSPACE'}
+      . "/scripts/coverage/lcov_filter.pl "
+      . " -s $inputfile  -o $outputfile "
+      . " -p 'lnet'  -p 'libcfs' -p 'lustre-wc-rel.lustre'  ";
+    DEBUG "Executing $cmd";
+    DEBUG `$cmd`;    
+    return 1;
+} ## --- end sub filter
 1;
 
