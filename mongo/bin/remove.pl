@@ -19,7 +19,7 @@ use Getopt::Long qw(:config no_ignore_case );
 
 use Log::Log4perl qw(:easy);
 Log::Log4perl->easy_init( { level => $DEBUG } );
-use XpMongo qw($dbname $collection $host  remove_by_sessionstarttime);
+use XpMongo qw($dbname $collection $host  remove_by_field);
 
 
 my $helpmessage = <<"__HELP__";
@@ -37,6 +37,7 @@ Options:
 
 Removing parameters:
     --sessionstarttime   - epoch of xperior testing start
+    --branch             - branch id
     --jenkinsbuildit     - TODO
 
 
@@ -50,7 +51,7 @@ sub help {
 
 ############################## main
 
-my ( $dryrun, $help, $post, $sessionstarttime );
+my ( $dryrun, $help, $post, $sessionstarttime, $branch );
 
 GetOptions(
     "dry|n"          => \$dryrun,
@@ -58,7 +59,8 @@ GetOptions(
     "collection|C:s" => \$collection,
     "host|H:s"       => \$host,
 
-    "sessionstarttime:i"     => \$sessionstarttime,
+    "sessionstarttime:i"  => \$sessionstarttime,
+    "branch:s"            => \$branch,
 
     "help|h" => \$help,
 );
@@ -72,7 +74,9 @@ DEBUG "Databse    = $dbname ";
 DEBUG "Collection = $collection";
 DEBUG "Host       = $host";
 
-if ( ( not defined $help ) && ( not defined $sessionstarttime ) ) {
+if (     ( not defined $help ) 
+     and (not defined $sessionstarttime) 
+     and (not defined $branch) )  {
     ERROR "No action set";
     help;
     exit 1;
@@ -89,7 +93,12 @@ if ( defined $help ) {
 }
 elsif ( defined($sessionstarttime) ) {
     DEBUG "Removing by session time";
-    remove_by_sessionstarttime($dryrun, $sessionstarttime);
+    remove_by_field($dryrun,'extoptions.sessionstarttime',
+                                            $sessionstarttime);
+}elsif ( defined($branch)){
+    DEBUG "Removing by session time";
+    remove_by_field($dryrun, 'extoptions.branch',
+                                            $branch);
 }
 
 

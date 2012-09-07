@@ -40,7 +40,7 @@ our $host       = "localhost";
 
 BEGIN {
     @ISA           = ("Exporter");
-    @EXPORT        = qw(&opendb &post &remove_by_sessionstarttime);
+    @EXPORT        = qw(&opendb &post &remove_by_field);
     @EXPORT_OK     = qw($dbname $collection $host );
     Log::Log4perl->easy_init( { level => $DEBUG } );
 }
@@ -253,28 +253,31 @@ REDUCE
     INFO "Deleted $c records";
 }
 
-sub remove_by_sessionstarttime{
-    my ($dry, $sessionstarttime ) = @_;
-    DEBUG "dry=[$dry], sessionstarttime=[$sessionstarttime]";
+sub remove_by_field{
+    my ($dry, $field, $value ) = @_;
+    DEBUG "dry=[$dry], [$field]=[$value]";
     my $db = opendb();
     my $grid = $db->get_gridfs;
     my $c=0;
     #get list of items
 
     my $cursor = $db->${collection}->find(
-    {'extoptions.sessionstarttime'  => $sessionstarttime});
+    { $field  => $value});
     #{'extoptions.executiontype' => "IT"});           
     #iterate over all results
      while ($cursor->has_next) {        
         my $res = $cursor->next;
         #iterate of attachments
+        #TODO remove in threads all in same time
         foreach my $a(@{$res->{'attachments_ids'}}){
             #remove attachemnt
             DEBUG "Remove attachement $a";
             $grid->delete($a) if $dry > 0;;
         }
         #remove result
-        INFO "Remove record  [$res->{_id}]";
+        INFO "Remove record  [$res->{_id}]:"
+            ." $res->{groupname}.$res->{id} "
+            ." for branch $res->{extoptions}->{branch}";
         $db->$collection->remove({_id => $res->{_id}}) if $dry > 0;
         my $err = $db->last_error();
         if( (not defined( $err)) or ($err->{ok} != 1)){
@@ -284,4 +287,8 @@ sub remove_by_sessionstarttime{
     }
     INFO "Deleted $c records";
 }
+
+
+
+1;
 

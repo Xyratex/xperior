@@ -29,7 +29,7 @@ function(k, values) {
 		r.date = value.date;
 
 		for (var cfgr in value.configurations) {
-			print('Reduce: cfg is: ' + cfgr);
+			//print('Reduce: cfg is: ' + cfgr);
 
 			if (r.configurations[cfgr] == null) {
 				r.configurations[cfgr] = {};

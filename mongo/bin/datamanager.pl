@@ -3,7 +3,7 @@
 #
 #         FILE: datamanager.pl
 #
-#  DESCRIPTION: Saimple script for view/get information from 
+#  DESCRIPTION: Sample script for view/get information from 
 #               mongo xperior database
 #
 #       AUTHOR: ryg 

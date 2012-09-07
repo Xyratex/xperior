@@ -42,7 +42,7 @@ function() {
 	} else if (this.status_code == 2) {
 		r.configurations[cfg]['skipped'] = 1;
 	}
-	print("doc after map  v:" + tojson(r));
+	//print("doc after map  v:" + tojson(r));
 	emit(r.id, r);
 }
 
