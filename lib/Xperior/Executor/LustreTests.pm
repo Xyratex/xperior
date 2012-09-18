@@ -58,7 +58,6 @@ our $VERSION = "0.0.2";
 has 'mdsopt'  => ( is => 'rw' );
 has 'ossopt'  => ( is => 'rw' );
 has 'clntopt' => ( is => 'rw' );
-has 'reason'  => ( is => 'rw' );
 
 after 'init' => sub {
     my $self = shift;
@@ -67,22 +66,6 @@ after 'init' => sub {
     #$self->reset;
     $self->reason('');
 };
-
-=head2 Functions
-
-=over 12
-
-=item * B<getReason> - return failure reason if it found while test
-log parsed.
-
-=back
-
-=cut
-
-sub getReason {
-    my $self = shift;
-    return $self->reason;
-}
 
 =over 12
 

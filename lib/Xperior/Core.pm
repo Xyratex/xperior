@@ -102,42 +102,40 @@ sub _createExecutor {
     my $obj = $es->new;
     if ( defined($roles) ) {
         foreach my $role ( split( /\s/, $roles ) ) {
-            DEBUG "Applying roles [$role]";
+            chomp $role;
+            DEBUG "Applying role [$role]";
 
             if ( $role eq 'LustreClientStatus' ) {
                 use Xperior::Executor::Roles::LustreClientStatus;
                 Xperior::Executor::Roles::LustreClientStatus->meta->apply($obj);
                 DEBUG 'ok';
-            }
-
-            if ( $role eq 'StoreSyslog' ) {
+            }elsif( $role eq 'StoreSyslog' ) {
                 use Xperior::Executor::Roles::StoreSyslog;
                 Xperior::Executor::Roles::StoreSyslog->meta->apply($obj);
                 DEBUG 'ok';
-            }
-
-            if ( $role eq 'StoreConsole' ) {
+            }elsif ( $role eq 'StoreConsole' ) {
                 use Xperior::Executor::Roles::StoreConsole;
                 Xperior::Executor::Roles::StoreConsole->meta->apply($obj);
                 DEBUG 'ok';
-            }
-            if ( $role eq 'GetDiagnostics' ) {
+            }elsif ( $role eq 'GetDiagnostics' ) {
                 use Xperior::Executor::Roles::GetDiagnostics;
                 Xperior::Executor::Roles::GetDiagnostics->meta->apply($obj);
                 DEBUG 'ok';
-            }
-            if ( $role eq 'ReformatBefore' ) {
+            }elsif ( $role eq 'ReformatBefore' ) {
                 use Xperior::Executor::Roles::ReformatBefore;
                 Xperior::Executor::Roles::ReformatBefore->meta->apply($obj);
                 DEBUG 'ok';
-            }
-
-            if ( $role eq 'GetCoverage' ) {
+            }elsif ( $role eq 'GetCoverage' ) {
                 use Xperior::Executor::Roles::GetCoverage;
                 Xperior::Executor::Roles::GetCoverage->meta->apply($obj);
                 DEBUG 'ok';
+            }elsif ( $role eq 'NetconsoleCollector' ) {
+                use Xperior::Executor::Roles::NetconsoleCollector;
+                Xperior::Executor::Roles::NetconsoleCollector->meta->apply($obj);
+                DEBUG 'ok';
+            }else{
+                confess "Unknows role [$role]";
             }
-
         }
     }
     return $obj;
@@ -301,7 +299,7 @@ sub run {
                     }
                 }
                 else {
-                    WARN "Unclean test failure, not exiting after it";
+                    WARN "Unclean test failure, don't exit after it";
                 }
             }
             else {
