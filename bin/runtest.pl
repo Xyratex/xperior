@@ -13,7 +13,7 @@
 
 =head1 NAME
 
-Xperior - execute tests via Xperior harness (old internal name is Xperior)
+Xperior - execute tests via Xperior harness 
 
 =head1 SYNOPSIS 
 
@@ -21,10 +21,10 @@ Xperior - execute tests via Xperior harness (old internal name is Xperior)
 
 =head1 DESCRIPTION
 
-The application is executing different specially wrapped tests via Xperior
-harness. The application read yaml tests descriptions,check environmental
-conditions, read/gather cluster configuration and run tests based on it, gather
-logs and save report.
+The application executes different specially wrapped tests via Xperior harness.
+The application reads yaml tests descriptions, checks environment, reads and gathers 
+cluster configuration, runs tests based on found configuration, 
+collects logs and saves a report.
 
 =head1 OPTIONS
 
@@ -36,12 +36,12 @@ logs and save report.
 
 =item run
 
-Executre tests selected in configuration and filters.
+Execute tests selected in configuration and filters.
 
 =item list
 
-Print list of tests which will be ready to execution considering configuration
-and filters
+Print list of tests which will be ready to execute considering configuration
+and filters.
 
 =back
 
@@ -59,18 +59,18 @@ Show test cmd output. Default - no.
 
 =item --tap
 
-Generate also tap files in work directory
+Generate tap files in working directory
 
 =item --html
 
-Generate also html report in work directory ( report/report.html)
-
+Generate html report in working directory: C<report/report.html>
 
 =item --continue
 
-Continue execution in specified work directory. Execution is continued from
-next test after last found written, possible not completed, report. 
-If L<--continue> is not set then previous results in work directory are overwritten.
+Continue execution in specified working directory. Execution is continued 
+from the next test after last written one which is possibly not finished. 
+Report the results. If L<--continue> is not set, then the previous results 
+in the working directory are overwritten.
 
 =item --skipnodeinfo
 
@@ -78,10 +78,10 @@ TBI
 
 =item --extopt=name:value
 
-Additional options which will be stored in test results. use the parameter many
-times for many parameters. 
-Overrides values taken from external options file 
-if used simlutaneousely with L<--extop-file> option.
+Additional options which will be stored in test results. 
+You can use this option several times to pass more than one parameter.
+Overrides values taken from external options' file 
+if used simlutaneousely with L<--extop-file> option. 
 For details, see L<--extopt-file>.
 
 =item --extopt-file=<path>
@@ -115,7 +115,7 @@ path to yaml config file, syntax TBD here!
 
 =item --workdir=<path>
 
-Working dir where test log and results will be saved
+Working directory where test log and results will be saved
 
 =item --testdir=<path>
 
@@ -127,14 +127,13 @@ Directory where are test descriptors yaml files
 
 =head3 Exclude/include lists 
 
-Every tests defined by his name and his test group. 
-It is possible to use regular expression which will be used for comparing string. 
-Symbols after '#' are ignored.
+Each test is defined by its name and test group. 
+It is possible to use regular expression which will be used for string comparison. 
+Symbols after '#' are ignored. Sample:
 
-=head4 Sample
-    replay-dual.* #match to any replay-dual continue
-    sanity/a1
-    #comment too
+	replay-dual.* #match to any replay-dual continue
+	sanity/a1
+	#comment too
 
 =over 2
 
