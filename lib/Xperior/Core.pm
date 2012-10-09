@@ -42,6 +42,8 @@ use Xperior::Test;
 use Xperior::TestEnvironment;
 use Xperior::Utils;
 
+use List::Util qw(first);
+
 =head Exit codes
 
 =over 4
@@ -196,139 +198,73 @@ sub run {
         exit(ERROR_CONFIG_FAILURE);
     }
 
-    #$self->env->getNodesInfo;
-
-    #TODO load exclude list
-
     #TODO check tests applicability there
 
-    #start testing
-    my @tests;
-    my @rts = @{ $self->{'tests'} };
-    my %targs;
     my @includeonly = @{ $self->options->{'includeonly'} };
-    my $excludelist = undef;
-    my $includelist = undef;
+    my $excludelist;
+    my $includelist;
+    my $completelist;
 
-    #DEBUG "Process defined excludelist [".$self->options->{'excludelist'}."]";
     $excludelist = parseFilterFile( $self->options->{'excludelist'} )
-      if ( ( defined $self->options->{'excludelist'} )
+        if ( ( defined $self->options->{'excludelist'} )
         && ( $self->options->{'excludelist'} ne '' ) );
 
     $includelist = parseFilterFile( $self->options->{'includelist'} )
-      if ( ( defined $self->options->{'includelist'} )
+        if ( ( defined $self->options->{'includelist'} )
         && ( $self->options->{'includelist'} ne '' ) );
 
-    my $executedtests;
+    $completelist = findCompleteTests( $self->options->{'workdir'} )
+        if ( $self->options->{'continue'} );
 
-    if ( $self->options->{'continue'} ) {
-        $executedtests = getExecutedTestsFromWD( $self->options->{'workdir'} );
-    }
-    DEBUG Dumper $includelist;
+    my $skipCounter = 0;
+    my $execCounter = 0;
+    foreach my $test (@{ $self->{'tests'}}) {
+        my $testFullName = $test->getGroupName . '/' . $test->getName;
+        my $skip = 0;
+        my $exclude = 0;
+        DEBUG "Processing $testFullName";
 
-    #going over all loaded tests
-    my $snum = 0;
-    my $enum = 0;
-    foreach my $test (@rts) {
-
-        #DEBUG "Test = ".Dumper $test;
-
-        ##filtering
-        my $filtered = 0;
-        my $excluded = 0;
-
-        #if includeonly set ignore all other filtering options
-        if ( ( scalar @includeonly ) > 0 ) {
-            $filtered = 1;
-            foreach my $iodescr (@includeonly) {
-                $filtered = 0
-                  if (
-                    compareIE( $iodescr,
-                        $test->getGroupName . '/' . $test->getName ) > 0
-                  );
-            }
+        if ( @includeonly ) {
+            $skip = 1 unless first { $testFullName =~ m/^$_$/ } @includeonly;
         }
         else {
-
-            #skip tags
-            foreach my $tt ( @{ $test->getTags } ) {
-                foreach my $t ( @{ $self->options->{'skiptags'} } ) {
-                    $filtered++ if $t eq $tt;
-                }
+            foreach my $tag ( @{ $test->getTags } ) {
+                next unless first { $_ eq $tag } @{ $self->options->{'skiptags'} } ;
+                $skip = 1;
+                last;
             }
-
-            # skip exclude list
-            if ( defined $excludelist ) {
-
-                #DEBUG "Process defined excludelist [$excludelist]";
-                foreach my $tmpl (@$excludelist) {
-
-                    #$filtered = 1
-                    $excluded = 1
-                      if (
-                        compareIE( $tmpl,
-                            $test->getGroupName . '/' . $test->getName ) > 0
-                      );
-                }
+            if (defined $excludelist) {
+                $exclude = 1 
+                    if first { $testFullName =~ m/^$_$/ } @$excludelist;
             }
-
-            if ( defined $includelist ) {
-
-                #DEBUG "Process defined excludelist [$includelist]";
-                my $isincluded = 0;
-                foreach my $it (@$includelist) {
-                    if (
-                        compareIE( $it,
-                            $test->getGroupName . '/' . $test->getName ) > 0
-                      )
-                    {
-                        $isincluded = 1;
-                    }
-                }
-                $filtered = 1 if ( $isincluded != 1 );
+            if (defined $includelist) {
+                $skip = 1 
+                    unless first { $testFullName =~ m/^$_$/ } @$includelist;
             }
-
-            #skip already executed for --continue
-            foreach my $et (@$executedtests) {
-                $filtered = 1
-                  if (
-                    compareIE( $et,
-                        $test->getGroupName . '/' . $test->getName . '.yaml' )
-                    == 1
-                  );
-            }
-
+            $skip = 1 if first { "$testFullName.yaml" =~ m/^$_$/ } @$completelist;
         }
 
-        if ($filtered) {
-            $snum++;
+        if ($skip) {
+            $skipCounter++;
             next;
         }
+
         WARN "Starting test execution";
-        my $a = $self->options->{'action'};
-        if ( $a eq 'run' ) {
-            my $exe = $self->_runtest( $test, $excluded );
+        my $action = $self->options->{'action'};
+        if ( $action eq 'run' ) {
+            my $exe = $self->_runtest( $test, $exclude );
             my $res = $exe->result_code;
-            WARN 'TEST '
-              . $test->getName
-              . ' STATUS: '
-              . $test->results->{'status'};
-            $enum++;
+            WARN "TEST $test->getName STATUS: $test->results->{'status'}";
+
+            $execCounter++;
 
             #ignore passed and skipped results
-            if (
-                    ( $res != 0 )
-                and ( $res != 2 )
-
-              )
-            {
-
+            if ( $res != 0 and $res != 2 ) {
                 #test failed, do env check
-                my $cer = $self->{'env'}->checkEnv;
-                if ( $cer < 0 ) {
+                if ( $self->{'env'}->checkEnv < 0 ) {
                     WARN
 "Found problems while testing configuration after failed test, exiting";
-                    WARN "Executed $enum tests, skipped $snum";
+                    WARN "Executed $execCounter tests, skipped $skipCounter";
                     $self->_htmlReport;
                     exit(ERROR_CONFIG_FAILURE2);
                 }
@@ -336,11 +272,9 @@ sub run {
                     and ( $exe->yaml->{'fail_reason'} eq 'No_status_found' )
                     and ( $exe->yaml->{'killed'} eq 'no' ) )
                 {
-                    if ( defined( $test->getParam('dangerous') )
-                        && ( $test->getParam('dangerous') eq 'yes' ) )
-                    {
+                    if ( $test->getParam('dangerous', 'yes') ) {
                         WARN "Dangerous test failure detected, exiting";
-                        WARN "Executed $enum tests, skipped $snum";
+                        WARN "Executed $execCounter tests, skipped $skipCounter";
                         $self->_htmlReport;
                         exit(ERROR_DANGEROUS_TEST_FAILURE);
                     }
@@ -351,31 +285,25 @@ sub run {
 
             }
             else {
-                if (
-                    defined(
-                             $test->getParam('exitafter')
-                          && $test->getParam('exitafter') eq 'yes'
-                    )
-                  )
-                {
+                if ( $test->getParam('exitafter', 'yes') ) {
                     WARN "Test requires stop after complete, exiting";
-                    WARN "Executed $enum tests, skipped $snum";
+                    WARN "Executed $execCounter tests, skipped $skipCounter";
                     $self->_htmlReport;
                     exit(ERROR_TEST_BREAK_REQUIRED);
                 }
             }
         }
-        elsif ( $a eq 'list' ) {
+        elsif ( $action eq 'list' ) {
             print "====================\n";
             print $test->getDescription;
         }
         else {
-            confess "Cannot selected action for : $a";
+            confess "Cannot selected action for : $action";
         }
     }
     $self->_htmlReport;
     WARN "Execution completed";
-    WARN "Executed $enum tests, skipped $snum";
+    WARN "Executed $execCounter tests, skipped $skipCounter";
 }
 
 

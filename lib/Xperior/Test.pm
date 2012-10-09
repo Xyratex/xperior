@@ -83,18 +83,28 @@ sub getParamNames{
 
 =item getParam
 
-returns parameter by name. 
+returns parameter value by name.
+if given $compare parameter, returns the value
 
 =back
 
 =cut
 
 sub getParam{
-    my ($self,$pname)   = @_;
-    return $self->testcfg->{$pname} if (defined($self->testcfg->{$pname} ));
-    return $self->groupcfg->{$pname} if (defined($self->groupcfg->{$pname} ));
+    my ($self, $name, $compare) = @_;
 
-    return undef;
+	my $value;
+
+    if (defined($self->testcfg->{$name})) {
+		$value = $self->testcfg->{$name};
+	}
+	elsif (defined($self->groupcfg->{$name})) {
+		$value = $self->groupcfg->{$name};
+	}
+
+	$value = $value eq $compare if defined $compare;
+
+    return $value;
 }
 
 =over

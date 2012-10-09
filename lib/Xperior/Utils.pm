@@ -22,7 +22,7 @@ use File::Find;
 use Data::Dumper;
 
 our @ISA = ("Exporter");
-our @EXPORT = qw(&trim &runEx &parseFilterFile &compareIE &getExecutedTestsFromWD);
+our @EXPORT = qw(&trim &runEx &parseFilterFile &findCompleteTests);
 
 sub trim{
    my $string = shift;
@@ -49,7 +49,7 @@ sub runEx{
         confess "Child process failed with error status $error_code";
     }
 
-    DEBUG "Return code is:[" . $error_code . "]";
+    DEBUG "Return code is: [" . $error_code . "]";
     return $error_code;
 }
 
@@ -72,29 +72,20 @@ sub parseFilterFile{
     return \@onlyvalues;
 }
 
-# 0 - different values
-# 1 - match
-sub compareIE{
-    my ($template, $value) =@_;
-    $template = trim $template;
-    #DEBUG "Compare for exclusion/inclusion: [$template] and [$value]";
-    return 1 if( $value =~ m/^$template$/);
-    #DEBUG "Negative comparing result";
-    return 0;
-}
-
-
-sub  getExecutedTestsFromWD{
-    my $wd = shift;
+sub findCompleteTests{
+    my $workdir = shift;
     my @testlist;
-    return \@testlist  unless -d $wd;
+
+    return \@testlist
+        unless -d $workdir;
+
     find sub {
         my $file = $_;
         my $path =  $File::Find::name;
-        $path =~ s/^$wd//;
+        $path =~ s/^$workdir//;
         $path =~ s/^\///;
-        push (@testlist, $path) unless ( -d $file); }, 
-        $wd; 
+        push (@testlist, $path) unless ( -d $file ); 
+	}, $workdir;
     #DEBUG Dumper \@testlist;
     return \@testlist;
 }

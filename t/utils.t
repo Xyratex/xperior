@@ -31,21 +31,6 @@ setup           _setup    => sub { };
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub { };
 
-test plan => 5, dCompareIE => sub{
-    my $res = compareIE("xxx","yyy");
-    is($res,0,"Dummy check");
-    $res = compareIE('sanity/1','sanity/1');
-    is($res,1,"Simple check 0");
-    $res = compareIE('sanity/*','sanity/1');
-    is($res,0,"Simple regexp check"); 
-    $res = compareIE('san*','sanity/1');   
-    is($res,0,"Simple regexp check 2");               
-    $res = compareIE('sanity','sanity/1');   
-    is($res,0,"Simple regexp check 3");               
-
-};
-
-
 test plan => 1, gLoadEIFiles    => sub {
     my $res = parseFilterFile("t/data/iefile");
     DEBUG Dumper $res;
@@ -61,8 +46,8 @@ test plan => 1, gLoadEIFiles    => sub {
     is_deeply($res,\@exp,'Check parsing results');
 };
 
-test plan => 1, aGetExecutedTestsFromWD => sub{
-    my $res =  getExecutedTestsFromWD('t/data/wd');
+test plan => 1, aFindCompleteTests => sub{
+    my $res =  findCompleteTests('t/data/wd');
     DEBUG Dumper $res;
     my @exp = (
           'mdtest/test1.yaml',
