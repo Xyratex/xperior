@@ -11,9 +11,12 @@
 #      CREATED:  10/08/2011 
 #===============================================================================
 =pod
+
 =head1 DESCRIPTION
 
-IOR wrapper module for Xperior harness.
+IOR execution module for Xperior harness. This module inherit L<SingleProcessBase> and provide only parsing for B<iorcmd> parameter from test descriptor. This parameter is obligatory for test and should contains correct command for executing IOR. Sample test descriptor there C<testds/ior_tests.yaml>. 
+
+
 
 =cut
 
@@ -34,7 +37,7 @@ after 'init' => sub{
 =over 
 
 =item *
- processLogs - parse output for get benchmark results 
+processLogs - parse output for benchmark results. Tested on output from IOR 2.10.x. 
 
 =back
 

@@ -9,6 +9,18 @@
 #      COMPANY:  Xyratex
 #      CREATED:  09/27/2011 11:47:51 PM
 #===============================================================================
+=pod
+
+=head1 DESCRIPTION
+
+LustreTests execution module for Xperior harness. This module inherit 
+L<Xperior::Executor::SingleProcessBase> and provide functionality for
+generating command line  for Lustre B<test-framework.sh> based tests
+and parse these tests output.
+
+Sample test descriptor there C<testds/sanity_tests.yaml>. 
+=cut
+
 package Xperior::Executor::LustreTests;
 use Moose;
 use Data::Dumper;
@@ -32,10 +44,29 @@ after 'init' => sub {
     $self->reason('');
 };
 
+=head2 Functions
+
+=over 12
+
+=item * B<getReason> - return failure reason if it found while test 
+log parsed.
+
+=back
+
+=cut
+
 sub getReason {
     my $self = shift;
     return $self->reason;
 }
+
+=over 12
+
+=item * B<_prepareCommands> - generate command line for Lustre test based on L<configuration|XperiorUserGuide/"System descriptor"> and test descriptor.
+
+=back
+
+=cut
 
 sub _prepareCommands {
     my $self = shift;
@@ -56,7 +87,6 @@ sub _prepareCommands {
         $ext = '';    #ext must be set also when script is set
     }
 
-    #REFORMAT=YES
     $self->cmd( "SLOW=YES  "
           . $self->mdsopt . " "
           . $self->ossopt . " "
@@ -64,14 +94,26 @@ sub _prepareCommands {
           . " $eopts $tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\" /usr/lib64/lustre/tests/${script}${ext}"
     );
 
-#    $self->cmd("SLOW=YES  ".$self->mdsopt." ".$self->ossopt." ".$self->clntopt." ONLY=$tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -S -w \\\"  ACC_SM_ONLY=${script} /usr/lib64/lustre/tests/acceptance-small.sh");
-
 }
 
-# 0   - passed
-# 1   - skipped
-# 10  - failed
-# 100 - no result set, failed too
+=over 12
+
+=item * B<processLogs> - parse B<test-framework.sh> test output and
+calculate result based on output parsing.
+
+Return values:
+
+    0   - passed
+    1   - skipped
+    10  - failed
+    100 - no result set based on parsing, failed toor
+
+Also failure reason accessible (if defined) via call C<getReason>.
+
+=back
+
+=cut 
+
 sub processLogs {
     my ( $self, $file ) = @_;
     DEBUG("Processing log file [$file]");

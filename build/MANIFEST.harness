@@ -53,8 +53,9 @@ t/testcfgs/lustre/tags.yaml
 t/testcfgs/simple/sanity_tests.yaml
 t/testcfgs/simple/tags.yaml
 t/testds/tags.yaml
-doc/XperiorDG.pod
-doc/XperiorUG.pod
+doc/XperiorDeveloperGuide.pod
+doc/XperiorUserGuide.pod
+doc/XperiorInstallationGuide.pod
 lib/Xperior/html/jquery-1.4.2.min.js
 lib/Xperior/html/xperior_report.tt2
 lib/Xperior/html/jquery.tablesorter-2.0.3.min.js

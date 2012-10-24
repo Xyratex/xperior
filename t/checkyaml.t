@@ -63,17 +63,17 @@ test plan => 3, cChekModule => sub{
 };
 
 test plan => 3, eCheckProgram => sub {
-    DEBUG `bin/checkyaml.pl  --ydir='t/yamlcheckdata/1'`;
+    DEBUG `bin/checkyaml.pl  --dir='t/yamlcheckdata/1'`;
     my $res = ${^CHILD_ERROR_NATIVE};
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is($res,0,"pass exit code");
 
-    DEBUG `bin/checkyaml.pl  --ydir='t/yamlcheckdata/1' --failonundef`;
+    DEBUG `bin/checkyaml.pl  --dir='t/yamlcheckdata/1' --failonundef`;
     $res = ${^CHILD_ERROR_NATIVE};
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is($res,2304,"no schema found, 0x0900");
 
-    DEBUG `bin/checkyaml.pl  --ydir='t/yamlcheckdata/2'`;
+    DEBUG `bin/checkyaml.pl  --dir='t/yamlcheckdata/2'`;
     $res = ${^CHILD_ERROR_NATIVE};
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is($res,2048,"schema check doesn't pass, 0x0800");

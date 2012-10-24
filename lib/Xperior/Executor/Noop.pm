@@ -25,8 +25,10 @@ sub execute{
     my $self = shift;
     my $id = $self->test->getParam('id');
     $self->fail;
+    $self->addYE('starttime',time);
     $self->addYE('testid',$id);
     $self->addYE('message','Noop engine, empty test');
+    $self->addYE('killed','no');
 my $ml = <<ML
 Qwerty
 Asdfg
@@ -35,10 +37,15 @@ ML
 ;
     $self->addYE('multiline1',$ml);
     $self->addYE('multiline2',"qwerty\n"."asdfgh\n\nzxcvbn");
+    $self->addYE('completed','yes');
+    $self->addYE('endtime_planned',time);
+    $self->addYE('endtime',time);
+    
     $self->pass;
     $self->test->results ($self->yaml);
-
 }
+
+__PACKAGE__->meta->make_immutable;
 
 1;
 

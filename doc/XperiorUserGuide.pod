@@ -2,43 +2,39 @@
 
 =head1 Xperior harness user guide
 
-=head2 Structure of /opt/xyratex/xperior folder
+=head2 L<Xperior::Executor::Noop> executor
 
-=over  
+Xpreior harness have only Noop test executor which could be use for proving
+installation and Xperiro investigation. Simple comand line for execute 
+sample empty tests:
 
-=item *
+    bin/xper --debug --workdir /tmp/demo --testdir=t/testcfgs/simple --config=t/testcfgs/localtestsystemcfg.yaml --html
 
-B<bin>    - this perl application
+By default, t/testcfgs/localtestsystemcfg.yaml use local ssh and user tomcat.
+Please add local user tomcat with passwordless ssh or replace user tomcat
+to exists user with passwordless login. More about L<xper|runtest> and 
+its parameters.
 
-=item *
+Simple check for test descriptor files could be done via L<checkyaml> tool, e.g.
 
-B<lib>    - Xperior perl libraries, for overriding use PERL5LIB env variable. runtest.pl script try to find it as C<../lib> from his location
+    bin/checkyaml.pl --ydir testds/
 
-=item *
+Other executors could provide support for different test, e.g. 
+L<Xperior::Executor::IOR> or L<Xperior::Executor::LustreTests>
 
-B<doc>    - pod help files 
+=head2 Input/output data for Xperior
 
-=item *
+Xperior expects on input L<system configuration|"System descriptor"> and 
+directory with L<test descriptors|"Test descriptor">. After start, Xperior
+does checks for nodes and servcies which defined in configuration (see 
+L<Xperior::Node>). Further, Xperior iterate over described tests and execute
+every test. Execution results are stored in work directory in 
+L<xprerior result files |"Description of YAML test result">.
 
-B<html>   - html documentation from pod files after package build
+=head3 Test descriptor
 
-=item *
-
-B<testds> - test descriptions, see explanation below. 
-
-=item *
-
-B<t>      - internal unit tests for Xperior::Core, allow quickly test how harness work. Could be useful for test how work after installation.
-
-=item *
-
-B<systemcfg.yaml> - default location for file with tested system description, see explanation below. 
-
-=back
-
-=head2 Test descriptor
-
-Test descriptor file must be placed in test directory (see Synopsis section). It must be yaml file. 
+Test descriptor file must be placed in test directory (see Synopsis section).
+It must be yaml file and have C<_tests.yaml> end of name.. 
 
 Sample test descriptor 1:
 
@@ -72,27 +68,35 @@ tags             : functional
 dangerous        : yes
 
 
-Tests:
+    Tests:
    - id               : 0b
    - id               : 0c
    - id               : 1a
    - id               : 1b
 
 
-The file contains set of tags. Main entity is test, in this sample it is single element C<id> is C<Tests> array. Every test inherit vales from common description (fields which  described out of C<Tests> array). A test can override any field or add new fields. Supported fields divided into 2 groups: common fields and executor-specific fields. See alone executor specific field C<iorcmd>  in explanation below.
+The file contains set of tags. Main entity is test, in this sample it
+is single element C<id> is C<Tests> array. Every test inherit vales from
+common description (fields which  described out of C<Tests> array). A test
+can override any field or add new fields. Supported fields divided into 2 
+groups: common fields and executor-specific fields. See alone executor 
+specific field C<iorcmd>  in explanation below.
 
-B<groupname>, B<executor>, B<description>, B<reference>, B<roles>, B<tags> - are common fields. All other are executor-specific and used in executors. 
+B<groupname>, B<executor>, B<description>, B<reference>, B<roles>, B<tags> 
+- are common fields. All other are executor-specific and used in executors. 
 
 
 =over
 
 =item *
 
-C<groupname>        - name of tests group. Used as directory for test results placement.
+C<groupname>        - name of tests group. Used as directory for test 
+results placement.
 
 =item *
 
-C<executor>         - full qualified perl module name which implements Executor interface.
+C<executor>         - full qualified perl module name which implements
+Executor interface.
 
 =item *
 
@@ -100,7 +104,8 @@ C<descriptor> ,C<reference> - self-documentation tags
 
 =item *
 
-C<expected_time>    - expected time for test execution. If actual test execution need more time this will be pointed in result. Not implemented.
+C<expected_time>    - expected time for test execution. If actual test
+execution need more time this will be pointed in result. Not implemented.
 
 =item *
 
@@ -108,15 +113,19 @@ C<timeout>          - after this time execution will be killed
 
 =item *
 
-C<cleanup_max_time> - timeout for cleanup system for next test. Not implemented.
+C<cleanup_max_time> - timeout for cleanup system for next test. Not 
+implemented.
 
 =item *
 
-C<iorcmd>           - command for executing, specific parameter for Xperior::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are variables from system configuration, see their definition in next section.
+C<iorcmd>           - command for executing, specific parameter for 
+Xperior::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are 
+variables from system configuration, see their definition in next section.
 
 =item *
 
-C<tags>             - test tags (labels) space separated list, used for simple test filtering. See also C<testds/tags.yaml>.
+C<tags>             - test tags (labels) space separated list, used for
+simple test filtering. See also C<testds/tags.yaml>.
 
 =item *
 
@@ -124,15 +133,18 @@ C<Tests:>           - array of single tests
 
 =item *
 
-C<id>               - test id. Obligatory tests attribute which cannot be inherit.
+C<id>               - test id. Obligatory tests attribute which cannot be
+inherit.
 
 =back
 
-=head2 System descriptor
+=head3 System descriptor
 
-B<Warning!> The system descriptor is not ended, it is possible that in future new test executor will need more info about system.
+B<Warning!> The system descriptor is not ended, it is possible that in
+future new test executor will need more info about system.
 
-Descriptor is yaml file, which have 2 parts: C<Nodes> array, C<LustreObjects> and system wide variables. TBD. 
+Descriptor is yaml file, which have 2 parts: C<Nodes> array, C<LustreObjects>
+and system wide variables. TBD. 
 
  Nodes:
    - id          : mds1 
@@ -170,9 +182,10 @@ LustreObjects:
 client_mount_point      : /mnt/lustre/
 benchmark_tests_file    : testfile
 
-=head2 Description of YAML test result
+=head3 Description of YAML test result
 
-Sample YAML result from lustre  C<sanity/101b>  test with comments. Also can be generated tap and html reports.
+Sample YAML result from lustre  C<sanity/101b>  test with comments.
+Also can be generated tap and html reports.
 
  ---
  cleanup_max_time: -1                                 # not used now
@@ -221,15 +234,13 @@ Sample YAML result from lustre  C<sanity/101b>  test with comments. Also can be 
  tags: functional
  timeout: 300
  
-=head2 Executing test internals.
 
-TBD
-
-
-=head1 See also
+=head2 See also
 
 
-Many ideas get from L<http://en.wikipedia.org/wiki/Test_Anything_Protocol>  and perl test framework based on TAP. Internally harness use yaml part of tap and also can export full TAP output.
+Many ideas get from L<http://en.wikipedia.org/wiki/Test_Anything_Protocol>
+and perl test framework based on TAP. Internally harness use yaml part of
+tap and also can export full TAP output.
 
 Yaml specification there: L<http://www.yaml.org/>
 

@@ -12,7 +12,6 @@ package Xperior::Utils;
 use strict;
 use warnings;
 
-use LWP;
 use Carp;
 use Log::Log4perl qw(:easy);
 use Cwd qw(chdir);
@@ -87,6 +86,7 @@ sub findCompleteTests{
         push (@testlist, $path) unless ( -d $file ); 
 	}, $workdir;
     #DEBUG Dumper \@testlist;
+    @testlist = sort @testlist;
     return \@testlist;
 }
 
