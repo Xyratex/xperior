@@ -1,0 +1,249 @@
+=pod
+
+=head1 Xperior harness user guide
+
+=head2 L<Xperior::Executor::Noop> executor
+
+Xpreior harness have only Noop test executor which could be use for proving
+installation and Xperiro investigation. Simple comand line for execute 
+sample empty tests:
+
+    bin/xper --debug --workdir /tmp/demo --testdir=t/testcfgs/simple --config=t/testcfgs/localtestsystemcfg.yaml --html
+
+By default, t/testcfgs/localtestsystemcfg.yaml use local ssh and user tomcat.
+Please add local user tomcat with passwordless ssh or replace user tomcat
+to exists user with passwordless login. More about L<xper|runtest> and 
+its parameters.
+
+Simple check for test descriptor files could be done via L<checkyaml> tool, e.g.
+
+    bin/checkyaml.pl --ydir testds/
+
+Other executors could provide support for different test, e.g. 
+L<Xperior::Executor::IOR> or L<Xperior::Executor::LustreTests>
+
+=head2 Input/output data for Xperior
+
+Xperior expects on input L<system configuration|"System descriptor"> and 
+directory with L<test descriptors|"Test descriptor">. After start, Xperior
+does checks for nodes and servcies which defined in configuration (see 
+L<Xperior::Node>). Further, Xperior iterate over described tests and execute
+every test. Execution results are stored in work directory in 
+L<xprerior result files |"Description of YAML test result">.
+
+=head3 Test descriptor
+
+Test descriptor file must be placed in test directory (see Synopsis section).
+It must be yaml file and have C<_tests.yaml> end of name.. 
+
+Sample test descriptor 1:
+
+ ---
+groupname        : ior 
+executor         : Xperior::Executor::IOR
+description      : IOR tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 60
+timeout          : 300 
+cleanup_max_time : -1
+iorcmd           : /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_pointE@/@test_fileE@
+tags             : benchmark ior 
+Tests: 
+   - id               : test1 
+
+
+Sample test descriptor 2
+
+ ---
+groupname        : sanity
+executor         : Xperior::Executor::LustreTests
+roles            : StoreSyslog StoreConsole GetDiagnostics
+description      : Lustre sanity tests
+reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+expected_time    : 10
+timeout          : 300
+cleanup_max_time : -1
+#options          :
+tags             : functional
+dangerous        : yes
+
+
+    Tests:
+   - id               : 0b
+   - id               : 0c
+   - id               : 1a
+   - id               : 1b
+
+
+The file contains set of tags. Main entity is test, in this sample it
+is single element C<id> is C<Tests> array. Every test inherit vales from
+common description (fields which  described out of C<Tests> array). A test
+can override any field or add new fields. Supported fields divided into 2 
+groups: common fields and executor-specific fields. See alone executor 
+specific field C<iorcmd>  in explanation below.
+
+B<groupname>, B<executor>, B<description>, B<reference>, B<roles>, B<tags> 
+- are common fields. All other are executor-specific and used in executors. 
+
+
+=over
+
+=item *
+
+C<groupname>        - name of tests group. Used as directory for test 
+results placement.
+
+=item *
+
+C<executor>         - full qualified perl module name which implements
+Executor interface.
+
+=item *
+
+C<descriptor> ,C<reference> - self-documentation tags
+
+=item *
+
+C<expected_time>    - expected time for test execution. If actual test
+execution need more time this will be pointed in result. Not implemented.
+
+=item *
+
+C<timeout>          - after this time execution will be killed
+
+=item *
+
+C<cleanup_max_time> - timeout for cleanup system for next test. Not 
+implemented.
+
+=item *
+
+C<iorcmd>           - command for executing, specific parameter for 
+Xperior::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are 
+variables from system configuration, see their definition in next section.
+
+=item *
+
+C<tags>             - test tags (labels) space separated list, used for
+simple test filtering. See also C<testds/tags.yaml>.
+
+=item *
+
+C<Tests:>           - array of single tests
+
+=item *
+
+C<id>               - test id. Obligatory tests attribute which cannot be
+inherit.
+
+=back
+
+=head3 System descriptor
+
+B<Warning!> The system descriptor is not ended, it is possible that in
+future new test executor will need more info about system.
+
+Descriptor is yaml file, which have 2 parts: C<Nodes> array, C<LustreObjects>
+and system wide variables. TBD. 
+
+ Nodes:
+   - id          : mds1 
+     ip          : 192.168.200.102    
+     ctrlproto   : ssh
+     user        : root
+     pass        : Xyratex
+........................
+   - id           : client1
+     ip           : 192.168.200.150
+     ctrlproto    : ssh
+     user         : root
+     pass         : Xyratex
+LustreObjects:
+   - id          : mds1 
+     device      : /dev/sda1
+     node        : mds1
+     type        : mds
+   
+   - id          : oos1 
+     device      : /dev/sda1
+     node        : oss1
+     type        : oss
+
+   - id          : client1
+     node        : client1
+     type        : client
+     master      : yes 
+
+   - id          : client2
+     node        : mds1 
+     type        : client
+
+ #Variables
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile
+
+=head3 Description of YAML test result
+
+Sample YAML result from lustre  C<sanity/101b>  test with comments.
+Also can be generated tap and html reports.
+
+ ---
+ cleanup_max_time: -1                                 # not used now
+ cmd: SLOW=YES  MDSCOUNT=1 MDSDEV1=/tmp/lustre-mdt1 mds1_HOST=mds
+  OSTCOUNT=2 OSTDEV1=/tmp/lustre-ost1 ost1_HOST=mds  OSTDEV2=/tmp/lustre-ost2
+  ost2_HOST=mds CLIENTS=lclient RCLIENTS=\"mds\" ONLY=101b DIR=/mnt/lustre/  
+  PDSH=\"/usr/bin/pdsh -S -w \" /usr/lib64/lustre/tests/sanity.sh 2>
+  /tmp/test_stderr.569020.log 1>  /tmp/test_stdout.569020.log # comman which will be executed
+ completed: yes  #test execution completed  
+ dangerous: yes  
+ description: Lustre sanity tests
+ endtime: 1328712096                                   # unix epoch when test execution completed
+ endtime_planned: 1328712332                           # time when execution will be interrupted by timeout 
+ executor: Xperior::Executor::LustreTests
+ exitcode: 0                                           # exit code of 'cmd' program
+ expected_time: 10                                     # not used now
+ groupname: sanity                                     # test group name
+ id: 101b                                              # test id, main test identificator
+ killed: no                                            # was 'cmd' killed by timeout or not
+ log:                                                  # array of log
+   console.mds1: 101b.console.mds1.log
+   messages.client2: 101b.messages.client2.log
+   messages.mds1: 101b.messages.mds1.log
+   messages.oss1: 101b.messages.oss1.log
+   messages.oss2: 101b.messages.oss2.log
+   stderr: 101b.stderr.log
+   stdout: 101b.stdout.log
+ masterclient:                                         # node where test started
+   id: client1
+   master: yes
+   node: client1
+   type: client
+ messages: |                                           # messages from xperior
+   No console defined for node [oss1]
+   No console defined for node [oss2]
+   No console defined for node [client1]
+   No console defined for node [client2]
+   Cannot copy log file [/tmp/messageslog.1328712015.34009]: 256
+ reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+ result: 'ok 1 '                                        # tap test string result
+ roles: StoreSyslog StoreConsole
+ schema: Xperior1                                        # yaml schema id
+ starttime: 1328712032                                   # unix epoch when test execution started
+ status: passed                                          # test execution result as string
+ status_code: 0                                          # test execution result code
+ tags: functional
+ timeout: 300
+ 
+
+=head2 See also
+
+
+Many ideas get from L<http://en.wikipedia.org/wiki/Test_Anything_Protocol>
+and perl test framework based on TAP. Internally harness use yaml part of
+tap and also can export full TAP output.
+
+Yaml specification there: L<http://www.yaml.org/>
+
+
+=cut
+
