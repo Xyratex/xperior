@@ -15,20 +15,29 @@
 =pod
 
 =head1 NAME
+
 fixyaml.pl - simple program which do few simple modification for yaml files in directory
 
 =head1 SYNOPSIS 
- fixyaml.pl --ydir <directory>  [<options>]
+
+ fixyaml.pl --dir <directory>  [<options>]
 
 =head1 DESCRIPTION
 
 The program can add,change or remove keys and subkeys and its values from yaml files. It specially  created to work with Xperior result files.
 
+Could be used for simple modifications system configurations or test 
+descriptors. This sample set role C<GetCoverage> for all files 
+in C<workdir>
+
+    bin/fixyaml.pl --dir='workdir' --chkey=roles --value='GetCoverage'
+
+
 =head1 OPTIONS
 
 =over 2
 
-=item --ydir
+=item --dir
 
 Directory where placed yaml files. These files will be changed.
 
@@ -52,6 +61,8 @@ Add/update second level key
 
 Value for b<--chkey> or b<--chsubkey> parameter
 
+=back
+
 =cut
 
 use strict;
@@ -73,10 +84,10 @@ use YAML::Syck;
 my $nopts;
 $nopts = 1 unless ( $ARGV[0] );
 
-my ( $delkey, $delsubkey, $chkey, $chsubkey, $value, $helpflag, $manflag, $ydir );
+my ( $delkey, $delsubkey, $chkey, $chsubkey, $value, $helpflag, $manflag, $dir );
 
 GetOptions(
-    "ydir:s"      => \$ydir,
+    "dir:s"      => \$dir,
     "rmkey:s"    => \$delkey,
     "rmsubkey:s" => \$delsubkey,
     "chkey:s"    => \$chkey,
@@ -90,7 +101,7 @@ pod2usage( -verbose => 1 ) if ( ($helpflag) || ($nopts) );
 
 pod2usage( -verbose => 2 ) if ($manflag);
 
-if ( ( not defined $ydir ) || (  $ydir eq '' ) ) {
+if ( ( not defined $dir ) || (  $dir eq '' ) ) {
     print "No directory with YAML files set!\n";
     pod2usage(3);
     exit 1;
@@ -119,7 +130,7 @@ find(
         push( @yamls, $File::Find::name )
           if (/\.yaml$/);
     },
-    $ydir
+    $dir
 );
 
 foreach my $file (@yamls){

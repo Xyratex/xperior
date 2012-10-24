@@ -48,7 +48,9 @@ B<systemcfg.yaml> - default location for file with system configuration definiti
 
 =head2 Dependecies and additional packages
 
-Xperior directly use some Perl libraries which could not be included in your Perl distribution by default. Certainly, it depends on your perl setup and cannot be generalised for any system.
+Xperior directly uses some Perl libraries which could not be included in your 
+Perl distribution by default. Certainly, it depends on your perl setup and
+cannot be generalised for any system.
 
 
 List of external packages are used by core Xperior libs and scripts (C<lib/Xperior>)
@@ -69,7 +71,8 @@ List of external packages are used by core Xperior libs and scripts (C<lib/Xperi
     accessors
     YAML::Syck
 
-Configuration checker script C<checkyaml.pl> contains Rx libraries and has also its own dependencies:
+Configuration checker script C<checkyaml.pl> contains Rx libraries and
+has also its own dependencies:
 
     Data::OptList
     Number::Tolerant
@@ -84,13 +87,29 @@ B<Note: current description doesn't include mongo uploader information.>
 
 =over 12
 
-=item 1. Install perl and cpan, and initiate cpan. Often it already done.
+=item 1. Install perl and cpan, and initiate cpan. Often it 
+already done.
 
-=item 2. Use CPAN for installing  libraries from list above, e.g. C<cpan install YAML>
+=item 2. Use CPAN for installing  these libraries from list above, 
+e.g. C<cpan install YAML>
+
+    Log::Log4perl
+    YAML
+    Moose
+    File::chdir
+    TAP::Formatter::HTML
+    Proc::Simple
+    MooseX-Clone
+    XML::Simple
+    YAML::Syck
+    Number::Tolerant
+    Test::Able
+
 
 =back
 
-=head3 Steps for  Scientific Linux release 6.0(should work for Redhat/Fedora too).
+=head3 Steps for  Scientific Linux release 6.0(should work 
+for Redhat/Fedora too).
 
 =over 12
 
@@ -116,8 +135,8 @@ and its dependencies
 
 =head2 Make RPM
 
-Sources could be packed to rpm for Redhat/Fedora distros. After build rpm packages could be installed via rpm command as usually.  
-
+Sources could be packed to rpm for Redhat/Fedora distros. After 
+build rpm packages could be installed via rpm command as usually.
 
 =over 12
 
@@ -133,7 +152,8 @@ in directory C<$WD/html> (C<$WD> - Xperior  source directory)
 =item * Make RPM for harness and main modules
 
 
-These steps prepare standard perl module distribution and make rpm for core Xperior part.
+These steps prepare standard perl module distribution and make
+rpm for core Xperior part.
 
     cd $WD
     perl build/Makefile.harness.PL
@@ -143,8 +163,10 @@ These steps prepare standard perl module distribution and make rpm for core Xper
 =item * Make  RPM for Lustre tests package
 
 
-These steps prepare standard perl module distribution and make rpm for Lustre acceptance-small tests sets.
- 
+These steps prepare standard perl module distribution and make
+rpm for Lustre acceptance-small tests sets.
+
+
     cd $WD
     perl build/Makefile.lustre.PL
     make dist
@@ -152,6 +174,7 @@ These steps prepare standard perl module distribution and make rpm for Lustre ac
 
 =back
 
-For building own rpm packages for external libraries was used utility L<http://perl.arix.com/cpan2rpm/>.
+For building own rpm packages for external libraries was used
+utility L<http://perl.arix.com/cpan2rpm/>.
 
 =cut

@@ -9,6 +9,15 @@
 #      COMPANY:  Xyratex
 #      CREATED:  10/23/2011 06:39:29 PM
 #===============================================================================
+=pod
+
+=head1 DESCRIPTION
+
+This is base module for control remote execution of one process. Reused in several other modules which override functions. Inherited fom L<Xperior::Executor::Base>
+
+=cut
+
+
 
 package Xperior::Executor::SingleProcessBase;
 use Moose;
@@ -19,10 +28,21 @@ use File::Copy;
 
 use Xperior::SshProcess;
 extends 'Xperior::Executor::Base';
-=item * 
-Function execute on-clients test. Remote execution done via ssh.
-Only one pocess execute on client which marked as master.
+
+=head3  execute
+
+Function execute process on remote client and control remote execution via ssh. Only one process could be executed by one object instance. Process is executed  on first found client which marked as master.
+
+Command line for executing  should be prepared in inheritor by defining B<_prepareCommands> function.
+
+Before execution directory 'tempdir' from system configuration will be cleaned up.
+
+Process executing via asynchronous call from L<Xperior::SshProcess> and use its object for regular monitoring remote process status. 
+
+When remote process not found observation stopped and execution status calculated. Status calculated by results from B<processLogs>  function, 'killed' and connection issue status, worse status selected. Also it stderr and stdout saving as test logs.
+
 =cut
+
 sub execute{
     my $self = shift; 
     my $mcl = $self->_getMasterClient;

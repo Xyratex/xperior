@@ -19,7 +19,8 @@ Xperior::Executor - wrappers for specific tests are store there
 =back
 
 =head2 Class diagram
- 
+
+
 =for html <hr> <img src="classes.png">
 <p> This is a raw HTML paragraph </p>
 
@@ -56,8 +57,6 @@ These tests need:
 =item t/sshprocess.t
 
 =item t/launcher.t
-
-=item 
 
 =item t/ielists.t
 

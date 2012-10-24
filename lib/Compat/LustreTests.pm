@@ -23,6 +23,21 @@ my $XPERIORBINDIR;
 our @ISA;
 our @EXPORT;
 
+=pod
+
+=head1 DESCRIPTION
+
+Module provides functionality for generating Xperior  
+L<test descriptors|XperiorUserGuide/"Test descriptor"> and Xperior exclude
+list based on Lustre test scripts.
+
+Sample code how use it:
+
+    use Compat::LustreTests
+    writeGeneratedTestSuiteFile( "$wd/workdir", $suite,'testds', 'tests' );
+
+=cut
+
 BEGIN {
     @ISA = ("Exporter");
     @EXPORT =
@@ -32,9 +47,15 @@ BEGIN {
     Log::Log4perl->easy_init( { level => $DEBUG } );
 
 }
+
 use constant LUSTRETESTS => '/usr/lib64/lustre/tests';
 
-=item writeTestSuiteExclude ($outputDir, $suiteName, $predefinedList, $lustreTestsDir) 
+=head2 writeTestSuiteExclude ($outputDir, $suiteName, $predefinedList, $lustreTestsDir) 
+
+Saving Xperior exclude list for test-framework.sh based suite.
+
+Only test from  B<ALWAYS_EXCEPT> save to exclude list.
+
     $outputDir        - where store new exclude list
     
     $suiteName      - name of test suite (test group) which descriptor will
@@ -56,7 +77,13 @@ sub writeTestSuiteExclude {
     close EX;
 }    ## --- end sub writeTestSuiteExclude
 
-=item  writeTestSuiteFile($outputDir, $suiteName, $predefinedDir, $lustreTestsDir)
+=head2  writeTestSuiteFile($outputDir, $suiteName, $predefinedDir, $lustreTestsDir)
+
+Saving Xperior test descriptor for test-framework.sh based suite.
+
+Only tests which start from B<run_test> or 
+B<run_test_with_stat> save to test descriptor.
+
     $outputDir        - where store new test descriptor
     
     $suiteName        - name of test suite (test group) whose descriptor will

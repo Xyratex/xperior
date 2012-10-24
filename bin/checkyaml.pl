@@ -20,15 +20,20 @@ checkyaml.pl - program do check for yaml files for schemas.
 Check engine:http://rx.codesimply.com/, schemas are getting from Xperior C<data> dir
 
 =head1 SYNOPSIS
- checkyaml.pl --ydir=<directory> [--failonundef]
+
+    checkyaml.pl --dir=<directory> [--failonundef]
 
 =head1 DESCRIPTION
 
+Tool for check yaml files correctness. Based on L<Data::Rx library|http://rx.codesimply.com>.
+
 =head1 OPTIONS
 
-=over 2
 
-=item --ydir
+=over 12
+
+
+=item --dir
 
 Directory where placed target yaml files. These files will NOT be changed.
 
@@ -39,7 +44,7 @@ If set program exit with error code  9 if found yaml without field 'schema' or c
 
 =head1 EXIT CODES
 
-=over 2
+=over 12
 
 =item  0
 
@@ -53,6 +58,8 @@ No 'schema' field found in yaml document and option --failonundef set
 
 Data doesn't fit to schema
 
+=back
+
 =cut
 
 ##################### main
@@ -62,6 +69,18 @@ use Getopt::Long;
 use Log::Log4perl qw(:easy);
 Log::Log4perl->easy_init( { level => $DEBUG } );
 use Pod::Usage;
+use File::Basename;
+use English;
+use Cwd qw(abs_path);
+
+my $XPERIORBASEDIR; 
+BEGIN {
+
+    $XPERIORBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
+    push @INC, "$XPERIORBASEDIR/../lib";
+
+};
+
 use Xperior::CheckConfig;
 use Error qw(:try);
 use Xperior::Xception;
@@ -72,9 +91,9 @@ $| = 1;
 my $nopts;
 $nopts = 1 unless ( $ARGV[0] );
 
-my ( $ydir, $fuflag, $helpflag, $manflag );
+my ( $dir, $fuflag, $helpflag, $manflag );
 GetOptions(
-    "ydir:s"       => \$ydir,
+    "dir:s"       => \$dir,
     "failonundef!" => \$fuflag,
     "help!"        => \$helpflag,
     "man!"         => \$manflag,
@@ -83,13 +102,13 @@ pod2usage( -verbose => 1 ) if ( ($helpflag) || ($nopts) );
 
 pod2usage( -verbose => 2 ) if ($manflag);
 
-if ( ( not defined $ydir ) || ( $ydir eq '' ) ) {
+if ( ( not defined $dir ) || ( $dir eq '' ) ) {
     print "No directory with YAML files set!\n";
     pod2usage( -verbose => 1 );
     exit 1;
 }
 try {
-    checkDir( $ydir, $fuflag );
+    checkDir( $dir, $fuflag );
 }
 catch NoSchemaException with {
     exit 9;

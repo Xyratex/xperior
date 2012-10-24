@@ -18,12 +18,17 @@ Xperior::Executor::Base - Base executor class
 
 =head1 DESCRIPTION
 
-To be done
-it is possible to use http://instanttap.appspot.com/ for check tap outputs. Doesn't work with skip.
+Base class for test. Keep all test parametes to field B<yaml> which 
+saved to Xprerior result files by b<report> call. Also could be stored 
+TAP report which have less information but more compatible with other tools.
+
+Method B<execute> is extension poit for 
+L<Xperior::Executor::SingleProcessBase> and its inheritors.
+
+It is possible to use http://instanttap.appspot.com/ for check tap outputs. 
 
 =head1 FUNCTIONS
 
-=over 2
 
 =cut
 
@@ -78,7 +83,9 @@ sub init{
     $self->_write;
 }
 
-=item addYE(KEY, VALUE) - Adds Yaml Element. 
+=head2 addYE(KEY, VALUE) 
+
+Adds Yaml Element. 
 
 Returns 1 if the value has been overridden, otherwise returns 0.
 
@@ -92,11 +99,14 @@ sub addYE{
     return $overridden;
 }
 
-=item addYEE(KEY1, KEY2, VALUE) - Adds Yaml Elelement in Element. 
+=head2 addYEE(KEY1, KEY2, VALUE) 
+
+Adds Yaml Element in Element. Means adding second level hash element. 
 
 Returns 1 if the value has been overridden, otherwise returns 0.
 
 =cut
+
 sub addYEE{
     my ($self, $key1, $key2, $value) = @_;
     my $overridden = (defined $self->yaml->{$key1} and 
@@ -106,11 +116,25 @@ sub addYEE{
     return $overridden;
 }
 
+
+=head2 addMessage
+
+Save message to tests. User for message frpm Xperior, e.g.
+"Master client down". Saved in result yaml.
+
+=cut
+
 sub addMessage{
     my ($self,$data) = @_;
     $self->yaml->{'messages'} = $self->yaml->{'messages'}
                                     . $data."\n";
 }
+
+=head2 pass
+
+Set test passed.
+
+=cut
 
 sub pass{
     my ($self,$msg)  = @_;
@@ -124,6 +148,12 @@ sub pass{
     $self->yaml->{'status'} = 'passed';
     $self->yaml->{'status_code'} = 0;
 }
+
+=head2 fail
+
+Set test failed.
+
+=cut
 
 sub fail{
     my ($self,$msg)  = @_;
@@ -140,6 +170,12 @@ sub fail{
     $self->yaml->{'fail_reason'} = $pmsg;
 }
 
+=head2 skip
+
+Set test skipped
+
+=cut
+
 sub skip{
     #mode means type of skip - skip may 
     # be acc-sm induced or exclude list induced 
@@ -155,6 +191,13 @@ sub skip{
     $self->yaml->{'status_code'} = 2; 
     $self->yaml->{'fail_reason'} = $msg;
 }
+
+=head2 setExtOpt(KEY, VALUE)
+
+Set additional fied to yaml in special section B<extoptions>. Use it 
+for adding meta-information to test result.
+
+=cut
 
 sub setExtOpt{
     my ($self,$key,$value) = @_;
@@ -193,6 +236,12 @@ sub createLogFile{
     return $fd;
 }
 
+=head2 tap
+
+Write TAP report for B<$self-E<gt>yaml>
+
+=cut
+
 sub tap{
     my $self = shift;
     $self->addYE('result',$self->result);
@@ -226,6 +275,12 @@ sub tap{
      return $out;    
 }
 
+=head2 report
+
+Write B<$self-E<gt>yaml> to yaml file in work directory 
+
+=cut
+
 sub report{
      my $self = shift;
      $self->addYE('result',     $self->result);
@@ -233,21 +288,27 @@ sub report{
      $self->_write;
 }
 
-=item execute() - Stub of execute test function. 
+=head2 execute() 
+
+Stub of execute test function. 
 
 Should be implemented in child classes.
 
 =cut
+
 sub execute{
     confess 'Functions is not implemented, override it!';
 }
 
-=item getReason() - Stub of getReason function.
+=head2 getReason() 
+
+Stub of getReason function.
 
 Should be implemented in child classes. 
 Should return short failure reason description.
 
 =cut
+
 sub getReason{
     return "Non-zero exit code";
 }
@@ -305,7 +366,4 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 
-=back
-
-=cut=
 
