@@ -31,7 +31,9 @@ use Data::Dumper;
 has 'nodes'      => ( is => 'rw',isa => 'ArrayRef[]', );
 has 'cfg'    => ( is => 'rw');
 
-=item init(yamlobj)
+=head2 Public fields and supported constructor parameters
+
+=head3 init(yamlobj)
 
 Class initialization method
 
@@ -165,28 +167,6 @@ sub getNodeById{
     return undef;
 
 }
-
-=begin  BlockComment  # BlockCommentNo_1
-
-
-sub getLusterConfig{
-
-}
-
-sub getDiskSize{
-}
-
-sub getFreeSpace{
-
-}
-
-sub getNetworkType{
-}
-
-=end    BlockComment  # BlockCommentNo_1
-
-=cut
-
 
 
 __PACKAGE__->meta->make_immutable;

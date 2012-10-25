@@ -4,33 +4,28 @@ Nodes:
      ip          : mds    
      ctrlproto   : ssh
      user        : root
-     pass        : Xyratex
 
    - id           : oss1
 #     ip           : 192.168.200.110
      ip           : 192.168.200.102    
      ctrlproto    : ssh
      user         : root
-     pass         : Xyratex
 
    - id          : oss2
      ip          : 192.168.200.102
      ssh_user    : root
-     ssh_pass    : Xyratex
 
    - id           : client1
      ip           : lclient 
 #     ip           : 192.168.200.150
      ctrlproto    : ssh
      user         : root 
-     pass         : Xyratex
 
    - id           : client2
      ip           : mds 
 #    ip           : 192.168.200.102
      ctrlproto    : ssh
      user         : ryg
-     pass         : Xyratex
 
 
 

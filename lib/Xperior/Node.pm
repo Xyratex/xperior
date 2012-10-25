@@ -34,13 +34,12 @@ use Xperior::Nodes::IPMINode;
 use constant DEFAULT_PROTO     => 'ssh';
 use constant DEFAULT_NODE      => 'BasicNode';
 use constant DEFAULT_UP_TIME_SEC   =>  300; #sec 
-=over *
-Public fields and supported constructor parameters
-=item isReachable
+
+=head2 Public fields and supported constructor parameters
+
+=head3 isReachable
 
 check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lustre is up and files can be created).  
-
-=back
 
 =cut
 
@@ -106,14 +105,10 @@ sub BUILD {
     }
 }
 
-=over *
-
-=item isReachable
+=head3 isReachable
 
 check that node is reachable via ssh (pdsh - TBI), and Lustre basic 
 liveness (Lustre is up and files can be created).  
-
-=back
 
 =cut
 
@@ -219,19 +214,16 @@ sub getLFCapacity{
     DEBUG "getLFCapacity -  cannot parse:[$cmd]";
     return -1;
 
-}
+} 
 
-=over * 
-
-=item run(cmd,timeout)
+=head3 run(cmd,timeout)
 
 Execute command on node which associated with object.
 
 Function throws execption if ssh problem detected
 
-=back
-
 =cut
+
 #TODO add test on it
 sub run 
 {
@@ -247,18 +239,16 @@ sub run
     return $ssh->exitcode;
 }
 
-=over * 
-
-=item getFile(src,dst)
+=head3 getFile(src,dst)
 
 Get file from node which associated with object.
 
 Return Xperior::SshProcess->getFile exit code
 Return 0 if file copied and exit code if error occurred.
 
-=back
 
 =cut
+
 #TODO add test on it
 sub getFile
 {
@@ -268,15 +258,9 @@ sub getFile
     return $ssh->getFile($src,$dst);
 }
 
-
-
-=over *
-
-=item getRemoteConnector
+=head3 getRemoteConnector
 
 Return connector for node. This connector is the main node connector and should be used for short (synchronous) execution and main single execution for avoid memory wasting. If consumer need more then one long a synchronous execution next connector can be get via connector clone or via getUncontrolledRC
-
-=back
 
 =cut
 
@@ -296,13 +280,10 @@ sub getRemoteConnector{
     return $sc;
 }
 
-=over *
-
-=item getExclusiveRC
+=head3 getExclusiveRC
 
 Return a connector which can be used exclusively by consumer. Nobody more can get it.
 
-=back
 
 =cut
 
@@ -317,9 +298,7 @@ sub getExclusiveRC{
     return $urc; 
 }
 
-=over *
-
-=item storeKernelDump($file)
+=head3 storeKernelDump($file)
 
 Store kernel crash dump core in file which pointed.
 
@@ -328,8 +307,6 @@ Paramaters:
 $file - file which where will store vmcore file.
 
 Return 0 if file copied, -1 if no dump files found and exit code if error occurred.
-
-=back
 
 =cut
 
@@ -354,14 +331,10 @@ sub storeKernelDump {
     return $rc->getFile($kdump,$storefile);
 }
 
-=over *
-
-=item cleanCrashDir  
+=head3 cleanCrashDir  
 
 Remove all previosly stored kernel dumpes on local filesytems on remote node
 Return remote command exit code.
-
-=back
 
 =cut
 
@@ -379,9 +352,7 @@ sub cleanCrashDir{
     return $rc->exitcode;
 }
 
-=ovr *
-
-=item waitDown($timeout)
+=head3 waitDown($timeout)
 
 default timeout is 300 sec
 
@@ -391,7 +362,6 @@ Exit code:
 
 1 - host is up after timeout
 
-=back
 
 =cut
 
@@ -412,14 +382,10 @@ sub waitDown{
     return 1;
 }
 
-=over *
-
-=item waitUp($timeout)
+=head3 waitUp($timeout)
 
 Wait until node up (available via ssh) and set ssh member, return ssh object.
 If node is not up until $timeout or ssh connection failed return undef.
-
-=back
 
 =cut
 
@@ -431,9 +397,7 @@ sub waitUp {
 }
 
 
-=over *
-
-=item ping
+=head3 ping
 
 Ping node.
 
@@ -441,8 +405,6 @@ Returns a success flag. If the hostname cannot be found or there
 is a problem with the IP number, the success flag returned will 
 be undef. Otherwise, the success flag will be 1 if the host is 
 reachable and 0 if it is not.
-
-=back
 
 =cut
 

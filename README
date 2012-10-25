@@ -1,2 +1,12 @@
 Script system xperior for  automated testing distributed filesystems
 
+For generate documentation run
+
+bin/gendocs.pl
+
+and read html/index.html, start from XperiorInstallationGuide and
+XperiorUserGuide.
+
+This script have weak dependence on Autodia perl package.
+
+

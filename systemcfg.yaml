@@ -4,7 +4,6 @@ Nodes:
      ip           : mds    
      ctrlproto    : ssh
      user         : root
-     pass         : Xyratex
      nodetype     : KVMNode
      console      : /home/ryg/work/xyratex/kvm/serial_mds.log
      kvmdomain    : mds
@@ -13,7 +12,6 @@ Nodes:
      ip           : mds
      ctrlproto    : ssh
      user         : root
-     pass         : Xyratex
      nodetype     : KVMNode
      console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
      kvmdomain    : mds
@@ -22,7 +20,6 @@ Nodes:
      ip           : mds
      ctrlproto    : ssh
      user         : root
-     pass         : Xyratex
      nodetype     : KVMNode
      console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
      kvmdomain    : mds          
@@ -31,7 +28,6 @@ Nodes:
      ip           : lclient 
      ctrlproto    : ssh
      user         : root
-     pass         : Xyratex
      nodetype     : KVMNode
      console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
      kvmdomain    : mds          
@@ -40,7 +36,6 @@ Nodes:
      ip           : mds 
      ctrlproto    : ssh
      user         : root
-     pass         : Xyratex
      nodetype     : KVMNode
      console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
      kvmdomain    : mds          

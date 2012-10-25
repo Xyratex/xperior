@@ -151,13 +151,11 @@ and system wide variables. TBD.
      ip          : 192.168.200.102    
      ctrlproto   : ssh
      user        : root
-     pass        : Xyratex
 ........................
    - id           : client1
      ip           : 192.168.200.150
      ctrlproto    : ssh
      user         : root
-     pass         : Xyratex
 LustreObjects:
    - id          : mds1 
      device      : /dev/sda1

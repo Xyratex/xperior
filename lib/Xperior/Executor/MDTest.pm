@@ -10,6 +10,7 @@
 #      CREATED:  11/01/2011 
 #===============================================================================
 =pod
+
 =head1 DESCRIPTION
 
 B<mdtest> wrapper module for Xperior harness. Pretty same to IOR wrapper,
@@ -30,14 +31,11 @@ after 'init' => sub{
     $self->reset;
 };
 
+=head2 Public fields and supported constructor parameters
 
+=head3 processLogs
 
-=over 
-
-=item *
- processLogs - parse output for get benchmark results 
-
-=back
+parse output for get benchmark results 
 
 =cut 
 
