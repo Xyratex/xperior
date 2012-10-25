@@ -1,16 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE:  sshprocess.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION:  Tests for Xperior::SshProcess class. Currently have hardcoded values for ryg's notebook 
-#
-#       AUTHOR:   ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  10/08/2011 01:28:07 AM
-#===============================================================================
 
-#!/usr/bin/perl -w
 package sshprocess;
 use strict;
 use Test::Able;
@@ -30,7 +45,7 @@ startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
 
-setup           _setup    => sub { 
+setup           _setup    => sub {
     $sp =  Xperior::SshProcess->new();
     $sp->init('localhost','tomcat');
 };
@@ -63,7 +78,7 @@ test plan => 7, aakCreateAliveKill    => sub {
     my $res = $sp->isAlive;
     is($res,0, 'Check alive for alive app');
     $sp->kill;
-    $res = $sp->isAlive;    
+    $res = $sp->isAlive;
     is($res,-1, 'Check alive for exited app');
     isnt($sp->killed,0, 'Check status after kill');
     isnt($sp->exitcode,undef, 'Check 1 exit code after kill');
@@ -75,7 +90,7 @@ test plan => 6, lCreateAliveExit    => sub {
     #highlevel functional test
     $sp->create('sleep','/bin/sleep 15');
     pass('App started');
-    is( -e $sp->pidfile, 1,'Pid file exists');   
+    is( -e $sp->pidfile, 1,'Pid file exists');
     my $res = $sp->isAlive;
     my $ec  = $sp->exitcode;
     is($res,0, 'Check alive for alive app');
@@ -95,7 +110,7 @@ test plan => 6, fSynExecution => sub {
   ok($etime-$stime< 15, "Check execution time");
   $sp->createSync('ls -la /folder/which/nobody/never/creates/');
   is($sp->exitcode,2,"Check exit code for failed syn execution");
-  
+
   $stime = time;
   $sp->createSync('/bin/sleep 15',5);
   $etime=time;
@@ -109,7 +124,7 @@ test plan => 6, fSynExecution => sub {
 
 
 test plan => 20, xStress    => sub {
-    for(my $i=0; $i<10; $i++){ 
+    for(my $i=0; $i<10; $i++){
         $sp->create('sleep','/bin/sleep 10');
         my $res = $sp->isAlive;
         is($res,0, "Check alive for alive app[$i]");
@@ -126,7 +141,7 @@ test plan => 10, cInit    => sub {
     is($sp->osversion, trim`uname -a`,'Check os version');
     my $pidfile   = $sp->pidfile;
     my $ecodefile = $sp->ecodefile;
-    my $rscrfile  = $sp->rscrfile;   
+    my $rscrfile  = $sp->rscrfile;
     $sp->init('localhost','tomcat');
     isnt($pidfile,  $sp->pidfile,'Pid file is uniq');
     isnt($ecodefile,$sp->ecodefile, 'Exit code file is uniq');
@@ -149,7 +164,7 @@ test plan => 5, fClone    => sub {
     is($nsp->host,'localhost','check cloned host');
     is($nsp->user,'tomcat', 'check cloned user');
     is($nsp->osversion, trim`uname -a`,'Check cloned os version');
-    
+
     #check that clones aren resf on one object
     $nsp->host('newhost');
     is($sp->host,'localhost','check org host');
@@ -164,10 +179,10 @@ test plan => 4, vGetFile => sub {
     my $nof = '/tmp/xxxYYYwwwN';
 
     DEBUG `touch $if`;
-    my $res = $sp->getFile($if,$of);    
+    my $res = $sp->getFile($if,$of);
     is($res,0,"Check ok result");
     ok (-e $of, "Check new file" );
-    $res = $sp->getFile($nif,$nof);   
+    $res = $sp->getFile($nif,$nof);
     DEBUG $res;
     isnt($res,0,'Check not exist file copy');
     ok ( (! -e $nof), "Check no new file for bad source" );

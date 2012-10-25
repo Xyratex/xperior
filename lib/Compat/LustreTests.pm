@@ -1,14 +1,40 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  LustreTests.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Set of functions to work with old bash lustre test
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg
-#      COMPANY:  Xyratex
-#      CREATED:  05/07/2012 07:34:30 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+# Author: Kyrylo Shatskyy<Kyrylo_Shatskyy@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+Compat::LustreTests - provides functionality for generating Xperior data files
+
+=cut
+
 package Compat::LustreTests;
 use strict;
 use warnings;
@@ -23,11 +49,9 @@ my $XPERIORBINDIR;
 our @ISA;
 our @EXPORT;
 
-=pod
-
 =head1 DESCRIPTION
 
-Module provides functionality for generating Xperior  
+Module provides functionality for generating Xperior
 L<test descriptors|XperiorUserGuide/"Test descriptor"> and Xperior exclude
 list based on Lustre test scripts.
 
@@ -50,17 +74,17 @@ BEGIN {
 
 use constant LUSTRETESTS => '/usr/lib64/lustre/tests';
 
-=head2 writeTestSuiteExclude ($outputDir, $suiteName, $predefinedList, $lustreTestsDir) 
+=head2 writeTestSuiteExclude ($outputDir, $suiteName, $predefinedList, $lustreTestsDir)
 
 Saving Xperior exclude list for test-framework.sh based suite.
 
 Only test from  B<ALWAYS_EXCEPT> save to exclude list.
 
     $outputDir        - where store new exclude list
-    
+
     $suiteName      - name of test suite (test group) which descriptor will
                      be generated
-    
+
     $predefinedList - predefined exclude list file, which will be merged with data from suites
 
     $lustreTestsDir      - where original lustre test scripts are
@@ -81,14 +105,14 @@ sub writeTestSuiteExclude {
 
 Saving Xperior test descriptor for test-framework.sh based suite.
 
-Only tests which start from B<run_test> or 
+Only tests which start from B<run_test> or
 B<run_test_with_stat> save to test descriptor.
 
     $outputDir        - where store new test descriptor
-    
+
     $suiteName        - name of test suite (test group) whose descriptor will
                      be generated
-    
+
     $predefinedDir   - directory, where stored test descriptor, values from
                     whose will be added to new test suite descriptor
 
@@ -177,7 +201,7 @@ sub _mergeWithPredefinedExclude {
 $excludedtests
 
 #########################################################
-### add non-tests excluded tests from 
+### add non-tests excluded tests from
 $pre
 
 MERGED
@@ -290,4 +314,30 @@ sub _getTags {
 }
 
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+Author: Kyrylo Shatskyy<Kyrylo_Shatskyy@xyratex.com>
+
+=cut
 

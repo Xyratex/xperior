@@ -1,25 +1,47 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE: NodeManager.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION: 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR: ryg,kyr
-# ORGANIZATION: Xyratex
-#      VERSION: 1.0
-#      CREATED: 06/29/2012 05:51:49 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 
 =pod
 
-=head1 Base class for different nodes support.
+=head1 NAME
 
-Abstract class implements simple functionality for check node start and provide method list which must be implemented in inheritors.
+Xperior::Nodes::NodeManager - Base class for different nodes support.
+
+=head1 DESCRIPTION
+
+Abstract class implements simple functionality for check node start and provide
+method list which must be implemented in inheritors.
+
+=head2 METHODS
 
 =cut
 
-package Xperior::Nodes::NodeManager; 
+package Xperior::Nodes::NodeManager;
 
 use strict;
 use warnings;
@@ -30,8 +52,6 @@ use Moose::Role;
 
 has 'nodedescriptor' => ( is => 'rw', isa => 'Str');
 has 'console'        => ( is => 'rw');
-
-=head2 Public fields and supported constructor parameters
 
 
 =head3  halt
@@ -56,7 +76,33 @@ restore OS state to orignal state and reboot
 
 =cut
 
-requires qw(halt start restoreSystem isAlive sync); 
+requires qw(halt start restoreSystem isAlive sync);
 
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
 

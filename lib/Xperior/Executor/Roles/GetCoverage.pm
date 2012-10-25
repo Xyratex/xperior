@@ -1,16 +1,45 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  GetCoverage.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Role define coverage storing via lcov. Special calls are done
-#  before and after test execution. Only one-node cluster supported. Lock on
-#  well-know environment.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg
-#      COMPANY:  Xyratex
-#      CREATED:  05/23/2012 03:34:15 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+Xperior::Executor::Roles::GetCoverage - coverage collecting
+
+=head1 DESCRIPTION
+
+Role define coverage collecting via lcov. Special calls are done
+before and after test execution. Only one-node cluster supported. Lock on
+well-know environment.
+
+=cut
+
 package Xperior::Executor::Roles::GetCoverage;
 
 use strict;
@@ -41,15 +70,15 @@ before 'execute' => sub {
 
         #create dir is not exits
         $self->getNormalizedLogName('coverage.'.$n->{id});
-        
-        #manually  constrcut resource name
-        my $initcov =  
-           $self->_reportDir.
-           "/init.coverage.$n->{id}.log"; 
 
-        my $initusercov =  
+        #manually  constrcut resource name
+        my $initcov =
            $self->_reportDir.
-           "/init.usercoverage.$n->{id}.log"; 
+           "/init.coverage.$n->{id}.log";
+
+        my $initusercov =
+           $self->_reportDir.
+           "/init.usercoverage.$n->{id}.log";
 
         #generate init info only one per session
         unless ( -e $initcov ) {
@@ -69,10 +98,10 @@ after 'execute' => sub {
         my $n = $self->env->getNodeById( $nid->{'node'} );
         my $c = $n->getExclusiveRC;
 
-        $self->getCoverage( 
-                $c, $n->{id}, 
+        $self->getCoverage(
+                $c, $n->{id},
                 $self->getNormalizedLogName( 'coverage.' . $n->{id} ),
-                $self->getNormalizedLogName( 'usercoverage.' . $n->{id} ),        
+                $self->getNormalizedLogName( 'usercoverage.' . $n->{id} ),
                 '' );
         last;
     }
@@ -108,7 +137,7 @@ sub getCoverage {
             WARN "[$logcov] is not attached to test result";
         }else{
             $self->registerLogFile( 'coverage.' . $node, $logcov );
-            
+
         }
     }
     else {
@@ -160,8 +189,33 @@ sub filter {
       . " -s $inputfile  -o $outputfile "
       . " -p 'lnet'  -p 'libcfs' -p 'lustre-wc-rel.lustre'  ";
     DEBUG "Executing $cmd";
-    DEBUG `$cmd`;    
+    DEBUG `$cmd`;
     return 1;
 } ## --- end sub filter
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
 

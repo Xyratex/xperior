@@ -1,24 +1,48 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  LustreTests.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION: Module which contains Lustre execution specific functionality
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg
-#      COMPANY:  Xyratex
-#      CREATED:  09/27/2011 11:47:51 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
 =pod
+
+=head1 NAME
+
+Xperior::Executor::LustreTests - Module which contains Lustre execution specific functionality
 
 =head1 DESCRIPTION
 
-LustreTests execution module for Xperior harness. This module inherit 
+Module which contains Lustre execution specific functionality
+
+LustreTests execution module for Xperior harness. This module inherit
 L<Xperior::Executor::SingleProcessBase> and provide functionality for
 generating command line  for Lustre B<test-framework.sh> based tests
 and parse these tests output.
 
-Sample test descriptor there C<testds/sanity_tests.yaml>. 
+Sample test descriptor there C<testds/sanity_tests.yaml>.
+
 =cut
 
 package Xperior::Executor::LustreTests;
@@ -48,7 +72,7 @@ after 'init' => sub {
 
 =over 12
 
-=item * B<getReason> - return failure reason if it found while test 
+=item * B<getReason> - return failure reason if it found while test
 log parsed.
 
 =back
@@ -79,7 +103,7 @@ sub _prepareCommands {
     my $script = $self->test->getParam('groupname');
     my $eopts  = '';
     #TODO add test on it
-    $eopts = $self->env->cfg->{extoptions} 
+    $eopts = $self->env->cfg->{extoptions}
                 if defined $self->env->cfg->{extoptions};
     if ( defined( $self->test->getParam('script') ) ) {
         $script = $self->test->getParam('script');
@@ -112,7 +136,7 @@ Also failure reason accessible (if defined) via call C<getReason>.
 
 =back
 
-=cut 
+=cut
 
 sub processLogs {
     my ( $self, $file ) = @_;
@@ -123,7 +147,7 @@ sub processLogs {
     my $defreason = 'No_status_found';
     my $reason = $defreason;
     my @results;
-    #consider only last keywords! 
+    #consider only last keywords!
     while ( defined( my $s = <F> ) ) {
         chomp $s;
         if ( $s =~ m/PASS/ ) {
@@ -132,7 +156,7 @@ sub processLogs {
         }
         if ( $s =~ m/FAIL:(.*)/ ) {
             $passed = 10;
-            if( $reason eq $defreason){ 
+            if( $reason eq $defreason){
                 $reason = $1 if defined $1;
             }else{
                 $reason = "$reason\n$1" if defined $1;
@@ -140,9 +164,9 @@ sub processLogs {
         }
         if ( $s =~ /SKIP:(.*)/ ) {
             $passed = 1;
-            $reason = $1 if defined $1;;            
+            $reason = $1 if defined $1;;
         }
-        #don't see next messages after test end 
+        #don't see next messages after test end
         #================== 05:28:17
         if ( $s =~ /test\s+complete.*=+\s+\d\d:\d\d:\d\d\s+/){
             last;
@@ -164,7 +188,7 @@ sub _prepareEnvOpts {
     my $c = 1;
     foreach my $m (@$mdss) {
         my $md = '';
-        if((defined($m->{'device'})) 
+        if((defined($m->{'device'}))
                 and($m->{'device'} ne '')){
             $md =  "MDSDEV$c=".$m->{'device'};
 
@@ -172,7 +196,7 @@ sub _prepareEnvOpts {
         $self->mdsopt( $self->mdsopt
               . " $md mds${c}_HOST="
               . $self->env->getNodeAddress( $m->{'node'} ).' '
-              . " mds_HOST=" 
+              . " mds_HOST="
               . $self->env->getNodeAddress( $m->{'node'} ).' '
               );
         $c++;
@@ -217,4 +241,29 @@ sub _prepareEnvOpts {
 __PACKAGE__->meta->make_immutable;
 
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
 

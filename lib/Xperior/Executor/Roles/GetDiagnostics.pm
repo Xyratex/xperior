@@ -1,21 +1,38 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  GetDiagnostics.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Call lustre-diagnostic on every node and get xml results
-#       AUTHOR:  ryg
-#      COMPANY:  Xyratex
-#      CREATED:  02/10/2012 03:55:40 PM
-#===============================================================================
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 
 =pod
 
 =head1 NAME
 
-Xperior::Executor::Roles::GetDiagnostics - gathering information on node after test failure
+Xperior::Executor::Roles::GetDiagnostics - Call lustre-diagnostic on every node and get xml results
 
-=head1  DESCRIPTION
+=head1 DESCRIPTION
 
 The module contains function which called after every execution for harvest diagnostic information from nodes which defined in configuration.
 
@@ -23,7 +40,7 @@ The module requests setup of lustre-diagnostic package on every node in cluster.
 
 Result of the module is file C<(testid).diagnostic.xml.(node id>.log>
 
-For enable this module for test or test group add to C<roles> property string C<GetDiagnostics>  
+For enable this module for test or test group add to C<roles> property string C<GetDiagnostics>
 
 =cut
 
@@ -45,7 +62,7 @@ after 'execute' => sub {
         my $c = $n->getExclusiveRC;
         my $td = '/tmp/xpdiagnostic.'
                     .Time::HiRes::gettimeofday().'.xml';
-        
+
         $c->createSync("/usr/sbin/lustre-diagnostics -x $td",300);
 
         my $res = $c->getFile( $td,
@@ -59,7 +76,7 @@ after 'execute' => sub {
                     "Cannot copy log file [$td]: $res");
 
             }
-        
+
 
         }
    }
@@ -67,3 +84,30 @@ after 'execute' => sub {
 };
 
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
+

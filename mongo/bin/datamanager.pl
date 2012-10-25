@@ -1,15 +1,43 @@
-#!/usr/bin/env perl 
-#===============================================================================
+#!/usr/bin/env perl
 #
-#         FILE: datamanager.pl
+# GPL HEADER START
 #
-#  DESCRIPTION: Sample script for view/get information from 
-#               mongo xperior database
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#       AUTHOR: ryg 
-# ORGANIZATION: Xyratex
-#      CREATED: 07/25/2012 11:04:48 PM
-#===============================================================================
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+datamanager.pl
+
+=head1 DESCRIPTION
+
+Sample script for view/get information from mongo xperior database
+
+=cut
 
 use strict;
 use warnings;
@@ -29,20 +57,20 @@ my $helpmessage = <<"__HELP__";
 Xperior's MongoDB Upload Results Tool
 
 Usage:
-    datamanager.pl  [<parameters>] 
+    datamanager.pl  [<parameters>]
 
 Connection:
-    --host       ( -H )  - host where database is up on default port ('localhost' if not set)
-    --database   ( -D )  - Mongo databse name ('$dbname' if not set)
-    --collection ( -C )  - Mongo collection name ('$collection' if not set)
+    -H, --host        - host where database is up on default port ('localhost' if not set)
+    -D, --database    - Mongo databse name ('$dbname' if not set)
+    -C, --collection  - Mongo collection name ('$collection' if not set)
 
 Options:
-    --did               - xperior result mongo document id  
-    --aid               - mongo grid fs document id
+    --did             - xperior result mongo document id
+    --aid             - mongo grid fs document id
 
 Actions:
-    --help       ( -h )  - help (default action)
-    --listatt            - list atrributes
+    -h, --help         - help (default action)
+    --listatt          - list atrributes
 
 
 __HELP__
@@ -72,7 +100,7 @@ GetOptions(
 
     "help|h"       => \$help,
     "listatt"      => \$listattach,
- 
+
     "did:s"   => \$did,
     "aid:s"   => \$aid,
 
@@ -105,8 +133,8 @@ if ( defined $help ) {
     if(isSet($did)){
         DEBUG "List attachements for document id [$did]";
         my $db = opendb();
-        my $cursor = $db ->${collection}->find( 
-                { _id => 
+        my $cursor = $db ->${collection}->find(
+                { _id =>
                     MongoDB::OID->new(value => $did) } );
         my $document = $cursor->next;
         #DEBUG Dumper $document;
@@ -114,10 +142,10 @@ if ( defined $help ) {
         if(defined($document)){
             INFO "Document found, listing attachemnts";
             if(defined($document->{'attachments_ids'})){
-                INFO "Found [". 
+                INFO "Found [".
                     scalar(@{$document->{'attachments_ids'}}) .
                     "] attachements";
-                
+
                 my $grid = $db->get_gridfs;
                 foreach my $aid ( @{$document->{'attachments_ids'}}){
                     my $file = $grid->get($aid);
@@ -140,7 +168,7 @@ if ( defined $help ) {
         my $file = $grid->get(
                 MongoDB::OID->new(value => $aid));
         if(defined($file)){
-            INFO "Info struct is:\n". Dumper $file->info; 
+            INFO "Info struct is:\n". Dumper $file->info;
         }else{
             ERROR "Cannot find attachement [$aid]";
         }
@@ -148,5 +176,30 @@ if ( defined $help ) {
 }
 
 
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
 
 

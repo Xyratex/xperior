@@ -1,10 +1,37 @@
+#
+# GPL HEADER START
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 =pod
 
 =head1 Xperior harness installation and build guide
 
 =head2 Source layout description
 
-=over 12 
+=over 12
 
 =item *
 
@@ -23,11 +50,11 @@ B<mongo>  - set of tools for uploading Xperior yaml results to Mongo database.
 
 =item *
 
-B<doc>    - pod help files 
+B<doc>    - pod help files
 
 =item *
 
-B<html>   - html documentation generated from pod files by L<gendocs.html>  
+B<html>   - html documentation generated from pod files by L<gendocs.html>
 
 =item *
 B<spec>   - RPM spec files for building rpm packages
@@ -42,13 +69,13 @@ B<t>      - internal unit tests for Xperior, allow quickly test regressions. Cou
 
 =item *
 
-B<systemcfg.yaml> - default location for file with system configuration definition, see explanation in L<XperiorUserGuide>. 
+B<systemcfg.yaml> - default location for file with system configuration definition, see explanation in L<XperiorUserGuide>.
 
 =back
 
 =head2 Dependecies and additional packages
 
-Xperior directly uses some Perl libraries which could not be included in your 
+Xperior directly uses some Perl libraries which could not be included in your
 Perl distribution by default. Certainly, it depends on your perl setup and
 cannot be generalised for any system.
 
@@ -88,10 +115,10 @@ B<Note: current description doesn't include mongo uploader information.>
 
 =over 12
 
-=item 1. Install perl and cpan, and initiate cpan. Often it 
+=item 1. Install perl and cpan, and initiate cpan. Often it
 already done.
 
-=item 2. Use CPAN for installing  these libraries from list above, 
+=item 2. Use CPAN for installing  these libraries from list above,
 e.g. C<cpan install YAML>
 
     Autodia
@@ -110,15 +137,15 @@ e.g. C<cpan install YAML>
 
 =back
 
-=head3 Steps for  Scientific Linux release 6.0(should work 
+=head3 Steps for  Scientific Linux release 6.0(should work
 for Redhat/Fedora too).
 
 =over 12
 
 =item 1. Create and switch on external repository with external libraries. TODO.
 
-=item 2. Install these rpm packages via C<yum> 
-    
+=item 2. Install these rpm packages via C<yum>
+
     perl-Autodia.noarch
     perl-Log-Log4perl.noarch
     perl-YAML.noarch
@@ -132,13 +159,13 @@ for Redhat/Fedora too).
     perl-Number-Tolerant-1.601-1.noarch
     perl-Test-Able-0.11-1.noarch
 
-and its dependencies 
+and its dependencies
 
 =back
 
 =head2 Make RPM
 
-Sources could be packed to rpm for Redhat/Fedora distros. After 
+Sources could be packed to rpm for Redhat/Fedora distros. After
 build rpm packages could be installed via rpm command as usually.
 
 =over 12
@@ -148,8 +175,8 @@ build rpm packages could be installed via rpm command as usually.
 Just use special utility for generate html documentation from POD
 in directory C<$WD/html> (C<$WD> - Xperior  source directory)
 
-    cd $WD 
-    bin/gendocs.pl  
+    cd $WD
+    bin/gendocs.pl
 
 
 =item * Make RPM for harness and main modules

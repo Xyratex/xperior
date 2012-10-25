@@ -1,3 +1,30 @@
+#
+# GPL HEADER START
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 =pod
 
 =head1 Xperior harness user guide
@@ -5,51 +32,51 @@
 =head2 L<Xperior::Executor::Noop> executor
 
 Xpreior harness have only Noop test executor which could be use for proving
-installation and Xperiro investigation. Simple comand line for execute 
+installation and Xperiro investigation. Simple comand line for execute
 sample empty tests:
 
     bin/xper --debug --workdir /tmp/demo --testdir=t/testcfgs/simple --config=t/testcfgs/localtestsystemcfg.yaml --html
 
 By default, t/testcfgs/localtestsystemcfg.yaml use local ssh and user tomcat.
 Please add local user tomcat with passwordless ssh or replace user tomcat
-to exists user with passwordless login. More about L<xper|runtest> and 
+to exists user with passwordless login. More about L<xper|runtest> and
 its parameters.
 
 Simple check for test descriptor files could be done via L<checkyaml> tool, e.g.
 
     bin/checkyaml.pl --ydir testds/
 
-Other executors could provide support for different test, e.g. 
+Other executors could provide support for different test, e.g.
 L<Xperior::Executor::IOR> or L<Xperior::Executor::LustreTests>
 
 =head2 Input/output data for Xperior
 
-Xperior expects on input L<system configuration|"System descriptor"> and 
+Xperior expects on input L<system configuration|"System descriptor"> and
 directory with L<test descriptors|"Test descriptor">. After start, Xperior
-does checks for nodes and servcies which defined in configuration (see 
+does checks for nodes and servcies which defined in configuration (see
 L<Xperior::Node>). Further, Xperior iterate over described tests and execute
-every test. Execution results are stored in work directory in 
+every test. Execution results are stored in work directory in
 L<xprerior result files |"Description of YAML test result">.
 
 =head3 Test descriptor
 
 Test descriptor file must be placed in test directory (see Synopsis section).
-It must be yaml file and have C<_tests.yaml> end of name.. 
+It must be yaml file and have C<_tests.yaml> end of name..
 
 Sample test descriptor 1:
 
  ---
-groupname        : ior 
+groupname        : ior
 executor         : Xperior::Executor::IOR
 description      : IOR tests
 reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
 expected_time    : 60
-timeout          : 300 
+timeout          : 300
 cleanup_max_time : -1
 iorcmd           : /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_pointE@/@test_fileE@
-tags             : benchmark ior 
-Tests: 
-   - id               : test1 
+tags             : benchmark ior
+Tests:
+   - id               : test1
 
 
 Sample test descriptor 2
@@ -78,19 +105,19 @@ dangerous        : yes
 The file contains set of tags. Main entity is test, in this sample it
 is single element C<id> is C<Tests> array. Every test inherit vales from
 common description (fields which  described out of C<Tests> array). A test
-can override any field or add new fields. Supported fields divided into 2 
-groups: common fields and executor-specific fields. See alone executor 
+can override any field or add new fields. Supported fields divided into 2
+groups: common fields and executor-specific fields. See alone executor
 specific field C<iorcmd>  in explanation below.
 
-B<groupname>, B<executor>, B<description>, B<reference>, B<roles>, B<tags> 
-- are common fields. All other are executor-specific and used in executors. 
+B<groupname>, B<executor>, B<description>, B<reference>, B<roles>, B<tags>
+- are common fields. All other are executor-specific and used in executors.
 
 
 =over
 
 =item *
 
-C<groupname>        - name of tests group. Used as directory for test 
+C<groupname>        - name of tests group. Used as directory for test
 results placement.
 
 =item *
@@ -113,13 +140,13 @@ C<timeout>          - after this time execution will be killed
 
 =item *
 
-C<cleanup_max_time> - timeout for cleanup system for next test. Not 
+C<cleanup_max_time> - timeout for cleanup system for next test. Not
 implemented.
 
 =item *
 
-C<iorcmd>           - command for executing, specific parameter for 
-Xperior::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are 
+C<iorcmd>           - command for executing, specific parameter for
+Xperior::Executor::IOR. C<@mount_pointE@> and C<@test_fileE@> are
 variables from system configuration, see their definition in next section.
 
 =item *
@@ -144,11 +171,11 @@ B<Warning!> The system descriptor is not ended, it is possible that in
 future new test executor will need more info about system.
 
 Descriptor is yaml file, which have 2 parts: C<Nodes> array, C<LustreObjects>
-and system wide variables. TBD. 
+and system wide variables. TBD.
 
  Nodes:
-   - id          : mds1 
-     ip          : 192.168.200.102    
+   - id          : mds1
+     ip          : 192.168.200.102
      ctrlproto   : ssh
      user        : root
 ........................
@@ -157,12 +184,12 @@ and system wide variables. TBD.
      ctrlproto    : ssh
      user         : root
 LustreObjects:
-   - id          : mds1 
+   - id          : mds1
      device      : /dev/sda1
      node        : mds1
      type        : mds
-   
-   - id          : oos1 
+
+   - id          : oos1
      device      : /dev/sda1
      node        : oss1
      type        : oss
@@ -170,10 +197,10 @@ LustreObjects:
    - id          : client1
      node        : client1
      type        : client
-     master      : yes 
+     master      : yes
 
    - id          : client2
-     node        : mds1 
+     node        : mds1
      type        : client
 
  #Variables
@@ -189,14 +216,14 @@ Also can be generated tap and html reports.
  cleanup_max_time: -1                                 # not used now
  cmd: SLOW=YES  MDSCOUNT=1 MDSDEV1=/tmp/lustre-mdt1 mds1_HOST=mds
   OSTCOUNT=2 OSTDEV1=/tmp/lustre-ost1 ost1_HOST=mds  OSTDEV2=/tmp/lustre-ost2
-  ost2_HOST=mds CLIENTS=lclient RCLIENTS=\"mds\" ONLY=101b DIR=/mnt/lustre/  
+  ost2_HOST=mds CLIENTS=lclient RCLIENTS=\"mds\" ONLY=101b DIR=/mnt/lustre/
   PDSH=\"/usr/bin/pdsh -S -w \" /usr/lib64/lustre/tests/sanity.sh 2>
   /tmp/test_stderr.569020.log 1>  /tmp/test_stdout.569020.log # comman which will be executed
- completed: yes  #test execution completed  
- dangerous: yes  
+ completed: yes  #test execution completed
+ dangerous: yes
  description: Lustre sanity tests
  endtime: 1328712096                                   # unix epoch when test execution completed
- endtime_planned: 1328712332                           # time when execution will be interrupted by timeout 
+ endtime_planned: 1328712332                           # time when execution will be interrupted by timeout
  executor: Xperior::Executor::LustreTests
  exitcode: 0                                           # exit code of 'cmd' program
  expected_time: 10                                     # not used now
@@ -231,7 +258,7 @@ Also can be generated tap and html reports.
  status_code: 0                                          # test execution result code
  tags: functional
  timeout: 300
- 
+
 
 =head2 See also
 

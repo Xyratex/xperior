@@ -1,16 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE:  checkyaml.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION:  
-#
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  05/07/2012 08:59:13 AM
-#===============================================================================
 
-#!/usr/bin/perl -w
 package checkyaml;
 use strict;
 use warnings;
@@ -36,7 +51,7 @@ test plan => 3, cChekModule => sub{
     use Xperior::CheckConfig;
     my $res = checkDir("t/yamlcheckdata/1",0);
     is($res,1,'One check');
-    
+
     try{
         checkDir("t/yamlcheckdata/1",1);
         fail ("No exception thrown");
@@ -77,7 +92,7 @@ test plan => 3, eCheckProgram => sub {
     $res = ${^CHILD_ERROR_NATIVE};
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is($res,2048,"schema check doesn't pass, 0x0800");
-    
+
 };
 
 checkyaml->run_tests;

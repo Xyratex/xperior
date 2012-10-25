@@ -1,14 +1,43 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE: KVMNode.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR: ryg,kyr
-# ORGANIZATION: Xyratex
-#      CREATED: 06/29/2012 05:52:13 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+Xperior::Nodes::KVMNode - KVM node extension
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=cut
+
 package Xperior::Nodes::KVMNode;
 
 use strict;
@@ -61,7 +90,7 @@ sub restoreSystem{
     sleep SLEEP_AFTER_DESTROY;
     runEx("sudo rm -vf ".$self->kvmimage);
     runEx("sudo cp -v  $image ".$self->kvmimage);
-    
+
     $self->start();
     sleep SLEEP_AFTER_START;
 
@@ -100,7 +129,7 @@ sub startStoreConsole{
     $proc->kill_on_destroy(1);
     $self->_findSerialFile;
     $proc->start("sudo tail -f -n 0 -v ".$self->_consolefile." 1>$file 2>&1 ");
-    $self->_proc($proc); 
+    $self->_proc($proc);
 }
 
 sub stopStoreConsole{
@@ -213,3 +242,30 @@ sub _isDomainActive {
 }
 
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
+

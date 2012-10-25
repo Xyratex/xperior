@@ -3,8 +3,9 @@
 Summary: Xperior dependencies meta package
 Name: xperior-deps
 Version: 1.0
-Release:6%{?dist} 
-License: GPL 
+Release:6%{?dist}
+License: GPLv2
+Vendor: Xyratex Technology Limited
 Group: Development/Libraries
 Requires: perl >= 1:5.8.0
 Requires: perl-Autodia

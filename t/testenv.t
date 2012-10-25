@@ -1,20 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE:  testenv.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION:  
-#
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
-#       AUTHOR:  ryg 
-#      COMPANY:  
-#      VERSION:  1.0
-#      CREATED:  10/04/2011 08:35:07 PM
-#     REVISION:  ---
-#===============================================================================
-#!/usr/bin/perl -w
+
 package testenv;
 use strict;
 use Test::Able;
@@ -26,19 +37,19 @@ use Carp;
 
 use Xperior::Test;
 
-my %options = ( 
+my %options = (
     testdir => 't/testcfgs/simple/',
 );
-my $testcore; 
+my $testcore;
 my $cfg ;
 
 
 startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
-setup           _setup    => sub { 
+setup           _setup    => sub {
     $testcore =  Xperior::Core->new();
-    $testcore->options(\%options);      
+    $testcore->options(\%options);
     $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
 
 };
@@ -55,33 +66,33 @@ test plan => 10, aGetNodeConfiguration    => sub {
     $node->getConfig;
     DEBUG $node->architecture;
     is($node->architecture,'x86_64','Check arch');
-    
+
     DEBUG $node->os;
     is($node->os,'GNU/Linux','Check os');
-    
+
     DEBUG $node->lustre_version;
     is($node->lustre_version,'jenkins-g26109ba-PRISTINE-2.6.32-131.6.1.el6.lustre.37.x86_64','Check lb');
-    
+
     DEBUG $node->os_release;
-    
+
     is($node->os_release,'6.0','Check os release');
     DEBUG $node->os_distribution;
-    
+
     is($node->os_distribution,'Scientific Linux release 6.0 (Carbon)','Check os distr');
-    
-    DEBUG $node->lustre_net;                                                         
+
+    DEBUG $node->lustre_net;
     is($node->lustre_net,'tcp','Check net');
 
-    DEBUG $node->memtotal;                 
+    DEBUG $node->memtotal;
     is($node->memtotal,'743200','Check mem total');
 
-    DEBUG $node->memfree;                 
+    DEBUG $node->memfree;
     ok($node->memtotal > 100,'Check mem free');
 
-    DEBUG $node->swaptotal;                 
+    DEBUG $node->swaptotal;
     is($node->swaptotal,'1507320','Check swap total');
 
-    DEBUG $node->swapfree;                 
+    DEBUG $node->swapfree;
     ok($node->swapfree > 100,'Check swap free');
 
 };
@@ -108,7 +119,7 @@ test plan => 3, nCheckRemoteControls => sub{
 
 test plan => 5, cCheckLustreObjects    => sub {
     ok (defined $cfg, "Check parsing results");
-   
+
     my $osss = $cfg->getOSSs;
     #print "OSSs:".Dumper $osss;
     my @exp1 = (
@@ -155,7 +166,7 @@ test plan => 5, cCheckLustreObjects    => sub {
     );
     print "Clients:".Dumper $clients;
     is_deeply($clients,\@exp3,"Check getClients");
-    
+
     my $mc = $cfg->getMasterClient;
     is($mc->{'node'},'client1',"Check getMasterClient");
 

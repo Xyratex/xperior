@@ -1,16 +1,43 @@
-#!/usr/bin/perl 
-#===============================================================================
+#!/usr/bin/perl
 #
-#         FILE:  remove.pl
+# GPL HEADER START
 #
-#        USAGE:  ./remove.pl  
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION: Remove xperior test run from  mongodb
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  05/10/2012 04:11:15 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+remove.pl
+
+=head1 DESCRIPTION
+
+Remove xperior test run from  mongodb
+
+=cut
 
 use strict;
 use warnings;
@@ -27,7 +54,7 @@ my $helpmessage = <<"__HELP__";
 Xperior's MongoDB  Results Removal  Tool
 
 Usage:
-    remove  [<parameters>] 
+    remove  [<parameters>]
 
 Options:
     --dry        ( -n )  - do all witout real removing to database
@@ -65,17 +92,17 @@ GetOptions(
     "help|h" => \$help,
 );
 
-INFO "Dry mode enbaled !"           
+INFO "Dry mode enbaled !"
         if defined $dryrun;
-INFO "Sessionstarttime is set to : [$sessionstarttime] " 
+INFO "Sessionstarttime is set to : [$sessionstarttime] "
         if defined $sessionstarttime;
 
 DEBUG "Databse    = $dbname ";
 DEBUG "Collection = $collection";
 DEBUG "Host       = $host";
 
-if (     ( not defined $help ) 
-     and (not defined $sessionstarttime) 
+if (     ( not defined $help )
+     and (not defined $sessionstarttime)
      and (not defined $branch) )  {
     ERROR "No action set";
     help;
@@ -102,5 +129,30 @@ elsif ( defined($sessionstarttime) ) {
 }
 
 
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
 
 

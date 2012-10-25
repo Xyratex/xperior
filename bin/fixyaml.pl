@@ -1,33 +1,50 @@
-#!/usr/bin/perl 
-#===============================================================================
+#!/usr/bin/perl
 #
-#         FILE:  fixyaml.pl
+# GPL HEADER START
 #
-#        USAGE:  ./fixyaml.pl <options>
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Do chanages on yaml files
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 
-#
-#       AUTHOR:  ryg
-#      COMPANY:  Xyratex
-#      CREATED:  04/03/2012 09:28:31 PM
-#===============================================================================
 =pod
 
 =head1 NAME
 
-fixyaml.pl - simple program which do few simple modification for yaml files in directory
+fixyaml.pl
 
-=head1 SYNOPSIS 
+=head1 SYNOPSIS
 
  fixyaml.pl --dir <directory>  [<options>]
 
 =head1 DESCRIPTION
 
+Simple program which do few simple modification for yaml files in directory.
+
 The program can add,change or remove keys and subkeys and its values from yaml files. It specially  created to work with Xperior result files.
 
-Could be used for simple modifications system configurations or test 
-descriptors. This sample set role C<GetCoverage> for all files 
+Could be used for simple modifications system configurations or test
+descriptors. This sample set role C<GetCoverage> for all files
 in C<workdir>
 
     bin/fixyaml.pl --dir='workdir' --chkey=roles --value='GetCoverage'
@@ -153,3 +170,30 @@ foreach my $file (@yamls){
     DumpFile($file, $data);
 }
 INFO "Completed!";
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
+

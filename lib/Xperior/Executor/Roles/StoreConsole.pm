@@ -1,14 +1,38 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  Xperior/Executor/Roles/StoreConsole.pm 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Role define harvesting info from master client host 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  12/21/2011 11:45:19 AM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+Xperior::Executor::Roles::StoreConsole - Role define harvesting info from master client host
+
+=cut
 
 package Xperior::Executor::Roles::StoreConsole;
 
@@ -34,7 +58,7 @@ before 'execute' => sub{
         }
         my $console = $n->console;
         my $log  = $self->getNormalizedLogName('console.'.$n->id);
-        
+
         my $proc = Proc::Simple->new();
         $proc->start("sudo tail -f -n 0 -v $console 2>&1 > $log");
         sleep 1;
@@ -42,12 +66,12 @@ before 'execute' => sub{
             $self->procs->{$n->id}=$proc;
             $self->registerLogFile('console.'.$n->id,
                      $self->getNormalizedLogName('console.'.$n->id));
-            
+
         }else{
             $self->addMessage(
                     "Cannot read console file on node [".$n->id."]");
         }
-    }    
+    }
 
 };
 
@@ -55,7 +79,7 @@ before 'execute' => sub{
 after   'execute' => sub{
     my $self    = shift;
 
-    foreach my $n (@{$self->env->nodes}){        
+    foreach my $n (@{$self->env->nodes}){
         if(defined($self->procs->{$n->id})){
             my $proc = $self->procs->{$n->id};
             #$proc->kill;
@@ -65,6 +89,31 @@ after   'execute' => sub{
     }
 
 };
-
-
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
+

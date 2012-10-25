@@ -1,15 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE: kvmnode.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION: 
-#
-#       AUTHOR: ryg
-# ORGANIZATION: Xyratex
-#      CREATED: 06/29/2012 06:55:15 PM
-#===============================================================================
-#!/usr/bin/perl -w
+
 package kvmnode;
 
 use strict;
@@ -20,14 +36,14 @@ use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
 use Error qw(try finally except otherwise);
-use Xperior::Xception; 
+use Xperior::Xception;
 use Xperior::Node;
 
 startup         some_startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
-setup           some_setup    => sub { 
-    use Xperior::Nodes::KVMNode; 
+setup           some_setup    => sub {
+    use Xperior::Nodes::KVMNode;
 };
 teardown        some_teardown => sub { };
 shutdown        some_shutdown => sub {  };
@@ -36,13 +52,13 @@ shutdown        some_shutdown => sub {  };
 test plan =>4, cCheckConfg => sub {
 
     my $objn = Xperior::Node->new(
-            kvmdomain =>'mds',            
+            kvmdomain =>'mds',
             kvmimage =>'/tmp/noimage',
-            ip =>'mds',                   
-            user => 'root',               
-            id => 'mdskvm',               
-            nodetype => 'KVMNode'         
-            ); 
+            ip =>'mds',
+            user => 'root',
+            id => 'mdskvm',
+            nodetype => 'KVMNode'
+            );
     try{
         $objn->_findSerialFile;
         fail ("No exception for null console");
@@ -52,13 +68,13 @@ test plan =>4, cCheckConfg => sub {
 
     $objn = Xperior::Node->new(
             console => 'notset',
-            kvmdomain =>'mds',            
+            kvmdomain =>'mds',
             kvmimage =>'/tmp/noimage',
-            ip =>'mds',                   
-            user => 'root',               
-            id => 'mdskvm',               
-            nodetype => 'KVMNode'         
-            ); 
+            ip =>'mds',
+            user => 'root',
+            id => 'mdskvm',
+            nodetype => 'KVMNode'
+            );
     try{
         $objn->_findSerialFile;
         fail ("No exception for null console");
@@ -69,15 +85,15 @@ test plan =>4, cCheckConfg => sub {
 
 
     my $obj = Xperior::Node->new(
-            kvmdomain =>'mds',            
+            kvmdomain =>'mds',
             kvmimage =>'/tmp/noimage',
             console  =>'0',
-            ip =>'mds',                   
-            user => 'root',               
-            id => 'mdskvm',               
-            nodetype => 'KVMNode'         
-            ); 
-    
+            ip =>'mds',
+            user => 'root',
+            id => 'mdskvm',
+            nodetype => 'KVMNode'
+            );
+
     my $xml = $obj->getConfg;
     like( $xml, qr/target port='0'/,'Check xml field');
     my $serial = $obj->_findSerialFile;
@@ -93,13 +109,13 @@ test plan =>5, akCheckDumpStore => sub {
             ip =>'mds',
             user => 'root',
             id => 'mdskvm',
-            nodetype => 'KVMNode',            
+            nodetype => 'KVMNode',
             );
     my $kdump = '/tmp/testkerneldump';
     unlink $kdump;
     $obj->start;
     $obj->waitUp;
-    my $ccdr = $obj->cleanCrashDir; 
+    my $ccdr = $obj->cleanCrashDir;
     is($ccdr,0,"clean crashdump dir");
 
     my $res = $obj->storeKernelDump($kdump);
@@ -113,7 +129,7 @@ test plan =>5, akCheckDumpStore => sub {
         pass("system crashed");
     };
     $res = $obj->storeKernelDump($kdump);
-    is($res,-1,"getting crashdump for down host");  
+    is($res,-1,"getting crashdump for down host");
     #start and wait anf find one dump
 
     #mean wait while kore dumped
@@ -122,7 +138,7 @@ test plan =>5, akCheckDumpStore => sub {
     $obj->start;
     $obj->waitUp;
     $res = $obj->storeKernelDump($kdump);
-    is($res,0,"crashdump stored");  
+    is($res,0,"crashdump stored");
 };
 
 
@@ -134,7 +150,7 @@ test plan =>8, eCheckStartHaltConfig => sub {
             ip =>'mds',
             user => 'root',
             id => 'mdskvm',
-            nodetype => 'KVMNode' 
+            nodetype => 'KVMNode'
             );
     is($obj->kvmdomain,'mds',"Check constructor 1");
     is($obj->restoretimeout,700,"Check constructor 2");
@@ -147,7 +163,7 @@ test plan =>8, eCheckStartHaltConfig => sub {
     $obj->start;
     my $r = $obj->isAlive;
     is($r,1,"Is vm active");
-    
+
     $obj->startStoreConsole($cf);
     my $fs1 = -s $cf;
     DEBUG "Size after start is $fs1";
@@ -157,7 +173,7 @@ test plan =>8, eCheckStartHaltConfig => sub {
     my $ssh = $obj->waitUp(300);
     isnt($ssh, undef, "ssh defined");
     $obj->halt;
-    
+
     $obj->stopStoreConsole;
     my $fs2 = -s $cf;
     DEBUG "Size after stop is $fs2";
@@ -174,7 +190,7 @@ test plan =>2, lCheckRestore => sub {
             ip =>'mds',
             id => 'mdskvm',
             user => 'root',
-            nodetype => 'KVMNode', 
+            nodetype => 'KVMNode',
             kvmdomain=>'mds',
             kvmimage => 't/kvmnode.t.testdata/image',
             restoretimeout => 1);
