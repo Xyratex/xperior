@@ -10,6 +10,7 @@
 #      CREATED:  11/01/2011 
 #===============================================================================
 =pod
+
 =head1 DESCRIPTION
 
 B<OpenMPI>  module for Xperior harness. Provides fuctions for command line 
@@ -38,22 +39,16 @@ has clients => (
 );
 has machines => (is=>'rw');
 has cmdfield => (is=>'rw');
-   
-=over *
+  
+=head2 Public fields and supported constructor parameters
 
-=item execute
+=head3 execute
 
 I<execute> is inherit from Xperior::Executor::SingleProcessBase class.
 
-=back
-
-=over *
-
-=item reset
+=head3 reset
 
 Reset previously generated values, f.e. clients list.
-
-=back
 
 =cut
 
@@ -66,13 +61,9 @@ sub reset{
 }
 
 
-=over *
-
-=item _prepareCommands
+=head3 _prepareCommands
 
 _prepareCommands - generate commands for executing cmd in  openmpi  environment. 
-
-=back
 
 =cut
 sub _prepareCommands{

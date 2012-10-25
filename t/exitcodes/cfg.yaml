@@ -4,7 +4,6 @@ Nodes:
      ip           : localhost
      ctrlproto    : ssh
      user         : tomcat 
-     pass         : Xyratex
      console      : /tmp/serial_${vm}_out 
 
 LustreObjects:

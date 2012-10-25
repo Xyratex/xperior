@@ -53,8 +53,9 @@ Perl distribution by default. Certainly, it depends on your perl setup and
 cannot be generalised for any system.
 
 
-List of external packages are used by core Xperior libs and scripts (C<lib/Xperior>)
+List of external packages are used by core Xperior libs and scripts (C<lib/Xperior> C<bin>)
 
+    Autodia
     Log::Log4perl
     YAML
     Error
@@ -93,6 +94,7 @@ already done.
 =item 2. Use CPAN for installing  these libraries from list above, 
 e.g. C<cpan install YAML>
 
+    Autodia
     Log::Log4perl
     YAML
     Moose
@@ -116,7 +118,8 @@ for Redhat/Fedora too).
 =item 1. Create and switch on external repository with external libraries. TODO.
 
 =item 2. Install these rpm packages via C<yum> 
-
+    
+    perl-Autodia.noarch
     perl-Log-Log4perl.noarch
     perl-YAML.noarch
     perl-Moose.x86_64

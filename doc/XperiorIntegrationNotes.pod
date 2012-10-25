@@ -1,0 +1,169 @@
+=pod
+
+=head1 Xperior integration notes 
+
+One of main purpose of developing Xperior was simplifying integration with CIT
+and other test automation tools.
+
+=head2 Integration with L<Jenkins|http://jenkins-ci.org/>
+
+L<Xperior executor|runtest> script doesn't have integrated remote nodes 
+management but full Xpreior have some libraries for it. See L<Xperior::Node>   
+L<Xperior::Nodes::NodeManager>. It is reason why one more perl script should
+be used. This script stop/star/check remote nodes. In sample below it is 
+B<runtest_on_kvm.pl> which executed by Jenkins. This sample work with KVM 
+virtual machines.
+
+Xpreior could be simple integrated with Jenkins via Jenkins B<Execute shell>
+build step and put commands like this
+
+    #update xperior sources
+    rm -rf xperior
+    git clone  ssh://gitosis@git.clusterstor.com/xperior
+    WD=`pwd`
+    export PERL5LIB=${WD}/xperior/mongo/lib:${WD}/xperior/lib
+    ... set environment variables for control what should be executed...
+
+    perl runtest_on_kvm.pl
+
+
+B<runtest_on_kvm.pl> manages KVM and starts xper script. B<t/nodetest.t>,
+B<t/kvmnode.t> and B<t/ipminode.t> contain more samples how work with nodes
+from Xperior libraries.
+
+    use Xperior::Node;
+    use Compat::LustreTests; 
+    use Cwd qw(chdir);
+    use Carp;
+
+    my $vmnode=...
+    my $suite=..., e.g. sanity.sh
+    my $wd = $CWD;
+
+    my $node = Xperior::Node->new(
+        kvmdomain =>'mds', #exist and configured kvm
+        kvmimage =>'/.../image', #VM image
+        ip =>$vmnode,                   
+        user => 'root', #user which used for login               
+        id => 'mdskvm',
+        nodetype => 'KVMNode',
+        console  =>'0' #where VM store serial console file if configured
+        )            
+    );
+
+    $node->halt; #stop if previously was started
+    $node->restoreSystem('vmimagebackup.file'); 
+    $node->start;
+    $node->waitUp;
+    ...
+    ...download and install Lustre...
+    ...
+    my $connector->getRemoteConnector;
+    print $connector->createSync("pdsh -V")."\n"; #check remote pdsh
+    #mount lustre all in one node
+    print $connector->createSync( 
+            "cd /usr/lib64/lustre/tests; FORMAT=yes sh ./llmount.sh",60 )."\n";
+    
+    #create system  configuration
+    my $config = <<"CFG";
+
+    ---
+    Nodes:
+       - id           : vm1
+         ip           : $vmnode
+         ctrlproto    : ssh
+         user         : root
+         console      : ... 
+
+    LustreObjects:
+       - id          : mds1
+        device      : /tmp/lustre-mdt1    
+        node        : vm1 
+        type        : mds
+   
+       - id          : oos1 
+         device      : /tmp/lustre-ost1 
+         node        : vm1
+         type        : oss
+
+       - id          : oos2 
+         device      : /tmp/lustre-ost2 
+         node        : vm1
+         type        : oss
+
+       - id          : client1
+         node        : vm1
+         type        : client
+         master      : yes 
+
+    #Variables
+    client_mount_point      : /mnt/lustre
+    benchmark_tests_file    : testfile
+    tempdir                 :  
+
+    CFG
+    open CFG, " > $xtestconfig ";
+    print CFG $config;
+    close CFG;
+
+    my $ilist = "/tmp/ilist.1vm";
+    my $sl    = <<"ILIST";
+        ${suite}/.* #run only one suite
+
+    ILIST
+    open IL, " > $ilist ";
+    print IL $sl;
+    close IL;
+    
+    mkdir 'tests';
+    $connector->getFile( "/usr/lib64/lustre/tests/$suite.sh",
+                      "tests/$suite.sh" );
+
+    writeGeneratedTestSuiteFile( "$wd/workdir", $suite,
+        "$XPERIORHOME/testds", 'tests' );
+    writeTestSuiteExclude( 
+        "$wd/workdir",$suite,
+        "$XPERIORHOME/exclude.list",'tests');
+    my $excludelist = "$wd/workdir/${suite}_exclude.list"; 
+    writeGeneratedTagsFile("$wd/workdir");
+
+    $CWD = $XPERIORHOME;
+     $res = runExternalApp(
+         "bin/runtest.pl --workdir='$wd/workdir' --testdir='$wd/workdir'  "
+           . "--config=$xtestconfig "
+           . "--includelist=$ilist  "
+           . "--excludelist=$excludelist   --action=run "
+           . " --extopt=sessionstarttime:$stime "
+           . " --extopt=branch:$tag "
+           . " --extopt=executiontype:IT "
+           . " --extopt=release:2.1 "
+           . " --extopt=configuration:1VM"
+           . " --extopt=buildurl:$burl"
+           . " --extopt=ofed:builtin"
+           . " --extopt=distr:SL61"
+           . " --extopt=arch:x86_64"
+           . " --extopt=type:full"
+           . " $loglevel  $continue "
+     );
+    
+     print "runtest exited with status $res\n";
+     if (   ( $res == 2816 ) 
+         or ( $res == 2560 )
+         or ( $res == 0xc00 )
+         or ( ( $res == 4864 ) and ( $connectcrash < 10 ) ) )
+     {
+         ... process error and restart vmnode
+     }
+     elsif ( $res == 0 ) {
+         print "Test execution completed";
+         last;
+     }
+     else {
+         confess "runtest exited with unknown code $res";
+     }
+
+After execution results will saved in  C<$wd/workdir>. This script executes 
+only one suite (defined in include list) and with matrix Jenkins task this script could be simple paralleled by number by suites.
+
+=cut
+
