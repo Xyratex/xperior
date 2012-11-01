@@ -219,10 +219,12 @@ sub run {
     my $skipCounter = 0;
     my $execCounter = 0;
     foreach my $test (@{ $self->{'tests'}}) {
+        my $testName = $test->getName();
         my $testFullName = $test->getGroupName . '/' . $test->getName;
         my $skip = 0;
         my $exclude = 0;
-        DEBUG "Processing $testFullName";
+
+        INFO "Processing $testFullName";
 
         if ( @includeonly ) {
             $skip = 1 unless first { $testFullName =~ m/^$_$/ } @includeonly;
@@ -254,7 +256,9 @@ sub run {
         if ( $action eq 'run' ) {
             my $exe = $self->_runtest( $test, $exclude );
             my $res = $exe->result_code;
-            WARN "TEST $test->getName STATUS: $test->results->{'status'}";
+            my $status = $test->results->{'status'};
+
+            WARN "TEST $testName STATUS: $status";
 
             $execCounter++;
 
@@ -282,7 +286,6 @@ sub run {
                 else {
                     WARN "Unclean test failure, not exiting after it";
                 }
-
             }
             else {
                 if ( $test->getParam('exitafter', 'yes') ) {
@@ -498,4 +501,6 @@ sub _htmlReport {
 
 }
 __PACKAGE__->meta->make_immutable;
+
+# vim: set ts=4 sw=4 et:
 

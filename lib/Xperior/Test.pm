@@ -83,8 +83,8 @@ sub getParamNames{
 
 =item getParam
 
-returns parameter value by name.
-if given $compare parameter, returns the value
+Returns parameter value by given L<name>. If L<compare> argument is defined, 
+returns result of comparison of its value and parameter.
 
 =back
 
@@ -102,7 +102,9 @@ sub getParam{
 		$value = $self->groupcfg->{$name};
 	}
 
-	$value = $value eq $compare if defined $compare;
+	if (defined($compare)) {
+		$value = defined($value) ? $value eq $compare : 0;
+	}
 
     return $value;
 }
