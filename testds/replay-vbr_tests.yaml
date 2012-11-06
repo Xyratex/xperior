@@ -1,86 +1,113 @@
---- 
-Tests: 
-  - 
+#
+# GPL HEADER START
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+---
+Tests:
+  -
     id: 1a
-  - 
+  -
     id: 1b
-  - 
+  -
     id: 1c
-  - 
+  -
     id: 2a
-  - 
+  -
     id: 2b
-  - 
+  -
     id: 3a
-  - 
+  -
     id: 3b
-  - 
+  -
     id: 4a
-  - 
+  -
     id: 4b
-  - 
+  -
     id: 4c
-  - 
+  -
     id: 4d
-  - 
+  -
     id: 4e
-  - 
+  -
     id: 4f
-  - 
+  -
     id: 4g
-  - 
+  -
     id: 4h
-  - 
+  -
     id: 4i
-  - 
+  -
     id: 4j
-  - 
+  -
     id: 4k
-  - 
+  -
     id: 5a
-  - 
+  -
     id: 5b
-  - 
+  -
     id: 5c
-  - 
+  -
     id: 6a
-  - 
+  -
     id: 6b
-  - 
+  -
     id: 6c
-  - 
+  -
     id: 6d
-  - 
+  -
     id: 7a
-  - 
+  -
     id: 7b
-  - 
+  -
     id: 7c
-  - 
+  -
     id: 7d
-  - 
+  -
     id: 7e
-  - 
+  -
     id: 7f
-  - 
+  -
     id: 7g
-  - 
+  -
     id: 7h
-  - 
+  -
     id: 7i
-  - 
+  -
     id: 8a
-  - 
+  -
     id: 8b
-  - 
+  -
     id: 8c
-  - 
+  -
     id: 10b
-  - 
+  -
     id: 11a
-  - 
+  -
     id: 11b
-  - 
+  -
     id: 12a
 cleanup_max_time: -1
 dangerous: 'yes'

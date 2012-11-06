@@ -1,15 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE: node.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION: tests for Xperior::Node
-#
-#       AUTHOR: ryg
-# ORGANIZATION: Xyratex
-#      CREATED: 07/06/2012 09:38:52 PM
-#===============================================================================
-#!/usr/bin/perl -w
+
 package nodetest;
 
 use strict;
@@ -55,7 +71,7 @@ test
     finally {
         pass "Finally";
     };
-    
+
     my $res =  $node->ping;
     is($res, 1, "positive ping check");
 

@@ -1,24 +1,41 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  SshProcess.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION: Module which implements remote process control for singlie process over ssh. Can be used without Xperior.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg
-#      COMPANY:  Xyratex
-#      CREATED:  10/08/2011
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 
 =pod
 
 =head1 NAME
 
-Xperior::SshProcess - implements remote process control for single process over ssh
+Xperior::SshProcess - The module implements remote process control for 
+single process over ssh
 
 =head1  DESCRIPTION
 
-The module is specially designed to be easily replaced by other module 
+The module is specially designed to be easily replaced by other module
 which provide same interface, possible via other protocol.
 
 Modules support two serial workflows, opposed to a parallel, that a user is resposible to control.
@@ -27,7 +44,7 @@ Modules support two serial workflows, opposed to a parallel, that a user is resp
 
 =item Workflow 1
 
-User creates long-time process on remote nodes, the process is executed in background on a target node 
+User creates long-time process on remote nodes, the process is executed in background on a target node
 and deattached from console.
 The stderr/stdout capturing and download is a user responsibility, that can be done, for example,
 by standard output rediction via command line.
@@ -130,7 +147,7 @@ sub _sshSyncExecS {
       . $self->host
       . " \"$cmd\" 2>&1 ";
     DEBUG "Remote cmd is [$cc], timeout is [$timeout]";
-    
+
     my $out = '';
     eval {
         local $SIG{ALRM} = sub {
@@ -318,8 +335,8 @@ sub createSync {
     $self->killed(0);
     $self->exitcode(undef);
     my $ss = <<"SS";
-$app   
-echo \\\$? > $ecf 
+$app
+echo \\\$? > $ecf
 SS
 
     my $tef = $self->rscrfile;
@@ -371,7 +388,7 @@ Returns:
 
 Successful start
 
-=item -1 
+=item -1
 
 Cannot find remote process
 
@@ -397,11 +414,11 @@ sub create {
     DEBUG "Del remote pid file: $pf";
     my $ecf = $self->ecodefile;
     my $ss  = <<"SS";
-$app &  
-pid=\\\$!  
-echo pid:[\\\$pid] > $pf 
+$app &
+pid=\\\$!
+echo pid:[\\\$pid] > $pf
 wait \\\$pid
-echo \\\$? > $ecf 
+echo \\\$? > $ecf
 SS
 
     #TODO  clean /tmp after execution and test it
@@ -569,7 +586,7 @@ sub getFile {
           . "-o 'UserKnownHostsFile=/dev/null' "
           . "-o 'StrictHostKeyChecking=no' "
           . "-o 'ConnectionAttempts=3' "
-          . "-o 'ConnectTimeout=25' " 
+          . "-o 'ConnectTimeout=25' "
           . $self->user . '@'
           . $self->hostname
           . ":$rfile $lfile" );
@@ -580,3 +597,29 @@ sub getFile {
 =cut
 
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+

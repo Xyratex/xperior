@@ -1,14 +1,38 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  XpMongo.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Functions which used to work with  MongoDB and Xperior results
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  05/10/2012 04:11:36 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+XpMongo - Functions which used to work with  MongoDB and Xperior results
+
+=cut
 
 package XpMongo;
 use strict;
@@ -98,7 +122,7 @@ sub _post_yaml_doc {
     my @aids;
     foreach my $a (@{$ats}){
         my $fh = IO::File->new($a, "r") or confess "Cannot open attachement file [$a]";
-        my $sa= 'no_name';        
+        my $sa= 'no_name';
         if($a =~ m/[\/\\]([^\/\\]+)$/){
             $sa = $1;
         }
@@ -110,7 +134,7 @@ sub _post_yaml_doc {
     $yaml_data->{attachments_ids}=\@aids;;
     _validate_doc_data($yaml_data);
 
-    $db ->${collection}->insert($yaml_data);    #,safe=>1);    
+    $db ->${collection}->insert($yaml_data);    #,safe=>1);
 
     my $err = $db->last_error();
 
@@ -171,11 +195,11 @@ my $map = <<MAP;
 function() {
     var r = this.extoptions;
 
-    var id =  
+    var id =
           this.extoptions.branch + "_"
-        + this.extoptions.type + "_" 
-        + this.extoptions.ofed + "_" 
-        + this.extoptions.arch + "_" 
+        + this.extoptions.type + "_"
+        + this.extoptions.ofed + "_"
+        + this.extoptions.arch + "_"
         + this.extoptions.sessionstarttime;
     emit(id, r);
 }
@@ -200,7 +224,7 @@ REDUCE
     my $cl = $db->get_collection($res_coll);
     my $cur1 = $cl->query( {}, { limit => 1000 } );
     my $targetextopt = undef;
-    while ($cur1->has_next) {        
+    while ($cur1->has_next) {
         my $res = $cur1->next;
         #print Dumper $res;
         if($res->{value}->{sessionstarttime} == $sessionstarttime ){
@@ -208,14 +232,14 @@ REDUCE
         }
     }
     if( not defined($targetextopt)){
-        ERROR 
+        ERROR
             "No session by sessionstarttime [$sessionstarttime] found";
         return -1;
     };
-  
+
     #very strange woraround. need deep investigation in mongodb driver
     #TODO avoid this direct setting
-    my %dh =  ( 
+    my %dh =  (
   branch   => $targetextopt->{branch},
   arch     => $targetextopt->{arch},
   buildurl => $targetextopt->{buildurl},
@@ -233,7 +257,7 @@ REDUCE
     my $cursor = $db->${collection}->find(
             {extoptions  => \%dh});
     #iterate over all results
-     while ($cursor->has_next) {        
+     while ($cursor->has_next) {
         my $res = $cursor->next;
         #iterate of attachments
         foreach my $a(@{$res->{'attachments_ids'}}){
@@ -263,9 +287,9 @@ sub remove_by_field{
 
     my $cursor = $db->${collection}->find(
     { $field  => $value});
-    #{'extoptions.executiontype' => "IT"});           
+    #{'extoptions.executiontype' => "IT"});
     #iterate over all results
-     while ($cursor->has_next) {        
+     while ($cursor->has_next) {
         my $res = $cursor->next;
         #iterate of attachments
         #TODO remove in threads all in same time
@@ -287,8 +311,31 @@ sub remove_by_field{
     }
     INFO "Deleted $c records";
 }
-
-
-
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
 

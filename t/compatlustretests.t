@@ -1,14 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE:  compatlustretests.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION:  Tests for Compat::LustreTests
-#
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  05/07/2012 08:12:32 PM
-#===============================================================================
+
 package  compatlustretests;
 
 use strict;
@@ -29,12 +46,12 @@ shutdown        _shutdown => sub {};
 #########################################
 
 test plan => 6, a_generateAndMergeTestSuiteExclude => sub {
-    
+
     my $exarrempty = Compat::LustreTests::_generateTestSuiteExclude
             ('replay-ost-single','t/lustre/tests/replay-ost-single.sh');
     is(scalar(@{$exarrempty}), 0, "No excluded tests");
 
-    
+
     my $exarr = Compat::LustreTests::_generateTestSuiteExclude
             ('sanity','t/lustre/tests/sanity.sh');
     is(scalar(@{$exarr}), 8, "8 excluded tests");
@@ -55,7 +72,7 @@ test plan => 6, a_generateAndMergeTestSuiteExclude => sub {
 
 test plan => 9, gGetGeneratedTestSuite => sub {
     my $yaml = getGeneratedTestSuite(
-            'replay-ost-single', 
+            'replay-ost-single',
             't/lustre/testds',
             't/lustre/tests');
     print  "\n----\n".Dumper $yaml ;
@@ -75,8 +92,8 @@ test plan => 4, hWriteGeneratedTestSuiteFile => sub {
     my $nyamlfile = "/tmp/replay-ost-single_tests.yaml";
     print `rm -rf $nyamlfile`;
     writeGeneratedTestSuiteFile(
-            '/tmp/', 
-            'replay-ost-single', 
+            '/tmp/',
+            'replay-ost-single',
             't/lustre/testds',
             't/lustre/tests');
     if( -e $nyamlfile ){

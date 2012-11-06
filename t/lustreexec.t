@@ -1,20 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE:  lustreexec.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION:  
-#
-#        FILES:  ---
-#         BUGS:  ---
-#        NOTES:  ---
-#       AUTHOR:  ryg 
-#      COMPANY:  
-#      VERSION:  1.0
-#      CREATED:  10/05/2011 11:35:54 PM
-#     REVISION:  ---
-#===============================================================================
-#!/usr/bin/perl -w
+
 package lustreexec;
 use strict;
 use Test::Able;
@@ -27,10 +38,10 @@ use Carp;
 use Xperior::Test;
 use Xperior::Executor::LustreTests;
 
-my %options = ( 
+my %options = (
     testdir => 't/testcfgs/lustre/',
     workdir => '/tmp/test_wd',
-    
+
 );
 
 my %th = (
@@ -46,7 +57,7 @@ my %gh = (
 startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
-setup           _setup    => sub { 
+setup           _setup    => sub {
 
 };
 teardown        _teardown => sub { };
@@ -54,9 +65,9 @@ shutdown        _shutdown => sub {  };
 #########################################
 test plan => 3, eCheckSimple    => sub {
     my $testcore =  Xperior::Core->new();
-    $testcore->options(\%options);      
+    $testcore->options(\%options);
     my $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
-    
+
     my $test = Xperior::Test->new;
     $test->init(\%th,\%gh);
     my $exe = Xperior::Executor::LustreTests->new();
@@ -64,14 +75,14 @@ test plan => 3, eCheckSimple    => sub {
     $exe->_prepareEnvOpts;
     DEBUG "MDS OPT:".$exe->mdsopt;
     is($exe->mdsopt,
-            'MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=192.168.200.102  mds_HOST=192.168.200.102 ', 
+            'MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=192.168.200.102  mds_HOST=192.168.200.102 ',
             'Check MDS OPT');
 
 
     DEBUG "OSS OPT:".$exe->ossopt;
     is($exe->ossopt,
-            'OSTCOUNT=2  OSTDEV1=/dev/loop1  ost1_HOST=192.168.200.102   OSTDEV2=/dev/loop2  ost2_HOST=192.168.200.102 ', 
-            'Check OSS OPT');                                
+            'OSTCOUNT=2  OSTDEV1=/dev/loop1  ost1_HOST=192.168.200.102   OSTDEV2=/dev/loop2  ost2_HOST=192.168.200.102 ',
+            'Check OSS OPT');
 
     DEBUG "CLNT OPT:".$exe->clntopt;
     is($exe->clntopt,
@@ -90,7 +101,7 @@ test plan =>2, gCheckLogParsing => sub{
 
 test plan =>3, kCheckExecution => sub{
     my $testcore =  Xperior::Core->new();
-    $testcore->options(\%options);      
+    $testcore->options(\%options);
     my $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
     my $tests  =  $testcore->loadTests;
     my $exe = Xperior::Executor::LustreTests->new();

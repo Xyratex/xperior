@@ -3,10 +3,11 @@
 Summary: Xperior harness core.
 Name: xperior-harness
 Version: 0.0.2
-Release:6%{?dist} 
-License: TBD 
+Release:6%{?dist}
+License: GPLv2
+Vendor: Xyratex Technology Limited
 Group: Development/Libraries
-Source: Xperior-harness-0.0.2.tar.gz 
+Source: Xperior-harness-0.0.2.tar.gz
 Requires: perl-Moose >= 0.94
 Requires: perl-MooseX-Clone
 Requires: perl-Test-Able
@@ -30,19 +31,19 @@ TBD
 
 
 %build
-perl Makefile.PL 
+perl Makefile.PL
 make
 
 
-%install 
+%install
 TD=$RPM_BUILD_ROOT/opt/xyratex/xperior/
 rm -rf $RPM_BUILD_ROOT
 install -d ${TD}/bin
 install -D  -m 755  bin/*.pl      ${TD}/bin/
 install -d -m 755 ${TD}/lib/Xperior
 install -d -m 755 ${TD}/lib/Xperior/Executor
-install -D  -m 644 blib/lib/Xperior/*.pm ${TD}/lib/Xperior 
-install -D  -m 644 blib/lib/Xperior/Executor/*.pm ${TD}/lib/Xperior/Executor 
+install -D  -m 644 blib/lib/Xperior/*.pm ${TD}/lib/Xperior
+install -D  -m 644 blib/lib/Xperior/Executor/*.pm ${TD}/lib/Xperior/Executor
 install -d ${TD}/doc
 install -D  -m 644  README     ${TD}/doc
 install -D  -m 644  Changes    ${TD}/doc
@@ -75,9 +76,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Tue Mar 20 2012 ryg <Roman_Grigoryev@xyratex.com> 0.0.2
-    Many updates in results processing. Stable ssh module. Improved improved include/exclude list processing. Added html report. Increased test coverage. 
+    Many updates in results processing. Stable ssh module. Improved improved include/exclude list processing. Added html report. Increased test coverage.
 * Mon Oct 24 2011 ryg <Roman_Grigoryev@xyratex.com> 0.0.1
-    Added docs and docs generation after installation. 
+    Added docs and docs generation after installation.
 * Mon Oct 24 2011 ryg <Roman_Grigoryev@xyratex.com> 0.0.1
     Initial package version.
 

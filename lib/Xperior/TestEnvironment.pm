@@ -1,18 +1,38 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  Xperior/TestEnvironment.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  This class maintains test environment and configuration.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex 
-#      CREATED:  08/30/2011 11:59:25 PM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 
-=pod 
+=pod
 
-=head1 Class maintains test environment and configuration.
+=head1 NAME
+
+Xperior::TestEnvironment - Class maintains test environment and configuration.
+
+=head1 DESCRIPTION
 
 This class gathers cluster configuration data, disk sizes, space available, network type, cpu count, that nodes are reachable via ssh/pdsh, and Lustre basic liveness (Lustre is up and files can be created).
 
@@ -75,7 +95,7 @@ sub checkEnv{
     foreach my $n (@{$self->{'nodes'}}){
         $problems-- unless $n->ping;
         $problems-- unless $n->isReachable;
-    }    
+    }
     INFO "Configuration check completed";
     return $problems;
 }
@@ -84,7 +104,7 @@ sub getNodesInfo{
     my $self = shift;
     foreach my $n (@{$self->{'nodes'}}){
         $n->getConfig;
-    }    
+    }
     INFO "Configuration configuration harvest completed";
 
 }
@@ -97,9 +117,9 @@ sub getOSSs{
     #print Dumper $self->cfg;
     foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
         if( $lo->{'type'} eq 'oss'){
-           push @osss, $lo;              
+           push @osss, $lo;
         }
-    }    
+    }
     return \@osss;
 }
 
@@ -109,9 +129,9 @@ sub getMDSs{
     #print Dumper $self->cfg;
     foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
         if( $lo->{'type'} eq 'mds'){
-           push @mdss, $lo;              
+           push @mdss, $lo;
         }
-    }    
+    }
     return \@mdss;
 
 }
@@ -122,9 +142,9 @@ sub getClients{
     #print Dumper $self->cfg;
     foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
         if( $lo->{'type'} eq 'client'){
-           push @clients, $lo;              
+           push @clients, $lo;
         }
-    }    
+    }
     return \@clients;
 
 }
@@ -134,9 +154,9 @@ sub getMasterClient{
     foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
         if(( $lo->{'type'} eq 'client')
                 &&( $lo->{'master'} eq 'yes')){
-           return $lo;              
+           return $lo;
         }
-    }    
+    }
     return undef;
 }
 
@@ -157,7 +177,7 @@ sub getNodeUser{
         return $n->user    if( $n->id eq $id);
     }
     return undef;
-}                
+}
 
 sub getNodeById{
     my ($self, $id) = @_;
@@ -170,3 +190,30 @@ sub getNodeById{
 
 
 __PACKAGE__->meta->make_immutable;
+1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+

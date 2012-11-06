@@ -1,12 +1,31 @@
-#!/usr/bin/perl 
-#===============================================================================
 #
-#         FILE:  mongo_configure.pl
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#      AUTHOR:  ryg
-#      COMPANY:  Xyratex
-#      CREATED:  04/02/2012 04:59:39 PM
-#===============================================================================
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
 package mongo;
 
 use strict;
@@ -215,6 +234,7 @@ test
   plan                => 5,
   aCheckProjectStatus => sub {
 
+    #DEBUG "##########################################";
     my $col = doMapReduce('branch_status',1);
     my $cursor = $db ->${col}->find( {_id => qr/^b4d01a3cd5_/}  );
     my $object0 = $cursor->next;
@@ -239,7 +259,6 @@ test
     DEBUG "Result obj1 is :" . Dumper($object2);
 
     is($object2,undef,"Check no more results");
-
   };
 
 teardown some_teardown => sub { };

@@ -1,29 +1,47 @@
-#!/usr/bin/perl 
-#===============================================================================
-#         FILE:  runtest.pl
+#!/usr/bin/perl
 #
-#        USAGE:  ./runtest.pl <options> 
+# GPL HEADER START
 #
-#  DESCRIPTION:  Start test execution in  Xperior harness
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  08/31/2011 06:37:26 PM
-#===============================================================================
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
 =pod
 
 =head1 NAME
 
-Xperior - execute tests via Xperior harness 
+Xperior
 
-=head1 SYNOPSIS 
+=head1 SYNOPSIS
 
     xper --action <run|list> [--continue] [<options>]
 
 =head1 DESCRIPTION
 
 The application executes different specially wrapped tests via Xperior harness.
-The application reads yaml tests descriptions, checks environment, reads and gathers 
-cluster configuration, runs tests based on found configuration, 
+The application reads yaml tests descriptions, checks environment, reads and gathers
+cluster configuration, runs tests based on found configuration,
 collects logs and saves a report.
 
 =head1 OPTIONS
@@ -67,9 +85,9 @@ Generate html report in working directory: C<report/report.html>
 
 =item --continue
 
-Continue execution in specified working directory. Execution is continued 
-from the next test after last written one which is possibly not finished. 
-Report the results. If L<--continue> is not set, then the previous results 
+Continue execution in specified working directory. Execution is continued
+from the next test after last written one which is possibly not finished.
+Report the results. If L<--continue> is not set, then the previous results
 in the working directory are overwritten.
 
 =item --skipnodeinfo
@@ -78,16 +96,16 @@ TBI
 
 =item --extopt=name:value
 
-Additional options which will be stored in test results. 
+Additional options which will be stored in test results.
 You can use this option several times to pass more than one parameter.
-Overrides values taken from external options' file 
-if used simlutaneousely with L<--extop-file> option. 
+Overrides values taken from external options' file
+if used simlutaneousely with L<--extop-file> option.
 For details, see L<--extopt-file>.
 
 =item --extopt-file=<path>
 
-Read external options from file in YAML format. 
-The file should contain 'extoptions' key under which 
+Read external options from file in YAML format.
+The file should contain 'extoptions' key under which
 other options should be provided. See example:
 
 	---
@@ -95,7 +113,7 @@ other options should be provided. See example:
 	  branch: xyratex
 	  executiontype: weekly
 
-To override options with custom values from command line, please, 
+To override options with custom values from command line, please,
 refer L<--extopt> option.
 
 =back
@@ -125,10 +143,10 @@ Directory where are test descriptors yaml files
 
 =head2 Filters
 
-=head3 Exclude/include lists 
+=head3 Exclude/include lists
 
-Each test is defined by its name and test group. 
-It is possible to use regular expression which will be used for string comparison. 
+Each test is defined by its name and test group.
+It is possible to use regular expression which will be used for string comparison.
 Symbols after '#' are ignored. Sample:
 
 	replay-dual.* #match to any replay-dual continue
@@ -139,7 +157,7 @@ Symbols after '#' are ignored. Sample:
 
 =item --excludelist
 
-List of tests for exclude from execution. These tests will not be executed, 
+List of tests for exclude from execution. These tests will not be executed,
 no status or report will be generated. See syntax definition below.
 
 =item --includelist
@@ -157,13 +175,13 @@ include/exclude list format below.
 
 =item --skiptag=<tags>
 
-List of tags which will be skipped. No mask or regexp allowed. 
-Use this parameter twice or more for many tag exclusion. 
+List of tags which will be skipped. No mask or regexp allowed.
+Use this parameter twice or more for many tag exclusion.
 Ignored if L<--includeonly> set.
 
 =back
 
-=head2 Logging level 
+=head2 Logging level
 
 =over 2
 
@@ -199,7 +217,7 @@ Execution done because of detected nodes crash or network problem
 
 =item 11
 
-Execution done because of failure of tests which are in critical tests list 
+Execution done because of failure of tests which are in critical tests list
 =item 12
 
 Execution done because test have enabled 'exitafter' property. It means that some actions must be done after test execution.
@@ -240,7 +258,7 @@ use Log::Log4perl qw(:easy);
 use Carp;
 use Pod::Usage;
 use Cwd qw(abs_path);
-my $XPERIORBASEDIR; 
+my $XPERIORBASEDIR;
 BEGIN {
 
     $XPERIORBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
@@ -278,7 +296,7 @@ my $manflag;
 my $continue;
 my $tap;
 my $html;
-my $logfile	= undef;   
+my $logfile	= undef;
 
 GetOptions(
     "config:s"       => \$configfile,
@@ -290,7 +308,7 @@ GetOptions(
     "extopt-file=s"  => \$extoptfile,
     "tests:s"        => \$task,
     "excludelist:s"  => \$excludelist,
-    "includelist:s"  => \$includelist, 
+    "includelist:s"  => \$includelist,
     "flist:s"        => \$flist,
     "workdir:s"      => \$workdir,
     "testdir:s"      => \$testdir,
@@ -352,7 +370,7 @@ unless(defined($workdir)){
 if( $action eq 'run'){
     if (-d $workdir) {
         INFO "Test directory [$workdir] found, overwriting old results";
-    }else{                                                
+    }else{
         INFO "No workdir directory [$workdir] found, create it.";
         unless( mkdir $workdir){
             print "Cannot create workdir [$workdir]\n";
@@ -360,7 +378,7 @@ if( $action eq 'run'){
         }
     }
 }
-        
+
  my %options = (
     xperiorbasedir => "$XPERIORBASEDIR/../lib",
     testdir  => $testdir,
@@ -383,4 +401,30 @@ my $testcore =  Xperior::Core->new();
 $testcore->run(\%options);
 
 __END__
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
 

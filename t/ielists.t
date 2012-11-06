@@ -1,15 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE:  ielists.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION:  
-#
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex
-#      CREATED:  01/10/2012 10:20:50 PM
-#===============================================================================
-#!/usr/bin/perl -w
+
 package ielists;
 use strict;
 
@@ -66,17 +82,17 @@ test plan => 1, cFullList => sub {
 
 test plan => 2, eIncludeList => sub {
 
-    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list`;   
-    my $tts = getTests(\@out); 
-    
+    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list`;
+    my $tts = getTests(\@out);
+
     print "Ready results:".Dumper $tts;
     my @exp = (
            'replay-vbr/1a',
            'replay-dual/9'
           );
 
-    is_deeply($tts,\@exp,"Simple include list ");   
-   
+    is_deeply($tts,\@exp,"Simple include list ");
+
 
     my @out1 = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list`;
     my $tts1 = getTests(\@out1);
@@ -92,20 +108,20 @@ test plan => 2, eIncludeList => sub {
 
 test plan => 3, alIELists => sub {
 
-    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list               --excludelist=t/testlists/exclude.list`;   
-    my $tts = getTests(\@out); 
-    
+    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list               --excludelist=t/testlists/exclude.list`;
+    my $tts = getTests(\@out);
+
     #print "Ready results:".Dumper $tts;
     my @exp = (
            'replay-vbr/1a',
            'replay-dual/9'
           );
 
-    is_deeply($tts,\@exp,"Simple include list/exclude list 1");   
+    is_deeply($tts,\@exp,"Simple include list/exclude list 1");
 
-    @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list               --excludelist=t/testlists/exclude.list`;   
-    $tts = getTests(\@out); 
-    
+    @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list               --excludelist=t/testlists/exclude.list`;
+    $tts = getTests(\@out);
+
     #print "Ready results:".Dumper $tts;
     @exp = (
            'replay-dual/6',
@@ -113,11 +129,11 @@ test plan => 3, alIELists => sub {
            'replay-dual/9'
           );
 
-    is_deeply($tts,\@exp,"Simple include list/exclude list 2");   
+    is_deeply($tts,\@exp,"Simple include list/exclude list 2");
 
-    my @out1 = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list     --excludelist=t/testlists/exclude_r.list`;  
+    my @out1 = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.list     --excludelist=t/testlists/exclude_r.list`;
     my $tts1 = getTests(\@out1);
-    
+
     #print "Ready results:".Dumper $tts1;
     my @exp1 = ('replay-dual/6',
                 'replay-dual/8',

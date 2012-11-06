@@ -3,12 +3,13 @@
 Summary: The MDTest and IOR wrapper for Xperior harnesss.
 Name: xperior-openmpibenchmarks
 Version: 0.0.2
-Release: 4%{?dist} 
-License: TBD 
+Release: 4%{?dist}
+License: GPLv2
+Vendor: Xyratex Technology Limited
 Group: Development/Libraries
 Source: Xperior-openmpibenchmarks-0.0.2.tar.gz
 Requires:  ior
-Requires:  xperior-harness 
+Requires:  xperior-harness
 BuildArch: noarch
 
 %description
@@ -17,14 +18,14 @@ TBD
 %setup -q -n Xperior-openmpibenchmarks-%{version}
 
 %build
-perl Makefile.PL 
+perl Makefile.PL
 make
 
-%install 
+%install
 TD=$RPM_BUILD_ROOT/opt/xyratex/xperior/
 rm -rf $RPM_BUILD_ROOT
 install -d ${TD}/lib/Xperior/Executor
-install -D  -m 644 blib/lib/Xperior/Executor/*.pm ${TD}/lib/Xperior/Executor 
+install -D  -m 644 blib/lib/Xperior/Executor/*.pm ${TD}/lib/Xperior/Executor
 install -d ${TD}/testds
 install -D  testds/*.yaml  ${TD}/testds/
 

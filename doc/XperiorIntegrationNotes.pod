@@ -1,17 +1,44 @@
+#
+# GPL HEADER START
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 =pod
 
-=head1 Xperior integration notes 
+=head1 Xperior integration notes
 
 One of main purpose of developing Xperior was simplifying integration with CIT
 and other test automation tools.
 
 =head2 Integration with L<Jenkins|http://jenkins-ci.org/>
 
-L<Xperior executor|runtest> script doesn't have integrated remote nodes 
-management but full Xpreior have some libraries for it. See L<Xperior::Node>   
+L<Xperior executor|runtest> script doesn't have integrated remote nodes
+management but full Xpreior have some libraries for it. See L<Xperior::Node>
 L<Xperior::Nodes::NodeManager>. It is reason why one more perl script should
-be used. This script stop/star/check remote nodes. In sample below it is 
-B<runtest_on_kvm.pl> which executed by Jenkins. This sample work with KVM 
+be used. This script stop/star/check remote nodes. In sample below it is
+B<runtest_on_kvm.pl> which executed by Jenkins. This sample work with KVM
 virtual machines.
 
 Xpreior could be simple integrated with Jenkins via Jenkins B<Execute shell>
@@ -32,7 +59,7 @@ B<t/kvmnode.t> and B<t/ipminode.t> contain more samples how work with nodes
 from Xperior libraries.
 
     use Xperior::Node;
-    use Compat::LustreTests; 
+    use Compat::LustreTests;
     use Cwd qw(chdir);
     use Carp;
 
@@ -43,16 +70,16 @@ from Xperior libraries.
     my $node = Xperior::Node->new(
         kvmdomain =>'mds', #exist and configured kvm
         kvmimage =>'/.../image', #VM image
-        ip =>$vmnode,                   
-        user => 'root', #user which used for login               
+        ip =>$vmnode,
+        user => 'root', #user which used for login
         id => 'mdskvm',
         nodetype => 'KVMNode',
         console  =>'0' #where VM store serial console file if configured
-        )            
+        )
     );
 
     $node->halt; #stop if previously was started
-    $node->restoreSystem('vmimagebackup.file'); 
+    $node->restoreSystem('vmimagebackup.file');
     $node->start;
     $node->waitUp;
     ...
@@ -61,9 +88,9 @@ from Xperior libraries.
     my $connector->getRemoteConnector;
     print $connector->createSync("pdsh -V")."\n"; #check remote pdsh
     #mount lustre all in one node
-    print $connector->createSync( 
+    print $connector->createSync(
             "cd /usr/lib64/lustre/tests; FORMAT=yes sh ./llmount.sh",60 )."\n";
-    
+
     #create system  configuration
     my $config = <<"CFG";
 
@@ -73,33 +100,33 @@ from Xperior libraries.
          ip           : $vmnode
          ctrlproto    : ssh
          user         : root
-         console      : ... 
+         console      : ...
 
     LustreObjects:
        - id          : mds1
-        device      : /tmp/lustre-mdt1    
-        node        : vm1 
+        device      : /tmp/lustre-mdt1
+        node        : vm1
         type        : mds
-   
-       - id          : oos1 
-         device      : /tmp/lustre-ost1 
+
+       - id          : oos1
+         device      : /tmp/lustre-ost1
          node        : vm1
          type        : oss
 
-       - id          : oos2 
-         device      : /tmp/lustre-ost2 
+       - id          : oos2
+         device      : /tmp/lustre-ost2
          node        : vm1
          type        : oss
 
        - id          : client1
          node        : vm1
          type        : client
-         master      : yes 
+         master      : yes
 
     #Variables
     client_mount_point      : /mnt/lustre
     benchmark_tests_file    : testfile
-    tempdir                 :  
+    tempdir                 :
 
     CFG
     open CFG, " > $xtestconfig ";
@@ -114,17 +141,17 @@ from Xperior libraries.
     open IL, " > $ilist ";
     print IL $sl;
     close IL;
-    
+
     mkdir 'tests';
     $connector->getFile( "/usr/lib64/lustre/tests/$suite.sh",
                       "tests/$suite.sh" );
 
     writeGeneratedTestSuiteFile( "$wd/workdir", $suite,
         "$XPERIORHOME/testds", 'tests' );
-    writeTestSuiteExclude( 
+    writeTestSuiteExclude(
         "$wd/workdir",$suite,
         "$XPERIORHOME/exclude.list",'tests');
-    my $excludelist = "$wd/workdir/${suite}_exclude.list"; 
+    my $excludelist = "$wd/workdir/${suite}_exclude.list";
     writeGeneratedTagsFile("$wd/workdir");
 
     $CWD = $XPERIORHOME;
@@ -145,9 +172,9 @@ from Xperior libraries.
            . " --extopt=type:full"
            . " $loglevel  $continue "
      );
-    
+
      print "runtest exited with status $res\n";
-     if (   ( $res == 2816 ) 
+     if (   ( $res == 2816 )
          or ( $res == 2560 )
          or ( $res == 0xc00 )
          or ( ( $res == 4864 ) and ( $connectcrash < 10 ) ) )
@@ -162,7 +189,7 @@ from Xperior libraries.
          confess "runtest exited with unknown code $res";
      }
 
-After execution results will saved in  C<$wd/workdir>. This script executes 
+After execution results will saved in  C<$wd/workdir>. This script executes
 only one suite (defined in include list) and with matrix Jenkins task this script could be simple paralleled by number by suites.
 
 =cut

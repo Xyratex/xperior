@@ -1,15 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
+# 
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
 #
-#         FILE:  executors.t
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+# 
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+# 
+# GPL HEADER END
+# 
+# Copyright 2012 Xyratex Technology Limited
+# 
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
-#  DESCRIPTION:  
-#
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex 
-#      CREATED:  10/03/2011 06:36:20 PM
-#===============================================================================
-#!/usr/bin/perl -w
+
 package executors;
 
 use strict;
@@ -24,7 +40,7 @@ use Carp;
 use Xperior::Executor::Noop;
 use Xperior::Test;
 
-my %options = ( 
+my %options = (
     workdir => '/tmp/test_wd',
 );
 
@@ -38,15 +54,15 @@ my %gh = (
       groupname => 'sanity',
         );
 my $test;
-my $exe; 
+my $exe;
 
 startup         some_startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
-setup           some_setup    => sub { 
+setup           some_setup    => sub {
 
     my $testcore =  Xperior::Core->new();
-    $testcore->options(\%options);      
+    $testcore->options(\%options);
     my $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
 
     $test = Xperior::Test->new;
@@ -119,7 +135,7 @@ not ok 1  #reason
 OUT
 ;
     is($fres,$fres,'fail tap check');
-    $exe->skip(1,"skip reason"); 
+    $exe->skip(1,"skip reason");
     my $sres = $exe->tap;
 #    DEBUG $sres;
     my $sexp = <<OUT
@@ -148,9 +164,9 @@ OUT
 
 #########################################
 test plan => 3, cCheckCreateLog    => sub {
-    
+
     my $fh    = $exe->createLogFile('test1');
-    print $fh 'Test report'; 
+    print $fh 'Test report';
     close $fh;
     pass("Checked that no any file io crash observed");
     ok(-r '/tmp/test_wd/sanity/1.test1.log');
@@ -178,7 +194,7 @@ test plan => 4, cCheckReportWriting    => sub {
 test plan => 1, f_getMasterClient    => sub {
   my $node = $exe->_getMasterClient;
   is($node->{node},'client1','Check master node');
-    
+
 };
 
 

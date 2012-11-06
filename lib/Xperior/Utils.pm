@@ -1,13 +1,39 @@
-#===============================================================================
 #
-#         FILE:  Xtest/Utils.pm
+# GPL HEADER START
 #
-#  DESCRIPTION:  
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#       AUTHOR:  ryg
-#      COMPANY:  Xyratex 
-#      CREATED:  09/05/2011 03:55:22 PM
-#===============================================================================
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
+=pod
+
+=head1 NAME
+
+Xperior::Utils - some utility functions
+
+=cut
+
 package Xperior::Utils;
 use strict;
 use warnings;
@@ -33,7 +59,7 @@ sub trim{
 
 
 sub runEx{
-    my ($cmd, $dieOnFail,$failMess ) = @_;    
+    my ($cmd, $dieOnFail,$failMess ) = @_;
     DEBUG "Cmd is [$cmd]";
     DEBUG "WD  is [$CWD]";
 
@@ -63,7 +89,7 @@ sub parseFilterFile{
         my @nocomment = split (/#/,$str);
         next unless defined $nocomment[0];
         $nocomment[0] = trim( $nocomment[0]) if defined $nocomment[0];
-        confess "Cannot parse file, space found on string [$str]:[".$nocomment[0]."]" 
+        confess "Cannot parse file, space found on string [$str]:[".$nocomment[0]."]"
             if $nocomment[0] =~ m/\s+/ ;
         push(@onlyvalues, $nocomment[0]) if $nocomment[0] ne '';
     }
@@ -83,7 +109,7 @@ sub findCompleteTests{
         my $path =  $File::Find::name;
         $path =~ s/^$workdir//;
         $path =~ s/^\///;
-        push (@testlist, $path) unless ( -d $file ); 
+        push (@testlist, $path) unless ( -d $file );
 	}, $workdir;
     #DEBUG Dumper \@testlist;
     @testlist = sort @testlist;
@@ -91,4 +117,29 @@ sub findCompleteTests{
 }
 
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
 

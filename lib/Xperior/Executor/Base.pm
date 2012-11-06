@@ -1,15 +1,31 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  Base.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Base class for execute tests 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex 
-#      VERSION:  1.0
-#      CREATED:  09/30/2011 01:31:34 AM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+
 =pod
 
 =head1 NAME
@@ -18,14 +34,14 @@ Xperior::Executor::Base - Base executor class
 
 =head1 DESCRIPTION
 
-Base class for test. Keep all test parametes to field B<yaml> which 
-saved to Xprerior result files by b<report> call. Also could be stored 
+Base class for test. Keep all test parametes to field B<yaml> which
+saved to Xprerior result files by b<report> call. Also could be stored
 TAP report which have less information but more compatible with other tools.
 
-Method B<execute> is extension poit for 
+Method B<execute> is extension poit for
 L<Xperior::Executor::SingleProcessBase> and its inheritors.
 
-It is possible to use http://instanttap.appspot.com/ for check tap outputs. 
+It is possible to use http://instanttap.appspot.com/ for check tap outputs.
 
 =head1 FUNCTIONS
 
@@ -83,9 +99,9 @@ sub init{
     $self->_write;
 }
 
-=head2 addYE(KEY, VALUE) 
+=head2 addYE(KEY, VALUE)
 
-Adds Yaml Element. 
+Adds Yaml Element.
 
 Returns 1 if the value has been overridden, otherwise returns 0.
 
@@ -99,9 +115,9 @@ sub addYE{
     return $overridden;
 }
 
-=head2 addYEE(KEY1, KEY2, VALUE) 
+=head2 addYEE(KEY1, KEY2, VALUE)
 
-Adds Yaml Element in Element. Means adding second level hash element. 
+Adds Yaml Element in Element. Means adding second level hash element.
 
 Returns 1 if the value has been overridden, otherwise returns 0.
 
@@ -109,7 +125,7 @@ Returns 1 if the value has been overridden, otherwise returns 0.
 
 sub addYEE{
     my ($self, $key1, $key2, $value) = @_;
-    my $overridden = (defined $self->yaml->{$key1} and 
+    my $overridden = (defined $self->yaml->{$key1} and
                       defined $self->yaml->{$key1}->{$key2});
     $self->yaml->{$key1}->{$key2} = $value ;
     $self->_write;
@@ -139,11 +155,11 @@ Set test passed.
 sub pass{
     my ($self,$msg)  = @_;
     if( defined $msg){
-        $msg = " #".$msg 
+        $msg = " #".$msg
     }else{
         $msg='';
     }
-    $self->{'result'} ="ok 1 $msg"; 
+    $self->{'result'} ="ok 1 $msg";
     $self->{'result_code'} = 0;
     $self->yaml->{'status'} = 'passed';
     $self->yaml->{'status_code'} = 0;
@@ -159,14 +175,14 @@ sub fail{
     my ($self,$msg)  = @_;
     my $pmsg = $msg;
     if((defined $msg) and ($msg ne '')){
-        $msg = " #".$msg 
+        $msg = " #".$msg
     }else{
         $msg='';
     }
     $self->{'result'} ="not ok 1 $msg" ;
     $self->{'result_code'} = 1;
     $self->yaml->{'status'} = 'failed';
-    $self->yaml->{'status_code'} = 1; 
+    $self->yaml->{'status_code'} = 1;
     $self->yaml->{'fail_reason'} = $pmsg;
 }
 
@@ -177,24 +193,24 @@ Set test skipped
 =cut
 
 sub skip{
-    #mode means type of skip - skip may 
-    # be acc-sm induced or exclude list induced 
+    #mode means type of skip - skip may
+    # be acc-sm induced or exclude list induced
     my ($self,$mode,$msg)  = @_;
     if( defined $msg){
-        $msg = " #".$msg 
+        $msg = " #".$msg
     }else{
         $msg='';
     }
     $self->{'result'} ="ok 1# SKIP $msg" ;
     $self->{'result_code'} = 2;
     $self->yaml->{'status'} = 'skipped';
-    $self->yaml->{'status_code'} = 2; 
+    $self->yaml->{'status_code'} = 2;
     $self->yaml->{'fail_reason'} = $msg;
 }
 
 =head2 setExtOpt(KEY, VALUE)
 
-Set additional fied to yaml in special section B<extoptions>. Use it 
+Set additional fied to yaml in special section B<extoptions>. Use it
 for adding meta-information to test result.
 
 =cut
@@ -209,20 +225,20 @@ sub registerLogFile{
     my ($self,$key,$path)  = @_;
     my $rd=$self->_reportDir.'/';
     $path =~ s/$rd//;
-    $self->addYEE('log',$key,$path); 
+    $self->addYEE('log',$key,$path);
 }
 
 #TODO add tests!
 sub normalizeLogPlace{
     my ($self,$lfile,$key)  = @_;
-    move "$lfile", 
+    move "$lfile",
             $self->_resourceFilePrefix."$key.log";
 }
 
 sub getNormalizedLogName{
     my ($self,$key)  = @_;
     $self->_createDir;
-    return $self->_resourceFilePrefix."$key.log";    
+    return $self->_resourceFilePrefix."$key.log";
 }
 
 sub createLogFile{
@@ -272,12 +288,12 @@ sub tap{
      open  TAP, "> $file" or confess "Cannot open report file:" . $!;
      print TAP $out;
      close TAP;
-     return $out;    
+     return $out;
 }
 
 =head2 report
 
-Write B<$self-E<gt>yaml> to yaml file in work directory 
+Write B<$self-E<gt>yaml> to yaml file in work directory
 
 =cut
 
@@ -288,9 +304,9 @@ sub report{
      $self->_write;
 }
 
-=head2 execute() 
+=head2 execute()
 
-Stub of execute test function. 
+Stub of execute test function.
 
 Should be implemented in child classes.
 
@@ -300,11 +316,11 @@ sub execute{
     confess 'Functions is not implemented, override it!';
 }
 
-=head2 getReason() 
+=head2 getReason()
 
 Stub of getReason function.
 
-Should be implemented in child classes. 
+Should be implemented in child classes.
 Should return short failure reason description.
 
 =cut
@@ -332,7 +348,7 @@ sub _write{
 sub _createDir{
     my $self = shift;
     if ( ! -d $self->_reportDir){
-        mkpath ($self->_reportDir); 
+        mkpath ($self->_reportDir);
     }
 }
 
@@ -366,4 +382,28 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
 

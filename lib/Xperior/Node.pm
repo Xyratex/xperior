@@ -1,23 +1,47 @@
 #
-#===============================================================================
+# GPL HEADER START
 #
-#         FILE:  Xperior::Node.pm
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-#  DESCRIPTION:  Node  abstraction. Allows to get info about node. 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
 #
-#       AUTHOR:  ryg 
-#      COMPANY:  Xyratex 
-#      CREATED:  08/31/2011 10:38:28 AM
-#===============================================================================
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
 
 =pod
 
-=head1 Class implements different functions to work with node and get information about them.
+=head1 NAME
+
+Xperior::Node - Node  abstraction
+
+=head1 DESCRIPTION
+
+Node  abstraction. Allows to get info about node.
+Class implements different functions to work with node and get information about them.
 
 =cut
 
+
 package Xperior::Node;
-use Moose; 
+use Moose;
 use Error  qw(try finally except otherwise);
 use Moose::Util::TypeConstraints;
 
@@ -33,13 +57,13 @@ use Xperior::Nodes::IPMINode;
 
 use constant DEFAULT_PROTO     => 'ssh';
 use constant DEFAULT_NODE      => 'BasicNode';
-use constant DEFAULT_UP_TIME_SEC   =>  300; #sec 
+use constant DEFAULT_UP_TIME_SEC   =>  300; #sec
 
 =head2 Public fields and supported constructor parameters
 
 =head3 isReachable
 
-check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lustre is up and files can be created).  
+check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lustre is up and files can be created).
 
 =cut
 
@@ -86,7 +110,7 @@ sub BUILD {
                 unless defined $self->ctrlproto;
     $self->nodetype(DEFAULT_NODE)
                         unless defined $self->nodetype;
-    
+
     DEBUG "Apply role [".$self->nodetype."]";
     if($self->nodetype eq 'KVMNode'){
         Xperior::Nodes::KVMNode->meta->apply($self);
@@ -107,8 +131,8 @@ sub BUILD {
 
 =head3 isReachable
 
-check that node is reachable via ssh (pdsh - TBI), and Lustre basic 
-liveness (Lustre is up and files can be created).  
+check that node is reachable via ssh (pdsh - TBI), and Lustre basic
+liveness (Lustre is up and files can be created).
 
 =cut
 
@@ -137,23 +161,23 @@ sub getConfig{
     my $sc = $self->getRemoteConnector;
     $self->architecture(trim($sc->createSync('uname -m')));
     $self->os(trim($sc->createSync('uname -o')));
-    $self->os_release( 
-            trim( 
+    $self->os_release(
+            trim(
                 (split(':\s',$sc->createSync('lsb_release -r')))
                 [1]
                 ));
 
-    $self->os_distribution( 
+    $self->os_distribution(
             trim(
                 (split(':\s',$sc->createSync('lsb_release -d')))
                 [1]
                 ));
 
-    $self->lustre_version( 
+    $self->lustre_version(
             trim(
                 (split('\s', $sc->createSync('lctl lustre_build_version')))
                     [2] ));
-    $self->lustre_net( 
+    $self->lustre_net(
             trim(
                 (split('@', $sc->createSync('lctl list_nids ')))
                     [1] ));
@@ -184,7 +208,7 @@ sub getLFFreeSpace{
     my $sc =$self->getRemoteConnector;
     my $cmd = $sc->createSync("lfs df");
     foreach my $str ( split(/\n/,$cmd)){
-        return $1 
+        return $1
             if( $str =~ m/filesystem\ssummary\:\s+\d+\s+\d+\s+(\d+)/ );
     }
     DEBUG "getLFFreeSpace -  cannot parse:[$cmd]";
@@ -196,7 +220,7 @@ sub getLFFreeInodes{
     my $sc =$self->getRemoteConnector;
     my $cmd = $sc->createSync("lfs df -i");
     foreach my $str ( split(/\n/,$cmd)){
-        return $1 
+        return $1
             if( $str =~ m/filesystem\ssummary\:\s+\d+\s+\d+\s+(\d+)/ );
     }
     DEBUG "getLFFreeInodes -  cannot parse:[$cmd]";
@@ -208,13 +232,13 @@ sub getLFCapacity{
     my $sc =$self->getRemoteConnector;
     my $cmd = $sc->createSync("lfs df");
     foreach my $str ( split(/\n/,$cmd)){
-        return $1 
+        return $1
             if( $str =~ m/filesystem\ssummary\:\s+(\d+)\s+\d+\s+\d+/ );
     }
     DEBUG "getLFCapacity -  cannot parse:[$cmd]";
     return -1;
 
-} 
+}
 
 =head3 run(cmd,timeout)
 
@@ -225,14 +249,14 @@ Function throws execption if ssh problem detected
 =cut
 
 #TODO add test on it
-sub run 
+sub run
 {
-    my ( $self, $cmd, $timeout ) = @_;    
+    my ( $self, $cmd, $timeout ) = @_;
     my $ssh = $self->getExclusiveRC;
     throw NullObjectException
-        ("Cannot create ssh object") 
+        ("Cannot create ssh object")
             unless defined $ssh;
-    DEBUG $ssh->createSync($cmd, $timeout); 
+    DEBUG $ssh->createSync($cmd, $timeout);
     throw CannotConnectException
         ("Cannot execute command on remote side")
             unless defined  $ssh->exitcode;
@@ -266,11 +290,11 @@ Return connector for node. This connector is the main node connector and should 
 
 sub getRemoteConnector{
     my $self = shift;
-    return $self->rconnector 
+    return $self->rconnector
          if defined $self->rconnector;
-    
+
     my $sc = Xperior::SshProcess->new();
-    
+
     if ($sc->init($self->ip,$self->user) < 0){
         $self->rconnector(undef);
         return undef;
@@ -295,7 +319,7 @@ sub getExclusiveRC{
         $urc = $rc->clone;
     }
     $urc->initTemp;
-    return $urc; 
+    return $urc;
 }
 
 =head3 storeKernelDump($file)
@@ -331,7 +355,7 @@ sub storeKernelDump {
     return $rc->getFile($kdump,$storefile);
 }
 
-=head3 cleanCrashDir  
+=head3 cleanCrashDir
 
 Remove all previosly stored kernel dumpes on local filesytems on remote node
 Return remote command exit code.
@@ -343,11 +367,11 @@ sub cleanCrashDir{
     my $rc = $self->getRemoteConnector;
     DEBUG "Crashdir is [". $self->crashdir."]";
     confess "Crashdir is not set" unless(
-                              (defined($self->crashdir))and 
+                              (defined($self->crashdir))and
                               ($self->crashdir ne '') and
                               ($self->crashdir ne '/'));
     my $res = $rc->createSync("rm -rf  ".$self->crashdir."/*");
-    ERROR "Cannot remove dump files:".$res 
+    ERROR "Cannot remove dump files:".$res
                     if( $rc->exitcode != 0);
     return $rc->exitcode;
 }
@@ -374,7 +398,7 @@ sub waitDown{
         unless($self->isAlive){
             last;
             DEBUG "Host is down";
-            return 0;   
+            return 0;
         }
         sleep 10;
     }
@@ -391,7 +415,7 @@ If node is not up until $timeout or ssh connection failed return undef.
 
 sub waitUp {
     my ($self, $timeout) = @_;
-    $timeout = DEFAULT_UP_TIME_SEC unless defined $timeout; 
+    $timeout = DEFAULT_UP_TIME_SEC unless defined $timeout;
     $self->rconnector($self->_waitForNodeUp( $self->ip,$self->user, $timeout ));
     return $self->rconnector;
 }
@@ -401,9 +425,9 @@ sub waitUp {
 
 Ping node.
 
-Returns a success flag. If the hostname cannot be found or there 
-is a problem with the IP number, the success flag returned will 
-be undef. Otherwise, the success flag will be 1 if the host is 
+Returns a success flag. If the hostname cannot be found or there
+is a problem with the IP number, the success flag returned will
+be undef. Otherwise, the success flag will be 1 if the host is
 reachable and 0 if it is not.
 
 =cut
@@ -451,3 +475,29 @@ sub _waitForNodeUp {
 
 __PACKAGE__->meta->make_immutable;
 1;
+
+=head1 COPYRIGHT AND LICENSE
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2 only,
+as published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License version 2 for more details (a copy is included
+in the LICENSE file that accompanied this code).
+
+You should have received a copy of the GNU General Public License
+version 2 along with this program; If not, see http://www.gnu.org/licenses
+
+
+
+Copyright 2012 Xyratex Technology Limited
+
+=head1 AUTHOR
+
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+
+=cut
+
