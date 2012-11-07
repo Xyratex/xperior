@@ -73,6 +73,7 @@ Tests:
     id: 19
   -
     id: 20
+    timeout: 450
   -
     id: 21a
   -
