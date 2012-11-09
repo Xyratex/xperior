@@ -40,9 +40,11 @@ package Xperior::Executor::Roles::StoreSyslog ;
 use Moose::Role;
 use Time::HiRes;
 use Xperior::Utils;
-has tlog => ( is =>'rw');
-has ison => ( is =>'rw', isa => 'HashRef');
-
+has tlog      => ( is =>'rw');
+has ison      => ( is =>'rw', isa => 'HashRef');
+has storedir  => ( is =>'rw', default => '/var/log/xperior/messageslog');
+has remotelog => ( is =>'rw', default => 'var/log/messages');
+has logname   => ( is => 'rw', default => 'messages');
 requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
 
 before 'execute' => sub{
@@ -51,13 +53,13 @@ before 'execute' => sub{
     $self->ison(\%h);
     foreach my $n (@{$self->env->nodes}){
         my $c = $n->getExclusiveRC;
-        my $tlog = '/tmp/messageslog.'.Time::HiRes::gettimeofday();
+        my $tlog = $self->storedir.'.'.Time::HiRes::gettimeofday();
 
         $self->tlog($tlog);
         $self->ison->{$n->id}=$c;
-        $c->create('tail',"tail -f -n 0 -v /var/log/messages > $tlog ");
+        $c->create('tail',"tail -f -n 0 -v $self->{remotelog} > $tlog ");
 
-        if( defined($c->exitcode) && ($c->exitcode != 0)){
+        if($c->exitcode != 0){
             $self->addMessage('Cannot harvest log data for node '.$n->id);
             $self->ison->{$n->id}=0;
         }
@@ -71,16 +73,16 @@ after   'execute' => sub{
 
     foreach my $n (@{$self->env->nodes}){
         if($self->ison->{$n->id}!=0){
-            my $c = $self->ison->{$n->id};
+            my $id = $n->id;
+            my $logfile =  $self->getNormalizedLogName($self->logname.'.'.$id);
+            my $c = $self->ison->{$id};
             $c->kill(1);
-            my $res = $c->getFile( $self->tlog,
-            $self->getNormalizedLogName('messages.'.$n->id));
+            my $res = $c->getFile( $self->tlog,$logfile);
             if ($res == 0){
-                $self->registerLogFile('messages.'.$n->id,
-                     $self->getNormalizedLogName('messages.'.$n->id));
+                $self->registerLogFile($logfile,$logfile);
             }else{
                 $self->addMessage(
-                    'Cannot copy log file ['.$self->tlog."]: $res");
+                    "Cannot copy log file [".$self->tlog."]: $res");
 
             }
         }

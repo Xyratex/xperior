@@ -43,8 +43,6 @@ Inherited fom L<Xperior::Executor::Base>
 
 =cut
 
-
-
 package Xperior::Executor::SingleProcessBase;
 use Moose;
 use Data::Dumper;
@@ -54,6 +52,9 @@ use File::Copy;
 
 use Xperior::SshProcess;
 extends 'Xperior::Executor::Base';
+
+use constant DEFAULT_POLL => 5;
+has 'reason' => ( is => 'rw' );
 
 =head3  execute
 
@@ -69,130 +70,154 @@ When remote process not found observation stopped and execution status calculate
 
 =cut
 
-sub execute{
-    my $self = shift;
-    my $mcl = $self->_getMasterClient;
+sub execute {
+    my $self    = shift;
+    my $mclient = $self->_getMasterClient;
 
     #saving env data
-    $self->addYE('masterclient',$mcl);
-    DEBUG "MC:". Dumper $mcl;
+    $self->addYE( 'masterclient', $mclient );
+    DEBUG "Master Client:" . Dumper $mclient;
     $self->_prepareCommands;
     $self->_addCmdLogFiles;
-    $self->addYE('cmd',$self->cmd);
+    $self->addYE( 'cmd', $self->cmd );
 
     #$self->_saveStageInfoBeforeTest;
 
     #get remote processor
-    my $mclo =
-        $self->env->getNodeById($mcl->{'node'});
-    my $testp = $mclo->getRemoteConnector;
-    unless( defined( $testp)) {
-        INFO 'Master client is:'.Dumper $mclo;
+    my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
+    my $testproc   = $mclientobj->getRemoteConnector;
+    unless ( defined($testproc) ) {
+        ERROR 'Master client obj is:' . Dumper $mclientobj;
         confess "SSH to master client is undef";
     }
-    ## create temprory dir
-    my $td = '';
-    $td = $self->env->cfg->{'tempdir'}
-                if defined $self->env->cfg->{'tempdir'} ;
-    $testp->createSync
-        ('mkdir -p '.$self->env->cfg->{'client_mount_point'}.$td);
-    #TODO add exit value check there. Now it doesn't have value.
 
-#TODO check these values on empty or undefined values.
-#$self->env->cfg->{'client_mount_point'}
-#$self->env->cfg->{'tempdir'})
+    ##remove and recreate directory for logs
+    #TODO cleanup should be done out of sub execute
+    #$testp->createSync ('rm -rf /var/log/xperior/');
+    $testproc->createSync('mkdir  /var/log/xperior/');
 
-    my $starttime=time;
-    $self->addYE('starttime',$starttime);
+    ## create temprory dir on target fs
+    my $tempdir = $self->env->cfg->{'tempdir'}
+      or carp("Undefined 'tempdir'");
 
-    my $cr = $testp->create($self->appname,$self->cmd);
-    if($cr < 0){
-        $self->fail('Cannot start remote test process on master client');
+    my $mountpoint = $self->env->cfg->{'client_mount_point'}
+      or carp("Undefined 'client_mount_point'");
+
+    $testproc->createSync("mkdir -p ${mountpoint}${tempdir}");
+
+    #TODO add exit value check there. Now it doesn't have value until
+    #own lustre mount manager
+
+    my $starttime = time;
+    $self->addYE( 'starttime', $starttime );
+
+    my $cr = $testproc->create( $self->appname, $self->cmd );
+    if ( $cr < 0 ) {
+        $self->fail(
+'Cannot start or find just started remote test process on master client'
+        );
         $self->addMessage(
-           'Cannot start remote process, network or remote host problem.');
-        $self->test->results ($self->yaml);
+            'Cannot start remote process, network or remote host problem.');
+        $self->test->results( $self->yaml );
+        $self->addYE( 'masterhostdown', 'yes' );
+        $self->addYE( 'killed',         'no' );
+        $self->_getLog( $testproc, $self->remote_err, 'stderr' );
+        $self->_getLog( $testproc, $self->remote_out, 'stdout' );
         return;
     }
-    #all alredy started there
-    my $endtime= $starttime
-        + $self->test->getParam('timeout');
 
-    while( $endtime > time ){
+    my $endtime = $starttime + $self->test->getParam('timeout');
+
+    my $polltime = $self->test->getParam('polltime') || DEFAULT_POLL;
+    DEBUG "Poll time is [$polltime]";
+    while ( $endtime > time ) {
+
         #monitoring timeout
-        sleep 5;
-        unless ( $testp->isAlive == 0 ) {
+        sleep $polltime;
+        if ( $testproc->isAlive != 0 ) {
             INFO "Remote app is not alive, exiting";
             last;
-        };
-
+        }
         DEBUG "Test alive, next wait cycle";
     }
-    $testp->createSync('sync',30);
-    $self->addYE('endtime',time);
-    $self->addYE('endtime_planned',$endtime);
+    $testproc->createSync( 'sync', 30 );
+    $self->addYE( 'endtime',         time );
+    $self->addYE( 'endtime_planned', $endtime );
     ### post processing and cleanup
-    my $killed=0;
-    my $kt=0;
-    if($testp->isAlive == 0){
+    my $killed     = 0;
+    my $isnodedown = 0;
+    my $killtime   = 0;
+    my $ping       = $mclientobj->ping;
+    if ( $ping and ( $testproc->isAlive == 0 ) ) {
         WARN "Test is alive after end of test execution, kill it";
-        my $ts = $mclo->getExclusiveRC;
+        my $ts = $mclientobj->getExclusiveRC;
         DEBUG $ts->createSync('ps afx');
-        DEBUG "Owned pid is:".$testp->pid;
-         $testp->kill;
-         $killed=1;
-         $kt=$testp->killed;
+        DEBUG "Owned pid is:" . $testproc->pid;
+        $testproc->kill;
+        $killed   = 1;
+        $killtime = $testproc->killed;
+    }
+    elsif ( not defined($ping) ) {
+        $isnodedown = 1;
+        $self->addMessage(
+            'Incorrect master host ip or cannot resolve dns name');
+    }
+    elsif ( $ping == 0 ) {
+        $isnodedown = 1;
+        $self->addMessage('Master host is down');
     }
 
-
-    $self->addYE('completed','yes');
+    $self->addYE( 'completed', 'yes' );
 
     #$self->_saveStageInfoAfterTest;
 
     #cleanup tempdir after execution
-    $testp->createSync
-        ('rm -rf '.$self->env->cfg->{'client_mount_point'}
-            .$td."/*");
+    #TODO make this removing safe!!!
+    $testproc->createSync( 'rm -rf ' . $mountpoint . $tempdir . "/*" );
 
     ### get logs
 
-    my $res = $testp->getFile( $self->remote_err,
-            $self->getNormalizedLogName('stderr'));
-    if($res == 0){
-        $self->registerLogFile('stderr',
-            $self->getNormalizedLogName('stderr'));
-    }else{
-        $self->addMessage(
-            'Cannot copy log file ['.$self->remote_err."]: $res");
+    my $res = $self->_getLog( $testproc, $self->remote_err, 'stderr' );
+    $res = $self->_getLog( $testproc, $self->remote_out, 'stdout' );
+
+    # processLogs return values
+    #0   - passed
+    #1   - skipped
+    #10  - failed
+    #100 - no result set based on parsing, failed toor
+    my $pr = 100;
+    if ( $res == 0 ) {
+        $pr = $self->processLogs( $self->getNormalizedLogName('stdout') );
+    }
+    else {
+        $self->reason(
+            "Cannot get log file [" . $self->remote_out . "]: $res" );
     }
 
-    $res = $testp->getFile( $self->remote_out,
-            $self->getNormalizedLogName('stdout'));
-    my $pr = 100;
-    if($res == 0){
-        $self->registerLogFile('stdout',
-            $self->getNormalizedLogName('stdout'));
-        $pr = $self->processLogs
-            ($self->getNormalizedLogName('stdout'));
-    }else{
-        $self->addMessage(
-            'Cannot copy log file ['.$self->remote_out."]: $res");
-    }
     #calculate results status
-    if($killed > 0){
-        $self->addYE('killed','yes');
-        $self->fail(
-                'Killed by timeout after ['.
-                ($kt-$starttime).
-                '] sec of execution');
-    }else{
-        $self->addYE('killed','no');
-        $self->addYE('exitcode',$testp->exitcode);
-        if( ($testp->exitcode == 0) && ($pr == 0) ){
+    if ( $killed > 0 ) {
+        $self->addYE( 'killed',         'yes' );
+        $self->addYE( 'masterhostdown', 'no' );
+        my $lifetime = $killtime - $starttime;
+        $self->fail("Killed by timeout after [$lifetime] sec of execution");
+    }
+    elsif ( $isnodedown > 0 ) {
+        $self->addYE( 'masterhostdown', 'yes' );
+        $self->addYE( 'killed',         'no' );
+        $self->fail('Master host became down just after or while testing');
+    }
+    else {
+        $self->addYE( 'killed',         'no' );
+        $self->addYE( 'masterhostdown', 'no' );
+        $self->addYE( 'exitcode',       $testproc->exitcode );
+        if ( ( $testproc->exitcode == 0 ) && ( $pr == 0 ) ) {
             $self->pass;
-        }elsif(($testp->exitcode == 0) && ($pr == 1)){
-            $self->skip(1,$self->getReason);
-        }else{
-            $self->fail($self->getReason);
+        }
+        elsif ( ( $testproc->exitcode == 0 ) && ( $pr == 1 ) ) {
+            $self->skip( 1, $self->getReason );
+        }
+        else {
+            $self->fail( $self->getReason );
         }
     }
 
@@ -200,36 +225,62 @@ sub execute{
     ### end
     #no idea what is good result there, so no return
     #$self->test->tap     ( $self->tap);
-    $self->test->results ($self->yaml);
+    $self->test->results( $self->yaml );
+
     #$self->write();
     #return $self->tap();
+    return;
 }
 
-sub _getMasterClient{
+sub getReason {
     my $self = shift;
-    foreach my $lc (@{$self->env->getClients}){
-        DEBUG "Check client ". Dumper $lc;
-        return $lc
-            if(defined( $lc->{'master'} &&
-                ( $lc->{'master'} eq 'yes')));
+    return $self->reason;
+}
+
+sub _getLog {
+    my ( $self, $connector, $logfile, $logname ) = @_;
+
+    my $res =
+      $connector->getFile( $logfile, $self->getNormalizedLogName($logname) );
+    if ( $res == 0 ) {
+        $self->registerLogFile( $logname,
+            $self->getNormalizedLogName($logname) );
+    }
+    else {
+        $self->addMessage( 'Cannot copy log file [' . $logfile . "]: $res" );
+    }
+    return $res;
+}
+
+sub _getMasterClient {
+    my $self = shift;
+    foreach my $client ( @{ $self->env->getClients } ) {
+        DEBUG "Check client " . Dumper $client;
+        return $client
+          if (
+            defined( $client->{'master'} && ( $client->{'master'} eq 'yes' ) )
+          );
     }
     return undef;
 }
 
-sub _addCmdLogFiles{
+sub _addCmdLogFiles {
     my $self = shift;
-    #TODO add random part
-    my $r = int rand 1000000 ;
-    my $tee = " | tee ";
+    my $r    = int rand 1000000;
+    my $tee  = " | tee ";
 
     $self->options->{'cmdout'} = 0
-        unless defined  $self->options->{'cmdout'} ;
+      unless defined $self->options->{'cmdout'};
 
-    $tee = " 1>  " if  $self->options->{'cmdout'} == 0 ;
-    $self->remote_err( "/tmp/test_stderr.$r.log");
-    $self->remote_out( "/tmp/test_stdout.$r.log");
-    $self->cmd( $self->cmd ." 2>     ".$self->remote_err.
-                            $tee.$self->remote_out);
+    $tee = " 1>  " if $self->options->{'cmdout'} == 0;
+    $self->remote_err("/var/log/xperior/test_stderr.$r.log");
+    $self->remote_out("/var/log/xperior/test_stdout.$r.log");
+    $self->cmd( $self->cmd
+          . " 2>     "
+          . $self->remote_err
+          . $tee
+          . $self->remote_out );
+    return;
 }
 
 __PACKAGE__->meta->make_immutable;
