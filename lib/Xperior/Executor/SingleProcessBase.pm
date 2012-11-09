@@ -46,6 +46,7 @@ Inherited fom L<Xperior::Executor::Base>
 package Xperior::Executor::SingleProcessBase;
 use Moose;
 use Data::Dumper;
+use Carp;
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;

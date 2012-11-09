@@ -101,7 +101,7 @@ sub _createExecutor {
     load $es;
     my $obj = $es->new;
     if ( defined($roles) ) {
-        foreach my $role ( split( /\s/, $roles ) ) {
+        foreach my $role ( split( /\s+/, trim($roles) ) ) {
             chomp $role;
             DEBUG "Applying role [$role]";
 
