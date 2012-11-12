@@ -27,7 +27,7 @@
 #
 =pod
 
-=head1 Xperior harness installation and build guide
+=head1 Xperior harness installation and preparation guide
 
 =head2 Source layout description
 
@@ -78,7 +78,6 @@ B<systemcfg.yaml> - default location for file with system configuration definiti
 Xperior directly uses some Perl libraries which could not be included in your
 Perl distribution by default. Certainly, it depends on your perl setup and
 cannot be generalised for any system.
-
 
 List of external packages are used by core Xperior libs and scripts (C<lib/Xperior> C<bin>)
 
@@ -134,43 +133,104 @@ e.g. C<cpan install YAML>
     Number::Tolerant
     Test::Able
 
+=item 3. Approximate list of packages which will be installed
+
+On RH6/SL6 nodes with default installation these packages will be
+installed from CPAN (nesting level means dependencies ):
+
+    YAML
+        ExtUtils::MakeMaker
+    Autodia
+        XML::Simple
+        XML::SAX
+            XML::NamespaceSupport
+            XML::SAX::Base
+        XML::NamespaceSupport
+        XML::SAX::Expat
+    Template
+        Template::Toolkit
+        AppConfig
+    Moose
+        Dist::CheckConflicts
+            Test::Fatal
+                Try::Tiny
+            Sub::Exporter
+                Data::OptList
+                    Test::Simple
+                    Test::More
+                    Params::Util
+                    Sub::Install
+                Test::More
+                Params::Util
+                Sub::Install
+            Sub::Exporter
+            List::MoreUtils
+        Test::Requires
+        Package::DeprecatedManager
+        Package::Stash::XS
+        MRO::Compat
+        Task::Weaken
+        Class::Load::XS
+            Module::Build
+            Module::Implementation
+                Module::Runtime
+            Class::Load
+        Evan::Closure
+        Class::Load
+        Package::Stash
+        Sub::Name
+        Carp
+        Devel::GlobalDestruction
+        Perl::OSType (upgraded)
+        Module::Metadata (upgraded)
 
 =back
 
-=head3 Steps for  Scientific Linux release 6.0(should work
-for Redhat/Fedora too).
+=cut
 
-=over 12
-
-=item 1. Create and switch on external repository with external libraries. TODO.
-
-=item 2. Install these rpm packages via C<yum>
-
-    perl-Autodia.noarch
-    perl-Log-Log4perl.noarch
-    perl-YAML.noarch
-    perl-Moose.x86_64
-    perl-File-chdir.noarch
-    perl-TAP-Formatter-HTML.noarch
-    perl-Proc-Simple.noarch
-    perl-MooseX-Clone.noarch
-    perl-XML-Simple.noarch
-    perl-YAML-Syck.x86_64
-    perl-Number-Tolerant-1.601-1.noarch
-    perl-Test-Able-0.11-1.noarch
-
-and its dependencies
-
-=back
-
-=head2 Make RPM
-
-Sources could be packed to rpm for Redhat/Fedora distros. After
-build rpm packages could be installed via rpm command as usually.
-
-=over 12
-
-=item * Make documentation
+#=head3 Steps for installing Perl modules from rpm packages for Scientific
+#Linux release 6.0(should work for Redhat/Fedora too).
+#
+#=over 12
+#
+#=item 1. Create and switch on external repository with external libraries. TODO.
+#
+#Create new file in e.g  B</etc/yum.repos.d/xperior.repo> with content
+#
+#    [xperior]
+#    name=Xperior repo
+#    baseurl=<SERVER>
+#    gpgcheck=0
+#
+#As B<SERVER> set address with GitHub Xperior support repository url.
+#
+#=item 2. Install these rpm packages and its dependencies via C<yum>
+#
+#    perl-Autodia.noarch
+#    perl-Log-Log4perl.noarch
+#    perl-YAML.noarch
+#    perl-Moose.x86_64
+#    perl-File-chdir.noarch
+#    perl-TAP-Formatter-HTML.noarch
+#    perl-Proc-Simple.noarch
+#    perl-MooseX-Clone.noarch
+#    perl-XML-Simple.noarch
+#    perl-YAML-Syck.x86_64
+#    perl-Number-Tolerant-1.601-1.noarch
+#    perl-Test-Able-0.11-1.noarch
+#
+#=back
+#
+#=head2 Make RPM
+#
+#Sources could be packed to rpm for Redhat/Fedora distros. After
+#build rpm packages could be installed via rpm command as usually.
+#These packages don't deeply tested and could be outdated.
+#
+#=over 12
+#
+#=item * Generate documentation
+=head2 Generating documentation
 
 Just use special utility for generate html documentation from POD
 in directory C<$WD/html> (C<$WD> - Xperior  source directory)
@@ -178,33 +238,38 @@ in directory C<$WD/html> (C<$WD> - Xperior  source directory)
     cd $WD
     bin/gendocs.pl
 
-
-=item * Make RPM for harness and main modules
-
-
-These steps prepare standard perl module distribution and make
-rpm for core Xperior part.
-
-    cd $WD
-    perl build/Makefile.harness.PL
-    make dist
-    PERL5LIB=$WD/lib rpmbuild  --define -ba ${WD}/spec/xperior-harness.spec`
-
-=item * Make  RPM for Lustre tests package
-
-
-These steps prepare standard perl module distribution and make
-rpm for Lustre acceptance-small tests sets.
-
-
-    cd $WD
-    perl build/Makefile.lustre.PL
-    make dist
-    PERL5LIB=$WD/lib rpmbuild  --define -ba ${WD}/spec/xperior-lustretests.spec
-
-=back
-
-For building own rpm packages for external libraries was used
-utility L<http://perl.arix.com/cpan2rpm/>.
-
 =cut
+
+#=item * Make RPM for harness and main modules
+#
+#
+#These steps prepare standard perl module distribution and make
+#rpm for core Xperior part.
+#
+#    cd $WD
+#    perl build/Makefile.harness.PL
+#    make dist
+#    cp Xperior-harness-0.0.2.tar.gz ~/rpm/SOURCES/ (check actual archive name)
+#    PERL5LIB=$WD/lib rpmbuild -ba ${WD}/spec/xperior-harness.spec`
+#    make clean
+#
+#=item * Make  RPM for Lustre tests package
+#
+#
+#These steps prepare standard perl module distribution and make
+#rpm for Lustre acceptance-small tests sets.
+#
+#
+#    cd $WD
+#    perl build/Makefile.lustre.PL
+#    make dist
+#    cp Xperior-lustretests-0.0.2.tar ~/rpm/SOURCES/ (check actual archive name)
+#    PERL5LIB=$WD/lib rpmbuild  --define -ba ${WD}/spec/xperior-lustretests.spec
+#    make clean
+#
+#=back
+#
+#For building own rpm packages for external libraries was used
+#utility L<http://perl.arix.com/cpan2rpm/>.
+#
+#=cut

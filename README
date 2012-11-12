@@ -15,8 +15,8 @@ in the LICENSE file that accompanied this code).
 You should have received a copy of the GNU General Public License
 version 2 along with this program; If not, see http://www.gnu.org/licenses
 
-Please  visit http://www.xyratex.com/contact if you need additional information or
-have any questions.
+Please  visit http://www.xyratex.com/contact if you need additional
+information or have any questions.
 
 GPL HEADER END
 
@@ -27,15 +27,26 @@ Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 
 
 
-Script system xperior for  automated testing distributed filesystems
+Script system xperior for automated testing distributed filesystems
 
 For generate documentation run
 
-bin/gendocs.pl
+    bin/gendocs.pl
 
 and read html/index.html, start from XperiorInstallationGuide and
 XperiorUserGuide.
 
-This script have weak dependence on Autodia perl package.
+This C<bin/gendocs.pl> have weak dependence on Autodia perl package, if package
+B<Autodia> doesn't installed  you will see message
+
+    Can't exec "autodia.pl": No such file or directory at bin/gendocs.pl
+
+and class diagram will be not generated. Re-execute the script after installing
+the package. Please ignore this message
+"Warning: something's.../Autodia/Handler.pm line 50"
+
+Xperior is under active development by roman_grigoryev@xyratex.com. If you are
+interested in contributing / suggesting / complaining please send him
+email directly.
 
 

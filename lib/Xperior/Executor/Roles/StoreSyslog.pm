@@ -43,7 +43,7 @@ use Xperior::Utils;
 has tlog      => ( is =>'rw');
 has ison      => ( is =>'rw', isa => 'HashRef');
 has storedir  => ( is =>'rw', default => '/var/log/xperior/messageslog');
-has remotelog => ( is =>'rw', default => 'var/log/messages');
+has remotelog => ( is =>'rw', default => '/var/log/messages');
 has logname   => ( is => 'rw', default => 'messages');
 requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
 
