@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # version 2 along with this program; If not, see http://www.gnu.org/licenses
 #
-# Please  visit http://www.xyratex.com/contact if you need additional information or
-# have any questions.
+# Please  visit http://www.xyratex.com/contact if you need additional
+# information or have any questions.
 #
 # GPL HEADER END
 #
@@ -29,25 +29,116 @@
 
 =head1 Xperior harness user guide
 
-=head2 L<Xperior::Executor::Noop> executor
+=head2 L<Xperior::Executor::Noop> executor and simple run
 
-Xpreior harness have only Noop test executor which could be use for proving
-installation and Xperiro investigation. Simple comand line for execute
+Xpreior harness have basic Noop test executor which could be use for proving
+installation and Xperior investigation. Simple comand line for execute
 sample empty tests:
 
-    bin/xper --debug --workdir /tmp/demo --testdir=t/testcfgs/simple --config=t/testcfgs/localtestsystemcfg.yaml --html
+    bin/xper --debug --workdir /tmp/demo --testdir=t/testcfgs/simple \
+        --config=t/testcfgs/localtestsystemcfg.yaml --html
 
-By default, t/testcfgs/localtestsystemcfg.yaml use local ssh and user tomcat.
-Please add local user tomcat with passwordless ssh or replace user tomcat
-to exists user with passwordless login. More about L<xper|runtest> and
-its parameters.
+By default, C<t/testcfgs/localtestsystemcfg.yaml> use B<local ssh> and user
+B<tomcat>.
+I<Please add local user tomcat with passwordless ssh or replace
+user tomcat to other user which have passwordless local access to exists
+user with passwordless login>. More about L<xper|runtest> and its
+parameters see on it page. More about configuration see on current page below.
 
-Simple check for test descriptor files could be done via L<checkyaml> tool, e.g.
+Simple check for test descriptor files could be done via L<checkyaml> tool,
+e.g.
 
     bin/checkyaml.pl --ydir testds/
 
 Other executors could provide support for different test, e.g.
 L<Xperior::Executor::IOR> or L<Xperior::Executor::LustreTests>
+
+
+=head2  L<Xperior::Executor::LustreTests> and quick Lustre test run
+
+This chapter describes executing few Lustre sanity tests on one-node
+Lustre setup when all components include client are on one node.
+
+I<Instruction tested for case when Xperior executed on real node (B<xnode>)
+and Lustre one-node cluster in virtual machine (B<lnode>)>
+
+I<This setup should not be used for regular execution,
+see L<XperiorIntegrationNotes> for more details>
+
+=over 12
+
+=item 1. Nodes preparation
+
+B<Xnode> must be able to do passwordless ssh connection to B<lnode >
+with root or administrator user. B<Lnode> must be able to locally ssh
+on its public address. User, which should be used for connect, and
+external B<lnode> address should be defined in system configuration,
+see item 3.
+
+If you use host names please check that names could be resolved by
+nodes via dns or /etc/hosts.
+
+=item 2. Create system configuration file.
+
+Basic sample see  L<there|"System configuration for basic one node cluster">.
+You can use copy it and save on disk as configuration for one node cluster,
+don't forget check B<user> and B<ip> fields. Use created file name in
+I<--config> option on next step.
+
+More details about configuration see L<there|"System descriptor">
+
+=item 3. Run Xperior
+
+ bin/runtest.pl --workdir='/tmp/wd' --testdir=testds \
+ --config=new_config_file.yaml  --includeonly='sanity/0.*' --action=run --html
+
+You could use C<--debug> for see verbose messages. After end of execution
+see html report in C</tmp/wd> (or value of I<--workdir> option).
+
+=back
+
+=head3 System configuration for basic one node cluster
+
+
+I<Remove leading space after copying>
+
+ ---
+ Nodes:
+   - id           : lnode
+     ip           : 192.168.0.10
+     ctrlproto    : ssh
+     user         : root
+     nodetype     : BasicNode
+
+ LustreObjects:
+   - id          : mds1
+     device      : /tmp/lustre-mdt1
+     node        : lnode
+     type        : mds
+
+   - id          : oss1
+     device      : /tmp/lustre-ost1
+     node        : node
+     type        : oss
+
+   - id          : oss2
+     device      : /tmp/lustre-ost2
+     node        : lnode
+     type        : oss
+
+   - id          : client1
+     node        : lnode
+     type        : client
+     master      : yes
+
+   - id          : client2
+     node        : lnode
+     type        : client
+
+ #Variables
+ client_mount_point      : /mnt/lustre
+ benchmark_tests_file    : testfile
+ tempdir                 : /tmp
 
 =head2 Input/output data for Xperior
 
@@ -64,43 +155,39 @@ Test descriptor file must be placed in test directory (see Synopsis section).
 It must be yaml file and have C<_tests.yaml> end of name..
 
 Sample test descriptor 1:
-
  ---
-groupname        : ior
-executor         : Xperior::Executor::IOR
-description      : IOR tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 60
-timeout          : 300
-cleanup_max_time : -1
-iorcmd           : /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_pointE@/@test_fileE@
-tags             : benchmark ior
-Tests:
-   - id               : test1
+ groupname        : ior
+ executor         : Xperior::Executor::IOR
+ description      : IOR tests
+ reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+ expected_time    : 60
+ timeout          : 300
+ cleanup_max_time : -1
+ iorcmd           : /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_pointE@/@test_fileE@
+ tags             : benchmark ior
+ Tests:
+    - id               : test1
 
 
 Sample test descriptor 2
 
  ---
-groupname        : sanity
-executor         : Xperior::Executor::LustreTests
-roles            : StoreSyslog StoreConsole GetDiagnostics
-description      : Lustre sanity tests
-reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
-expected_time    : 10
-timeout          : 300
-cleanup_max_time : -1
-#options          :
-tags             : functional
-dangerous        : yes
-
-
+ groupname        : sanity
+ executor         : Xperior::Executor::LustreTests
+ roles            : StoreSyslog StoreConsole GetDiagnostics
+ description      : Lustre sanity tests
+ reference        : http://wiki.lustre.org/index.php/Testing_Lustre_Code
+ expected_time    : 10
+ timeout          : 300
+ cleanup_max_time : -1
+ #options          :
+ tags             : functional
+ dangerous        : yes
     Tests:
-   - id               : 0b
-   - id               : 0c
-   - id               : 1a
-   - id               : 1b
-
+    - id               : 0b
+    - id               : 0c
+    - id               : 1a
+    - id               : 1b
 
 The file contains set of tags. Main entity is test, in this sample it
 is single element C<id> is C<Tests> array. Every test inherit vales from

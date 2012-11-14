@@ -158,19 +158,19 @@ Symbols after '#' are ignored. Sample:
 =item --excludelist
 
 List of tests for exclude from execution. These tests will not be executed,
-no status or report will be generated. See syntax definition below.
+no status or report will be generated. See syntax definition above.
 
 =item --includelist
 
 List of tests for execution. Only tests in the list will be executed.
-Same syntax as exclude list. TBI.
+Same syntax as exclude list, see above.
 
 =item --includeonly
 
 List of test for execution from command line. Use this parameter twice or more
 for many tests. Exclude/include lists parameters is ignored if this key
 pointed. Test must be pointed as <test group>/<test name>. See also
-include/exclude list format below.
+include/exclude list format above.
 
 
 =item --skiptag=<tags>

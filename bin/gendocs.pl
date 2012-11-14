@@ -41,6 +41,8 @@ use strict;
 use warnings;
 use File::Path;
 use Pod::Simple::HTMLBatch;
+use Pod::Simple::XHTML;
+
 
 rmtree('html');
 mkdir 'html';
@@ -71,7 +73,9 @@ HEADER
 my $batchconv = Pod::Simple::HTMLBatch->new;
 $batchconv->verbose(3);
 $batchconv->contents_page_start($header);
-$batchconv->add_css( '../podstyle.css' );
+$batchconv->add_css('http://www.perl.org/css/perl.css');
+$batchconv->css_flurry(0);
+$batchconv->javascript_flurry(0);
 
 my @in = ('bin','doc','lib');
 $batchconv->batch_convert( \@in, 'html' );
