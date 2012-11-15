@@ -729,6 +729,7 @@ Tests:
     id: 128
   -
     id: 129
+    roles: StoreSyslog StoreConsole GetDiagnostics LustreClientStatus
   -
     id: 130a
   -
