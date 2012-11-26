@@ -45,8 +45,67 @@ setup           _setup    => sub {};
 teardown        _teardown => sub {};
 shutdown        _shutdown => sub {};
 #########################################
+test plan => 3, nMultirun => sub {
+    my $out=`bin/xper --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug`;
+    my @ids;
+    foreach my $str (split(/\n/,$out) ){
+        DEBUG ">$str";
+        if($str =~ m/Test\s+full\s+name\s+:\s+\[(.*)\]$/){
+            push @ids, $1;
+        }
+    }
+    is(scalar(@ids),10,'Number of tests');
+    is($ids[1],'sanity/1a__1','Value check');
+    is($ids[9],'sanity/2b__4','Value check 1');
+};
+#########################################
+test plan => 3, mMultirun  => sub {
+    my $out=`bin/xper --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug --includeonly='sanity/2b.*'`;
+    my @ids;
+    foreach my $str (split(/\n/,$out) ){
+        DEBUG ">$str";
+        if($str =~ m/Test\s+full\s+name\s+:\s+\[(.*)\]$/){
+            push @ids, $1;
+        }
+    }
+    is(scalar(@ids),5,'Number of tests');
+    is($ids[1],'sanity/2b__1','Value check 2');
+    is($ids[4],'sanity/2b__4','Value check 3');
+};
 
-test plan => 2, cExitCodes => sub {
+#########################################
+test plan => 5, oMultirun => sub {
+    DEBUG `rm -rf /tmp/wd/` ;
+    my $out=`bin/xper --workdir=/tmp/wd --testdir=t/testcfgs/simple  --action=run  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug --includeonly='sanity/2b.*'`;
+    #DEBUG $out;
+    my @ids;
+    foreach my $str (split(/\n/,$out) ){
+        #DEBUG ">$str";
+        if($str =~ m/TEST\s+(.*)\s+STATUS\:\s+passed$/){
+            push @ids, $1;
+        }
+    }
+    is(scalar(@ids),5,'Number of tests');
+    is($ids[1],'2b__1','Value check 2');
+    is($ids[4],'2b__4','Value check 3');
+
+    my $out1=`bin/xper --workdir=/tmp/wd --testdir=t/testcfgs/simple  --action=run  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 6 --debug --includeonly='sanity/2b.*' --continue`;
+    DEBUG $out1;
+    my @ids1;
+    foreach my $str (split(/\n/,$out1) ){
+        #DEBUG ">$str";
+        if($str =~ m/TEST\s+(.*)\s+STATUS\:\s+passed$/){
+            push @ids1, $1;
+        }
+    }
+    is(scalar(@ids1),1,'Number of tests');
+    is($ids1[0],'2b__5','Value check 4');
+};
+
+
+
+#########################################
+test plan => 2, jExitCodes => sub {
 
     DEBUG `bin/runtest.pl  --action=run --workdir=/tmp/lwd1  --config=t/exitcodes/cfg.yaml  --testdir=t/exitcodes/ --debug --includeonly='lustre-single/pass'`;
     my $res = ${^CHILD_ERROR_NATIVE};

@@ -50,6 +50,51 @@ setup           some_setup    => sub {
 };
 
 
+##################################################
+test plan => 8, m_multiplyTestsOption          => sub {
+    my @tests = @{$testcore->loadTests};
+    my $tn = @tests;
+    is ( $tn, 2, 'Check original test number' );
+    $testcore->tests(\@tests);
+    my @newtests = @{$testcore->_multiplyTests(20)};
+    my $tn1 = @newtests;
+    is ( $tn1, 40, 'Check new test number' );
+
+    is ( $newtests[5]->getParam('id'), '1a__5', 'Check id');
+    is ( $newtests[5]->getParam('expected_time'), 10, 'Check ex time');
+
+    is ( $newtests[19]->getParam('id'), '1a__19', 'Check id');
+    is ( $newtests[19]->getParam('copynumber'), 19, 'Check copynumber');
+
+
+    is ( $newtests[20]->getParam('id'), '2b__0' , 'Check id');
+    is ( $newtests[20]->getParam('groupname'), 'sanity' ,
+                                        'Check groupname');   
+};
+##################################################
+test plan => 8, n_multiplyTests          => sub {
+    my @tests = @{$testcore->loadTests()};
+    my $tn = @tests;
+    $tests[0]{'testcfg'}{'multirun'}=10;
+    is ( $tn, 2, 'Check original test number' );
+    $testcore->tests(\@tests);
+    my @newtests = @{$testcore->_multiplyTests()};
+    my $tn1 = @newtests;
+    is ( $tn1, 11, 'Check new test number' );
+
+    is ( $newtests[3]->getParam('id'), '1a__3', 'Check id');
+    is ( $newtests[3]->getParam('expected_time'), 10, 'Check ex time');
+
+    is ( $newtests[9]->getParam('id'), '1a__9', 'Check id');
+    is ( $newtests[9]->getParam('multirun'), 10, 'Check multirun');
+
+
+    is ( $newtests[10]->getParam('id'), '2b' , 'Check id');
+    is ( $newtests[10]->getParam('groupname'), 'sanity' ,
+                                        'Check groupname');    
+};
+
+
 
 ##################################################
 test plan => 1, fCheckRuntest          => sub {

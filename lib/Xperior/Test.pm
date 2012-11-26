@@ -35,74 +35,72 @@ Xperior::Test - Class implements Test abstraction.
 
 =head1 DESCRIPTION
 
-The class is used for describing tests and keep passive information for executors. Executor class use Test for get all information about test under execution.
+The class is used for describing tests and keep passive information
+for executors. Executor class use Test for get all information about
+test under execution.
 
 =cut
 
 package Xperior::Test;
 use Moose;
 use Data::Dumper;
-#use MooseX::Storage;
+
 use Log::Log4perl;
 
 our $VERSION = '0.01';
-#with Storage('format' => 'JSON', 'io' => 'File');
+
+with qw(MooseX::Clone);
 
 
-has 'testcfg'              => ( is => 'rw');
-has 'groupcfg'             => ( is => 'rw');
-has 'tap'                  => ( is => 'rw');
-has 'results'              => ( is => 'rw');
+has 'testcfg'  => ( is => 'rw' ,traits => [qw(Clone)]);
+has 'groupcfg' => ( is => 'rw' ,traits => [qw(Clone)]);
+has 'tap'      => ( is => 'rw' ,traits => [qw(Clone)]);
+has 'results'  => ( is => 'rw' ,traits => [qw(Clone)]);
 
 sub init {
-    my $self    = shift;
-    $self->{'testcfg'}    = shift;
-    $self->{'groupcfg'}   = shift;
+    my $self = shift;
+    $self->{'testcfg'}  = shift;
+    $self->{'groupcfg'} = shift;
 }
 
-=over
+=head getName
 
-=item getName
-
-returns name of a test. Name could be defined as I<name> in test descriptor. Test id is returned if I<name> is not defined.
+Returns name of a test. Name could be defined as I<name> in test descriptor.
+Test id is returned if I<name> is not defined.
 
 =back
 
 =cut
 
-sub getName{
+sub getName {
     my $self = shift;
-    return $self->testcfg->{'name'} if (defined($self->testcfg->{'name'} ));
+    return $self->testcfg->{'name'} if ( defined( $self->testcfg->{'name'} ) );
     return $self->testcfg->{'id'};
 }
 
-=over
+=head2 getParamNames
 
-=item getParamNames
-
-return list of available parameters for test (from test description and group description considering inheritance ).
+Return list of available parameters for test (from test description and group description considering inheritance ).
 
 =back
 
 =cut
 
-sub getParamNames{
+sub getParamNames {
     my $self = shift;
     my @names;
-    foreach my $n (keys %{$self->testcfg}){
+    foreach my $n ( keys %{ $self->testcfg } ) {
         push @names, $n;
     }
-    foreach my $n (keys %{$self->groupcfg}){
+    foreach my $n ( keys %{ $self->groupcfg } ) {
         push @names, $n;
     }
+
     #print Dumper \@names;
     return \@names;
 }
 
-
-=over
-
-=item getParam
+=head2 getParam
 
 Returns parameter value by given L<name>. If L<compare> argument is defined, 
 returns result of comparison of its value and parameter.
@@ -111,41 +109,40 @@ returns result of comparison of its value and parameter.
 
 =cut
 
-sub getParam{
-    my ($self, $name, $compare) = @_;
+sub getParam {
+    my ( $self, $name, $compare ) = @_;
 
-	my $value;
+    my $value;
 
-    if (defined($self->testcfg->{$name})) {
-		$value = $self->testcfg->{$name};
-	}
-	elsif (defined($self->groupcfg->{$name})) {
-		$value = $self->groupcfg->{$name};
-	}
+    if ( defined( $self->testcfg->{$name} ) ) {
+        $value = $self->testcfg->{$name};
+    }
+    elsif ( defined( $self->groupcfg->{$name} ) ) {
+        $value = $self->groupcfg->{$name};
+    }
 
-	if (defined($compare)) {
-		$value = defined($value) ? $value eq $compare : 0;
-	}
+    if ( defined($compare) ) {
+        $value = defined($value) ? $value eq $compare : 0;
+    }
 
     return $value;
 }
 
-=over
+=head2 getTags
 
-=item getTags
-
-returns tags list for test. Tags list contains tags defined in test descriptor and also test group name.
+Returns tags list for test. Tags list contains tags defined in test descriptor
+and also test group name.
 
 =back
 
 =cut
 
-sub getTags{
-    my $self=shift;
+sub getTags {
+    my $self = shift;
     my @tags;
     my $ts = $self->getParam('tags');
-    if(defined($ts)){
-        foreach my $t (split(/\s/,$ts)){
+    if ( defined($ts) ) {
+        foreach my $t ( split( /\s/, $ts ) ) {
             push @tags, $t;
         }
     }
@@ -153,39 +150,85 @@ sub getTags{
     return \@tags;
 }
 
-sub getGroupName{
-    my $self=shift;
-    return  $self->getParam('groupname');
+sub getGroupName {
+    my $self = shift;
+    return $self->getParam('groupname');
 }
 
-=over
+=head2  getDescription
 
-=item getDescription
-
-returns text description for test
+Returns text description for test
 
 =back
 
 =cut
 
-sub getDescription{
-my $self = shift;
-my $td='none';
-if(defined($self->testcfg->{'description'})){
-        $td=$self->testcfg->{'description'};
+sub getDescription {
+    my $self = shift;
+    my $td   = 'none';
+    if ( defined( $self->testcfg->{'description'} ) ) {
+        $td = $self->testcfg->{'description'};
+    }
+    return
+        "Test full name    : ["
+      . $self->getParam('groupname') . "/"
+      . $self->getName . "]\n"
+      . "Group description : "
+      . $self->groupcfg->{'description'} . "\n"
+      . "Test description  : "
+      . $td . "\n"
+      . "Test group        : "
+      . $self->getParam('groupname') . "\n"
+      . "Test name         : "
+      . $self->getName . "\n"
+      . "Test tags         : "
+      . join( ',', @{ $self->getTags } ) . "\n";
 }
-return
-"Test full name    : [".$self->getParam('groupname')."/".$self->getName."]\n".
-"Group description : ".$self->groupcfg->{'description'}."\n".
-"Test description  : ".$td."\n".
-"Test group        : ".$self->getParam('groupname')."\n".
-"Test name         : ".$self->getName."\n".
-"Test tags         : ".join(',',@{$self->getTags})."\n";
+
+sub clean {
+
 }
 
+=head2 _multiplyTests
 
-sub clean{
+Returns test array based on current test.
+Option 'multirun' defines number of test in returned array. In
+generated tests will be added fields 'original_id', 'copynumber'
+and 'numberofcopies'.
 
+If parameter 'multirun' set to '0' or undefined then test option 
+'multirun' is used. If test option 'multirun' is not set also then test
+will not change.
+
+If parameter 'multirun' set to '1' then only fields 'copynumber' and
+'numberofcopies' will be added to test.
+
+=cut
+
+sub multiply {
+    my ( $self, $multiply ) = @_;
+    my $count = $self->getParam('multirun');
+    my @newtests;
+    $count = $multiply if $multiply;
+    if ( $count && $count == 1 ) {
+        $self->{'testcfg'}->{'copynumber'} = 1;
+        $self->{'testcfg'}->{'numberofcopies'} =1;
+        push( @newtests, $self );
+    }
+    elsif($count){
+        for ( my $i = 0 ; $i < $count ; $i++ ) {
+            my $test = $self->clone();
+            $test->{'testcfg'}->{'id'} = $self->{'testcfg'}->{'id'} . "__$i";
+            $test->{'testcfg'}->{'original_id'} = $self->{'testcfg'}->{'id'};
+            $test->{'testcfg'}->{'copynumber'} = $i;
+            $test->{'testcfg'}->{'numberofcopies'} = $count;
+            push( @newtests, $test );
+        }
+    }
+    else {
+        push( @newtests, $self );
+    }
+    return @newtests;
 }
 
 __PACKAGE__->meta->make_immutable;
