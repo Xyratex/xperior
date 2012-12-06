@@ -44,7 +44,6 @@ use YAML qw "Bless LoadFile Load";
 use Data::Dumper;
 use Moose;
 use Carp qw( confess cluck );
-use Clone qw(clone);
 use File::Path;
 use File::chdir;
 use File::Copy;
