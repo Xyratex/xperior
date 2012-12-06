@@ -44,6 +44,7 @@ use YAML qw "Bless LoadFile Load";
 use Data::Dumper;
 use Moose;
 use Carp qw( confess cluck );
+use Clone qw(clone);
 use File::Path;
 use File::chdir;
 use File::Copy;
@@ -94,6 +95,24 @@ has 'options'    => ( is => 'rw' );
 has 'tests'      => ( is => 'rw' );    # isa => 'ArrayRef[]', );
 has 'testgroups' => ( is => 'rw' );
 has 'env'        => ( is => 'rw' );
+
+=head2 _multiplyTests
+
+Return test set same as C<$self-tests> with increased number of tests.
+Factor set via cmd option 'multirun' set. If cmd 'multirun' set 0 or 
+undefined test option 'multirun' will be used.
+
+=cut
+
+sub _multiplyTests{
+    my ($self,$multirun)=@_;
+    DEBUG "Multiply tests";
+    my @newtests;
+    foreach my $test (@{$self->{'tests'}}){
+        push(@newtests, $test->multiply($multirun));
+    }
+    return \@newtests;
+}
 
 sub _createExecutor {
     my ( $self, $es, $roles ) = @_;
@@ -205,14 +224,17 @@ sub run {
     my $options = shift;
     $self->{'options'} = $options;
     DEBUG "Start framework";
-    my $tags = $self->loadTags;
-    $self->tests( $self->loadTests );
+    my $tags = $self->loadTags();
+    $self->tests( $self->loadTests() );
     $self->env( $self->loadEnv( $options->{'configfile'} ) );
     if ( $self->env->checkEnv < 0 ) {
         WARN "Found problems while testing configuration";
         exit(ERROR_CONFIG_FAILURE);
     }
 
+
+    $self->tests(
+        $self->_multiplyTests($self->options->{'multirun'}));
     #TODO check tests applicability there
 
     my @includeonly = @{ $self->options->{'includeonly'} };
@@ -239,7 +261,7 @@ sub run {
         my $skip = 0;
         my $exclude = 0;
 
-        INFO "Processing $testFullName";
+        INFO "Preprocessing $testFullName";
 
         if ( @includeonly ) {
             $skip = 1 unless first { $testFullName =~ m/^$_$/ } @includeonly;
@@ -258,13 +280,16 @@ sub run {
                 $skip = 1
                     unless first { $testFullName =~ m/^$_$/ } @$includelist;
             }
-            $skip = 1 if first { "$testFullName.yaml" =~ m/^$_$/ } @$completelist;
         }
 
+        $skip = 1 if first { "$testFullName.yaml" =~ m/^$_$/ } @$completelist;
+        
         if ($skip) {
+            INFO "Skipped";
             $skipCounter++;
             next;
         }
+
 
         WARN "Starting test execution";
         my $action = $self->options->{'action'};
@@ -314,6 +339,8 @@ sub run {
         elsif ( $action eq 'list' ) {
             print "====================\n";
             print $test->getDescription;
+            print "====================\n";
+
         }
         else {
             confess "Cannot selected action for : $action";

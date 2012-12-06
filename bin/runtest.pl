@@ -90,6 +90,26 @@ from the next test after last written one which is possibly not finished.
 Report the results. If L<--continue> is not set, then the previous results
 in the working directory are overwritten.
 
+=item --multirun
+
+Optional, defines how much times every test should be executed. 
+Alternatively, could be set for specific test via test parameter
+in test descriptor:
+
+    - id       : test1
+    .....
+    multirun : 10 
+
+Command line option overrides test parameter. After end of execution 
+for multiplied tests will be generated results with with 'id' ends '__x',
+where is 'x' - number in series.
+E.g. 
+    tests1_0.yaml (for first execution)
+    tests1_1.yaml
+    ...........
+    tests1_5.yaml (for 5-th execution)
+
+
 =item --skipnodeinfo
 
 TBI
@@ -297,6 +317,7 @@ my $continue;
 my $tap;
 my $html;
 my $logfile	= undef;
+my $multirun;
 
 GetOptions(
     "config:s"       => \$configfile,
@@ -310,6 +331,7 @@ GetOptions(
     "excludelist:s"  => \$excludelist,
     "includelist:s"  => \$includelist,
     "flist:s"        => \$flist,
+    "multirun:i"     => \$multirun,
     "workdir:s"      => \$workdir,
     "testdir:s"      => \$testdir,
     "debug!"         => \$debug,
@@ -396,6 +418,8 @@ if( $action eq 'run'){
     extopt   => \@extopt,
     extoptfile => $extoptfile,
 );
+
+$options{'multirun'}=$multirun if($multirun);
 
 my $testcore =  Xperior::Core->new();
 $testcore->run(\%options);
