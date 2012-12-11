@@ -56,8 +56,7 @@ use Data::Dumper;
 use IO::Socket;
 use Log::Log4perl qw(:easy);
 
-use Readonly;
-Readonly my $ENDMSG => "__NETCONSOLE_COLLECTION_END__";
+my $ENDMSG = "__NETCONSOLE_COLLECTION_END__";
 
 has udpserverthr => ( is => 'rw' );
 has udpserver    => ( is => 'rw' );
