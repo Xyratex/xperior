@@ -41,6 +41,7 @@ use warnings;
 
 use Log::Log4perl qw(:easy);
 use File::Basename;
+use File::Slurp;
 use English;
 use Carp;
 use Cwd;
@@ -64,8 +65,11 @@ Sample code how use it:
 
 BEGIN {
     @ISA = ("Exporter");
-    @EXPORT =
-      qw(&writeGeneratedTagsFile &writeGeneratedTestSuiteFile &writeTestSuiteExclude  &getGeneratedTestSuite &getGeneratedTestSuiteExclude);
+    @EXPORT = qw(
+                    &newSuite &newExcludeList
+                    &writeGeneratedTagsFile &writeGeneratedTestSuiteFile &writeTestSuiteExclude  
+                    &getGeneratedTestSuite &getGeneratedTestSuiteExclude
+                );
     $XPERIORBINDIR = dirname( Cwd::abs_path($PROGRAM_NAME) );
     push @INC, "$XPERIORBINDIR/../lib";
     Log::Log4perl->easy_init( { level => $DEBUG } );
@@ -131,6 +135,58 @@ sub writeGeneratedTestSuiteFile {
     close REP;
 }
 
+=head2 newSuite
+
+Compose new suite content from given shell script 
+
+=over
+
+=item script (mandatory)
+
+Test suite shell script
+
+=item default (optional)
+
+Default suite yaml file path
+
+=item name (optional)
+
+Suite name, aka groupname. If omitted, the script name is taken.
+
+=back
+
+Example:
+
+  my $scriptFile   = "${lustreTestsDir}/${suiteName}.sh";
+  my $defaultSuite = "${predefinedDir}/${suiteName}_tests.yaml",
+
+  my $suite = newSuite( script  => $scriptFile,
+                        default => $defaultSuite,
+                        name    => $suiteName );
+
+  DumpFile("${outputDir}/${suiteName}_tests.yaml", $suite);
+
+=cut
+
+sub newSuite {
+    my (%param) = @_;
+    my $script  = $param{script}   || confess "Undefined 'script' parameter";
+    my $name    = $param{name}     || basename ($script, ".sh");
+    my $default = $param{default};
+    my @tests = _findSuiteTests($script);
+    my $content = {
+        groupname   => $name,
+        description => "Lustre $name tests",
+        reference   => "http://wiki.lustre.org/index.php/Testing_Lustre_Code",
+        Tests       => \@tests,
+    };
+    if (-f $default) {
+        DEBUG "Loading default suite: $default";
+        $content = _mergeSuites($content, LoadFile($default));
+    }
+    return $content;
+}
+
 sub getGeneratedTestSuite {
     my ( $tsname, $pdir, $sdir ) = @_;
     my $script = "$sdir/$tsname.sh";
@@ -158,8 +214,24 @@ sub getGeneratedTestSuiteExclude {
 
 sub _generateTestSuiteExclude {
     my ( $tsname, $script ) = @_;
+    my @excluded = map { "$tsname/$_" } _findSuiteExclusions($script);
+    return \@excluded;
+}    ## --- end sub _generateTestSuiteExclude
+
+=head2 _findSuiteExclusions <script>
+
+Returns array of excluded tests found in the suite shell script file
+
+Usage:
+   my @exclude_list = map { "sanity/$_" } _findSuiteExclusions("sanity.sh");
+   write_file("exclude.list", @exclude_list);
+
+=cut
+
+sub _findSuiteExclusions {
+    my ($script) = @_;
     INFO "Reading $script";
-    my @excluded;
+    my @items;
     open( SCRIPT, "<$script" ) or confess "Cannot read file $script";
     DEBUG "Read file [$script]";
     while (<SCRIPT>) {
@@ -170,17 +242,58 @@ sub _generateTestSuiteExclude {
             my @splitted = split /\s+/, $1;
             foreach my $t (@splitted) {
                 if ( $t =~ m/\d+\w*/ ) {
-                    push @excluded, "$tsname/$t";
-                    DEBUG "Found [$tsname: $t]";
+                    push @items, $t;
+                    DEBUG "Found [$t]";
                 }
             }
             last;
         }
     }
     close SCRIPT;
-    INFO "Found excluded tests: ", scalar @excluded;
-    return \@excluded;
-}    ## --- end sub _generateTestSuiteExclude
+    INFO "Found excluded tests: ", scalar @items;
+    return @items;
+}
+
+=head2 newExcludeList
+
+Returns exclude list generated from suite shell script
+
+=over
+
+=item script (mandatory)
+
+Test suite shell script
+
+=item name (optional)
+
+Suite name used for exclusion rules.
+
+=item default (optional)
+
+Default suite yaml file path
+
+=back
+
+Usage:
+    
+    my @exclude_list 
+        = map { newExcludeList(script => "$_.sh", name => $_  } @tests;
+    write_file("exclude.list", @exclude_list);
+
+=cut
+
+sub newExcludeList {
+    my (%param) = @_;
+    my $script  = $param{script}   || confess "Undefined 'script' parameter";
+    my $name    = $param{name}     || basename ($script, ".sh");
+    my $default = $param{default};
+    my @list    = map { "$name/$_" } _findSuiteExclusions($script);
+    if (-f $default) {
+        my @defaultList = read_file($default);
+        push @list, @defaultList;
+    }
+    return @list;
+}
 
 sub _mergeWithPredefinedExclude {
     my ( $excludedtests_arr, $tsname, $predefinedlist ) = @_;
@@ -218,15 +331,21 @@ sub _mergeWithPreconfig {
         return $tests;
     }
     my $pcfg = LoadFile($pcfgscr);
+    $tests = _mergeSuites($tests, $pcfg);
+    return $tests;
+}
 
-    foreach my $key ( keys %{$pcfg} ) {
+sub _mergeSuites {
+    my ( $target, $default ) = @_;
+
+    foreach my $key ( keys %{$default} ) {
         if ( $key eq 'Tests' ) {
-            foreach my $t ( @{ $pcfg->{$key} } ) {
-                my $tid = $t->{'id'};
+            foreach my $test ( @{ $default->{$key} } ) {
+                my $tid = $test->{'id'};
                 DEBUG "Check test $tid description";
 
                 my $nto = undef;
-                foreach my $ntk ( @{ $tests->{$key} } ) {
+                foreach my $ntk ( @{ $target->{$key} } ) {
                     if ( $ntk->{'id'} eq $tid ) {
                         $nto = $ntk;
                         last;
@@ -237,21 +356,21 @@ sub _mergeWithPreconfig {
                     next;
                 }
 
-                foreach my $tk ( keys %{$t} ) {
+                foreach my $tk ( keys %{$test} ) {
                     unless ( defined( $nto->{$tk} ) ) {
                         DEBUG "Found unset key {$tk} for test [$tid]";
-                        $nto->{$tk} = $t->{$tk};
+                        $nto->{$tk} = $test->{$tk};
                     }
                 }
             }
         }
         else {
-            unless ( defined( $tests->{$key} ) ) {
-                $tests->{$key} = $pcfg->{$key};
+            unless ( defined( $target->{$key} ) ) {
+                $target->{$key} = $default->{$key};
             }
         }
     }
-    return $tests;
+    return $target;
 }
 
 #TODO create tests for it
@@ -264,20 +383,27 @@ sub _generateTestSuite {
         reference   => "http://wiki.lustre.org/index.php/Testing_Lustre_Code",
         Tests       => [],
     };
+    @{$content->{Tests}} = _findSuiteTests($script);
+    return $content;
+}
 
+# Parses suite script and returns array of tests
+sub _findSuiteTests {
+    my ($script) = @_;
+    my @tests;
     open( SCRIPT, "<$script" ) or confess "Cannot read file $script";
     while (<SCRIPT>) {
         if ( $_ =~
 /^(run_test|run_test_with_stat)\s+([0-9]+[A-Za-z]*)\s+\"([^\"]+)\"\s*$/
           )
         {
-            push @{ $content->{Tests} }, { id => $2 };
-            DEBUG "Found '$suitename' test $2: $3";
+            push @tests, { id => $2 };
+            DEBUG "Found test $2: $3";
         }
     }
     close SCRIPT;
-    INFO "Found tests: ", scalar @{ $content->{Tests} };
-    return $content;
+    INFO "Found tests: ", scalar @tests;
+    return @tests;
 }
 
 #TODO write tests for it
@@ -334,10 +460,10 @@ version 2 along with this program; If not, see http://www.gnu.org/licenses
 
 Copyright 2012 Xyratex Technology Limited
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Roman Grigoryev<Roman_Grigoryev@xyratex.com>
-Author: Kyrylo Shatskyy<Kyrylo_Shatskyy@xyratex.com>
+Roman Grigoryev<Roman_Grigoryev@xyratex.com>,
+Kyrylo Shatskyy<Kyrylo_Shatskyy@xyratex.com>
 
 =cut
 
