@@ -34,6 +34,7 @@ use Log::Log4perl qw(:easy);
 use Test::Able;
 use Test::More;
 use Data::Dumper;
+use File::Temp;
 use YAML qw "Bless LoadFile Load Dump";
 
 startup         _startup  => sub {
@@ -66,7 +67,7 @@ test plan => 6, a_generateAndMergeTestSuiteExclude => sub {
     #print $elist;
     my $elist1 = Compat::LustreTests::getGeneratedTestSuiteExclude('sanity','t/lustre/exclude.list',
                     't/lustre/tests/');
-    is($elist,$elist1,'check that parts same as the whole');
+    is($elist1, $elist, 'check that parts same as the whole');
 };
 
 
@@ -86,6 +87,23 @@ test plan => 9, gGetGeneratedTestSuite => sub {
     is($yaml->{Tests}[2]->{timeout},123,'test timeout');
     is($yaml->{Tests}[8]->{id},7,'last test id');
     isnt($yaml->{Tests}[8]->{timeout},999,'last test timeout');
+};
+
+test plan => 9, gNewSuite => sub {
+    my $suite = Compat::LustreTests::newSuite(
+        script  => 't/lustre/tests/replay-ost-single.sh',
+        default => 't/lustre/testds/replay-ost-single_tests.yaml'
+    );
+    is($suite->{groupname},'replay-ost-single',"Check new value");
+    is($suite->{schema}, 'data/schemas/testds.yaml','Check merged value 1');
+    is($suite->{timeout}, 300, ,'Check merged value 2');
+    #check
+    is(scalar(@{$suite->{'Tests'}}),9,'number of tests');
+    is($suite->{Tests}[0]->{id},'0a','first test id');
+    is($suite->{Tests}[0]->{dangerous},'yes','test dangerous');
+    is($suite->{Tests}[2]->{timeout},123,'test timeout');
+    is($suite->{Tests}[8]->{id},7,'last test id');
+    isnt($suite->{Tests}[8]->{timeout},999,'last test timeout');
 };
 
 test plan => 4, hWriteGeneratedTestSuiteFile => sub {
