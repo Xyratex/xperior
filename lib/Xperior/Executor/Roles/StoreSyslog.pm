@@ -51,17 +51,17 @@ before 'execute' => sub{
     my $self    = shift;
     my %h;
     $self->ison(\%h);
-    foreach my $n (@{$self->env->nodes}){
-        my $c = $n->getExclusiveRC;
-        my $tlog = $self->storedir.'.'.Time::HiRes::gettimeofday();
+    foreach my $node (@{$self->env->nodes}) {
+        my $c = $node->getExclusiveRC;
+        my $tlog = $self->storedir . '.' . Time::HiRes::gettimeofday();
 
         $self->tlog($tlog);
-        $self->ison->{$n->id}=$c;
-        $c->create('tail',"tail -f -n 0 -v $self->{remotelog} > $tlog ");
+        $self->ison->{$node->id} = $c;
+        $c->create('tail', "tail -f -n 0 -v $self->{remotelog} > $tlog ");
 
-        if($c->exitcode != 0){
-            $self->addMessage('Cannot harvest log data for node '.$n->id);
-            $self->ison->{$n->id}=0;
+        if($c->exitcode) {
+            $self->addMessage('Cannot harvest log data for node ' . $node->id);
+            $self->ison->{$node->id} = 0;
         }
     }
 
