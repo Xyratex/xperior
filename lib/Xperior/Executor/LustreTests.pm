@@ -166,7 +166,7 @@ sub _prepareEnvOpts {
     my $self    = shift;
     my $mdss    = $self->env->getMDSs;
     my $osss    = $self->env->getOSSs;
-    my $clietns = $self->env->getClients;
+    my $clients = $self->env->getClients;
     $self->mdsopt('');
     my $c = 1;
     foreach my $m (@$mdss) {
@@ -209,7 +209,7 @@ sub _prepareEnvOpts {
     $self->clntopt('CLIENTS=');
     my $mclient;
     my @rclients;
-    foreach my $cl (@$clietns) {
+    foreach my $cl (@$clients) {
         if ( ( defined( $cl->{'master'} ) && ( $cl->{'master'} eq 'yes' ) ) ) {
             $mclient = $self->env->getNodeAddress( $cl->{'node'} );
         }
