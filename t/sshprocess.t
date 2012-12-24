@@ -172,6 +172,25 @@ test plan => 5, fClone    => sub {
 
 };
 
+test plan => 5, wPutFile => sub {
+    my $if = '/tmp/xxxYYYzzz';
+    my $of = '/tmp/xxxYYYwww';
+    my $nif = '/tmp/xxxYYYzzzN';
+    my $nof = '/tmp/xxxYYYwwwN';
+
+    DEBUG `touch $if`;
+    my $res = $sp->putFile($if,$of);
+    is($res,0,"Check ok result");
+    ok (-e $of, "Check new file" );
+    $res = $sp->putFile($nif,$nof);
+    DEBUG $res;
+    isnt($res,0,'Check not exist file copy');
+    ok ( (! -e $nof), "Check no new file for bad source" );
+    $sp->createSync('rm -f $if $of');
+    is($sp->exitcode,0,"Check exit code for correct removing");
+};
+
+
 test plan => 4, vGetFile => sub {
     my $if = '/tmp/xxxYYYzzz';
     my $of = '/tmp/xxxYYYwww';
@@ -186,6 +205,7 @@ test plan => 4, vGetFile => sub {
     DEBUG $res;
     isnt($res,0,'Check not exist file copy');
     ok ( (! -e $nof), "Check no new file for bad source" );
+    DEBUG `rm -f $if $of`;
 };
 
 #TODO add stress test and sendFile
