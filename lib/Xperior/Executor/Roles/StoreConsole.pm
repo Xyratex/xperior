@@ -40,6 +40,8 @@ use Moose::Role;
 use Time::HiRes;
 use Proc::Simple;
 use Xperior::Utils;
+use Log::Log4perl qw(:easy);
+
 
 has procs => ( is =>'rw', isa => 'HashRef');
 
@@ -60,6 +62,7 @@ before 'execute' => sub{
         my $log  = $self->getNormalizedLogName('console.'.$n->id);
 
         my $proc = Proc::Simple->new();
+        DEBUG "Start kvm console saving from file $console";
         $proc->start("sudo tail -f -n 0 -v $console 2>&1 > $log");
         sleep 1;
         if($proc->poll){

@@ -61,8 +61,6 @@ Function to be used: B<createSync> and field B<exitcode>
 
 =head2 Functions
 
-=over 2
-
 =cut
 
 package Xperior::SshProcess;
@@ -130,7 +128,6 @@ sub _sshSyncExec {
     }
     return $r;
 }
-
 
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
@@ -242,7 +239,7 @@ sub _sshAsyncExec {
     return $sc;
 }
 
-=item init ($host, $user, $port)
+=head3 init ($host, $user, $port)
 
 Initialize module. Protocol is only ssh.
 
@@ -280,12 +277,13 @@ sub init {
     if (   ( ${^CHILD_ERROR_NATIVE} != 0 )
         || ( $self->exitcode != 0 )
         || ( $self->killed != 0 )
-        || ( $ver eq '') )
+        || ( $ver eq '' ) )
     {
         WARN "SshProcess cannot be initialized";
         if ( defined($nocrash) && $nocrash ) {
             return -99;
-        } else {
+        }
+        else {
             confess "\nSSH returns non-zero values on previous command:"
               . ${^CHILD_ERROR_NATIVE};
         }
@@ -318,7 +316,7 @@ sub _findPid {
     return -1;
 }
 
-=item createSync ($command, $timeout)
+=head3 createSync ($command, $timeout)
 
 Execute remote process and catch stderr/std and exit code. Function exit when remote execution done.
 
@@ -347,13 +345,15 @@ SS
 
     if ( $self->killed == 0 ) {
         my $ecfc = $self->_sshSyncExec("cat $ecf");
-        if(defined($ecfc)){
+        if ( defined($ecfc) ) {
             chomp $ecfc;
             DEBUG "Exit code is [$ecfc]";
             $self->exitcode( trim $ecfc );
-        }else{
-            WARN "No remote exit code is get, looks like connection problem observed, set undef";
-            $self->exitcode( undef );
+        }
+        else {
+            WARN
+"No remote exit code is get, looks like connection problem observed, set undef";
+            $self->exitcode(undef);
         }
 
         #$self->exitcode($self->syncexitcode);
@@ -362,13 +362,13 @@ SS
 
 }
 
-=item create ($name, $command)
+=head3 create ($name, $command)
 
 Execute remote process with unattached stderr/stdout and exit. Pid is savednon remote fs. Exit code is saved after process end.
 
 Parameters:
 
-=over 2
+=over 4
 
 =item $name
 
@@ -450,7 +450,7 @@ SS
     return $self->pid;
 }
 
-=item kill ($mode)
+=head3 kill ($mode)
 
 Kill process which was created by create via saved pid.
 
@@ -480,7 +480,7 @@ sub kill {
     $self->exitcode(-99);
 }
 
-=item isAlive
+=head3 isAlive
 
 Check process status on remote system via saved pid. Also this function get exit code from remote side if application is exited or killed.
 
@@ -516,8 +516,8 @@ sub isAlive {
     my $AT       = 6;
     my $exitcode = '';
     while ( $AT > $step ) {
-        $o =  $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
-        if(defined($o)){
+        $o = $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
+        if ( defined($o) ) {
             $o = trim $o;
         }
         if ( ( defined($o) ) and ( $o =~ m/^\s*$pid\s*/ ) ) {
@@ -534,6 +534,7 @@ sub isAlive {
         DEBUG "Proc is not found, <$step> recheck process status";
     }
     DEBUG "Alive check cycle done";
+
     #  DEBUG "*********** $o";
     unless ( defined($o) ) {
         ERROR "unable to check remote system, no output got";
@@ -553,21 +554,29 @@ sub isAlive {
     return -1;
 }
 
-#sub sendFile {
-#    my $localdir  = shift;
-#    my $user      = shift;
-#    my $host      = shift;
-#    my $remotedir = shift;
-#
-#    DEBUG "Sending $localdir to ${user} @ ${host} : $remotedir";
-#
-#    runExternal("scp -rp $localdir ${user}\@${host}:$remotedir");
-#
-#}
+=head3 putFile ($local_file, $remote_file)
 
-=item getFile ($remote_file, $local_file)
+Put fileto remote system.
 
-Get file from remote system. TODO add tests on it.
+Return 0 if file copied and scp exit code if error occurred.
+
+=cut
+
+sub putFile {
+    my ( $self, $localfile, $remotefile ) = @_;
+    my $destination = $self->user . '@' . $self->hostname . ':' . $remotefile;
+    DEBUG "Copying $localfile to $destination";
+    runEx(  "scp -rp "
+          . "-o 'UserKnownHostsFile=/dev/null' "
+          . "-o 'StrictHostKeyChecking=no' "
+          . "-o 'ConnectionAttempts=3' "
+          . "-o 'ConnectTimeout=25' "
+          . "$localfile $destination" );
+}
+
+=head3 getFile ($remote_file, $local_file)
+
+Get file from remote system.
 
 Return 0 if file copied and scp exit code if error occurred.
 
@@ -575,26 +584,16 @@ Return 0 if file copied and scp exit code if error occurred.
 
 sub getFile {
     my ( $self, $rfile, $lfile ) = @_;
-
-    DEBUG "Getting "
-      . $self->user . '@'
-      . $self->hostname . ':'
-      . $rfile . ' to '
-      . $lfile;
+    my $source = $self->user . '@' . $self->hostname . ':' . $rfile;
+    DEBUG "Copying [$source] to [$lfile]";
 
     return runEx( "scp -rp "
           . "-o 'UserKnownHostsFile=/dev/null' "
           . "-o 'StrictHostKeyChecking=no' "
           . "-o 'ConnectionAttempts=3' "
           . "-o 'ConnectTimeout=25' "
-          . $self->user . '@'
-          . $self->hostname
-          . ":$rfile $lfile" );
+          . "$source $lfile" );
 }
-
-=back
-
-=cut
 
 1;
 
