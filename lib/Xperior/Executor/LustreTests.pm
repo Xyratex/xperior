@@ -58,11 +58,12 @@ our $VERSION = "0.0.2";
 has 'mdsopt'  => ( is => 'rw' );
 has 'ossopt'  => ( is => 'rw' );
 has 'clntopt' => ( is => 'rw' );
+has 'lustretestdir' => (is => 'rw');
 
 after 'init' => sub {
     my $self = shift;
     $self->appname('sanity');
-
+    $self->lustretestdir('/usr/lib64/lustre/tests/');
     #$self->reset;
     $self->reason('');
 };
@@ -98,7 +99,8 @@ sub _prepareCommands {
           . $self->mdsopt . " "
           . $self->ossopt . " "
           . $self->clntopt
-          . " $eopts $tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\" /usr/lib64/lustre/tests/${script}${ext}"
+          . " $eopts $tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\" "
+          . $self->lustretestdir.${script}.${ext}
     );
 
 }

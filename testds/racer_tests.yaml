@@ -1,3 +1,4 @@
+#
 # GPL HEADER START
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -23,21 +24,20 @@
 # Copyright 2012 Xyratex Technology Limited
 #
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
-
-# commented in script code
-# This test is now irrelevant (as of bug 10718 inclusion), we no longer
-# match every page all of the time.
-#run_test 62 "verify obd_match failure doesn't LBUG (should -EIO)"
-sanity/71 #too long for it
-
-#by ryg because fail in ONLY mode
-#sanityn/1b #MRP-335 fixed
-#sanityn/1c #MRP-335 fixed
-#sanityn/1d #MRP-335 fixed
-
-
-## lustre-single
-lustre-single/metadata-updates #MRP-369
-#lustre-single/runtests         #MRP-370
-
-
+#
+---
+Tests:
+  -
+    id: 1
+    timeout: 960
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Lustre racer tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: racer
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 300

@@ -70,7 +70,7 @@ test plan => 3, bCreateExitCodes     => sub{
 #exit 1;
 };
 
-test plan => 7, aakCreateAliveKill    => sub {
+test plan => 7, kCreateAliveKill    => sub {
     #highlevel functional test
     is($sp->killed,0, 'Check status before start');
     $sp->create('sleep','/bin/sleep 30');
@@ -106,20 +106,20 @@ test plan => 6, fSynExecution => sub {
   my $stime = time;
   $sp->createSync('/bin/sleep 10');
   my $etime = time;
-  is($sp->exitcode,0,"Check exit code for correct syn execution");
+  is($sp->syncexitcode,0,"Check exit code for correct syn execution");
   ok($etime-$stime< 15, "Check execution time");
   $sp->createSync('ls -la /folder/which/nobody/never/creates/');
-  is($sp->exitcode,2,"Check exit code for failed syn execution");
+  is($sp->syncexitcode,2,"Check exit code for failed syn execution");
 
   $stime = time;
   $sp->createSync('/bin/sleep 15',5);
   $etime=time;
-  isnt($sp->exitcode,0,"Check exit code for failed syn operation");
+  isnt($sp->syncexitcode,0,"Check exit code for failed syn operation");
   DEBUG "Execution was:".($etime-$stime);
   ok($etime-$stime < 40, "Check time of timeouted operation");
 
   $sp->createSync('/bin/sleep 10');
-  is($sp->exitcode,0,"Check exit code for failed syn operation");
+  is($sp->syncexitcode,0,"Check exit code for failed syn operation");
 };
 
 
@@ -197,6 +197,7 @@ test plan => 4, vGetFile => sub {
     my $nif = '/tmp/xxxYYYzzzN';
     my $nof = '/tmp/xxxYYYwwwN';
 
+    DEBUG `sudo rm $of `;
     DEBUG `touch $if`;
     my $res = $sp->getFile($if,$of);
     is($res,0,"Check ok result");

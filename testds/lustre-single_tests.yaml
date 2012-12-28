@@ -38,6 +38,7 @@ Tests:
   -
     id: runtests
     script: runtests
+    executor: Xperior::Executor::LustreSingleTests
 cleanup_max_time: -1
 dangerous: 'yes'
 description: Set  of Lustre single tests

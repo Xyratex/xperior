@@ -122,7 +122,7 @@ sub getCoverage {
           . " --capture --output-file /tmp/coverage.$node  1>/dev/null 2>&1 ",
         300
     );
-    my $syncres = $ssh->exitcode;
+    my $syncres = $ssh->syncexitcode;
     if ( $syncres != 0 ) {
         DEBUG "Cannot collect kernel lcov data, exit code is [$syncres]";
         exit 99;
@@ -155,7 +155,7 @@ sub getCoverage {
           . " --capture --output-file /tmp/usercoverage.$node -q ",
         300
     );
-    $syncres = $ssh->exitcode;
+    $syncres = $ssh->syncexitcode;
     if ( $syncres != 0 ) {
         DEBUG "Cannot collect user lcov data, exit code is [$syncres]";
         exit 99;

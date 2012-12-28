@@ -55,11 +55,9 @@ Functions to be used: B<create>, B<kill>, B<isAlive> and fields B<exitcode> and 
 
 Create short-time process on remote nodes with capturing stderr/stdout. It behaves as perl B<``> (backtics) command.
 
-Function to be used: B<createSync> and field B<exitcode>
+Function to be used: B<createSync> and field B<syncexitcode>
 
 =back
-
-=head2 Functions
 
 =cut
 
@@ -77,25 +75,60 @@ use Time::HiRes;
 
 with qw(MooseX::Clone);
 
+=head2 Fields
+
+=head3 port 
+
+Port which is used for ssh connection
+
+=head3 host
+
+Host which is used for ssh conenction
+
+=head3 user
+
+User which is used for ssh connection, no default
+
+=head3 exitcode
+
+Exit code from latest executed command via C<create> call.
+
+=head3 syncexitcode
+
+Exit code from latest executed command via C<createSync> call.
+
+=head3 killed
+
+Flag set if killed latest executed command via C<create> call.
+
+=cut
+
 has port => ( is => 'rw' );
 has host => ( is => 'rw' );
 has user => ( is => 'rw' );
 has pass => ( is => 'rw' );
 
-has pidfile      => ( is => 'rw' );
-has ecodefile    => ( is => 'rw' );
-has rscrfile     => ( is => 'rw' );
-has pid          => ( is => 'rw' );
-has appcmd       => ( is => 'rw' );
-has appname      => ( is => 'rw' );
-has exitcode     => ( is => 'rw' );
-has syncexitcode => ( is => 'rw' );
-has bprocess     => ( is => 'rw' );
+has pidfile       => ( is => 'rw' );
+has ecodefile     => ( is => 'rw' );
+has syncecodefile => ( is => 'rw' );
+has rscrfile      => ( is => 'rw' );
+has pid           => ( is => 'rw' );
+has appcmd        => ( is => 'rw' );
+has appname       => ( is => 'rw' );
+has exitcode      => ( is => 'rw' );
+has syncexitcode  => ( is => 'rw' );
+has bprocess      => ( is => 'rw' );
 
 has killed => ( is => 'rw' );
 
 has hostname  => ( is => 'rw' );
 has osversion => ( is => 'rw' );
+
+=back
+
+=head2 Functions
+
+=cut
 
 #TODO speed improvement via socket sharing
 
@@ -247,10 +280,11 @@ Initialize module. Protocol is only ssh.
 
 sub initTemp {
     my $self = shift;
-    $self->pidfile( '/tmp/xperior_pid_ssh_' . Time::HiRes::gettimeofday() );
-    $self->ecodefile( '/tmp/remote_exit_code_' . Time::HiRes::gettimeofday() );
-    $self->rscrfile(
-        '/tmp/remote_script_' . Time::HiRes::gettimeofday() . '.sh' );
+    my $id   = Time::HiRes::gettimeofday();
+    $self->pidfile("/tmp/xperior_pid_ssh_$id");
+    $self->ecodefile("/tmp/remote_exit_code_$id");
+    $self->syncecodefile("/tmp/remote_sync_exit_code_$id");
+    $self->rscrfile("/tmp/remote_script_$id.sh");
 
 }
 
@@ -329,9 +363,9 @@ sub createSync {
     $self->appcmd($app);
     DEBUG "Xperior::SshProcess createSync";
     DEBUG "App to run [$app] on host[" . $self->host . "]";
-    my $ecf = $self->ecodefile;
+    my $ecf = $self->syncecodefile;
     $self->killed(0);
-    $self->exitcode(undef);
+    $self->syncexitcode(undef);
     my $ss = <<"SS";
 $app
 echo \\\$? > $ecf
@@ -348,12 +382,12 @@ SS
         if ( defined($ecfc) ) {
             chomp $ecfc;
             DEBUG "Exit code is [$ecfc]";
-            $self->exitcode( trim $ecfc );
+            $self->syncexitcode( trim $ecfc );
         }
         else {
             WARN
 "No remote exit code is get, looks like connection problem observed, set undef";
-            $self->exitcode(undef);
+            $self->syncexitcode(undef);
         }
 
         #$self->exitcode($self->syncexitcode);

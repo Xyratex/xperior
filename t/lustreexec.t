@@ -34,9 +34,12 @@ use Xperior::Core;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
+use File::Path qw(make_path remove_tree);
+use File::chdir;
 
 use Xperior::Test;
 use Xperior::Executor::LustreTests;
+use Xperior::Executor::LustreSingleTests;
 
 my %options = (
     testdir => 't/testcfgs/lustre/',
@@ -63,6 +66,8 @@ setup           _setup    => sub {
 teardown        _teardown => sub { };
 shutdown        _shutdown => sub {  };
 #########################################
+
+
 test plan => 3, eCheckSimple    => sub {
     my $testcore =  Xperior::Core->new();
     $testcore->options(\%options);
@@ -75,9 +80,8 @@ test plan => 3, eCheckSimple    => sub {
     $exe->_prepareEnvOpts;
     DEBUG "MDS OPT:".$exe->mdsopt;
     is($exe->mdsopt,
-            'MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=192.168.200.102  mds_HOST=192.168.200.102 ',
+            'MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=mds  mds_HOST=mds ',
             'Check MDS OPT');
-
 
     DEBUG "OSS OPT:".$exe->ossopt;
     is($exe->ossopt,
@@ -108,12 +112,13 @@ test plan =>3, kCheckExecution => sub{
     $exe->init(@{$tests}[0], \%options, $cfg);
     $exe->_prepareCommands;
     DEBUG $exe->cmd;
-    my $excmd =  'SLOW=YES  MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=192.168.200.102  mds_HOST=192.168.200.102  OSTCOUNT=2  OSTDEV1=/dev/loop1  ost1_HOST=192.168.200.102   OSTDEV2=/dev/loop2  ost2_HOST=192.168.200.102  CLIENTS=lclient RCLIENTS=\"mds\"  ONLY=1a DIR=/mnt/lustre//tmp/  PDSH=\"/usr/bin/pdsh -R ssh -S -w \" /usr/lib64/lustre/tests/sanity.sh';
+    my $excmd =  'SLOW=YES  MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=mds  mds_HOST=mds  OSTCOUNT=2  OSTDEV1=/dev/loop1  ost1_HOST=192.168.200.102   OSTDEV2=/dev/loop2  ost2_HOST=192.168.200.102  CLIENTS=lclient RCLIENTS=\"mds\"  ONLY=1a DIR=/mnt/lustre//tmp/  PDSH=\"/usr/bin/pdsh -R ssh -S -w \" /usr/lib64/lustre/tests/sanity.sh';
     is($exe->cmd,$excmd,"Check generated cmd");
     $exe->execute;
     DEBUG Dumper $exe->yaml;
     is($exe->yaml->{'status'},'passed', 'Check result');
-    is($exe->yaml->{ 'executor'}, 'Xperior::Executor::LustreTests', 'Check result');
+    is($exe->yaml->{ 'executor'},
+        'Xperior::Executor::LustreTests', 'Check result');
 };
 
 lustreexec->run_tests;

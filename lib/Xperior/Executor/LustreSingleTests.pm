@@ -30,65 +30,57 @@
 
 =head1 NAME
 
-Xperior::Executor::Roles::StoreSyslog - Role define harvesting info from 
-master client host
+Xperior::Executor::LustreSingleTests - Module which contains Lustre execution
+functionality for single test, e.g. runtests
+
+=head1 DESCRIPTION
+
+Module which contains Lustre execution specific functionality
+
+LustreTests execution module for Xperior harness. This module inherit
+L<Xperior::Executor::SingleProcessBase> and provide functionality for
+generating command line  for Lustre B<test-framework.sh> based tests
+and parse these tests output.
+
+Sample test descriptor there C<testds/sanity_tests.yaml>.
 
 =cut
 
-package Xperior::Executor::Roles::StoreSyslog ;
+package Xperior::Executor::LustreSingleTests;
+use Moose;
+use Data::Dumper;
+use Carp qw( confess cluck );
+use Log::Log4perl qw(:easy);
 
-use Moose::Role;
-use Time::HiRes;
-use Xperior::Utils;
-has tlog      => ( is =>'rw');
-has ison      => ( is =>'rw', isa => 'HashRef');
-has storedir  => ( is =>'rw', default => '/var/log/xperior/messageslog');
-has remotelog => ( is =>'rw', default => '/var/log/messages');
-has logname   => ( is => 'rw', default => 'messages');
-requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
+extends 'Xperior::Executor::LustreTests';
 
-before 'execute' => sub{
-    my $self    = shift;
-    my %h;
-    $self->ison(\%h);
-    foreach my $node (@{$self->env->nodes}) {
-        my $c = $node->getExclusiveRC;
-        my $tlog = $self->storedir . '.' . Time::HiRes::gettimeofday();
-
-        $self->tlog($tlog);
-        $self->ison->{$node->id} = $c;
-        $c->create('tail', "tail -f -n 0 -v $self->{remotelog} > $tlog ");
-
-        if($c->syncexitcode) {
-            $self->addMessage('Cannot harvest log data for node ' . $node->id);
-            $self->ison->{$node->id} = 0;
-        }
-    }
-
+after 'init' => sub {
+    my $self = shift;
+    $self->appname('single');
+    $self->reason('');
 };
 
 
-after   'execute' => sub{
-    my $self    = shift;
+=head3 processLogs 
 
-    foreach my $n (@{$self->env->nodes}){
-        if($self->ison->{$n->id}!=0){
-            my $id = $n->id;
-            my $logfile =  $self->getNormalizedLogName($self->logname.'.'.$id);
-            my $c = $self->ison->{$id};
-            $c->kill(1);
-            my $res = $c->getFile( $self->tlog,$logfile);
-            if ($res == 0){
-                $self->registerLogFile($logfile,$logfile);
-            }else{
-                $self->addMessage(
-                    "Cannot copy log file [".$self->tlog."]: $res");
+This executor for lustre tests which don't needed log 
+parsing, just replace it to pretty simple function
+with static result.
 
-            }
-        }
-    }
+Return values:
+    0   - passed
 
-};
+=back
+
+=cut
+
+sub processLogs {
+    my ( $self, $file ) = @_;
+    DEBUG("Processing log file skipped");
+    return 0;
+}
+
+__PACKAGE__->meta->make_immutable;
 
 1;
 
@@ -116,5 +108,4 @@ Copyright 2012 Xyratex Technology Limited
 Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 
 =cut
-
 

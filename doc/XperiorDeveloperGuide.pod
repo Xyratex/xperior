@@ -88,6 +88,8 @@ These tests need:
 
 =item t/ielists.t
 
+=item t/lustresingleexec.t
+
 =back
 
 =head3 Tests which need distributed configuration
