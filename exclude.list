@@ -38,6 +38,6 @@ sanity/71 #too long for it
 
 ## lustre-single
 lustre-single/metadata-updates #MRP-369
-lustre-single/runtests         #MRP-370
+#lustre-single/runtests         #MRP-370
 
 

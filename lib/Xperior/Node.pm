@@ -259,8 +259,8 @@ sub run
     DEBUG $ssh->createSync($cmd, $timeout);
     throw CannotConnectException
         ("Cannot execute command on remote side")
-            unless defined  $ssh->exitcode;
-    return $ssh->exitcode;
+            unless defined  $ssh->syncexitcode;
+    return $ssh->syncexitcode;
 }
 
 =head3 getFile(src,dst)
@@ -372,8 +372,8 @@ sub cleanCrashDir{
                               ($self->crashdir ne '/'));
     my $res = $rc->createSync("rm -rf  ".$self->crashdir."/*");
     ERROR "Cannot remove dump files:".$res
-                    if( $rc->exitcode != 0);
-    return $rc->exitcode;
+                    if( $rc->syncexitcode != 0);
+    return $rc->syncexitcode;
 }
 
 =head3 waitDown($timeout)

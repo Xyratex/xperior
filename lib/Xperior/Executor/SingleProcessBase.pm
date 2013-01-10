@@ -142,6 +142,7 @@ sub execute {
         DEBUG "Test alive, next wait cycle";
     }
     $testproc->createSync( 'sync', 30 );
+
     $self->addYE( 'endtime',         time );
     $self->addYE( 'endtime_planned', $endtime );
     ### post processing and cleanup
@@ -169,6 +170,7 @@ sub execute {
     }
 
     $self->addYE( 'completed', 'yes' );
+    DEBUG "*****After crash check:".  $testproc->exitcode;
 
     #$self->_saveStageInfoAfterTest;
 
@@ -178,8 +180,8 @@ sub execute {
 
     ### get logs
 
-    my $res = $self->_getLog( $testproc, $self->remote_err, 'stderr' );
-    $res = $self->_getLog( $testproc, $self->remote_out, 'stdout' );
+    my $getlogres = $self->_getLog( $testproc, $self->remote_err, 'stderr' );
+    $getlogres = $self->_getLog( $testproc, $self->remote_out, 'stdout' );
 
     # processLogs return values
     #0   - passed
@@ -187,14 +189,13 @@ sub execute {
     #10  - failed
     #100 - no result set based on parsing, failed toor
     my $pr = 100;
-    if ( $res == 0 ) {
+    if ( $getlogres == 0 ) {
         $pr = $self->processLogs( $self->getNormalizedLogName('stdout') );
     }
     else {
         $self->reason(
-            "Cannot get log file [" . $self->remote_out . "]: $res" );
+            "Cannot get log file [" . $self->remote_out . "]: $getlogres" );
     }
-
     #calculate results status
     if ( $killed > 0 ) {
         $self->addYE( 'killed',         'yes' );
@@ -216,6 +217,10 @@ sub execute {
         }
         elsif ( ( $testproc->exitcode == 0 ) && ( $pr == 1 ) ) {
             $self->skip( 1, $self->getReason );
+        }
+        elsif ( ( $testproc->exitcode != 0 ) && ( $pr == 0 ) ) {
+            $self->fail(
+                "Test return non-zero exit code :" . $testproc->exitcode );
         }
         else {
             $self->fail( $self->getReason );
