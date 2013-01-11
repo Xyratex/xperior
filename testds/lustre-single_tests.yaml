@@ -28,11 +28,6 @@
 ---
 Tests:
   -
-    exitafter: 'yes'
-    id: racer
-    script: racer.sh
-    timeout: 1200
-  -
     id: metadata-updates
     script: metadata-updates.sh
   -
