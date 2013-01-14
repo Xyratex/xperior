@@ -55,15 +55,16 @@ extends 'Xperior::Executor::SingleProcessBase';
 
 our $VERSION = "0.0.2";
 
-has 'mdsopt'  => ( is => 'rw' );
-has 'ossopt'  => ( is => 'rw' );
-has 'clntopt' => ( is => 'rw' );
-has 'lustretestdir' => (is => 'rw');
+has 'mdsopt'        => ( is => 'rw' );
+has 'ossopt'        => ( is => 'rw' );
+has 'clntopt'       => ( is => 'rw' );
+has 'lustretestdir' => ( is => 'rw' );
 
 after 'init' => sub {
     my $self = shift;
     $self->appname('sanity');
     $self->lustretestdir('/usr/lib64/lustre/tests/');
+
     #$self->reset;
     $self->reason('');
 };
@@ -86,9 +87,10 @@ sub _prepareCommands {
     my $tid    = 'ONLY=' . $self->test->testcfg->{id};
     my $script = $self->test->getParam('groupname');
     my $eopts  = '';
+
     #TODO add test on it
     $eopts = $self->env->cfg->{extoptions}
-                if defined $self->env->cfg->{extoptions};
+      if defined $self->env->cfg->{extoptions};
     if ( defined( $self->test->getParam('script') ) ) {
         $script = $self->test->getParam('script');
         $tid    = '';                                #no default test number
@@ -100,8 +102,9 @@ sub _prepareCommands {
           . $self->ossopt . " "
           . $self->clntopt
           . " $eopts $tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\" "
-          . $self->lustretestdir.${script}.${ext}
-    );
+          . $self->lustretestdir
+          . ${script}
+          . ${ext} );
 
 }
 
@@ -112,10 +115,11 @@ calculate result based on output parsing.
 
 Return values:
 
-    0   - passed
-    1   - skipped
-    10  - failed
-    100 - no result set based on parsing, failed toor
+    Xperior::Executor::SingleProcessBase::PASSED
+    Xperior::Executor::SingleProcessBase::SKIPPED
+    Xperior::Executor::SingleProcessBase::FAILED
+    Xperior::Executor::SingleProcessBase::NOTSET -no result set based 
+                                                  on parsing, failed too
 
 Also failure reason accessible (if defined) via call C<getReason>.
 
@@ -128,40 +132,35 @@ sub processLogs {
     DEBUG("Processing log file [$file]");
     open( F, "  $file" );
 
-    my $passed = 100;
+    my $result    = $self->NOTSET;
     my $defreason = 'No_status_found';
-    my $reason = $defreason;
+    my $reason    = $defreason;
     my @results;
-    #consider only last keywords!
+
     while ( defined( my $s = <F> ) ) {
         chomp $s;
-        if ( $s =~ m/PASS/ ) {
-            $passed = 0;
+        if ( $s =~ m/^PASS/ ) {
+            $result = $self->PASSED;
             $reason = '';
-        }
-        if ( $s =~ m/FAIL:(.*)/ ) {
-            $passed = 10;
-            if( $reason eq $defreason){
-                $reason = $1 if defined $1;
-            }else{
-                $reason = "$reason\n$1" if defined $1;
-            }
-        }
-        if ( $s =~ /SKIP:(.*)/ ) {
-            $passed = 1;
-            $reason = $1 if defined $1;;
-        }
-        #don't see next messages after test end
-        #================== 05:28:17
-        if ( $s =~ /test\s+complete.*=+\s+\d\d:\d\d:\d\d\s+/){
             last;
         }
+        if ( $s =~ m/^FAIL(.*)/ ) {
+            $result = $self->FAILED;
+            $reason = $1 if defined $1;
+            last;
+        }
+        if ( $s =~ /^SKIP(.*)/ ) {
+            $result = $self->SKIPPED;
+            $reason = $1 if  $1;
+            last;
+        }
+
     }
-    if ($passed) {
+    if ($result) {
         $self->reason($reason);
     }
     close(F);
-    return $passed;
+    return $result;
 }
 
 sub _prepareEnvOpts {
@@ -173,17 +172,18 @@ sub _prepareEnvOpts {
     my $c = 1;
     foreach my $m (@$mdss) {
         my $md = '';
-        if((defined($m->{'device'}))
-                and($m->{'device'} ne '')){
-            $md =  "MDSDEV$c=".$m->{'device'};
+        if (    ( defined( $m->{'device'} ) )
+            and ( $m->{'device'} ne '' ) )
+        {
+            $md = "MDSDEV$c=" . $m->{'device'};
 
         }
         $self->mdsopt( $self->mdsopt
               . " $md mds${c}_HOST="
-              . $self->env->getNodeAddress( $m->{'node'} ).' '
+              . $self->env->getNodeAddress( $m->{'node'} ) . ' '
               . " mds_HOST="
-              . $self->env->getNodeAddress( $m->{'node'} ).' '
-              );
+              . $self->env->getNodeAddress( $m->{'node'} )
+              . ' ' );
         $c++;
     }
     $c--;
@@ -193,9 +193,10 @@ sub _prepareEnvOpts {
     $c = 1;
     foreach my $m (@$osss) {
         my $sd = '';
-        if((defined($m->{'device'}))
-                and($m->{'device'} ne '')){
-            $sd =  " OSTDEV$c=". $m->{'device'}
+        if (    ( defined( $m->{'device'} ) )
+            and ( $m->{'device'} ne '' ) )
+        {
+            $sd = " OSTDEV$c=" . $m->{'device'}
 
         }
         $self->ossopt( $self->ossopt

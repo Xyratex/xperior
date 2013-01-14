@@ -58,11 +58,11 @@ use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
 
-#use Xperior::SshProcess;
 
 our $YVERSION = 'Xperior1'; #yaml output version. other modules also can add fields.
 our $EXT  = '.yaml';
 our $TEXT = '.tap';
+
 has 'test'              => ( is => 'rw');
 has 'options'           => ( is => 'rw');
 has 'env'               => ( is => 'rw');

@@ -1,0 +1,936 @@
+Logging to shared log directory: /tmp/test_logs/1358023141
+only running test 24b
+excepting tests: 52 60
+mft53.xyua: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft53.xyua environments
+Using TIMEOUT=20
+enable jobstats, set job scheduler as procname_uid
+disable quota as required
+.................................
+
+== recovery-small test 24b: test dirty page discard due to client eviction == 22:39:02 (1358023142)
+Initializing cgroup subsys cpuset
+Initializing cgroup subsys cpu
+Linux version 2.6.32-279.14.1.el6_lustreb_neo_stable_227_1 (root@morpheus) (gcc version 4.4.4 20100726 (Red Hat 4.4.4-13) (GCC) ) #1 SMP Wed Jan 9 10:30:13 MSK 2013
+Command line: ro root=UUID=4c47776e-b3cc-4642-91e8-ec3918e09b01 rd_NO_LUKS rd_NO_LVM rd_NO_MD rd_NO_DM LANG=en_US.UTF-8 SYSFONT=latarcyrheb-sun16 KEYBOARDTYPE=pc KEYTABLE=us crashkernel=auto rhgb quiet  console=ttyS0,115200   console=tty0 
+KERNEL supported cpus:
+  Intel GenuineIntel
+  AMD AuthenticAMD
+  Centaur CentaurHauls
+Disabled fast string operations
+BIOS-provided physical RAM map:
+ BIOS-e820: 0000000000000000 - 000000000009dc00 (usable)
+ BIOS-e820: 000000000009dc00 - 00000000000a0000 (reserved)
+ BIOS-e820: 00000000000f0000 - 0000000000100000 (reserved)
+ BIOS-e820: 0000000000100000 - 000000005fffd000 (usable)
+ BIOS-e820: 000000005fffd000 - 0000000060000000 (reserved)
+ BIOS-e820: 00000000fffc0000 - 0000000100000000 (reserved)
+DMI 2.4 present.
+SMBIOS version 2.4 @ 0xFDA50
+DMI: Red Hat KVM, BIOS 0.5.1 01/01/2007
+e820 update range: 0000000000000000 - 0000000000001000 (usable) ==> (reserved)
+e820 remove range: 00000000000a0000 - 0000000000100000 (usable)
+last_pfn = 0x5fffd max_arch_pfn = 0x400000000
+MTRR default type: write-back
+MTRR fixed ranges enabled:
+  00000-9FFFF write-back
+  A0000-BFFFF uncachable
+  C0000-FFFFF write-protect
+MTRR variable ranges enabled:
+  0 base 00E0000000 mask FFE0000000 uncachable
+  1 disabled
+  2 disabled
+  3 disabled
+  4 disabled
+  5 disabled
+  6 disabled
+  7 disabled
+x86 PAT enabled: cpu 0, old 0x70106, new 0x7010600070106
+initial memory mapped : 0 - 20000000
+init_memory_mapping: 0000000000000000-000000005fffd000
+ 0000000000 - 005fe00000 page 2M
+ 005fe00000 - 005fffd000 page 4k
+kernel direct mapping tables up to 5fffd000 @ 8000-c000
+RAMDISK: 36df4000 - 37fef328
+ACPI: RSDP 00000000000fda20 00014 (v00 BOCHS )
+ACPI: RSDT 000000005fffd6f0 00030 (v01 BOCHS  BXPCRSDT 00000001 BXPC 00000001)
+ACPI: FACP 000000005ffffe40 00074 (v01 BOCHS  BXPCFACP 00000001 BXPC 00000001)
+ACPI: DSDT 000000005fffd8b0 02544 (v01   BXPC   BXDSDT 00000001 INTL 20090123)
+ACPI: FACS 000000005ffffe00 00040
+ACPI: SSDT 000000005fffd810 0009E (v01 BOCHS  BXPCSSDT 00000001 BXPC 00000001)
+ACPI: APIC 000000005fffd720 00078 (v01 BOCHS  BXPCAPIC 00000001 BXPC 00000001)
+ACPI: Local APIC address 0xfee00000
+No NUMA configuration found
+Faking a node at 0000000000000000-000000005fffd000
+Bootmem setup node 0 0000000000000000-000000005fffd000
+  NODE_DATA [000000000000a000 - 000000000003dfff]
+  bootmap [000000000003e000 -  0000000000049fff] pages c
+(7 early reservations) ==> bootmem [0000000000 - 005fffd000]
+  #0 [0000000000 - 0000001000]   BIOS data page ==> [0000000000 - 0000001000]
+  #1 [0000006000 - 0000008000]       TRAMPOLINE ==> [0000006000 - 0000008000]
+  #2 [0001000000 - 0002012024]    TEXT DATA BSS ==> [0001000000 - 0002012024]
+  #3 [0036df4000 - 0037fef328]          RAMDISK ==> [0036df4000 - 0037fef328]
+  #4 [000009dc00 - 0000100000]    BIOS reserved ==> [000009dc00 - 0000100000]
+  #5 [0002013000 - 0002013081]              BRK ==> [0002013000 - 0002013081]
+  #6 [0000008000 - 000000a000]          PGTABLE ==> [0000008000 - 000000a000]
+found SMP MP-table at [ffff8800000fda70] fda70
+kvm-clock: Using msrs 12 and 11
+kvm-clock: cpu 0, msr 0:1c1f641, boot clock
+ [ffffea0000000000-ffffea00015fffff] PMD -> [ffff880002600000-ffff880003bfffff] on node 0
+Zone PFN ranges:
+  DMA      0x00000001 -> 0x00001000
+  DMA32    0x00001000 -> 0x00100000
+  Normal   0x00100000 -> 0x00100000
+Movable zone start PFN for each node
+early_node_map[2] active PFN ranges
+    0: 0x00000001 -> 0x0000009d
+    0: 0x00000100 -> 0x0005fffd
+On node 0 totalpages: 393113
+  DMA zone: 56 pages used for memmap
+  DMA zone: 103 pages reserved
+  DMA zone: 3837 pages, LIFO batch:0
+  DMA32 zone: 5320 pages used for memmap
+  DMA32 zone: 383797 pages, LIFO batch:31
+ACPI: PM-Timer IO Port: 0xb008
+ACPI: Local APIC address 0xfee00000
+ACPI: LAPIC (acpi_id[0x00] lapic_id[0x00] enabled)
+ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+ACPI: IOAPIC (id[0x01] address[0xfec00000] gsi_base[0])
+IOAPIC[0]: apic_id 1, version 17, address 0xfec00000, GSI 0-23
+ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+ACPI: IRQ0 used by override.
+ACPI: IRQ2 used by override.
+ACPI: IRQ5 used by override.
+ACPI: IRQ9 used by override.
+ACPI: IRQ10 used by override.
+ACPI: IRQ11 used by override.
+Using ACPI (MADT) for SMP configuration information
+SMP: Allowing 1 CPUs, 0 hotplug CPUs
+nr_irqs_gsi: 24
+PM: Registered nosave memory: 000000000009d000 - 000000000009e000
+PM: Registered nosave memory: 000000000009e000 - 00000000000a0000
+PM: Registered nosave memory: 00000000000a0000 - 00000000000f0000
+PM: Registered nosave memory: 00000000000f0000 - 0000000000100000
+Allocating PCI resources starting at 60000000 (gap: 60000000:9ffc0000)
+Booting paravirtualized kernel on KVM
+NR_CPUS:4096 nr_cpumask_bits:1 nr_cpu_ids:1 nr_node_ids:1
+PERCPU: Embedded 31 pages/cpu @ffff880002200000 s94488 r8192 d24296 u2097152
+pcpu-alloc: s94488 r8192 d24296 u2097152 alloc=1*2097152
+pcpu-alloc: [0] 0 
+kvm-clock: cpu 0, msr 0:2216641, primary cpu clock
+Built 1 zonelists in Node order, mobility grouping on.  Total pages: 387634
+Policy zone: DMA32
+Kernel command line: ro root=UUID=4c47776e-b3cc-4642-91e8-ec3918e09b01 rd_NO_LUKS rd_NO_LVM rd_NO_MD rd_NO_DM LANG=en_US.UTF-8 SYSFONT=latarcyrheb-sun16 KEYBOARDTYPE=pc KEYTABLE=us  rhgb quiet  console=ttyS0,115200   console=tty0 
+PID hash table entries: 4096 (order: 3, 32768 bytes)
+Checking aperture...
+No AGP bridge found
+Memory: 1514416k/1572852k available (5158k kernel code, 400k absent, 58036k reserved, 7160k data, 1260k init)
+Hierarchical RCU implementation.
+NR_IRQS:33024 nr_irqs:256
+Console: colour VGA+ 80x25
+console [tty0] enabled
+console [ttyS0] enabled
+allocated 12582912 bytes of page_cgroup
+please try 'cgroup_disable=memory' option if you don't want memory cgroups
+Detected 3292.226 MHz processor.
+Calibrating delay loop (skipped) preset value.. 6584.45 BogoMIPS (lpj=3292226)
+pid_max: default: 32768 minimum: 301
+Security Framework initialized
+SELinux:  Initializing.
+SELinux:  Starting in permissive mode
+Dentry cache hash table entries: 262144 (order: 9, 2097152 bytes)
+Inode-cache hash table entries: 131072 (order: 8, 1048576 bytes)
+Mount-cache hash table entries: 256
+Initializing cgroup subsys ns
+Initializing cgroup subsys cpuacct
+Initializing cgroup subsys memory
+Initializing cgroup subsys devices
+Initializing cgroup subsys freezer
+Initializing cgroup subsys net_cls
+Initializing cgroup subsys blkio
+Initializing cgroup subsys perf_event
+Initializing cgroup subsys net_prio
+Disabled fast string operations
+mce: CPU supports 10 MCE banks
+alternatives: switching to unfair spinlock
+SMP alternatives: switching to UP code
+Freeing SMP alternatives: 34k freed
+ACPI: Core revision 20090903
+ftrace: converting mcount calls to 0f 1f 44 00 00
+ftrace: allocating 21023 entries in 83 pages
+Setting APIC routing to flat
+..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+CPU0: Intel(R) Core(TM)2 Duo CPU     T7700  @ 2.40GHz stepping 0b
+Performance Events: unsupported p6 CPU model 15 no PMU driver, software events only.
+NMI watchdog disabled (cpu0): hardware events not enabled
+Brought up 1 CPUs
+Total of 1 processors activated (6584.45 BogoMIPS).
+sizeof(vma)=200 bytes
+sizeof(page)=56 bytes
+sizeof(inode)=592 bytes
+sizeof(dentry)=192 bytes
+sizeof(ext3inode)=800 bytes
+sizeof(buffer_head)=104 bytes
+sizeof(skbuff)=232 bytes
+sizeof(task_struct)=2648 bytes
+devtmpfs: initialized
+regulator: core version 0.5
+NET: Registered protocol family 16
+ACPI: bus type pci registered
+PCI: Using configuration type 1 for base access
+bio: create slab <bio-0> at 0
+ACPI: EC: Look up EC in DSDT
+ACPI: Interpreter enabled
+ACPI: (supports S0 S5)
+ACPI: Using IOAPIC for interrupt routing
+ACPI: No dock devices found.
+HEST: Table not found.
+PCI: Ignoring host bridge windows from ACPI; if necessary, use "pci=use_crs" and report a bug
+ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+pci_root PNP0A03:00: host bridge window [io  0x0000-0x0cf7] (ignored)
+pci_root PNP0A03:00: host bridge window [io  0x0d00-0xffff] (ignored)
+pci_root PNP0A03:00: host bridge window [mem 0x000a0000-0x000bffff] (ignored)
+pci_root PNP0A03:00: host bridge window [mem 0xe0000000-0xfebfffff] (ignored)
+pci 0000:00:01.1: reg 20: [io  0xc000-0xc00f]
+pci 0000:00:01.2: reg 20: [io  0xc020-0xc03f]
+pci 0000:00:01.3: quirk: [io  0xb000-0xb03f] claimed by PIIX4 ACPI
+pci 0000:00:01.3: quirk: [io  0xb100-0xb10f] claimed by PIIX4 SMB
+pci 0000:00:02.0: reg 10: [mem 0xf0000000-0xf1ffffff pref]
+pci 0000:00:02.0: reg 14: [mem 0xf2000000-0xf2000fff]
+pci 0000:00:02.0: reg 30: [mem 0xf2010000-0xf201ffff pref]
+pci 0000:00:03.0: reg 10: [io  0xc040-0xc05f]
+pci 0000:00:03.0: reg 14: [mem 0xf2020000-0xf2020fff]
+pci 0000:00:03.0: reg 30: [mem 0xf2030000-0xf203ffff pref]
+pci 0000:00:04.0: reg 10: [io  0xc080-0xc0bf]
+pci 0000:00:04.0: reg 14: [mem 0xf2040000-0xf2040fff]
+pci 0000:00:05.0: reg 10: [io  0xc0c0-0xc0df]
+ACPI: PCI Interrupt Routing Table [\_SB_.PCI0._PRT]
+ACPI: PCI Interrupt Link [LNKA] (IRQs 5 *10 11)
+ACPI: PCI Interrupt Link [LNKB] (IRQs 5 *10 11)
+ACPI: PCI Interrupt Link [LNKC] (IRQs 5 10 *11)
+ACPI: PCI Interrupt Link [LNKD] (IRQs 5 10 *11)
+ACPI: PCI Interrupt Link [LNKS] (IRQs 9) *0
+vgaarb: device added: PCI:0000:00:02.0,decodes=io+mem,owns=io+mem,locks=none
+vgaarb: loaded
+vgaarb: bridge control possible 0000:00:02.0
+SCSI subsystem initialized
+libata version 3.00 loaded.
+usbcore: registered new interface driver usbfs
+usbcore: registered new interface driver hub
+usbcore: registered new device driver usb
+PCI: Using ACPI for IRQ routing
+PCI: old code would have set cacheline size to 32 bytes, but clflush_size = 64
+PCI: pci_cache_line_size set to 64 bytes
+NetLabel: Initializing
+NetLabel:  domain hash size = 128
+NetLabel:  protocols = UNLABELED CIPSOv4
+NetLabel:  unlabeled traffic allowed by default
+Switching to clocksource kvm-clock
+pnp: PnP ACPI init
+ACPI: bus type pnp registered
+pnp 00:00: [io  0x0cf8-0x0cff]
+pnp 00:00: Plug and Play ACPI device, IDs PNP0a03 (active)
+pnp 00:01: [io  0x0070-0x0071]
+pnp 00:01: [irq 8]
+pnp 00:01: [io  0x0072-0x0077]
+pnp 00:01: Plug and Play ACPI device, IDs PNP0b00 (active)
+pnp 00:02: [io  0x0060]
+pnp 00:02: [io  0x0064]
+pnp 00:02: [irq 1]
+pnp 00:02: Plug and Play ACPI device, IDs PNP0303 (active)
+pnp 00:03: [irq 12]
+pnp 00:03: Plug and Play ACPI device, IDs PNP0f13 (active)
+pnp 00:04: [io  0x03f2-0x03f5]
+pnp 00:04: [io  0x03f7]
+pnp 00:04: [irq 6]
+pnp 00:04: [dma 2]
+pnp 00:04: Plug and Play ACPI device, IDs PNP0700 (active)
+pnp 00:05: [mem 0xfed00000-0xfed003ff]
+pnp 00:05: Plug and Play ACPI device, IDs PNP0103 (active)
+pnp: PnP ACPI: found 6 devices
+ACPI: ACPI bus type pnp unregistered
+PCI: max bus depth: 0 pci_try_num: 1
+pci_bus 0000:00: resource 0 [io  0x0000-0xffff]
+pci_bus 0000:00: resource 1 [mem 0x00000000-0xffffffffff]
+NET: Registered protocol family 2
+IP route cache hash table entries: 65536 (order: 7, 524288 bytes)
+TCP established hash table entries: 262144 (order: 10, 4194304 bytes)
+TCP bind hash table entries: 65536 (order: 8, 1048576 bytes)
+TCP: Hash tables configured (established 262144 bind 65536)
+TCP reno registered
+NET: Registered protocol family 1
+pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+pci 0000:00:01.0: PIIX3: Enabling Passive Release
+pci 0000:00:01.0: Activating ISA DMA hang workarounds
+ACPI: PCI Interrupt Link [LNKD] enabled at IRQ 11
+pci 0000:00:01.2: PCI INT D -> Link[LNKD] -> GSI 11 (level, high) -> IRQ 11
+pci 0000:00:01.2: PCI INT D disabled
+pci 0000:00:02.0: Boot video device
+Trying to unpack rootfs image as initramfs...
+Freeing initrd memory: 18412k freed
+audit: initializing netlink socket (disabled)
+type=2000 audit(1358028698.345:1): initialized
+HugeTLB registered 2 MB page size, pre-allocated 0 pages
+VFS: Disk quotas dquot_6.5.2
+Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+msgmni has been set to 2993
+SELinux:  Registering netfilter hooks
+alg: No test for stdrng (krng)
+ksign: Installing public key data
+Loading keyring
+- Added public key 2DDBE398E688683A
+- User ID: Red Hat, Inc. (Kernel Module GPG key)
+- Added public key D4A26C9CCD09BEDA
+- User ID: Red Hat Enterprise Linux Driver Update Program <secalert@redhat.com>
+Block layer SCSI generic (bsg) driver version 0.4 loaded (major 252)
+io scheduler noop registered
+io scheduler anticipatory registered
+io scheduler deadline registered (default)
+io scheduler cfq registered
+pci_hotplug: PCI Hot Plug PCI Core version: 0.5
+pciehp: PCI Express Hot Plug Controller Driver version: 0.4
+acpiphp: ACPI Hot Plug PCI Controller Driver version: 0.5
+acpiphp: Slot [1] registered
+acpiphp: Slot [2] registered
+acpiphp: Slot [3] registered
+acpiphp: Slot [4] registered
+acpiphp: Slot [5] registered
+acpiphp: Slot [6] registered
+acpiphp: Slot [7] registered
+acpiphp: Slot [8] registered
+acpiphp: Slot [9] registered
+acpiphp: Slot [10] registered
+acpiphp: Slot [11] registered
+acpiphp: Slot [12] registered
+acpiphp: Slot [13] registered
+acpiphp: Slot [14] registered
+acpiphp: Slot [15] registered
+acpiphp: Slot [16] registered
+acpiphp: Slot [17] registered
+acpiphp: Slot [18] registered
+acpiphp: Slot [19] registered
+acpiphp: Slot [20] registered
+acpiphp: Slot [21] registered
+acpiphp: Slot [22] registered
+acpiphp: Slot [23] registered
+acpiphp: Slot [24] registered
+acpiphp: Slot [25] registered
+acpiphp: Slot [26] registered
+acpiphp: Slot [27] registered
+acpiphp: Slot [28] registered
+acpiphp: Slot [29] registered
+acpiphp: Slot [30] registered
+acpiphp: Slot [31] registered
+input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+ACPI: Power Button [PWRF]
+ACPI: acpi_idle registered with cpuidle
+ERST: Table is not found!
+GHES: HEST is not enabled!
+hpet_acpi_add: no address or irqs in _CRS
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+crash memory driver: version 1.1
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+serial8250: ttyS0 at I/O 0x3f8 (irq = 4) is a 16550A
+brd: module loaded
+loop: module loaded
+input: Macintosh mouse button emulation as /devices/virtual/input/input1
+Fixed MDIO Bus: probed
+ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+uhci_hcd: USB Universal Host Controller Interface driver
+uhci_hcd 0000:00:01.2: PCI INT D -> Link[LNKD] -> GSI 11 (level, high) -> IRQ 11
+uhci_hcd 0000:00:01.2: setting latency timer to 64
+uhci_hcd 0000:00:01.2: UHCI Host Controller
+uhci_hcd 0000:00:01.2: new USB bus registered, assigned bus number 1
+uhci_hcd 0000:00:01.2: irq 11, io base 0x0000c020
+usb usb1: New USB device found, idVendor=1d6b, idProduct=0001
+usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb1: Product: UHCI Host Controller
+usb usb1: Manufacturer: Linux 2.6.32-279.14.1.el6_lustreb_neo_stable_227_1 uhci_hcd
+usb usb1: SerialNumber: 0000:00:01.2
+usb usb1: configuration #1 chosen from 1 choice
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 2 ports detected
+PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+serio: i8042 KBD port at 0x60,0x64 irq 1
+serio: i8042 AUX port at 0x60,0x64 irq 12
+mice: PS/2 mouse device common for all mice
+input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input2
+rtc_cmos 00:01: RTC can wake from S4
+rtc_cmos 00:01: rtc core: registered rtc_cmos as rtc0
+rtc0: alarms up to one day, 114 bytes nvram
+cpuidle: using governor ladder
+cpuidle: using governor menu
+EFI Variables Facility v0.08 2004-May-17
+usbcore: registered new interface driver hiddev
+usbcore: registered new interface driver usbhid
+usbhid: v2.6:USB HID core driver
+TCP cubic registered
+Initializing XFRM netlink socket
+NET: Registered protocol family 17
+registered taskstats version 1
+rtc_cmos 00:01: setting system clock to 2013-01-12 22:11:38 UTC (1358028698)
+Initalizing network drop monitor service
+Freeing unused kernel memory: 1260k freed
+Write protecting the kernel read-only data: 10240k
+Freeing unused kernel memory: 968k freed
+Freeing unused kernel memory: 1728k freed
+dracut: dracut-004-53.el6
+dracut: rd_NO_LUKS: removing cryptoluks activation
+dracut: rd_NO_LVM: removing LVM activation
+device-mapper: uevent: version 1.0.3
+device-mapper: ioctl: 4.22.6-ioctl (2011-10-19) initialised: dm-devel@redhat.com
+udev: starting version 147
+dracut: Starting plymouth daemon
+dracut: rd_NO_DM: removing DM RAID activation
+dracut: rd_NO_MD: removing MD RAID activation
+ata_piix 0000:00:01.1: version 2.13
+ata_piix 0000:00:01.1: setting latency timer to 64
+scsi0 : ata_piix
+scsi1 : ata_piix
+ata1: PATA max MWDMA2 cmd 0x1f0 ctl 0x3f6 bmdma 0xc000 irq 14
+ata2: PATA max MWDMA2 cmd 0x170 ctl 0x376 bmdma 0xc008 irq 15
+ACPI: PCI Interrupt Link [LNKC] enabled at IRQ 10
+virtio-pci 0000:00:03.0: PCI INT A -> Link[LNKC] -> GSI 10 (level, high) -> IRQ 10
+virtio-pci 0000:00:04.0: PCI INT A -> Link[LNKD] -> GSI 11 (level, high) -> IRQ 11
+ACPI: PCI Interrupt Link [LNKA] enabled at IRQ 10
+virtio-pci 0000:00:05.0: PCI INT A -> Link[LNKA] -> GSI 10 (level, high) -> IRQ 10
+input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input3
+  alloc irq_desc for 24 on node -1
+  alloc kstat_irqs on node -1
+virtio-pci 0000:00:04.0: irq 24 for MSI/MSI-X
+  alloc irq_desc for 25 on node -1
+  alloc kstat_irqs on node -1
+virtio-pci 0000:00:04.0: irq 25 for MSI/MSI-X
+ vda: vda1 vda2
+EXT4-fs (vda1): INFO: recovery required on readonly filesystem
+EXT4-fs (vda1): write access will be enabled during recovery
+Refined TSC clocksource calibration: 3292.374 MHz.
+EXT4-fs (vda1): recovery complete
+EXT4-fs (vda1): mounted filesystem with ordered data mode. Opts: 
+dracut: Mounted root filesystem /dev/vda1
+dracut: Loading SELinux policy
+SELinux:  Disabled at runtime.
+SELinux:  Unregistering netfilter hooks
+type=1404 audit(1358028699.381:2): selinux=0 auid=4294967295 ses=4294967295
+dracut: /sbin/load_policy: Can't load policy: No such file or directory
+dracut: Switching root
+udev: starting version 147
+piix4_smbus 0000:00:01.3: SMBus Host Controller at 0xb100, revision 0
+  alloc irq_desc for 26 on node -1
+  alloc kstat_irqs on node -1
+virtio-pci 0000:00:03.0: irq 26 for MSI/MSI-X
+  alloc irq_desc for 27 on node -1
+  alloc kstat_irqs on node -1
+virtio-pci 0000:00:03.0: irq 27 for MSI/MSI-X
+  alloc irq_desc for 28 on node -1
+  alloc kstat_irqs on node -1
+virtio-pci 0000:00:03.0: irq 28 for MSI/MSI-X
+microcode: CPU0 sig=0x6fb, pf=0x1, revision=0x0
+platform microcode: firmware: requesting intel-ucode/06-0f-0b
+Microcode Update Driver: v2.00 <tigran@aivazian.fsnet.co.uk>, Peter Oruba
+microcode: CPU0 update to revision 0xba failed
+microcode: CPU0 update to revision 0xba failed
+microcode: CPU0 update to revision 0xba failed
+microcode: CPU0 update to revision 0xba failed
+Adding 2097144k swap on /dev/vda2.  Priority:-1 extents:1 across:2097144k 
+NET: Registered protocol family 10
+lo: Disabled Privacy Extensions
+eth0: no IPv6 routers present
+LNet: HW CPU cores: 1, npartitions: 1
+alg: No test for crc32 (crc32-table)
+alg: No test for adler32 (adler32-zlib)
+padlock: VIA PadLock Hash Engine not detected.
+Lustre: Lustre: Build Version: jenkins-MODE=normal,NODE=diskless-sl6-64-354-g395e403-PRISTINE-2.6.32-279.14.1.el6_lustreb_neo_stable_227_1
+LNet: Added LNI 10.3.0.53@tcp [8/256/0/180]
+LNet: Accept secure, port 988
+Lustre: Echo OBD driver; http://www.lustre.org/
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode. quota=on. Opts: 
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode. quota=on. Opts: 
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode. quota=on. Opts: 
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode. quota=on. Opts: 
+Lustre: MGC10.3.0.53@tcp: Reactivating import
+Lustre: Setting parameter lustre-MDT0000-mdtlov.lov.stripesize in log lustre-MDT0000
+Lustre: lustre-MDT0000: new disk, initializing
+Lustre: 2733:0:(mdt_lproc.c:418:lprocfs_wr_identity_upcall()) lustre-MDT0000: identity upcall set to /usr/sbin/l_getidentity
+Lustre: lustre-MDT0000: Temporarily refusing client connection from 0@lo
+LustreError: 11-0: an error occurred while communicating with 0@lo. The mds_connect operation failed with -11
+Lustre: ctl-lustre-MDT0000: No data found on store. Initialize space
+LDISKFS-fs (loop1): mounted filesystem with ordered data mode. quota=on. Opts: 
+Lustre: lustre-OST0000: new disk, initializing
+LustreError: 11-0: an error occurred while communicating with 0@lo. The mds_connect operation failed with -11
+LDISKFS-fs (loop2): mounted filesystem with ordered data mode. quota=on. Opts: 
+Lustre: lustre-OST0001: new disk, initializing
+LustreError: 11-0: an error occurred while communicating with 0@lo. The mds_connect operation failed with -11
+LustreError: 11-0: an error occurred while communicating with 0@lo. The mds_connect operation failed with -11
+LustreError: Skipped 1 previous similar message
+Lustre: Mounted lustre-client
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: only running test 1
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 1: create, chmod, stat: drop req, drop rep == 22:12:53 (1358021573)
+Lustre: *** cfs_fail_loc=123, val=2147483648***
+Lustre: 4456:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021573/real 1358021573]  req@ffff880037b23000 x1423988780695759/t0(0) o700->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:30/10 lens 264/248 e 0 to 1 dl 1358021585 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: ctl-lustre-MDT0000: super-sequence allocation rc = 0 [0x0000000200000400-0x0000000240000400):0:mdt
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 2711:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005b8fc050 x1423988780695813/t4294967298(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 504/448 e 0 to 0 dl 1358021591 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: 4507:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021585/real 1358021585]  req@ffff880037b23800 x1423988780695813/t0(0) o36->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 504/568 e 0 to 1 dl 1358021592 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: *** cfs_fail_loc=123, val=2147483648***
+Lustre: 4551:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021592/real 1358021592]  req@ffff880037b23800 x1423988780695825/t0(0) o101->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 576/1048 e 0 to 1 dl 1358021599 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 2713:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005bedfc50 x1423988780695838/t4294967300(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/456 e 0 to 0 dl 1358021605 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: 4583:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021599/real 1358021599]  req@ffff880037b23800 x1423988780695838/t0(0) o36->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 488/1016 e 0 to 1 dl 1358021606 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: *** cfs_fail_loc=123, val=2147483648***
+Lustre: 4615:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021606/real 1358021606]  req@ffff88004e564c00 x1423988780695850/t0(0) o34->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 472/960 e 0 to 1 dl 1358021613 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: *** cfs_fail_loc=122, val=2147483648***
+LustreError: 2711:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff8800377abc50 x1423988780695860/t0(0) o34->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 472/456 e 0 to 0 dl 1358021619 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: 4659:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021613/real 1358021613]  req@ffff88004e564c00 x1423988780695860/t0(0) o34->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 472/960 e 0 to 1 dl 1358021620 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 49 sec == 22:13:41 (1358021621)
+Lustre: DEBUG MARKER: only running test 4
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 4: open: drop req, drop rep == 22:13:53 (1358021633)
+Lustre: *** cfs_fail_loc=123, val=2147483648***
+Lustre: 6284:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021633/real 1358021633]  req@ffff88005aa44400 x1423988780695919/t0(0) o101->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 592/1136 e 0 to 1 dl 1358021640 ref 2 fl Rpc:XP/0/ffffffff rc 0/-1
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: *** cfs_fail_loc=122, val=2147483648***
+LustreError: 2715:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005ad2d850 x1423988780695932/t4294967308(0) o35->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 392/456 e 0 to 0 dl 1358021646 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 15 sec == 22:14:07 (1358021647)
+Lustre: DEBUG MARKER: only running test 5
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 5: rename: drop req, drop rep == 22:14:21 (1358021661)
+Lustre: *** cfs_fail_loc=123, val=2147483648***
+Lustre: 7959:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021661/real 1358021661]  req@ffff880037fd6400 x1423988780696025/t0(0) o101->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 600/1080 e 0 to 1 dl 1358021668 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: 7959:0:(client.c:1836:ptlrpc_expire_one_request()) Skipped 1 previous similar message
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: Skipped 1 previous similar message
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: Skipped 1 previous similar message
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: Skipped 1 previous similar message
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 2713:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88003773a850 x1423988780696078/t4294967313(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 560/456 e 0 to 0 dl 1358021674 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 14 sec == 22:14:35 (1358021675)
+Lustre: DEBUG MARKER: only running test 6
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 6: link, unlink: drop req, drop rep == 22:14:50 (1358021690)
+Lustre: *** cfs_fail_loc=123, val=2147483648***
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 2711:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005bbac850 x1423988780696184/t4294967318(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 512/440 e 0 to 0 dl 1358021703 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: 9683:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021697/real 1358021697]  req@ffff88005d7dcc00 x1423988780696184/t0(0) o36->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 512/440 e 0 to 1 dl 1358021704 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: 9683:0:(client.c:1836:ptlrpc_expire_one_request()) Skipped 2 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: Skipped 2 previous similar messages
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: Skipped 2 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: Skipped 2 previous similar messages
+Lustre: *** cfs_fail_loc=123, val=2147483648***
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 2711:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005bedf050 x1423988780696208/t4294967320(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 512/456 e 0 to 0 dl 1358021717 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 29 sec == 22:15:18 (1358021718)
+Lustre: DEBUG MARKER: only running test 8
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 8: touch: drop rep (bug 1423) == 22:15:28 (1358021728)
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 2711:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88003773a450 x1423988780696256/t4294967323(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/456 e 0 to 0 dl 1358021734 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 8 sec == 22:15:35 (1358021735)
+Lustre: DEBUG MARKER: only running test 9
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 9: pause bulk on OST (bug 1420) == 22:15:45 (1358021745)
+LustreError: 2835:0:(fail.c:133:__cfs_fail_timeout_set()) cfs_fail_timeout id 214 sleeping for 5000ms
+LustreError: 2835:0:(fail.c:137:__cfs_fail_timeout_set()) cfs_fail_timeout id 214 awake
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 6 sec == 22:15:51 (1358021751)
+Lustre: DEBUG MARKER: only running test 10
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 10: finish request on server after client eviction (bug 1521) == 22:16:03 (1358021763)
+Lustre: *** cfs_fail_loc=305, val=0***
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 2 sec == 22:16:05 (1358021765)
+Lustre: DEBUG MARKER: only running test 11
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 11: wake up a thread waiting for completion after eviction (b=2460) == 22:16:22 (1358021782)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 2 sec == 22:16:23 (1358021783)
+Lustre: DEBUG MARKER: only running test 12
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 12: recover from timed out resend in ptlrpcd (b=2494) == 22:16:39 (1358021799)
+Lustre: DEBUG MARKER: multiop /mnt/lustre/f.recovery-small.12 OS_c
+Lustre: *** cfs_fail_loc=115, val=2147483648***
+Lustre: 18008:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021799/real 1358021799]  req@ffff880050455400 x1423988780696674/t0(0) o35->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:23/10 lens 392/888 e 0 to 1 dl 1358021806 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: 18008:0:(client.c:1836:ptlrpc_expire_one_request()) Skipped 3 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: Skipped 3 previous similar messages
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: Skipped 3 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: Skipped 3 previous similar messages
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 41 sec == 22:17:19 (1358021839)
+Lustre: DEBUG MARKER: only running test 13
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 13: mdc_readpage restart test (bug 1138) == 22:17:32 (1358021852)
+Lustre: *** cfs_fail_loc=104, val=2147483648***
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 8 sec == 22:17:39 (1358021859)
+Lustre: DEBUG MARKER: only running test 14
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 14: mdc_readpage resend test (bug 1138) == 22:17:50 (1358021870)
+Lustre: *** cfs_fail_loc=106, val=0***
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 1 sec == 22:17:50 (1358021870)
+Lustre: DEBUG MARKER: only running test 15
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 15: failed open (-ENOMEM) == 22:18:07 (1358021887)
+Lustre: *** cfs_fail_loc=128, val=0***
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 1 sec == 22:18:08 (1358021888)
+Lustre: DEBUG MARKER: only running test 16
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 16: timeout bulk put, don't evict client (2732) == 22:18:25 (1358021905)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Lustre: *** cfs_fail_loc=504, val=0***
+LustreError: 2835:0:(ldlm_lib.c:2728:target_bulk_io()) @@@ network error on bulk PUT 0(4096)  req@ffff88005dbe3000 x1423988780697112/t0(0) o3->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/432 e 0 to 0 dl 1358021949 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: lustre-OST0000: Bulk IO read error with a904049f-a5d1-e684-1894-634e521917fc (at 0@lo), client will retry: rc -110
+Lustre: 1690:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358021906/real 1358021906]  req@ffff88004e520400 x1423988780697112/t0(0) o3->lustre-OST0000-osc-ffff88005bd86400@0@lo:6/4 lens 488/432 e 0 to 1 dl 1358021950 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: 1690:0:(client.c:1836:ptlrpc_expire_one_request()) Skipped 1 previous similar message
+Lustre: lustre-OST0000-osc-ffff88005bd86400: Connection to lustre-OST0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: Skipped 1 previous similar message
+Lustre: lustre-OST0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: Skipped 1 previous similar message
+Lustre: lustre-OST0000-osc-ffff88005bd86400: Connection restored to lustre-OST0000 (at 0@lo)
+Lustre: Skipped 1 previous similar message
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 65 sec == 22:19:30 (1358021970)
+Lustre: DEBUG MARKER: only running test 17
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 17: timeout bulk get, don't evict client (2732) == 22:19:44 (1358021984)
+Lustre: *** cfs_fail_loc=503, val=0***
+Lustre: 13056:0:(service.c:1290:ptlrpc_at_send_early_reply()) @@@ Couldn't add any time (5/-18), not sending early reply
+  req@ffff88004f946c00 x1423988780697336/t0(0) o4->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/448 e 0 to 0 dl 1358022027 ref 2 fl Interpret:/0/0 rc 0/0
+LustreError: 2835:0:(ldlm_lib.c:2708:target_bulk_io()) @@@ timeout on bulk GET after 43+0s  req@ffff88004f946c00 x1423988780697336/t0(0) o4->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/448 e 0 to 0 dl 1358022027 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: lustre-OST0001: Bulk IO write error with a904049f-a5d1-e684-1894-634e521917fc (at 0@lo), client will retry: rc -110
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 84 sec == 22:21:08 (1358022068)
+Lustre: DEBUG MARKER: only running test 18a
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 18a: manual ost invalidate clears page cache immediately == 22:21:19 (1358022079)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Lustre: setting import lustre-OST0001_UUID INACTIVE by administrator request
+LustreError: 167-0: lustre-OST0001-osc-ffff88005bd86400: This client was evicted by lustre-OST0001; in progress operations using this service will fail.
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 2 sec == 22:21:20 (1358022080)
+Lustre: DEBUG MARKER: only running test 18b
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 18b: eviction and reconnect clears page cache (2766) == 22:21:36 (1358022096)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Lustre: 30049:0:(genops.c:1476:obd_export_evict_by_uuid()) lustre-OST0000: evicting a904049f-a5d1-e684-1894-634e521917fc at adminstrative request
+LustreError: 11-0: an error occurred while communicating with 0@lo. The obd_ping operation failed with -107
+LustreError: 167-0: lustre-OST0000-osc-ffff88005bd86400: This client was evicted by lustre-OST0000; in progress operations using this service will fail.
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 23 sec == 22:21:59 (1358022119)
+Lustre: DEBUG MARKER: only running test 18c
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 18c: Dropped connect reply after eviction handing (14755) == 22:22:10 (1358022130)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Lustre: 31769:0:(genops.c:1476:obd_export_evict_by_uuid()) lustre-OST0000: evicting a904049f-a5d1-e684-1894-634e521917fc at adminstrative request
+LustreError: 11-0: an error occurred while communicating with 0@lo. The ost_statfs operation failed with -107
+Lustre: *** cfs_fail_loc=225, val=0***
+Lustre: Evicted from lustre-OST0000_UUID (at 10.3.0.53@tcp) after server handle changed from 0x1d213418964f30d6 to 0x1d213418964f33df
+LustreError: 167-0: lustre-OST0000-osc-ffff88005bd86400: This client was evicted by lustre-OST0000; in progress operations using this service will fail.
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 16 sec == 22:22:25 (1358022145)
+Lustre: DEBUG MARKER: only running test 19a
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 19a: test expired_lock_main on mds (2867) == 22:22:39 (1358022159)
+Lustre: Mounted lustre-client
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: *** cfs_fail_loc=304, val=0***
+LNet: Service thread pid 2712 was inactive for 40.00s. The thread might be hung, or it might only be slow and will resume later. Dumping the stack trace for debugging purposes:
+Pid: 2712, comm: mdt00_001
+
+Call Trace:
+ [<ffffffff814ffe02>] schedule_timeout+0x192/0x2e0
+ [<ffffffff8107e270>] ? process_timeout+0x0/0x10
+ [<ffffffffa0200741>] cfs_waitq_timedwait+0x11/0x20 [libcfs]
+ [<ffffffffa0521b7d>] ldlm_completion_ast+0x4ed/0x960 [ptlrpc]
+ [<ffffffffa051d680>] ? ldlm_expired_completion_wait+0x0/0x260 [ptlrpc]
+ [<ffffffff81060300>] ? default_wake_function+0x0/0x20
+ [<ffffffffa05212b8>] ldlm_cli_enqueue_local+0x1f8/0x5d0 [ptlrpc]
+ [<ffffffffa0521690>] ? ldlm_completion_ast+0x0/0x960 [ptlrpc]
+ [<ffffffffa0b54970>] ? mdt_blocking_ast+0x0/0x2a0 [mdt]
+ [<ffffffffa0b571c2>] mdt_object_lock+0x342/0xae0 [mdt]
+ [<ffffffffa0b54970>] ? mdt_blocking_ast+0x0/0x2a0 [mdt]
+ [<ffffffffa0521690>] ? ldlm_completion_ast+0x0/0x960 [ptlrpc]
+ [<ffffffffa0b784db>] mdt_attr_set+0x8b/0x570 [mdt]
+ [<ffffffffa0b78fdd>] mdt_reint_setattr+0x61d/0xe20 [mdt]
+ [<ffffffffa0210371>] ? libcfs_debug_msg+0x41/0x50 [libcfs]
+ [<ffffffffa0210371>] ? libcfs_debug_msg+0x41/0x50 [libcfs]
+ [<ffffffffa0b730e1>] mdt_reint_rec+0x41/0xe0 [mdt]
+ [<ffffffffa0b6c7c3>] mdt_reint_internal+0x4f3/0x7e0 [mdt]
+ [<ffffffffa0b6caf4>] mdt_reint+0x44/0xe0 [mdt]
+ [<ffffffffa0b5be82>] mdt_handle_common+0x8e2/0x1680 [mdt]
+ [<ffffffffa0b91985>] mds_regular_handle+0x15/0x20 [mdt]
+ [<ffffffffa055a1ec>] ptlrpc_server_handle_request+0x41c/0xdf0 [ptlrpc]
+ [<ffffffffa020064e>] ? cfs_timer_arm+0xe/0x10 [libcfs]
+ [<ffffffffa0551669>] ? ptlrpc_wait_event+0xa9/0x290 [ptlrpc]
+ [<ffffffffa0210371>] ? libcfs_debug_msg+0x41/0x50 [libcfs]
+ [<ffffffff810534a3>] ? __wake_up+0x53/0x70
+ [<ffffffffa055b776>] ptlrpc_main+0xbb6/0x1950 [ptlrpc]
+ [<ffffffffa055abc0>] ? ptlrpc_main+0x0/0x1950 [ptlrpc]
+ [<ffffffff8100c14a>] child_rip+0xa/0x20
+ [<ffffffffa055abc0>] ? ptlrpc_main+0x0/0x1950 [ptlrpc]
+ [<ffffffffa055abc0>] ? ptlrpc_main+0x0/0x1950 [ptlrpc]
+ [<ffffffff8100c140>] ? child_rip+0x0/0x20
+
+LustreError: dumping log to /tmp/lustre-log.1358022199.2712
+Lustre: 2703:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358022201/real 1358022201]  req@ffff88005dbe3800 x1423988780697967/t0(0) o103->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:17/18 lens 328/224 e 0 to 1 dl 1358022208 ref 2 fl Rpc:X/2/ffffffff rc 0/-1
+Lustre: 2703:0:(client.c:1836:ptlrpc_expire_one_request()) Skipped 8 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: Skipped 10 previous similar messages
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: Skipped 9 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: Skipped 10 previous similar messages
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: Skipped 1 previous similar message
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: Skipped 2 previous similar messages
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: Skipped 4 previous similar messages
+LustreError: 0:0:(ldlm_lockd.c:391:waiting_locks_callback()) ### lock callback timer expired after 684s: evicting client at 0@lo  ns: mdt-ffff880053dfb000 lock: ffff88004e5eee00/0x1d213418964f11e2 lrc: 3/0,0 mode: PR/PR res: 50040/1147981594 bits 0x1 rrc: 2 type: IBT flags: 0x200000000020 nid: 0@lo remote: 0x1d213418964f11d4 expref: 4 pid: 2711 timeout: 4295478783 lvb_type: 0
+LNet: Service thread pid 2712 completed after 150.35s. This indicates the system was overloaded (too many service threads, or there were not enough hardware resources).
+LustreError: 2712:0:(mdt_handler.c:2972:mdt_recovery()) operation 101 on unconnected MDS from 12345-0@lo
+LustreError: 11-0: an error occurred while communicating with 0@lo. The ldlm_enqueue operation failed with -107
+LustreError: 167-0: lustre-MDT0000-mdc-ffff88005bd86400: This client was evicted by lustre-MDT0000; in progress operations using this service will fail.
+LustreError: 2703:0:(ldlm_request.c:1236:ldlm_cli_cancel_req()) Got rc -5 from cancel RPC: canceling anyway
+LustreError: 2703:0:(ldlm_request.c:1873:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -5
+LustreError: 1429:0:(mdc_locks.c:784:mdc_enqueue()) ldlm_cli_enqueue: -5
+LustreError: 1429:0:(file.c:2394:ll_inode_revalidate_fini()) lustre: revalidate FID [0xc378:0x446ccf1a:0x0] error: rc = -5
+Lustre: Unmounted lustre-client
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 151 sec == 22:25:09 (1358022309)
+Lustre: DEBUG MARKER: only running test 19b
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 19b: test expired_lock_main on ost (2867) == 22:25:20 (1358022320)
+Lustre: Mounted lustre-client
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: Skipped 8 previous similar messages
+Lustre: *** cfs_fail_loc=304, val=0***
+Lustre: Skipped 18 previous similar messages
+LustreError: 0:0:(ldlm_lockd.c:391:waiting_locks_callback()) ### lock callback timer expired after 150s: evicting client at 0@lo  ns: filter-ffff880050ac0000 lock: ffff88004e5ee600/0x1d213418964f3a0d lrc: 3/0,0 mode: PW/PW res: 9/0 rrc: 2 type: EXT [0->18446744073709551615] (req 0->4095) flags: 0x20 nid: 0@lo remote: 0x1d213418964f3a06 expref: 4 pid: 2829 timeout: 4295639576 lvb_type: 0
+Lustre: Unmounted lustre-client
+LustreError: 11-0: an error occurred while communicating with 0@lo. The obd_ping operation failed with -107
+LustreError: 167-0: lustre-OST0001-osc-ffff88005bd86400: This client was evicted by lustre-OST0001; in progress operations using this service will fail.
+LustreError: 3105:0:(ldlm_request.c:1236:ldlm_cli_cancel_req()) Got rc -5 from cancel RPC: canceling anyway
+LustreError: 3105:0:(ldlm_request.c:1873:ldlm_cli_cancel_list()) ldlm_cli_cancel_list: -5
+LustreError: 3607:0:(ldlm_resource.c:804:ldlm_resource_complain()) Namespace lustre-OST0001-osc-ffff88005bd86400 resource refcount nonzero (1) after lock cleanup; forcing cleanup.
+LustreError: 3607:0:(ldlm_resource.c:810:ldlm_resource_complain()) Resource: ffff880053dd9bc0 (9/0/0/0) (rc: 1)
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 153 sec == 22:27:52 (1358022472)
+Lustre: DEBUG MARKER: only running test 19c
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 19c: check reconnect and lock resend do not trigger expired_lock_main == 22:28:05 (1358022485)
+Lustre: Mounted lustre-client
+Lustre: Unmounted lustre-client
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 7 sec == 22:28:12 (1358022492)
+Lustre: DEBUG MARKER: only running test 20a
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 20a: ldlm_handle_enqueue error (should return error) == 22:28:23 (1358022503)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 1 sec == 22:28:23 (1358022503)
+Lustre: DEBUG MARKER: only running test 20b
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 20b: ldlm_handle_enqueue error (should return error) == 22:28:40 (1358022520)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+LustreError: 11-0: an error occurred while communicating with 0@lo. The ldlm_enqueue operation failed with -12
+LustreError: Skipped 1 previous similar message
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 0 sec == 22:28:40 (1358022520)
+Lustre: DEBUG MARKER: only running test 21a
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21a: drop close request while close and open are both in flight == 22:28:59 (1358022539)
+LustreError: 2712:0:(fail.c:133:__cfs_fail_timeout_set()) cfs_fail_timeout id 129 sleeping for 5000ms
+Lustre: *** cfs_fail_loc=115, val=2147483648***
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+LustreError: 2712:0:(fail.c:137:__cfs_fail_timeout_set()) cfs_fail_timeout id 129 awake
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 9 sec == 22:29:07 (1358022547)
+Lustre: DEBUG MARKER: only running test 21b
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21b: drop open request while close and open are both in flight == 22:29:18 (1358022558)
+Lustre: *** cfs_fail_loc=107, val=2147483648***
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: 11859:0:(client.c:1836:ptlrpc_expire_one_request()) @@@ Request sent has timed out for slow reply: [sent 1358022558/real 1358022558]  req@ffff880050455c00 x1423988780699228/t0(0) o36->lustre-MDT0000-mdc-ffff88005bd86400@0@lo:12/10 lens 488/568 e 0 to 1 dl 1358022751 ref 2 fl Rpc:X/0/ffffffff rc 0/-1
+Lustre: 11859:0:(client.c:1836:ptlrpc_expire_one_request()) Skipped 36 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection to lustre-MDT0000 (at 0@lo) was lost; in progress operations using this service will wait for recovery to complete
+Lustre: Skipped 38 previous similar messages
+Lustre: lustre-MDT0000: Client a904049f-a5d1-e684-1894-634e521917fc (at 0@lo) reconnecting
+Lustre: Skipped 36 previous similar messages
+Lustre: lustre-MDT0000-mdc-ffff88005bd86400: Connection restored to lustre-MDT0000 (at 0@lo)
+Lustre: Skipped 38 previous similar messages
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 194 sec == 22:32:31 (1358022751)
+Lustre: DEBUG MARKER: only running test 21c
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21c: drop both request while close and open are both in flight == 22:32:44 (1358022764)
+Lustre: *** cfs_fail_loc=107, val=2147483648***
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 11 sec == 22:32:54 (1358022774)
+Lustre: DEBUG MARKER: only running test 21d
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21d: drop close reply while close and open are both in flight == 22:33:07 (1358022787)
+LustreError: 2713:0:(fail.c:133:__cfs_fail_timeout_set()) cfs_fail_timeout id 129 sleeping for 5000ms
+Lustre: *** cfs_fail_loc=122, val=2147483648***
+LustreError: 2715:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005ad9f450 x1423988780699787/t4294967523(0) o35->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 392/456 e 0 to 0 dl 1358022794 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+LustreError: 2713:0:(fail.c:137:__cfs_fail_timeout_set()) cfs_fail_timeout id 129 awake
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 9 sec == 22:33:15 (1358022795)
+Lustre: DEBUG MARKER: only running test 21e
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21e: drop open reply while close and open are both in flight == 22:33:25 (1358022805)
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 2712:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005bedfc50 x1423988780699900/t4294967538(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/456 e 0 to 0 dl 1358022997 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 194 sec == 22:36:38 (1358022998)
+Lustre: DEBUG MARKER: only running test 21f
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21f: drop both reply while close and open are both in flight == 22:36:51 (1358023011)
+Lustre: *** cfs_fail_loc=119, val=2147483648***
+LustreError: 1030:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005b851450 x1423988780700351/t4294967553(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/456 e 0 to 0 dl 1358023022 ref 1 fl Interpret:/0/0 rc 0/0
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 9 sec == 22:36:59 (1358023019)
+Lustre: DEBUG MARKER: only running test 21g
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21g: drop open reply and close request while close and open are both in flight == 22:37:10 (1358023030)
+LustreError: 1030:0:(ldlm_lib.c:2425:target_send_reply_msg()) @@@ dropping reply  req@ffff88005b690850 x1423988780700473/t4294967568(0) o36->a904049f-a5d1-e684-1894-634e521917fc@0@lo:0/0 lens 488/456 e 0 to 0 dl 1358023041 ref 1 fl Interpret:/0/0 rc 0/0
+LustreError: 1030:0:(ldlm_lib.c:2425:target_send_reply_msg()) Skipped 1 previous similar message
+Lustre: *** cfs_fail_loc=115, val=2147483648***
+Lustre: Skipped 1 previous similar message
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 9 sec == 22:37:18 (1358023038)
+Lustre: DEBUG MARKER: only running test 21h
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 21h: drop open request and close reply while close and open are both in flight == 22:37:29 (1358023049)
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: *** cfs_fail_loc=122, val=2147483648***
+Lustre: Skipped 2 previous similar messages
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 9 sec == 22:37:38 (1358023058)
+Lustre: DEBUG MARKER: only running test 22
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 22: drop close request and do mknod == 22:37:48 (1358023068)
+Lustre: DEBUG MARKER: cancel_lru_locks mdc start
+Lustre: DEBUG MARKER: cancel_lru_locks mdc stop
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 8 sec == 22:37:55 (1358023075)
+Lustre: DEBUG MARKER: only running test 23
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 23: client hang when close a file after mds crash == 22:38:05 (1358023085)
+Lustre: Failing over lustre-MDT0000
+Lustre: server umount lustre-MDT0000 complete
+LustreError: 166-1: MGC10.3.0.53@tcp: Connection to MGS (at 0@lo) was lost; in progress operations using this service will fail
+LustreError: 2710:0:(client.c:1051:ptlrpc_import_delay_req()) @@@ IMP_INVALID  req@ffff88005d7da800 x1423988780700812/t0(0) o101->MGC10.3.0.53@tcp@0@lo:26/25 lens 328/344 e 0 to 0 dl 0 ref 2 fl Rpc:/0/ffffffff rc 0/-1
+LustreError: 2710:0:(client.c:1051:ptlrpc_import_delay_req()) @@@ IMP_INVALID  req@ffff88005d7da800 x1423988780700813/t0(0) o101->MGC10.3.0.53@tcp@0@lo:26/25 lens 328/344 e 0 to 0 dl 0 ref 2 fl Rpc:/0/ffffffff rc 0/-1
+LDISKFS-fs (loop0): mounted filesystem with ordered data mode. quota=on. Opts: 
+Lustre: MGC10.3.0.53@tcp: Reactivating import
+Lustre: lustre-MDT0000: used disk, loading
+Lustre: 26200:0:(mdt_lproc.c:418:lprocfs_wr_identity_upcall()) lustre-MDT0000: identity upcall set to /usr/sbin/l_getidentity
+Lustre: lustre-MDT0000: Temporarily refusing client connection from 0@lo
+Lustre: lustre-MDT0000: Temporarily refusing client connection from 0@lo
+LustreError: 11-0: an error occurred while communicating with 0@lo. The mds_connect operation failed with -11
+LustreError: 26159:0:(fld_index.c:201:fld_index_create()) srv-lustre-MDT0000: insert range [0x000000000000000c-0x0000000100000000):0:mdt failed: rc = -17
+Lustre: 26159:0:(ldlm_lib.c:2185:target_recovery_init()) RECOVERY: service lustre-MDT0000, 1 recoverable clients, last_transno 4294967599
+LustreError: 167-0: lustre-MDT0000-osp-OST0000: This client was evicted by lustre-MDT0000; in progress operations using this service will fail.
+Lustre: lustre-MDT0000: Will be in recovery for at least 1:00, or until 1 client reconnects
+Lustre: lustre-MDT0000: Recovery over after 0:01, of 1 clients 1 recovered and 0 were evicted.
+Lustre: lustre-OST0000: deleting orphan objects from 22 to 64
+Lustre: lustre-OST0001: deleting orphan objects from 19 to 64
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 28 sec == 22:38:33 (1358023113)
+Lustre: DEBUG MARKER: only running test 24a
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 24a: fsync error (should return error) == 22:38:44 (1358023124)
+Lustre: DEBUG MARKER: cancel_lru_locks osc start
+Lustre: DEBUG MARKER: cancel_lru_locks osc stop
+Lustre: 27921:0:(genops.c:1476:obd_export_evict_by_uuid()) lustre-OST0000: evicting a904049f-a5d1-e684-1894-634e521917fc at adminstrative request
+LustreError: 167-0: lustre-OST0000-osc-ffff88005bd86400: This client was evicted by lustre-OST0000; in progress operations using this service will fail.
+LustreError: Skipped 1 previous similar message
+Lustre: DEBUG MARKER: == recovery-small test complete, duration 1 sec == 22:38:45 (1358023125)
+Lustre: DEBUG MARKER: only running test 24b
+Lustre: DEBUG MARKER: excepting tests: 52 60
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: == recovery-small test 24b: test dirty page discard due to client eviction == 22:39:02 (1358023142)
+multiop /mnt/lustre/d0.recovery-small.24/f.recovery-small.24b-1 vOw8192_yc
+TMPPIPE=/tmp/multiop_open_wait_pipe.28452
+multiop /mnt/lustre/d0.recovery-small.24/f.recovery-small.24b-2 vOw8192_c
+TMPPIPE=/tmp/multiop_open_wait_pipe.28452
+fsync: Input/output error
+close: Input/output error
+fail_loc=0x0
+Connected clients:
+mft53.xyua
+mft53.xyua
+Lustre: 1691:0:(llite_lib.c:2450:ll_dirty_page_discard_warn()) lustre: dirty page discard: 10.3.0.53@tcp:/lustre/fid: [0x200000401:0x38:0x0]//d0.recovery-small.24/f.recovery-small.24b-2 may get corrupted (rc -108)
+Resetting fail_loc on all nodes...done.
+PASS 24b (0s)
+................................== recovery-small test complete, duration 1 sec == 22:39:02 (1358023142)
