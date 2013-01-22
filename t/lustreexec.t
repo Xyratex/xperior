@@ -94,12 +94,15 @@ test plan => 3, eCheckSimple    => sub {
             'Check Clients options');
 };
 
-test plan =>2, gCheckLogParsing => sub{
+test plan =>3, gCheckLogParsing => sub{
     my $exe = Xperior::Executor::LustreTests->new();
     my $res = $exe->processLogs('t/testout/sanity.1a.stdout.log');
     is($res,0,'Check PASS log');
     $res = $exe->processLogs('t/testout/sanity.1a.f.stdout.log');
     is($res,100,'Check no PASS log');
+
+    $res = $exe->processLogs('t/testout/recovery-small.24b.stdout.log');
+    is($res,0,'Check PASS log, special case "DEBUG MARKER"');
 
 };
 

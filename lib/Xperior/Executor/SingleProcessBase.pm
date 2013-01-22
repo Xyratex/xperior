@@ -54,7 +54,12 @@ use File::Copy;
 use Xperior::SshProcess;
 extends 'Xperior::Executor::Base';
 
-use constant DEFAULT_POLL => 5;
+has DEFAULT_POLL => ( is => 'ro', default => 5 );
+has PASSED       => ( is => 'ro', default => 0 );
+has SKIPPED      => ( is => 'ro', default => 1 );
+has FAILED       => ( is => 'ro', default => 10 );
+has NOTSET       => ( is => 'ro', default => 100 );    #also failed
+
 has 'reason' => ( is => 'rw' );
 
 =head3  execute
@@ -129,7 +134,7 @@ sub execute {
 
     my $endtime = $starttime + $self->test->getParam('timeout');
 
-    my $polltime = $self->test->getParam('polltime') || DEFAULT_POLL;
+    my $polltime = $self->test->getParam('polltime') || $self->DEFAULT_POLL;
     DEBUG "Poll time is [$polltime]";
     while ( $endtime > time ) {
 
@@ -170,7 +175,7 @@ sub execute {
     }
 
     $self->addYE( 'completed', 'yes' );
-    DEBUG "*****After crash check:".  $testproc->exitcode;
+    DEBUG "*****After crash check:" . $testproc->exitcode;
 
     #$self->_saveStageInfoAfterTest;
 
@@ -184,11 +189,7 @@ sub execute {
     $getlogres = $self->_getLog( $testproc, $self->remote_out, 'stdout' );
 
     # processLogs return values
-    #0   - passed
-    #1   - skipped
-    #10  - failed
-    #100 - no result set based on parsing, failed toor
-    my $pr = 100;
+    my $pr = $self->NOTSET;
     if ( $getlogres == 0 ) {
         $pr = $self->processLogs( $self->getNormalizedLogName('stdout') );
     }
@@ -196,6 +197,7 @@ sub execute {
         $self->reason(
             "Cannot get log file [" . $self->remote_out . "]: $getlogres" );
     }
+
     #calculate results status
     if ( $killed > 0 ) {
         $self->addYE( 'killed',         'yes' );
@@ -212,13 +214,13 @@ sub execute {
         $self->addYE( 'killed',         'no' );
         $self->addYE( 'masterhostdown', 'no' );
         $self->addYE( 'exitcode',       $testproc->exitcode );
-        if ( ( $testproc->exitcode == 0 ) && ( $pr == 0 ) ) {
+        if ( ( $testproc->exitcode == 0 ) && ( $pr == $self->PASSED ) ) {
             $self->pass;
         }
-        elsif ( ( $testproc->exitcode == 0 ) && ( $pr == 1 ) ) {
+        elsif ( ( $testproc->exitcode == 0 ) && ( $pr == $self->SKIPPED ) ) {
             $self->skip( 1, $self->getReason );
         }
-        elsif ( ( $testproc->exitcode != 0 ) && ( $pr == 0 ) ) {
+        elsif ( ( $testproc->exitcode != 0 ) && ( $pr == $self->PASSED ) ) {
             $self->fail(
                 "Test return non-zero exit code :" . $testproc->exitcode );
         }

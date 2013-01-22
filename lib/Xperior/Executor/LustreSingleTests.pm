@@ -68,7 +68,7 @@ parsing, just replace it to pretty simple function
 with static result.
 
 Return values:
-    0   - passed
+    Xperior::Executor::SingleProcessBase::PASSED   - passed
 
 =back
 
