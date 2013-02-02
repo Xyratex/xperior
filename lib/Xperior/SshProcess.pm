@@ -598,7 +598,7 @@ Return 0 if file copied and scp exit code if error occurred.
 
 sub putFile {
     my ( $self, $localfile, $remotefile ) = @_;
-    my $destination = $self->user . '@' . $self->hostname . ':' . $remotefile;
+    my $destination = $self->user . '@' . $self->host . ':' . $remotefile;
     DEBUG "Copying $localfile to $destination";
     runEx(  "scp -rp "
           . "-o 'UserKnownHostsFile=/dev/null' "
@@ -618,7 +618,7 @@ Return 0 if file copied and scp exit code if error occurred.
 
 sub getFile {
     my ( $self, $rfile, $lfile ) = @_;
-    my $source = $self->user . '@' . $self->hostname . ':' . $rfile;
+    my $source = $self->user . '@' . $self->host . ':' . $rfile;
     DEBUG "Copying [$source] to [$lfile]";
 
     return runEx( "scp -rp "
