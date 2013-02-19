@@ -1,0 +1,57 @@
+==> /var/log/messages <==
+Feb 11 20:13:00 mft52 kernel: Lustre: DEBUG MARKER: Using TIMEOUT=20
+Feb 11 20:13:01 mft52 kernel: Lustre: DEBUG MARKER: only running test 23b
+Feb 11 20:13:01 mft52 kernel: Lustre: DEBUG MARKER: excepting tests:
+Feb 11 20:13:01 mft52 kernel: Lustre: DEBUG MARKER: == ost-pools test 23b: OST pools and OOS == 20:13:01 (1360606381)
+Feb 11 20:13:15 mft52 kernel: Lustre: DEBUG MARKER: OSTCOUNT=2, OSTSIZE=200000
+Feb 11 20:13:15 mft52 kernel: Lustre: DEBUG MARKER: MAXFREE=4000000, AVAIL=34100, SLOW=YES
+Feb 11 20:14:09 mft52 kernel: Lustre: Service thread pid 2365 was inactive for 40.36s. The thread might be hung, or it might only be slow and will resume later. Dumping the stack trace for debugging purposes:
+Feb 11 20:14:09 mft52 kernel: Pid: 2365, comm: ll_ost_io_09
+Feb 11 20:14:09 mft52 kernel:
+Feb 11 20:14:09 mft52 kernel: Call Trace:
+Feb 11 20:14:09 mft52 kernel: [<ffffffff810910ce>] ? prepare_to_wait+0x4e/0x80
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0a57db5>] filter_do_bio+0x8f5/0x1950 [obdfilter]
+Feb 11 20:14:09 mft52 kernel: [<ffffffff81090de0>] ? autoremove_wake_function+0x0/0x40
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0839faf>] ? fsfilt_ldiskfs_commit+0x2f/0x70 [fsfilt_ldiskfs]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0a586c9>] filter_do_bio+0x1209/0x1950 [obdfilter]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa083b9ac>] ? fsfilt_ldiskfs_brw_start+0x27c/0x570 [fsfilt_ldiskfs]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0a5aaae>] filter_commitrw_write+0x145e/0x2ee8 [obdfilter]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa02ad01b>] ? lolnd_send+0x2b/0xb0 [lnet]
+Feb 11 20:14:09 mft52 kernel: [<ffffffff8115f8fc>] ? __kmalloc+0x20c/0x220
+Feb 11 20:14:09 mft52 kernel: [<ffffffff8123af53>] ? crypto_init_shash_ops+0x83/0x100
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0a4cae2>] filter_commitrw+0x272/0x290 [obdfilter]
+Feb 11 20:14:09 mft52 kernel: [<ffffffff81132501>] ? kzfree+0x31/0x40
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa01f994e>] ? cfs_free+0xe/0x10 [libcfs]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0a0ab5d>] obd_commitrw+0x11d/0x3c0 [ost]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0a13679>] ost_brw_write+0x1049/0x1970 [ost]
+Feb 11 20:14:09 mft52 kernel: [<ffffffff812760c6>] ? vsnprintf+0x2b6/0x5f0
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa01f819b>] ? cfs_set_ptldebug_header+0x2b/0xc0 [libcfs]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa04ee6c0>] ? target_bulk_timeout+0x0/0xc0 [ptlrpc]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0a18707>] ost_handle+0x2b77/0x4270 [ost]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0200044>] ? libcfs_id2str+0x74/0xb0 [libcfs]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa053b8f2>] ptlrpc_server_handle_request+0x432/0xff0 [ptlrpc]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa01f957e>] ? cfs_timer_arm+0xe/0x10 [libcfs]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0205ccf>] ? lc_watchdog_touch+0x6f/0x180 [libcfs]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa0534970>] ? ptlrpc_wait_event+0xb0/0x2b0 [ptlrpc]
+Feb 11 20:14:09 mft52 kernel: [<ffffffff81051be3>] ? __wake_up+0x53/0x70
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa053cd2a>] ptlrpc_main+0x87a/0x1840 [ptlrpc]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa053c4b0>] ? ptlrpc_main+0x0/0x1840 [ptlrpc]
+Feb 11 20:14:09 mft52 kernel: [<ffffffff8100c14a>] child_rip+0xa/0x20
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa053c4b0>] ? ptlrpc_main+0x0/0x1840 [ptlrpc]
+Feb 11 20:14:09 mft52 kernel: [<ffffffffa053c4b0>] ? ptlrpc_main+0x0/0x1840 [ptlrpc]
+Feb 11 20:14:09 mft52 kernel: [<ffffffff8100c140>] ? child_rip+0x0/0x20
+Feb 11 20:14:09 mft52 kernel:
+Feb 11 20:14:09 mft52 kernel: LustreError: dumping log to /tmp/lustre-log.1360606441.2365
+Feb 11 20:14:10 mft52 kernel: Lustre: 2365:0:(filter_io_26.c:775:filter_commitrw_write()) lustre-OST0000: slow direct_io 49s
+Feb 11 20:14:10 mft52 kernel: Lustre: Service thread pid 2365 completed after 49.42s. This indicates the system was overloaded (too many service threads, or there were not enough hardware resources).
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (296)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (296)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (296)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (296)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (296)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (296)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (324)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (324)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (325)
+Feb 11 20:14:11 mft52 kernel: cannot allocate a tage (327)
+Feb 11 20:14:32 mft52 kernel: LustreError: 21429:0:(vvp_io.c:1083:vvp_io_commit_write()) Write page 154951 of inode ffff880037a21cf8 failed -28

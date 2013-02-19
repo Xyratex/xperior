@@ -110,6 +110,38 @@ sub _prepareCommands {
 
 =over 12
 
+=item * B<processSystemLog> - parse B<system log> test output and
+find lines like this:
+	LustreError: dumping log to /tmp/lustre-log.1360606441.2365
+
+Dump file will be downloaded (if possible) and attach to test
+
+=back
+
+=cut
+
+sub processSystemLog{
+    my ( $self, $connector, $filename ) = @_;
+    DEBUG("Processing log file [$filename]");
+    my $isopen = open( F, "  $filename" ) ;
+    if(!$isopen){
+        INFO "Cannot open system log file [$filename]";
+        return;
+    }
+    my $i=0;
+    while ( defined( my $s = <F> ) ) {
+        chomp $s;
+        if (my ($dumplog) = ( $s =~ m/LustreError\:\s+dumping\s+log\s+to\s+(.*)$/ )) {
+            DEBUG "Log file [$dumplog] found in log";
+            $self->_getLog($connector,$dumplog,"dump.0");
+        }
+    }
+	close F;
+}
+
+
+=over 12
+
 =item * B<processLogs> - parse B<test-framework.sh> test output and
 calculate result based on output parsing.
 

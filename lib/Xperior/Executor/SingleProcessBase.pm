@@ -245,6 +245,11 @@ sub getReason {
     return $self->reason;
 }
 
+sub processSystemLog{
+	my ( $self, $connector, $filename ) = @_;
+	WARN 'processSystemLog is not implemented';
+}
+
 sub _getLog {
     my ( $self, $connector, $logfile, $logname ) = @_;
 

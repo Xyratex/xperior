@@ -90,6 +90,8 @@ These tests need:
 
 =item t/lustresingleexec.t
 
+=item t/roleStoreSyslog.t
+
 =back
 
 =head3 Tests which need distributed configuration

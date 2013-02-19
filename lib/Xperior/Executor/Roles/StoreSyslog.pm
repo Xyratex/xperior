@@ -80,14 +80,13 @@ after   'execute' => sub{
             my $res = $c->getFile( $self->tlog,$logfile);
             if ($res == 0){
                 $self->registerLogFile($logfile,$logfile);
+                $self->processSystemLog($c,$logfile);
             }else{
                 $self->addMessage(
                     "Cannot copy log file [".$self->tlog."]: $res");
-
             }
         }
     }
-
 };
 
 1;
