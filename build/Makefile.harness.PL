@@ -40,7 +40,7 @@ WriteMakefile(
       (ABSTRACT       => 'Xperior harness, system which allow execute many other tests via wrappering',
        AUTHOR         => 'ryg <Roman_Grigoryev@xyratex.com>') : (),
        MAN1PODS => {
-            'bin/runtest.pl'           => 'blib/man1/xperiror.1',
+            'bin/runtest.pl'           => 'blib/man1/xperior.1',
             'doc/XperiorDeveloperGuide.pod'        => 'blib/man1/XperiorDeveloperGuide.1',
             'doc/XperiorUserGuide.pod'             => 'blib/man1/XperiorUserGuide.1',
             'doc/XperiorInstallationGuide.pod'     => 'blib/man1/XperiorInstallationGuide.1',
