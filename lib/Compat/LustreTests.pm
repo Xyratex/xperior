@@ -288,7 +288,7 @@ sub newExcludeList {
     my $name    = $param{name}     || basename ($script, ".sh");
     my $default = $param{default};
     my @list    = map { "$name/$_" } _findSuiteExclusions($script);
-    if (-f $default) {
+    if ($default and -f $default) {
         my @defaultList = read_file($default);
         push @list, @defaultList;
     }
