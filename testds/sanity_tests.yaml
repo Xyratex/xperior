@@ -173,6 +173,7 @@ Tests:
     id: 24u
   -
     id: 24v
+    timeout: 600
   -
     id: 24w
   -
