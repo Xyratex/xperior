@@ -879,6 +879,9 @@ Tests:
   -
     id: 219
   -
+    id: 220
+    timeout: 360
+  -
     id: 900
 cleanup_max_time: -1
 dangerous: 'yes'
