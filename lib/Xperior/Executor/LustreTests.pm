@@ -97,15 +97,17 @@ sub _prepareCommands {
         $ext = '';    #ext must be set also when script is set
     }
 
-    $self->cmd( "SLOW=YES  "
-          . $self->mdsopt . " "
-          . $self->ossopt . " "
-          . $self->clntopt
-          . " $eopts $tid DIR=${dir}  PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\" "
-          . $self->lustretestdir
-          . ${script}
-          . ${ext} );
-
+    my @opt = ("SLOW=YES", 
+               "NAME=ncli", 
+               $self->mdsopt,
+               $self->ossopt,
+               $self->clntopt,
+               $eopts,
+               $tid, 
+               "DIR=${dir}",
+               "PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\"",
+               $self->lustretestdir . $script . $ext );
+    $self->cmd(join (' ', @opt));
 }
 
 =over 12
@@ -200,52 +202,39 @@ sub _prepareEnvOpts {
     my $mdss    = $self->env->getMDSs;
     my $osss    = $self->env->getOSSs;
     my $clients = $self->env->getClients;
-    $self->mdsopt('');
-    my $c = 1;
-    foreach my $m (@$mdss) {
-        my $md = '';
-        if (    ( defined( $m->{'device'} ) )
-            and ( $m->{'device'} ne '' ) )
-        {
-            $md = "MDSDEV$c=" . $m->{'device'};
+    my $c;
 
-        }
-        $self->mdsopt( $self->mdsopt
-              . " $md mds${c}_HOST="
-              . $self->env->getNodeAddress( $m->{'node'} ) . ' '
-              . " mds_HOST="
-              . $self->env->getNodeAddress( $m->{'node'} )
-              . ' ' );
+    my @mds_opt;
+    $c = 1;
+    foreach my $m (@$mdss) {
+        my $host = $self->env->getNodeAddress( $m->{'node'} );
+        push @mds_opt, "mds${c}_HOST=$host"
+                     , "mds_HOST=$host";
+        push @mds_opt, "MDSDEV$c=" . $m->{'device'}
+            if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
         $c++;
     }
-    $c--;
-    $self->mdsopt( "MDSCOUNT=$c" . $self->mdsopt );
-
-    $self->ossopt('');
+    push @mds_opt, "MDSCOUNT=" . scalar @$mdss;
+    $self->mdsopt( join(' ', @mds_opt) );
+    
+    my @oss_opt;
     $c = 1;
     foreach my $m (@$osss) {
-        my $sd = '';
-        if (    ( defined( $m->{'device'} ) )
-            and ( $m->{'device'} ne '' ) )
-        {
-            $sd = " OSTDEV$c=" . $m->{'device'}
-
-        }
-        $self->ossopt( $self->ossopt
-              . " $sd  ost${c}_HOST="
-              . $self->env->getNodeAddress( $m->{'node'} )
-              . ' ' );
+        my $host = $self->env->getNodeAddress( $m->{'node'} );
+        push @oss_opt, "ost${c}_HOST=$host";
+        push @oss_opt, "OSTDEV$c=" . $m->{'device'}
+            if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
         $c++;
     }
-    $c--;
-    $self->ossopt( "OSTCOUNT=$c" . $self->ossopt );
+    push @oss_opt, "OSTCOUNT=" . scalar @$osss;
+    $self->ossopt( join(' ', @oss_opt) );
 
     #include only master client for sanity suite
     $self->clntopt('CLIENTS=');
     my $mclient;
     my @rclients;
     foreach my $cl (@$clients) {
-        if ( ( defined( $cl->{'master'} ) && ( $cl->{'master'} eq 'yes' ) ) ) {
+        if ( $cl->{'master'} && $cl->{'master'} eq 'yes' ) {
             $mclient = $self->env->getNodeAddress( $cl->{'node'} );
         }
         else {
