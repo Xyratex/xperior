@@ -123,6 +123,7 @@ Tests:
     id: 32b
   -
     id: 33a
+    timeout: 600
   -
     id: 34
   -
