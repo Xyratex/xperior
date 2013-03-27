@@ -612,6 +612,7 @@ Tests:
     id: 101b
   -
     id: 101d
+    timeout: 610
   -
     dangerous: 'yes'
     id: 102a
