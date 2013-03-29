@@ -197,7 +197,6 @@ sub _sshSyncExecS {
             $rawout = $rawout . $s;
             unless ( $s =~ m/Warning:\sPermanently\sadded/ ) {
                 $out = $out . $s;
-                DEBUG "RO:$_";
             }
         }
         close $cmd;
@@ -291,17 +290,18 @@ sub initTemp {
 sub init {
     DEBUG "Automator::SshUnixProcess->init";
     my $self = shift;
-    $self->initTemp;
     $self->host(shift);
     $self->user(shift);
     $self->port(shift);
+    my $nocrash = shift;
+
+    $self->initTemp;
     $self->killed(0);
     $self->exitcode(0);
 
-    my $nocrash = shift;
-
-    my $ver = 'none';
+    my $ver = '';
     $ver = $self->_sshSyncExec( "uname -a", 30 );
+    $ver = '' unless defined $ver;
     chomp $ver;
 
     #DEBUG "-------------------------------";

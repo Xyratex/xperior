@@ -82,14 +82,14 @@ test
     DEBUG "MDS OPT:" . $exe->mdsopt;
     is(
         $exe->mdsopt,
-        'MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=mds  mds_HOST=mds ',
+        'mds1_HOST=mds mds_HOST=mds MDSDEV1=/dev/loop0 MDSCOUNT=1',
         'Check MDS OPT'
     );
 
     DEBUG "OSS OPT:" . $exe->ossopt;
     is(
         $exe->ossopt,
-'OSTCOUNT=2  OSTDEV1=/dev/loop1  ost1_HOST=192.168.200.102   OSTDEV2=/dev/loop2  ost2_HOST=192.168.200.102 ',
+'ost1_HOST=192.168.200.102 OSTDEV1=/dev/loop1 ost2_HOST=192.168.200.102 OSTDEV2=/dev/loop2 OSTCOUNT=2',
         'Check OSS OPT'
     );
 
@@ -154,7 +154,7 @@ test
   };
 
 test
-  plan            => 3,
+  plan            => 4,
   kCheckExecution => sub {
     my $testcore = Xperior::Core->new();
     $testcore->options( \%options );
@@ -165,7 +165,7 @@ test
     $exe->_prepareCommands;
     DEBUG $exe->cmd;
     my $excmd =
-'SLOW=YES  MDSCOUNT=1 MDSDEV1=/dev/loop0 mds1_HOST=mds  mds_HOST=mds  OSTCOUNT=2  OSTDEV1=/dev/loop1  ost1_HOST=192.168.200.102   OSTDEV2=/dev/loop2  ost2_HOST=192.168.200.102  CLIENTS=lclient RCLIENTS=\"mds\"  ONLY=1a DIR=/mnt/lustre//tmp/  PDSH=\"/usr/bin/pdsh -R ssh -S -w \" /usr/lib64/lustre/tests/sanity.sh';
+'SLOW=YES NAME=ncli mds1_HOST=mds mds_HOST=mds MDSDEV1=/dev/loop0 MDSCOUNT=1 ost1_HOST=192.168.200.102 OSTDEV1=/dev/loop1 ost2_HOST=192.168.200.102 OSTDEV2=/dev/loop2 OSTCOUNT=2 CLIENTS=lclient RCLIENTS=\"mds\"  ONLY=1a DIR=/mnt/lustre//tmp/ PDSH=\"/usr/bin/pdsh -R ssh -S -w \" /usr/lib64/lustre/tests/sanity.sh';
     is( $exe->cmd, $excmd, "Check generated cmd" );
     $exe->execute;
     DEBUG Dumper $exe->yaml;
@@ -175,6 +175,7 @@ test
         'Xperior::Executor::LustreTests',
         'Check result'
     );
+    is(-e '/tmp/test_wd/sanity/1a.mountifno.log' ,1 , 'Check that mountinfo is saved');
   };
 
 lustreexec->run_tests;
