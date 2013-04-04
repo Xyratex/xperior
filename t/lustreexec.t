@@ -48,13 +48,13 @@ my %options = (
 );
 
 my %th = (
-    id  => '1a',
-    inf => 'more info',
+           id  => '1a',
+           inf => 'more info',
 );
 
 my %gh = (
-    executor  => 'Xperior::Executor::LustreTests',
-    groupname => 'sanity',
+           executor  => 'Xperior::Executor::LustreTests',
+           groupname => 'sanity',
 );
 
 startup _startup => sub {
@@ -80,11 +80,9 @@ test
     $exe->init( $test, \%options, $cfg );
     $exe->_prepareEnvOpts;
     DEBUG "MDS OPT:" . $exe->mdsopt;
-    is(
-        $exe->mdsopt,
+    is( $exe->mdsopt,
         'mds1_HOST=mds mds_HOST=mds MDSDEV1=/dev/loop0 MDSCOUNT=1',
-        'Check MDS OPT'
-    );
+        'Check MDS OPT' );
 
     DEBUG "OSS OPT:" . $exe->ossopt;
     is(
@@ -94,16 +92,59 @@ test
     );
 
     DEBUG "CLNT OPT:" . $exe->clntopt;
-    is(
-        $exe->clntopt,
+    is( $exe->clntopt,
         'CLIENTS=lclient RCLIENTS=\"mds\"',
-        'Check Clients options'
-    );
+        'Check Clients options' );
   };
 
 test
-  plan             => 3,
-  fCheckLogParsing => sub {
+  plan                   => 6,
+  fCheckStdOutLogParsing => sub {
+    my $exe = Xperior::Executor::LustreTests->new();
+    Xperior::Executor::Roles::StoreSyslog->meta->apply($exe);
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
+    $exe->init( $test, \%options, $cfg );
+
+    my $fr = $exe->processLogs('t/testout/9.stdout.log');
+    is( $fr, $exe->FAILED, "Failed result" );
+    like(
+        $exe->yaml->{messages},
+qr/Cannot list lctl logs files\[\/tmp\/test_logs\/1365001494\/replay-dual.test_9.*.1365001544.log\]/,
+        'Check failure messages'
+    );
+    my $file1    = '/tmp/replay-dual.test_9.1.log';
+    my $teststr1 = 'xperior test file 1';
+    my $file2    = '/tmp/replay-dual.test_9.2.log';
+    my $teststr2 = 'xperior test file 2';
+    write_file( $file1, $teststr1 ) or confess "Can't create $file1: $!";
+    write_file( $file2, $teststr2 ) or confess "Can't create $file2: $!";
+
+    remove_tree('/tmp/test_wd');
+    make_path('/tmp/test_wd/sanity/');
+    $exe->init( $test, \%options, $cfg );
+    $fr = $exe->processLogs('t/testout/9.stdout.log.realfile');
+
+    my $resultstr1 =
+      read_file('/tmp/test_wd/sanity/1a.lctllog.replay-dual.test_9.1.log');
+    is( $teststr1,              $resultstr1, 'Compare files #1' );
+    is( $exe->yaml->{messages}, '',          'Check that messages empty#1' );
+
+    my $resultstr2 =
+      read_file('/tmp/test_wd/sanity/1a.lctllog.replay-dual.test_9.2.log');
+    is( $teststr2,              $resultstr2, 'Compare files #2' );
+    is( $exe->yaml->{messages}, '',          'Check that messages empty#2' );
+
+    unlink $file1;
+    unlink $file2;
+  };
+
+test
+  plan                   => 3,
+  fCheckSystemLogParsing => sub {
     my $exe = Xperior::Executor::LustreTests->new();
     Xperior::Executor::Roles::StoreSyslog->meta->apply($exe);
     my $test = Xperior::Test->new;
@@ -116,12 +157,11 @@ test
     my $mclient    = $exe->_getMasterClient;
     my $mclientobj = $exe->env->getNodeById( $mclient->{'node'} );
     my $connector  = $mclientobj->getRemoteConnector;
+
     $exe->processSystemLog( $connector, 't/testout/23b.messages.vm1.log' );
-    like(
-        $exe->yaml->{messages},
-        qr/Cannot copy log file \[\/tmp\/lustre-log\.1360606441\.2365\]/,
-        'Check messages'
-    );
+    like( $exe->yaml->{messages},
+          qr/Cannot copy log file \[\/tmp\/lustre-log\.1360606441\.2365\]/,
+          'Check messages' );
 
     my $file    = '/tmp/xp_test_file';
     my $teststr = 'xperior test file';
@@ -131,7 +171,7 @@ test
     make_path('/tmp/test_wd/sanity/');
     $exe->init( $test, \%options, $cfg );
     $exe->processSystemLog( $connector,
-        't/testout/23b.messages.vm1.log.realfile' );
+                            't/testout/23b.messages.vm1.log.realfile' );
     DEBUG Dumper $exe->yaml;
     my $resultstr = read_file('/tmp/test_wd/sanity/1a.dump.0.log');
     is( $teststr,               $resultstr, 'Compare files' );
@@ -141,8 +181,15 @@ test
 
 test
   plan             => 3,
-  gCheckLogParsing => sub {
-    my $exe = Xperior::Executor::LustreTests->new();
+  dCheckLogParsing => sub {
+    my $exe  = Xperior::Executor::LustreTests->new();
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
+    $exe->init( $test, \%options, $cfg );
+
     my $res = $exe->processLogs('t/testout/sanity.1a.stdout.log');
     is( $res, 0, 'Check PASS log' );
     $res = $exe->processLogs('t/testout/sanity.1a.f.stdout.log');
@@ -170,12 +217,11 @@ test
     $exe->execute;
     DEBUG Dumper $exe->yaml;
     is( $exe->yaml->{'status'}, 'passed', 'Check result' );
-    is(
-        $exe->yaml->{'executor'},
+    is( $exe->yaml->{'executor'},
         'Xperior::Executor::LustreTests',
-        'Check result'
-    );
-    is(-e '/tmp/test_wd/sanity/1a.mountifno.log' ,1 , 'Check that mountinfo is saved');
+        'Check result' );
+    is( -e '/tmp/test_wd/sanity/1a.mount-info.log',
+        1, 'Check that mountinfo is saved' );
   };
 
 lustreexec->run_tests;

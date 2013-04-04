@@ -103,8 +103,8 @@ DATA
         $lres .= "$ldata\n";
         $mres .= "$mdata\n";
     }
-    $self->_saveStatusLog( 'mount-info', $lres );
-    $self->_saveStatusLog( 'memory-info',   $mres );
+    $self->_saveStatusLog( 'mount-info',  $lres );
+    $self->_saveStatusLog( 'memory-info', $mres );
 };
 
 sub _saveStatusLog {
@@ -196,8 +196,10 @@ sub processSystemLog {
 
 =over 12
 
-=item * B<processLogs> - parse B<test-framework.sh> test output and
-calculate result based on output parsing.
+=item * B<processLogs> - parse B<test-framework.sh> test output,
+calculate result based on output parsing and find lines like this:
+    Dumping lctl log to /tmp/test_logs/1365001494/replay-dual.test_9.*.1365001544.log
+Dump file will be downloaded (if possible) and attach to test
 
 Return values:
 
@@ -215,6 +217,10 @@ Also failure reason accessible (if defined) via call C<getReason>.
 
 sub processLogs {
     my ( $self, $file ) = @_;
+
+    my $mclient    = $self->_getMasterClient;
+    my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
+    my $connector  = $mclientobj->getRemoteConnector;
     DEBUG("Processing log file [$file]");
     open( F, "  $file" );
 
@@ -225,6 +231,23 @@ sub processLogs {
 
     while ( defined( my $s = <F> ) ) {
         chomp $s;
+        if ( my ($dumplog) = ( $s =~ m/Dumping lctl log to\s+(.*)$/ ) ) {
+            DEBUG "Log files template [$dumplog] found in log";
+            my $files = $connector->createSync("ls -Aw1 $dumplog");
+            if ( ( $connector->syncexitcode != 0 ) or ( $files eq '' ) ) {
+                $self->addMessage("Cannot list lctl logs files[$dumplog]");
+            }
+            else {
+                foreach my $file ( split( /\n/, $files ) ) {
+                    INFO "Attaching log file [$file]";
+                    my $sname = $file;
+                    $sname =~ s/^.*\///;
+                    $sname =~ s/\.log$//;
+                    $self->_getLog( $connector, $file, "lctllog.$sname" );
+                }
+            }
+        }
+
         if ( $s =~ m/^PASS/ ) {
             $result = $self->PASSED;
             $reason = '';
