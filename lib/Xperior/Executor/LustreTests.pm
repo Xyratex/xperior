@@ -50,6 +50,7 @@ use Moose;
 use Data::Dumper;
 use Carp qw( confess cluck );
 use Log::Log4perl qw(:easy);
+use File::Slurp;
 
 extends 'Xperior::Executor::SingleProcessBase';
 
@@ -69,6 +70,37 @@ after 'init' => sub {
     $self->reason('');
 };
 
+before 'execute' => sub {
+    my $self = shift;
+    my $res = '';
+    foreach my $node ( @{ $self->env->{'nodes'} } )
+    {
+        my $c     = $node->getRemoteConnector;
+        my $lfs   = $c->createSync('lfs df -i');
+        my $mount = $c->createSync('mount | grep lustre');
+        my $node  = $node->{'ip'};
+        my $data  = <<DATA
+----------------- $node -----------------
+<lfs df -i>
+$lfs
+<mount | grep lustre>
+$mount
+
+DATA
+          ;
+        $res .= "$data\n";
+    }
+    my $logfile = $self->getNormalizedLogName('mountifno');
+    if ( defined( write_file( $logfile, { err_mode => 'carp' }, $res ) ) )
+    {
+        $self->registerLogFile( $logfile, $logfile );
+    }
+    else
+    {
+        $self->addMessage( "Cannot create log file [$logfile ]: $res" );
+    }
+};
+
 =over 12
 
 =item * B<_prepareCommands> - generate command line for Lustre test based on L<configuration|XperiorUserGuide/"System descriptor"> and test descriptor.
@@ -77,7 +109,8 @@ after 'init' => sub {
 
 =cut
 
-sub _prepareCommands {
+sub _prepareCommands
+{
     my $self = shift;
     $self->_prepareEnvOpts;
     my $td  = '';
@@ -91,23 +124,26 @@ sub _prepareCommands {
     #TODO add test on it
     $eopts = $self->env->cfg->{extoptions}
       if defined $self->env->cfg->{extoptions};
-    if ( defined( $self->test->getParam('script') ) ) {
+    if ( defined( $self->test->getParam('script') ) )
+    {
         $script = $self->test->getParam('script');
         $tid    = '';                                #no default test number
         $ext = '';    #ext must be set also when script is set
     }
 
-    my @opt = ("SLOW=YES", 
-               "NAME=ncli", 
-               $self->mdsopt,
-               $self->ossopt,
-               $self->clntopt,
-               $eopts,
-               $tid, 
-               "DIR=${dir}",
-               "PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\"",
-               $self->lustretestdir . $script . $ext );
-    $self->cmd(join (' ', @opt));
+    my @opt = (
+        "SLOW=YES",
+        "NAME=ncli",
+        $self->mdsopt,
+        $self->ossopt,
+        $self->clntopt,
+        $eopts,
+        $tid,
+        "DIR=${dir}",
+        "PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\"",
+        $self->lustretestdir . $script . $ext
+    );
+    $self->cmd( join( ' ', @opt ) );
 }
 
 =over 12
@@ -122,25 +158,29 @@ Dump file will be downloaded (if possible) and attach to test
 
 =cut
 
-sub processSystemLog{
+sub processSystemLog
+{
     my ( $self, $connector, $filename ) = @_;
     DEBUG("Processing log file [$filename]");
-    my $isopen = open( F, "  $filename" ) ;
-    if(!$isopen){
+    my $isopen = open( F, "  $filename" );
+    if ( !$isopen )
+    {
         INFO "Cannot open system log file [$filename]";
         return;
     }
-    my $i=0;
-    while ( defined( my $s = <F> ) ) {
+    my $i = 0;
+    while ( defined( my $s = <F> ) )
+    {
         chomp $s;
-        if (my ($dumplog) = ( $s =~ m/LustreError\:\s+dumping\s+log\s+to\s+(.*)$/ )) {
+        if ( my ($dumplog) =
+            ( $s =~ m/LustreError\:\s+dumping\s+log\s+to\s+(.*)$/ ) )
+        {
             DEBUG "Log file [$dumplog] found in log";
-            $self->_getLog($connector,$dumplog,"dump.0");
+            $self->_getLog( $connector, $dumplog, "dump.0" );
         }
     }
-	close F;
+    close F;
 }
-
 
 =over 12
 
@@ -161,7 +201,8 @@ Also failure reason accessible (if defined) via call C<getReason>.
 
 =cut
 
-sub processLogs {
+sub processLogs
+{
     my ( $self, $file ) = @_;
     DEBUG("Processing log file [$file]");
     open( F, "  $file" );
@@ -171,33 +212,39 @@ sub processLogs {
     my $reason    = $defreason;
     my @results;
 
-    while ( defined( my $s = <F> ) ) {
+    while ( defined( my $s = <F> ) )
+    {
         chomp $s;
-        if ( $s =~ m/^PASS/ ) {
+        if ( $s =~ m/^PASS/ )
+        {
             $result = $self->PASSED;
             $reason = '';
             last;
         }
-        if ( $s =~ m/^FAIL(.*)/ ) {
+        if ( $s =~ m/^FAIL(.*)/ )
+        {
             $result = $self->FAILED;
             $reason = $1 if defined $1;
             last;
         }
-        if ( $s =~ /^SKIP(.*)/ ) {
+        if ( $s =~ /^SKIP(.*)/ )
+        {
             $result = $self->SKIPPED;
-            $reason = $1 if  $1;
+            $reason = $1 if $1;
             last;
         }
 
     }
-    if ($result) {
+    if ($result)
+    {
         $self->reason($reason);
     }
     close(F);
     return $result;
 }
 
-sub _prepareEnvOpts {
+sub _prepareEnvOpts
+{
     my $self    = shift;
     my $mdss    = $self->env->getMDSs;
     my $osss    = $self->env->getOSSs;
@@ -206,38 +253,42 @@ sub _prepareEnvOpts {
 
     my @mds_opt;
     $c = 1;
-    foreach my $m (@$mdss) {
+    foreach my $m (@$mdss)
+    {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
-        push @mds_opt, "mds${c}_HOST=$host"
-                     , "mds_HOST=$host";
+        push @mds_opt, "mds${c}_HOST=$host", "mds_HOST=$host";
         push @mds_opt, "MDSDEV$c=" . $m->{'device'}
-            if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+          if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
         $c++;
     }
     push @mds_opt, "MDSCOUNT=" . scalar @$mdss;
-    $self->mdsopt( join(' ', @mds_opt) );
-    
+    $self->mdsopt( join( ' ', @mds_opt ) );
+
     my @oss_opt;
     $c = 1;
-    foreach my $m (@$osss) {
+    foreach my $m (@$osss)
+    {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
         push @oss_opt, "ost${c}_HOST=$host";
         push @oss_opt, "OSTDEV$c=" . $m->{'device'}
-            if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+          if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
         $c++;
     }
     push @oss_opt, "OSTCOUNT=" . scalar @$osss;
-    $self->ossopt( join(' ', @oss_opt) );
+    $self->ossopt( join( ' ', @oss_opt ) );
 
     #include only master client for sanity suite
     $self->clntopt('CLIENTS=');
     my $mclient;
     my @rclients;
-    foreach my $cl (@$clients) {
-        if ( $cl->{'master'} && $cl->{'master'} eq 'yes' ) {
+    foreach my $cl (@$clients)
+    {
+        if ( $cl->{'master'} && $cl->{'master'} eq 'yes' )
+        {
             $mclient = $self->env->getNodeAddress( $cl->{'node'} );
         }
-        else {
+        else
+        {
             push @rclients, $self->env->getNodeAddress( $cl->{'node'} );
         }
     }

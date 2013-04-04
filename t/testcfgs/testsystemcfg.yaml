@@ -13,7 +13,7 @@ Nodes:
 
    - id          : oss2
      ip          : 192.168.200.102
-     ssh_user    : root
+     user        : root
 
    - id           : client1
      ip           : lclient 
@@ -25,7 +25,7 @@ Nodes:
      ip           : mds 
 #    ip           : 192.168.200.102
      ctrlproto    : ssh
-     user         : ryg
+     user         : root
 
 
 
