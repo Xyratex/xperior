@@ -72,14 +72,16 @@ after 'init' => sub {
 
 before 'execute' => sub {
     my $self = shift;
-    my $res = '';
-    foreach my $node ( @{ $self->env->{'nodes'} } )
-    {
+    my $lres = '';
+    my $mres = '';
+    foreach my $node ( @{ $self->env->{'nodes'} } ) {
         my $c     = $node->getRemoteConnector;
         my $lfs   = $c->createSync('lfs df -i');
         my $mount = $c->createSync('mount | grep lustre');
+        my $free  = $c->createSync('free');
+        my $df    = $c->createSync('df');
         my $node  = $node->{'ip'};
-        my $data  = <<DATA
+        my $ldata = <<DATA
 ----------------- $node -----------------
 <lfs df -i>
 $lfs
@@ -88,18 +90,33 @@ $mount
 
 DATA
           ;
-        $res .= "$data\n";
+        my $mdata = <<DATA
+----------------- $node -----------------
+<free>
+$free
+<df>
+$df
+
+DATA
+          ;
+
+        $lres .= "$ldata\n";
+        $mres .= "$mdata\n";
     }
-    my $logfile = $self->getNormalizedLogName('mountifno');
-    if ( defined( write_file( $logfile, { err_mode => 'carp' }, $res ) ) )
-    {
+    $self->_saveStatusLog( 'mount-info', $lres );
+    $self->_saveStatusLog( 'memory-info',   $mres );
+};
+
+sub _saveStatusLog {
+    my ( $self, $name, $res ) = @_;
+    my $logfile = $self->getNormalizedLogName($name);
+    if ( defined( write_file( $logfile, { err_mode => 'carp' }, $res ) ) ) {
         $self->registerLogFile( $logfile, $logfile );
     }
-    else
-    {
-        $self->addMessage( "Cannot create log file [$logfile ]: $res" );
+    else {
+        $self->addMessage("Cannot create log file [$logfile ]: $res");
     }
-};
+}
 
 =over 12
 
@@ -109,8 +126,7 @@ DATA
 
 =cut
 
-sub _prepareCommands
-{
+sub _prepareCommands {
     my $self = shift;
     $self->_prepareEnvOpts;
     my $td  = '';
@@ -124,24 +140,23 @@ sub _prepareCommands
     #TODO add test on it
     $eopts = $self->env->cfg->{extoptions}
       if defined $self->env->cfg->{extoptions};
-    if ( defined( $self->test->getParam('script') ) )
-    {
+    if ( defined( $self->test->getParam('script') ) ) {
         $script = $self->test->getParam('script');
         $tid    = '';                                #no default test number
         $ext = '';    #ext must be set also when script is set
     }
 
     my @opt = (
-        "SLOW=YES",
-        "NAME=ncli",
-        $self->mdsopt,
-        $self->ossopt,
-        $self->clntopt,
-        $eopts,
-        $tid,
-        "DIR=${dir}",
-        "PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\"",
-        $self->lustretestdir . $script . $ext
+                "SLOW=YES",
+                "NAME=ncli",
+                $self->mdsopt,
+                $self->ossopt,
+                $self->clntopt,
+                $eopts,
+                $tid,
+                "DIR=${dir}",
+                "PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\"",
+                $self->lustretestdir . $script . $ext
     );
     $self->cmd( join( ' ', @opt ) );
 }
@@ -158,22 +173,19 @@ Dump file will be downloaded (if possible) and attach to test
 
 =cut
 
-sub processSystemLog
-{
+sub processSystemLog {
     my ( $self, $connector, $filename ) = @_;
     DEBUG("Processing log file [$filename]");
     my $isopen = open( F, "  $filename" );
-    if ( !$isopen )
-    {
+    if ( !$isopen ) {
         INFO "Cannot open system log file [$filename]";
         return;
     }
     my $i = 0;
-    while ( defined( my $s = <F> ) )
-    {
+    while ( defined( my $s = <F> ) ) {
         chomp $s;
         if ( my ($dumplog) =
-            ( $s =~ m/LustreError\:\s+dumping\s+log\s+to\s+(.*)$/ ) )
+             ( $s =~ m/LustreError\:\s+dumping\s+log\s+to\s+(.*)$/ ) )
         {
             DEBUG "Log file [$dumplog] found in log";
             $self->_getLog( $connector, $dumplog, "dump.0" );
@@ -201,8 +213,7 @@ Also failure reason accessible (if defined) via call C<getReason>.
 
 =cut
 
-sub processLogs
-{
+sub processLogs {
     my ( $self, $file ) = @_;
     DEBUG("Processing log file [$file]");
     open( F, "  $file" );
@@ -212,39 +223,33 @@ sub processLogs
     my $reason    = $defreason;
     my @results;
 
-    while ( defined( my $s = <F> ) )
-    {
+    while ( defined( my $s = <F> ) ) {
         chomp $s;
-        if ( $s =~ m/^PASS/ )
-        {
+        if ( $s =~ m/^PASS/ ) {
             $result = $self->PASSED;
             $reason = '';
             last;
         }
-        if ( $s =~ m/^FAIL(.*)/ )
-        {
+        if ( $s =~ m/^FAIL(.*)/ ) {
             $result = $self->FAILED;
             $reason = $1 if defined $1;
             last;
         }
-        if ( $s =~ /^SKIP(.*)/ )
-        {
+        if ( $s =~ /^SKIP(.*)/ ) {
             $result = $self->SKIPPED;
             $reason = $1 if $1;
             last;
         }
 
     }
-    if ($result)
-    {
+    if ($result) {
         $self->reason($reason);
     }
     close(F);
     return $result;
 }
 
-sub _prepareEnvOpts
-{
+sub _prepareEnvOpts {
     my $self    = shift;
     my $mdss    = $self->env->getMDSs;
     my $osss    = $self->env->getOSSs;
@@ -253,8 +258,7 @@ sub _prepareEnvOpts
 
     my @mds_opt;
     $c = 1;
-    foreach my $m (@$mdss)
-    {
+    foreach my $m (@$mdss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
         push @mds_opt, "mds${c}_HOST=$host", "mds_HOST=$host";
         push @mds_opt, "MDSDEV$c=" . $m->{'device'}
@@ -266,8 +270,7 @@ sub _prepareEnvOpts
 
     my @oss_opt;
     $c = 1;
-    foreach my $m (@$osss)
-    {
+    foreach my $m (@$osss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
         push @oss_opt, "ost${c}_HOST=$host";
         push @oss_opt, "OSTDEV$c=" . $m->{'device'}
@@ -281,19 +284,16 @@ sub _prepareEnvOpts
     $self->clntopt('CLIENTS=');
     my $mclient;
     my @rclients;
-    foreach my $cl (@$clients)
-    {
-        if ( $cl->{'master'} && $cl->{'master'} eq 'yes' )
-        {
+    foreach my $cl (@$clients) {
+        if ( $cl->{'master'} && $cl->{'master'} eq 'yes' ) {
             $mclient = $self->env->getNodeAddress( $cl->{'node'} );
         }
-        else
-        {
+        else {
             push @rclients, $self->env->getNodeAddress( $cl->{'node'} );
         }
     }
     $self->clntopt(
-        "CLIENTS=$mclient RCLIENTS=\\\"" . join( ',', @rclients ) . "\\\"" );
+           "CLIENTS=$mclient RCLIENTS=\\\"" . join( ',', @rclients ) . "\\\"" );
 }
 
 __PACKAGE__->meta->make_immutable;
