@@ -1,0 +1,40 @@
+Logging to shared log directory: /tmp/test_logs/1365001494
+only running test 9
+excepting tests: 15c
+Starting client mft51.xyua: -o user_xattr,flock mft51.xyua@tcp:/lustre /mnt/lustre2
+Started clients mft51.xyua: 
+mft51.xyua@tcp:/lustre on /mnt/lustre2 type lustre (rw,user_xattr,flock)
+mft51.xyua: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft51.xyua environments
+Using TIMEOUT=20
+disable quota as required
+setting all flavor to null
+already have total 8 null connections
+.........
+
+== replay-dual test 9: resending a replayed create == 18:05:11 (1365001511)
+Filesystem           1K-blocks      Used Available Use% Mounted on
+mft51.xyua@tcp:/lustre
+                       1377952     65880   1241944   6% /mnt/lustre
+fail_loc=0x80000119
+Failing mds1 on node mft51.xyua
+Stopping /mnt/mds1 (opts:) on mft51.xyua
+affected facets: mds1
+Failover mds1 to mft51.xyua
+18:05:21 (1365001521) waiting for mft51.xyua network 900 secs ...
+18:05:21 (1365001521) network interface is UP
+Starting mds1: -o loop,user_xattr  /tmp/lustre-mdt1 /mnt/mds1
+Started lustre-MDT0000
+fail_loc=0
+rm: cannot remove `/mnt/lustre/f9-2': Is a directory
+ replay-dual test_9: @@@@@@ FAIL: test_9 failed with 1 
+  Trace dump:
+  = /usr/lib64/lustre/tests/test-framework.sh:3165:error_noexit
+  = /usr/lib64/lustre/tests/test-framework.sh:3187:error
+  = /usr/lib64/lustre/tests/test-framework.sh:3423:run_one
+  = /usr/lib64/lustre/tests/test-framework.sh:3453:run_one_logged
+  = /usr/lib64/lustre/tests/test-framework.sh:3275:run_test
+  = /usr/lib64/lustre/tests/replay-dual.sh:201:main
+Dumping lctl log to /tmp/test_logs/1365001494/replay-dual.test_9.*.1365001544.log
+FAIL 9 (34s)
