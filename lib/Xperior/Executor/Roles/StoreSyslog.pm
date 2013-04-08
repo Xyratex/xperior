@@ -42,7 +42,7 @@ use Time::HiRes;
 use Xperior::Utils;
 has tlog      => ( is =>'rw');
 has ison      => ( is =>'rw', isa => 'HashRef');
-has storedir  => ( is =>'rw', default => '/var/log/xperior/messageslog');
+has storedir  => ( is =>'rw', default => '/var/log/xperior/syslog');
 has remotelog => ( is =>'rw', default => '/var/log/messages');
 has logname   => ( is => 'rw', default => 'messages');
 requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
@@ -53,8 +53,8 @@ before 'execute' => sub{
     $self->ison(\%h);
     foreach my $node (@{$self->env->nodes}) {
         my $c = $node->getExclusiveRC;
-        my $tlog = $self->storedir . '.' . Time::HiRes::gettimeofday();
-
+        my $tlog = $self->storedir . '/messages.' . Time::HiRes::gettimeofday();
+        $c->create('mkdir', "mkdir -p " . $self->storedir);
         $self->tlog($tlog);
         $self->ison->{$node->id} = $c;
         $c->create('tail', "tail -f -n 0 -v $self->{remotelog} > $tlog ");
