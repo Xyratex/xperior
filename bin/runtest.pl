@@ -61,6 +61,10 @@ Execute tests selected in configuration and filters.
 Print list of tests which will be ready to execute considering configuration
 and filters.
 
+=item generatehtml
+
+Generate html report based on exist workdir with execution results. 
+
 =back
 
 =item --help
@@ -363,7 +367,8 @@ else {
 
 #check test description configuration existence
 if((defined $action) &&($action ne '') ){
-    unless (($action eq 'run') ||( $action eq 'list')){
+    unless (($action eq 'run') 
+    || ( $action eq 'list') || ( $action eq 'generatehtml')){
         print "Incorrect action set : $action\n";
         pod2usage(3);
     }
@@ -372,13 +377,17 @@ if((defined $action) &&($action ne '') ){
 }
 
 if (-e $configfile) {
- INFO "Configuration file is [$configfile]";
+    INFO "Configuration file is [$configfile]";
+} elsif ( $action eq 'generatehtml'){
+    INFO "Configuration file is not needed in this mode";
 }else{
     confess "Cannot find configuration file [$configfile]" ;
 }
 
 if (-d $testdir) {
- INFO "Test directory [$testdir] found";
+    INFO "Test directory [$testdir] found";
+} elsif ( $action eq 'generatehtml'){
+    INFO "Test directory is not needed in this mode";
 }else{
     confess "Cannot find test directory [$testdir]" ;
 }

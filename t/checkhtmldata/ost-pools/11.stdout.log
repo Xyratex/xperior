@@ -1,0 +1,40 @@
+Logging to local directory: /tmp/test_logs/1365134552
+mft75: Checking config lustre mounted on /mnt/lustre
+mft76: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft75.xyua,mft76 environments
+Using TIMEOUT=20
+lnet.debug=0x33f1504
+lnet.subsystem_debug=0xffb7e3ff
+lnet.debug_mb=10
+mft76: lnet.debug=0x33f1504
+mft76: lnet.subsystem_debug=0xffb7e3ff
+mft76: lnet.debug_mb=10
+only running test 11
+excepting tests: 
+...............
+
+== test 11: OSTs in overlapping/multiple pools == 00:02:37
+mft77: Pool lustre.pool1 created
+Updated after 0 sec: wanted '' got ''
+mft77: Pool lustre.pool2 created
+Updated after 0 sec: wanted '' got ''
+mft77: OST lustre-OST0001_UUID added to pool lustre.pool2
+mft77: OST lustre-OST0000_UUID added to pool lustre.pool1
+Updated after 0 sec: wanted 'lustre-OST0000_UUID ' got 'lustre-OST0000_UUID '
+total: 100 creates in 0.22 seconds: 463.53 creates/second
+total: 100 creates in 0.23 seconds: 442.39 creates/second
+Pool: lustre.pool1
+lustre-OST0000_UUID
+mft77: OST lustre-OST0000_UUID removed from pool lustre.pool1
+mft77: Pool lustre.pool1 destroyed
+Updated after 0 sec: wanted 'foo' got 'foo'
+Pool: lustre.pool2
+lustre-OST0001_UUID
+mft77: OST lustre-OST0001_UUID removed from pool lustre.pool2
+mft77: Pool lustre.pool2 destroyed
+Updated after 0 sec: wanted 'foo' got 'foo'
+Resetting fail_loc on all nodes...done.
+PASS   (98s)
+..............===== ost-pools.sh test complete, duration 103 sec
+Pools from lustre:

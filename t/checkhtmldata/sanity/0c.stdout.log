@@ -1,0 +1,27 @@
+Logging to local directory: /tmp/test_logs/1365142269
+mft65: Checking config lustre mounted on /mnt/lustre
+mft66: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft65.xyua,mft66 environments
+Using TIMEOUT=20
+lnet.debug=0x33f1504
+lnet.subsystem_debug=0xffb7e3ff
+lnet.debug_mb=10
+mft66: lnet.debug=0x33f1504
+mft66: lnet.subsystem_debug=0xffb7e3ff
+mft66: lnet.debug_mb=10
+only running test 0c
+excepting tests: 27u 42a 42b 42c 42d 45 51d 62 68 75 101a
+preparing for tests involving mounts
+
+lnet.debug=-1
+..
+
+== test 0c: check import proc ============================= == 02:11:14
+    state: FULL
+    target: lustre-MDT0000_UUID
+Resetting fail_loc on all nodes...done.
+PASS   (0s)
+..........................................................................................................................................................................................................................................................................................................................................................................Pools from lustre:
+..........===== sanity.sh test complete, duration 6 sec
+lnet.debug=super neterror warning other dlmtrace error emerg ha rpctrace vfstrace config console

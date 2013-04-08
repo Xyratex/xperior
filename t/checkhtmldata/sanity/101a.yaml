@@ -1,0 +1,30 @@
+---
+cleanup_max_time: -1
+dangerous: yes
+description: Lustre sanity tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+extoptions:
+  arch: x86_64
+  branch: neo-1.2.3-vs-lustre-1.8.8-wc1
+  buildurl: 'http://10.3.0.111:8080/job/run-xperior-quartet/./SUITES=sanity,label=quartet-setup-kiev/57/'
+  configuration: Quartet
+  distr: SL61
+  executiontype: Integration
+  ofed: builtin
+  release: none
+  sessionstarttime: 1365141925
+  type: full
+fail_reason: ' #Excluded by exclude list'
+groupname: sanity
+id: 101a
+messages: ''
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+result: 'ok 1# SKIP  #Excluded by exclude list'
+result_code: 2
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+status: skipped
+status_code: 2
+tags: functional
+timeout: 300

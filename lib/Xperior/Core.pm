@@ -48,7 +48,7 @@ use File::Path;
 use File::chdir;
 use File::Copy;
 use File::Find;
-use TAP::Formatter::HTML;
+use Xperior::html::HTML;
 use TAP::Parser::Aggregator;
 use TAP::Parser;
 use TAP::Formatter::HTML::Session;
@@ -90,10 +90,10 @@ use constant ERROR_TEST_BREAK_REQUIRED    => 12;
 
 our $VERSION = "0.0.2";
 
-has 'options'    => ( is => 'rw' );
-has 'tests'      => ( is => 'rw' );    # isa => 'ArrayRef[]', );
-has 'testgroups' => ( is => 'rw' );
-has 'env'        => ( is => 'rw' );
+has 'options'    => (is => 'rw');
+has 'tests'      => (is => 'rw');    # isa => 'ArrayRef[]', );
+has 'testgroups' => (is => 'rw');
+has 'env'        => (is => 'rw');
 
 =head2 _multiplyTests
 
@@ -103,55 +103,63 @@ undefined test option 'multirun' will be used.
 
 =cut
 
-sub _multiplyTests{
-    my ($self,$multirun)=@_;
+sub _multiplyTests {
+    my ($self, $multirun) = @_;
     DEBUG "Multiply tests";
     my @newtests;
-    foreach my $test (@{$self->{'tests'}}){
+    foreach my $test (@{$self->{'tests'}}) {
         push(@newtests, $test->multiply($multirun));
     }
     return \@newtests;
 }
 
 sub _createExecutor {
-    my ( $self, $es, $roles ) = @_;
+    my ($self, $es, $roles) = @_;
     DEBUG "Loading module [$es]";
     load $es;
     my $obj = $es->new;
-    if ( defined($roles) ) {
-        foreach my $role ( split( /\s+/, trim($roles) ) ) {
+    if (defined($roles)) {
+        foreach my $role (split(/\s+/, trim($roles))) {
             chomp $role;
             DEBUG "Applying role [$role]";
 
-            if ( $role eq 'LustreClientStatus' ) {
+            if ($role eq 'LustreClientStatus') {
                 use Xperior::Executor::Roles::LustreClientStatus;
                 Xperior::Executor::Roles::LustreClientStatus->meta->apply($obj);
                 DEBUG 'ok';
-            }elsif( $role eq 'StoreSyslog' ) {
+            }
+            elsif ($role eq 'StoreSyslog') {
                 use Xperior::Executor::Roles::StoreSyslog;
                 Xperior::Executor::Roles::StoreSyslog->meta->apply($obj);
                 DEBUG 'ok';
-            }elsif ( $role eq 'StoreConsole' ) {
+            }
+            elsif ($role eq 'StoreConsole') {
                 use Xperior::Executor::Roles::StoreConsole;
                 Xperior::Executor::Roles::StoreConsole->meta->apply($obj);
                 DEBUG 'ok';
-            }elsif ( $role eq 'GetDiagnostics' ) {
+            }
+            elsif ($role eq 'GetDiagnostics') {
                 use Xperior::Executor::Roles::GetDiagnostics;
                 Xperior::Executor::Roles::GetDiagnostics->meta->apply($obj);
                 DEBUG 'ok';
-            }elsif ( $role eq 'ReformatBefore' ) {
+            }
+            elsif ($role eq 'ReformatBefore') {
                 use Xperior::Executor::Roles::ReformatBefore;
                 Xperior::Executor::Roles::ReformatBefore->meta->apply($obj);
                 DEBUG 'ok';
-            }elsif ( $role eq 'GetCoverage' ) {
+            }
+            elsif ($role eq 'GetCoverage') {
                 use Xperior::Executor::Roles::GetCoverage;
                 Xperior::Executor::Roles::GetCoverage->meta->apply($obj);
                 DEBUG 'ok';
-            }elsif ( $role eq 'NetconsoleCollector' ) {
+            }
+            elsif ($role eq 'NetconsoleCollector') {
                 use Xperior::Executor::Roles::NetconsoleCollector;
-                Xperior::Executor::Roles::NetconsoleCollector->meta->apply($obj);
+                Xperior::Executor::Roles::NetconsoleCollector->meta->apply(
+                    $obj);
                 DEBUG 'ok';
-            }else{
+            }
+            else {
                 confess "Unknows role [$role]";
             }
         }
@@ -161,47 +169,47 @@ sub _createExecutor {
 
 sub _runtest {
     DEBUG "Xperior::Core::_runtest";
-    my ( $self, $test, $excluded ) = @_;
+    my ($self, $test, $excluded) = @_;
     DEBUG "Starting tests " . $test->getParam('id');
 
     #DEBUG "Test is:". Dumper $test;
     my $executorname = $test->getParam('executor');
     my $roles        = $test->getParam('roles');
-    if ( defined($excluded) and ( $excluded == 1 ) ) {
+    if (defined($excluded) and ($excluded == 1)) {
         $executorname = 'Xperior::Executor::Skip';
         $roles        = '';
     }
-    my $executor = $self->_createExecutor( $executorname, $roles );
+    my $executor = $self->_createExecutor($executorname, $roles);
 
     #DEBUG "excluded : $excluded";
     #exit 111;
-    $executor->init( $test, $self->options, $self->env );
+    $executor->init($test, $self->options, $self->env);
 
     #TODO: cover following code with tests
-    if ( defined $self->options->{'extoptfile'} ) {
+    if (defined $self->options->{'extoptfile'}) {
         INFO "Load external options from file ["
-          . $self->options->{'extoptfile'} . "]";
+            . $self->options->{'extoptfile'} . "]";
         my $extopt;
-        eval { $extopt = LoadFile( $self->options->{'extoptfile'} ) }
-          or confess "$!";
+        eval {$extopt = LoadFile($self->options->{'extoptfile'})}
+            or confess "$!";
 
-        for my $opt ( keys %{ $extopt->{'extoptions'} } ) {
-            $executor->setExtOpt( $opt, $extopt->{'extoptions'}->{$opt} );
+        for my $opt (keys %{$extopt->{'extoptions'}}) {
+            $executor->setExtOpt($opt, $extopt->{'extoptions'}->{$opt});
         }
     }
 
     #TODO: move parsing of extopt out of Core package
-    if (   ( defined( $self->options->{'extopt'} ) )
-        && ( scalar @{ $self->options->{'extopt'} } ) )
+    if (   (defined($self->options->{'extopt'}))
+        && (scalar @{$self->options->{'extopt'}}))
     {
         INFO "Apply external options";
-        foreach my $param ( @{ $self->options->{'extopt'} } ) {
-            if ( $param =~ m/^([\w\d]+)\s*\:(.+)$/ ) {
-                $executor->setExtOpt( $1, $2 );
+        foreach my $param (@{$self->options->{'extopt'}}) {
+            if ($param =~ m/^([\w\d]+)\s*\:(.+)$/) {
+                $executor->setExtOpt($1, $2);
             }
             else {
                 INFO "Cannot parse --extopt parameter [$param], ",
-                  "please, use following form '--extopt=key:value'";
+                    "please, use following form '--extopt=key:value'";
             }
         }
     }
@@ -222,79 +230,87 @@ sub run {
     my $self    = shift;
     my $options = shift;
     $self->{'options'} = $options;
+
+    my $action = $self->options->{'action'};
+    if ($action eq 'generatehtml') {
+        $self->_reportHtml;
+        INFO "Report generation completed";
+        exit 0;
+    }
+
     DEBUG "Start framework";
     my $tags = $self->loadTags();
-    $self->tests( $self->loadTests() );
-    $self->env( $self->loadEnv( $options->{'configfile'} ) );
-    if ( $self->env->checkEnv < 0 ) {
+    $self->tests($self->loadTests());
+    $self->env($self->loadEnv($options->{'configfile'}));
+    if ($self->env->checkEnv < 0) {
         WARN "Found problems while testing configuration";
         exit(ERROR_CONFIG_FAILURE);
     }
 
+    $self->tests($self->_multiplyTests($self->options->{'multirun'}));
 
-    $self->tests(
-        $self->_multiplyTests($self->options->{'multirun'}));
     #TODO check tests applicability there
 
-    my @includeonly = @{ $self->options->{'includeonly'} };
+    my @includeonly = @{$self->options->{'includeonly'}};
     my $excludelist;
     my $includelist;
     my $completelist;
 
-    $excludelist = parseFilterFile( $self->options->{'excludelist'} )
-        if ( ( defined $self->options->{'excludelist'} )
-        && ( $self->options->{'excludelist'} ne '' ) );
+    if (   (defined $self->options->{'excludelist'})
+        && ($self->options->{'excludelist'} ne ''))
+    {
+        $excludelist = parseFilterFile($self->options->{'excludelist'});
+    }
 
-    $includelist = parseFilterFile( $self->options->{'includelist'} )
-        if ( ( defined $self->options->{'includelist'} )
-        && ( $self->options->{'includelist'} ne '' ) );
+    if(    (defined $self->options->{'includelist'})
+        && ($self->options->{'includelist'} ne ''))
+    {
+        $includelist = parseFilterFile($self->options->{'includelist'});
+    }
 
-    $completelist = findCompleteTests( $self->options->{'workdir'} )
-        if ( $self->options->{'continue'} );
-
+    $completelist = findCompleteTests($self->options->{'workdir'})
+        if ($self->options->{'continue'});
     my $skipCounter = 0;
     my $execCounter = 0;
-    foreach my $test (@{ $self->{'tests'}}) {
-        my $testName = $test->getName();
+    foreach my $test (@{$self->{'tests'}}) {
+        my $testName     = $test->getName();
         my $testFullName = $test->getGroupName . '/' . $test->getName;
-        my $skip = 0;
-        my $exclude = 0;
+        my $skip         = 0;
+        my $exclude      = 0;
 
         INFO "Preprocessing $testFullName";
-
-        if ( @includeonly ) {
-            $skip = 1 unless first { $testFullName =~ m/^$_$/ } @includeonly;
+        if (@includeonly) {
+            $skip = 1 unless first {$testFullName =~ m/^$_$/} @includeonly;
         }
         else {
-            foreach my $tag ( @{ $test->getTags } ) {
-                next unless first { $_ eq $tag } @{ $self->options->{'skiptags'} } ;
+            foreach my $tag (@{$test->getTags}) {
+                next
+                    unless first {$_ eq $tag} @{$self->options->{'skiptags'}};
                 $skip = 1;
                 last;
             }
             if (defined $excludelist) {
                 $exclude = 1
-                    if first { $testFullName =~ m/^$_$/ } @$excludelist;
+                    if first {$testFullName =~ m/^$_$/} @$excludelist;
             }
             if (defined $includelist) {
                 $skip = 1
-                    unless first { $testFullName =~ m/^$_$/ } @$includelist;
+                    unless first {$testFullName =~ m/^$_$/} @$includelist;
             }
         }
 
-        $skip = 1 if first { "$testFullName.yaml" =~ m/^$_$/ } @$completelist;
-        
+        $skip = 1 if first {"$testFullName.yaml" =~ m/^$_$/} @$completelist;
+
         if ($skip) {
             INFO "Skipped";
             $skipCounter++;
             next;
         }
 
-
         WARN "Starting test execution";
-        my $action = $self->options->{'action'};
-        if ( $action eq 'run' ) {
-            my $exe = $self->_runtest( $test, $exclude );
-            my $res = $exe->result_code;
+        if ($action eq 'run') {
+            my $exe    = $self->_runtest($test, $exclude);
+            my $res    = $exe->result_code;
             my $status = $test->results->{'status'};
 
             WARN "TEST $testName STATUS: $status";
@@ -302,23 +318,24 @@ sub run {
             $execCounter++;
 
             #ignore passed and skipped results
-            if ( $res != 0 and $res != 2 ) {
+            if ($res != 0 and $res != 2) {
+
                 #test failed, do env check
-                if ( $self->{'env'}->checkEnv < 0 ) {
+                if ($self->{'env'}->checkEnv < 0) {
                     WARN
 "Found problems while testing configuration after failed test, exiting";
                     WARN "Executed $execCounter tests, skipped $skipCounter";
-                    $self->_htmlReport;
+                    $self->_reportHtml;
                     exit(ERROR_CONFIG_FAILURE2);
                 }
-                unless (( $res == 1 )
-                    and ( $exe->yaml->{'fail_reason'} eq 'No_status_found' )
-                    and ( $exe->yaml->{'killed'} eq 'no' ) )
+                unless (($res == 1)
+                    and ($exe->yaml->{'fail_reason'} eq 'No_status_found')
+                    and ($exe->yaml->{'killed'} eq 'no'))
                 {
-                    if ( $test->getParam('dangerous', 'yes') ) {
+                    if ($test->getParam('dangerous', 'yes')) {
                         WARN "Dangerous test failure detected, exiting";
-                        WARN "Executed $execCounter tests, skipped $skipCounter";
-                        $self->_htmlReport;
+                        WARN"Executed $execCounter tests, skipped $skipCounter";
+                        $self->_reportHtml;
                         exit(ERROR_DANGEROUS_TEST_FAILURE);
                     }
                 }
@@ -327,15 +344,15 @@ sub run {
                 }
             }
             else {
-                if ( $test->getParam('exitafter', 'yes') ) {
+                if ($test->getParam('exitafter', 'yes')) {
                     WARN "Test requires stop after complete, exiting";
                     WARN "Executed $execCounter tests, skipped $skipCounter";
-                    $self->_htmlReport;
+                    $self->_reportHtml;
                     exit(ERROR_TEST_BREAK_REQUIRED);
                 }
             }
         }
-        elsif ( $action eq 'list' ) {
+        elsif ($action eq 'list') {
             print "====================\n";
             print $test->getDescription;
             print "====================\n";
@@ -345,12 +362,10 @@ sub run {
             confess "Cannot selected action for : $action";
         }
     }
-    $self->_htmlReport;
+    $self->_reportHtml;
     WARN "Execution completed";
     WARN "Executed $execCounter tests, skipped $skipCounter";
 }
-
-
 
 =item loadEnv
 
@@ -385,8 +400,8 @@ sub loadTests {
     INFO "Reading tests from dir:[" . $self->{'options'}->{'testdir'} . "]";
     find(
         sub {
-            push( @testNames, $File::Find::name )
-              if ( $File::Find::name =~ m/tests.yaml/ );
+            push(@testNames, $File::Find::name)
+                if ($File::Find::name =~ m/tests.yaml/);
         },
         $self->{'options'}->{'testdir'}
     );
@@ -396,16 +411,16 @@ sub loadTests {
     foreach my $fn (@testNames) {
         my $testscfg = $self->loadTestsFile($fn);
         my %groupcfg;
-        foreach my $key ( keys %{$testscfg} ) {
+        foreach my $key (keys %{$testscfg}) {
             $groupcfg{$key} = $testscfg->{$key}
-              if ( $key ne 'Tests' );
+                if ($key ne 'Tests');
         }
 
-        foreach my $testcfg ( @{ $testscfg->{'Tests'} } ) {
+        foreach my $testcfg (@{$testscfg->{'Tests'}}) {
             my $test = Xperior::Test->new;
 
             #DEBUG "groupcfg=".Dumper \%groupcfg;
-            $test->init( $testcfg, \%groupcfg );
+            $test->init($testcfg, \%groupcfg);
             push @tests, $test;
         }
     }
@@ -435,10 +450,19 @@ sub loadTags {
     return $cfg->{'tags'};
 }
 
-sub _htmlReport {
+=head3 _reportHtml
+
+Generate HTML report for work directory with results.
+Every executed suite is converted to TAP test result and 
+HTML report is generated via using customized TAP::Formatter::HTML
+  
+=cut
+
+sub _reportHtml {
     my $self = shift;
-    return unless $self->{options}->{html};
-    DEBUG 'Xperior::Core->_htmlReport';
+    return
+        unless ($self->{options}->{html}
+        or ($self->options->{'action'} eq 'generatehtml'));
 
     my $wd     = $self->{options}->{workdir};
     my $libdir = $self->{options}->{xperiorbasedir} . '/Xperior/html';
@@ -447,85 +471,89 @@ sub _htmlReport {
 
     #read executed test group list from workdir dir
     # filter report dir if report was previous generated
-    @suites = grep { !/report/ } grep { !/^\.\.?$/ } readdir $dh;
+    @suites = grep {!/report/} grep {!/^\.\.?$/} readdir $dh;
     closedir $dh;
     my %data;
     my %etimes;
 
     #read yaml xperior results and generate one tap
     foreach my $suite (@suites) {
-        my $mess = '';
+        my $report = '';
         my $i    = 1;
 
         opendir my ($dh), "$wd/$suite"
-          or confess "Couldn't open dir '$wd/$suite': $!";
-        my @tapfiles = grep { /\.yaml/ }
-          grep { !/^\.\.?$/ } readdir $dh;
+            or confess "Couldn't open dir '$wd/$suite': $!";
+        my @tapfiles = grep {/\.yaml/}
+            grep {!/^\.\.?$/} readdir $dh;
         closedir $dh;
 
         #generate tap for many files to
         #show xperior test group as one tap test
         foreach my $tfile (@tapfiles) {
+
             my $yaml = LoadFile("$wd/$suite/$tfile") or confess $!;
-            if ( $yaml->{'status_code'} == 0 ) {
-                $mess = $mess . "ok $i - " . $yaml->{id};
+            my $message = '';
+            if ($yaml->{'status_code'} == 0) {
+                $message = "ok $i # id=" . $yaml->{id};
+            }
+            elsif ($yaml->{'status_code'} == 2) {
+                $message =
+                    "ok $i # skip # id=$yaml->{id} $yaml->{'fail_reason'}";
+                $yaml->{killed}    = 'no';
+                $yaml->{endtime}   = 0;
+                $yaml->{starttime} = 0;
             }
             else {
-                $mess =
-                    $mess
-                  . "not ok $i - id="
-                  . $yaml->{'id'}
-                  . $yaml->{'fail_reason'};
+                $message ="not ok $i # id=$yaml->{'id'} $yaml->{'fail_reason'}";
             }
-            $mess =
-                $mess . "\n"
-              . "\# killed  :"
-              . $yaml->{killed} . " \n"
-              . "\# timeout :"
-              . $yaml->{timeout} . "\n"
-              . "\# elapsed time    :"
-              . ( $yaml->{endtime} - $yaml->{starttime} ) . "\n";
+            $report =
+                  "$report$message \n"
+                . "# killed  : $yaml->{killed} .  \n# timeout :$yaml->{timeout} \n"
+                . "\# elapsed time    :"
+                . ($yaml->{endtime} - $yaml->{starttime}) . "\n";
             $etimes{$suite} = $yaml->{endtime} - $yaml->{starttime};
-            foreach my $lname ( keys %{ $yaml->{log} } ) {
-                $mess =
-                    $mess
-                  . "\# log "
-                  . "<a href='../$suite/"
-                  . $yaml->{log}->{$lname}
-                  . "' type='text/plain'>$lname</a> \n";
+            foreach my $lname (keys %{$yaml->{log}}) {
+                $report =
+                      $report
+                    . "\# log "
+                    . "<a href='../$suite/"
+                    . $yaml->{log}->{$lname}
+                    . "' type='text/plain'>$lname</a> \n";
             }
 
             $i++;
         }
         $i--;
-        $data{$suite} = "TAP version 13\n" . "1..$i\n" . $mess . "\n";
+        $data{$suite} = "TAP version 13\n" . "1..$i\n" . $report . "\n";
 
     }
 
-    my $fmt = TAP::Formatter::HTML->new;
+    my $fmt = Xperior::html::HTML->new;
     $fmt->verbosity(-2);
     my $aggregate = TAP::Parser::Aggregator->new;
     my $session;
     foreach my $suite (@suites) {
         $aggregate->start;
-        my $parser = TAP::Parser->new( { tap => $data{$suite} } );
-        $session = $fmt->open_test( $suite, $parser );
-        while ( defined( my $result = $parser->next ) ) {
+        my $parser = TAP::Parser->new({tap => $data{$suite}});
+        $session = $fmt->open_test($suite, $parser);
+        while (defined(my $result = $parser->next)) {
             $session->result($result);
             next if $result->is_bailout;
         }
         $session->close_test;
 
-        $aggregate = $aggregate->add( $suite, $parser );
+        $aggregate = $aggregate->add($suite, $parser);
 
         $aggregate->stop;
     }
     mkdir "$wd/report";
     $fmt->abs_file_paths(1);
     $CWD = $libdir;
-    $fmt->template("xperior_report.tt2");
+    $fmt->template("$CWD/xperior_report.tt2");
+
+    #
     $fmt->output_file("$wd/report/report.html");
-    $fmt->tests( \@suites );
+    $fmt->tests(\@suites);
 
     $fmt->summary($aggregate);
 
@@ -536,7 +564,7 @@ sub _htmlReport {
     );
 
     foreach my $f (@libfiles) {
-        copy( "$libdir/$f", "$wd/report/$f" ) or confess "Copy failed: $!";
+        copy("$libdir/$f", "$wd/report/$f") or confess "Copy failed: $!";
     }
     INFO "HTML Report generated: file://$wd/report/report.html";
 

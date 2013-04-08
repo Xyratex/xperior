@@ -1,0 +1,26 @@
+Logging to local directory: /tmp/test_logs/1365143195
+mft66: Checking config lustre mounted on /mnt/lustre
+mft65: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft65.xyua,mft66 environments
+Using TIMEOUT=20
+lnet.debug=0x33f1504
+lnet.subsystem_debug=0xffb7e3ff
+lnet.debug_mb=10
+mft66: lnet.debug=0x33f1504
+mft66: lnet.subsystem_debug=0xffb7e3ff
+mft66: lnet.debug_mb=10
+only running test 10
+excepting tests: 27u 42a 42b 42c 42d 45 51d 62 68 75 101a
+preparing for tests involving mounts
+
+lnet.debug=-1
+.........................
+
+== test 10: mkdir .../d10 .../d10/d2; touch .../d10/d2/f ====== == 02:26:40
+/mnt/lustre/d10/d2/f has type file OK
+Resetting fail_loc on all nodes...done.
+PASS   (1s)
+...................................................................................................................................................................................................................................................................................................................................................Pools from lustre:
+..........===== sanity.sh test complete, duration 6 sec
+lnet.debug=super neterror warning other dlmtrace error emerg ha rpctrace vfstrace config console

@@ -1,0 +1,47 @@
+----------------- mft67 -----------------
+<lfs df -i>
+
+<mount | grep lustre>
+/dev/loop0 on /mnt/mds type lustre (rw,loop=/dev/loop0)
+
+
+
+----------------- mft68 -----------------
+<lfs df -i>
+
+<mount | grep lustre>
+/dev/loop0 on /mnt/ost1 type lustre (rw,loop=/dev/loop0)
+/dev/loop1 on /mnt/ost2 type lustre (rw,loop=/dev/loop1)
+
+
+
+----------------- mft65 -----------------
+<lfs df -i>
+UUID                      Inodes       IUsed       IFree IUse% Mounted on
+lustre-MDT0000_UUID       250048          39      250009   0% /mnt/lustre[MDT:0]
+lustre-OST0000_UUID        43776          85       43691   0% /mnt/lustre[OST:0]
+lustre-OST0001_UUID        43776          85       43691   0% /mnt/lustre[OST:1]
+
+filesystem summary:       250048          39      250009   0% /mnt/lustre
+
+
+<mount | grep lustre>
+mft67@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,acl,flock)
+
+
+
+----------------- mft66 -----------------
+<lfs df -i>
+UUID                      Inodes       IUsed       IFree IUse% Mounted on
+lustre-MDT0000_UUID       250048          39      250009   0% /mnt/lustre[MDT:0]
+lustre-OST0000_UUID        43776          85       43691   0% /mnt/lustre[OST:0]
+lustre-OST0001_UUID        43776          85       43691   0% /mnt/lustre[OST:1]
+
+filesystem summary:       250048          39      250009   0% /mnt/lustre
+
+
+<mount | grep lustre>
+mft67@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,acl,flock)
+
+
+
