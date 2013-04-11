@@ -283,8 +283,7 @@ sub _prepareEnvOpts {
     $c = 1;
     foreach my $m (@$mdss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
-        push @mds_opt, "mds${c}_HOST=$host", "mds_HOST=$host","mds${c}failover_HOST=$host";
-        push @mds_opt, "mdsfailover_HOST=$host" if $c==1;
+        push @mds_opt, "mds${c}_HOST=$host", "mds_HOST=$host";
         push @mds_opt, "MDSDEV$c=" . $m->{'device'}
           if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
         $c++;
