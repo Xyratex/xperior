@@ -101,7 +101,7 @@ test
     print Dumper $exe->yaml->{log};
 
     #
-    is( scalar( keys( $exe->yaml->{'log'} ) ),
+    is( scalar( keys( %{$exe->yaml->{'log'}} ) ),
         5, 'Check attachment array size' );
     is(
         $exe->yaml->{log}

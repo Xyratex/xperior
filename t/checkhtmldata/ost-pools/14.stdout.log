@@ -1,0 +1,22 @@
+Logging to local directory: /tmp/test_logs/1365134769
+mft75: Checking config lustre mounted on /mnt/lustre
+mft76: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft75.xyua,mft76 environments
+Using TIMEOUT=20
+lnet.debug=0x33f1504
+lnet.subsystem_debug=0xffb7e3ff
+lnet.debug_mb=10
+mft76: lnet.debug=0x33f1504
+mft76: lnet.subsystem_debug=0xffb7e3ff
+mft76: lnet.debug_mb=10
+only running test 14
+excepting tests: 
+..................
+
+== test 14: Round robin and QOS striping within a pool == 00:06:14
+ SKIP: ost-pools test_14 Need atleast 3 OSTs
+Resetting fail_loc on all nodes...done.
+PASS   (0s)
+...........===== ost-pools.sh test complete, duration 5 sec
+Pools from lustre:

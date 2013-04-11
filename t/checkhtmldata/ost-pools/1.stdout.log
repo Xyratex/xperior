@@ -1,0 +1,49 @@
+Logging to local directory: /tmp/test_logs/1365133384
+mft76: Checking config lustre mounted on /mnt/lustre
+mft75: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft75.xyua,mft76 environments
+Using TIMEOUT=20
+lnet.debug=0x33f1504
+lnet.subsystem_debug=0xffb7e3ff
+lnet.debug_mb=10
+mft76: lnet.debug=0x33f1504
+mft76: lnet.subsystem_debug=0xffb7e3ff
+mft76: lnet.debug_mb=10
+only running test 1
+excepting tests: 
+
+== test 1: Test lctl pool_new  ========================================= == 23:43:08
+Creating a pool with a 1 character pool name
+mft77: Pool lustre.p created
+Updated after 0 sec: wanted '' got ''
+Creating a pool with a 10 character pool name
+mft77: Pool lustre.p123456789 created
+Updated after 0 sec: wanted '' got ''
+Pool: lustre.p123456789
+mft77: Pool lustre.p123456789 destroyed
+Updated after 0 sec: wanted 'foo' got 'foo'
+Creating a pool with a 16 character pool name
+mft77: Pool lustre.p123456789123456 created
+Updated after 0 sec: wanted '' got ''
+Pool: lustre.p123456789123456
+mft77: Pool lustre.p123456789123456 destroyed
+Updated after 0 sec: wanted 'foo' got 'foo'
+Creating a pool with a 17 character pool name; should fail
+mft77: poolname p1234567891234567 is too long (length is 17 max is 16)
+mft77: argument lustre.p1234567891234567 must be <fsname>.<poolname>
+mft77: pool_new: File name too long
+pdsh@mft75: mft77: ssh exited with exit code 36
+Creating a pool with a 1000 character pool name; should fail
+mft77: poolname pooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo is too long (length is 1000 max is 16)
+mft77: argument lustre.pooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo must be <fsname>.<poolname>
+mft77: pool_new: File name too long
+pdsh@mft75: mft77: ssh exited with exit code 36
+pool_new should fail if fs-name or poolname are missing.
+Pool: lustre.p
+mft77: Pool lustre.p destroyed
+Updated after 0 sec: wanted 'foo' got 'foo'
+Resetting fail_loc on all nodes...done.
+PASS   (46s)
+.............................===== ost-pools.sh test complete, duration 50 sec
+Pools from lustre:

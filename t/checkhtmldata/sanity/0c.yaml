@@ -1,0 +1,55 @@
+---
+cleanup_max_time: -1
+cmd: SLOW=YES NAME=ncli mds1_HOST=mft67 mds_HOST=mft67 MDSCOUNT=1 ost1_HOST=mft68 ost2_HOST=mft68 OSTCOUNT=2 CLIENTS=mft65 RCLIENTS=\"mft66\"  ONLY=0c DIR=/mnt/lustre PDSH=\"/usr/bin/pdsh -R ssh -S -w \" /usr/lib64/lustre/tests/sanity.sh 2>     /var/log/xperior/test_stderr.943092.log 1>  /var/log/xperior/test_stdout.943092.log
+completed: yes
+dangerous: yes
+description: Lustre sanity tests
+endtime: 1365142281
+endtime_planned: 1365142571
+executor: Xperior::Executor::LustreTests
+exitcode: 0
+expected_time: 10
+extoptions:
+  arch: x86_64
+  branch: neo-1.2.3-vs-lustre-1.8.8-wc1
+  buildurl: 'http://10.3.0.111:8080/job/run-xperior-quartet/./SUITES=sanity,label=quartet-setup-kiev/57/'
+  configuration: Quartet
+  distr: SL61
+  executiontype: Integration
+  ofed: builtin
+  release: none
+  sessionstarttime: 1365141925
+  type: full
+groupname: sanity
+id: 0c
+killed: no
+log:
+  /home/jenkins/lustre-quartet-1-kiev/workspace/run-xperior-quartet/SUITES/sanity/label/quartet-setup-kiev/workdir/sanity/0c.memory-info.log: 0c.memory-info.log
+  /home/jenkins/lustre-quartet-1-kiev/workspace/run-xperior-quartet/SUITES/sanity/label/quartet-setup-kiev/workdir/sanity/0c.mount-info.log: 0c.mount-info.log
+  console.client1: 0c.console.client1.log
+  console.client2: 0c.console.client2.log
+  console.server-mds: 0c.console.server-mds.log
+  console.server-oss: 0c.console.server-oss.log
+  stderr: 0c.stderr.log
+  stdout: 0c.stdout.log
+masterclient:
+  id: client1
+  master: yes
+  node: client1
+  type: client
+masterhostdown: no
+messages: |
+  Cannot copy log file [/var/log/xperior/messageslog.1365142260.31719]: 256
+  Cannot copy log file [/var/log/xperior/messageslog.1365142260.31719]: 256
+  Cannot copy log file [/var/log/xperior/messageslog.1365142260.31719]: 256
+  Cannot copy log file [/var/log/xperior/messageslog.1365142260.31719]: 256
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+result: 'ok 1 '
+result_code: 0
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+starttime: 1365142271
+status: passed
+status_code: 0
+tags: functional
+timeout: 300

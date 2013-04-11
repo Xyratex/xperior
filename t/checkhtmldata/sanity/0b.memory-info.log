@@ -1,0 +1,63 @@
+----------------- mft67 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1537080    1307780     229300          0      72052     426624
+-/+ buffers/cache:     809104     727976
+Swap:       511992          0     511992
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/vda1             20136828   6324088  12789816  34% /
+tmpfs                   768540       324    768216   1% /dev/shm
+tmpfs                   768540    126716    641824  17% /tmp
+/dev/loop0              374872     17764    332908   6% /mnt/mds
+
+
+
+----------------- mft68 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1537080    1030592     506488          0      74392     312792
+-/+ buffers/cache:     643408     893672
+Swap:       511992          0     511992
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/vda1             20136828   6323996  12789908  34% /
+tmpfs                   768540       324    768216   1% /dev/shm
+tmpfs                   768540     32260    736280   5% /tmp
+/dev/loop0              688976     32940    621036   6% /mnt/ost1
+/dev/loop1              688976     32940    621036   6% /mnt/ost2
+
+
+
+----------------- mft65 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1536940     239220    1297720          0      60640     100808
+-/+ buffers/cache:      77772    1459168
+Swap:      2538488          0    2538488
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/vda1             18142536   1371856  15849080   8% /
+tmpfs                   768468         0    768468   0% /dev/shm
+mft67@tcp:/lustre      1377952     65880   1241944   6% /mnt/lustre
+
+
+
+----------------- mft66 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1536940     201364    1335576          0      29840      97880
+-/+ buffers/cache:      73644    1463296
+Swap:      2538488          0    2538488
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/vda1             18142536   1350876  15870060   8% /
+tmpfs                   768468         0    768468   0% /dev/shm
+mft67@tcp:/lustre      1377952     65880   1241944   6% /mnt/lustre
+
+
+
