@@ -52,7 +52,7 @@ requires 'env';
 
 before 'execute' => sub {
     my $self = shift;
-    foreach my $nid ( @{ $self->env->getMDSs } ) {
+    foreach my $nid ( $self->env->getMDSs() ) {
         my $n = $self->env->getNodeById($nid->{'node'});
         my $c = $n->getExclusiveRC;
         DEBUG $c->createSync( " sh /usr/lib64/lustre/tests/llmountcleanup.sh", 300 );

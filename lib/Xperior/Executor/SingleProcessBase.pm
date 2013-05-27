@@ -109,7 +109,7 @@ sub execute {
     my $mountpoint = $self->env->cfg->{'client_mount_point'}
       or carp("Undefined 'client_mount_point'");
 
-    $testproc->createSync("mkdir -p ${mountpoint}${tempdir}");
+    $testproc->createSync("mkdir -p ${mountpoint}/${tempdir}");
 
     #TODO add exit value check there. Now it doesn't have value until
     #own lustre mount manager

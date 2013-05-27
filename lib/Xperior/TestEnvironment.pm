@@ -113,27 +113,12 @@ sub getNodesInfo{
 
 sub getOSSs{
     my $self = shift;
-    my @osss;
-    #print Dumper $self->cfg;
-    foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
-        if( $lo->{'type'} eq 'oss'){
-           push @osss, $lo;
-        }
-    }
-    return \@osss;
+    return grep { $_->{'type'} eq 'oss' } @{$self->cfg->{'LustreObjects'}};
 }
 
 sub getMDSs{
     my $self = shift;
-    my @mdss;
-    #print Dumper $self->cfg;
-    foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
-        if( $lo->{'type'} eq 'mds'){
-           push @mdss, $lo;
-        }
-    }
-    return \@mdss;
-
+    return grep { $_->{'type'} eq 'mds' } @{$self->cfg->{'LustreObjects'}};
 }
 
 sub getClients{

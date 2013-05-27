@@ -57,7 +57,7 @@ use constant LDIR => '/root/cov/lustre-wc-rel/';
 
 before 'execute' => sub {
     my $self = shift;
-    foreach my $nid ( @{ $self->env->getMDSs } ) {
+    foreach my $nid ( $self->env->getMDSs() ) {
         my $n = $self->env->getNodeById( $nid->{'node'} );
         DEBUG "Target node:" . $n->ip;
         my $c = $n->getExclusiveRC;
@@ -94,7 +94,7 @@ before 'execute' => sub {
 
 after 'execute' => sub {
     my $self = shift;
-    foreach my $nid ( @{ $self->env->getMDSs } ) {
+    foreach my $nid ( $self->env->getMDSs() ) {
         my $n = $self->env->getNodeById( $nid->{'node'} );
         my $c = $n->getExclusiveRC;
 
