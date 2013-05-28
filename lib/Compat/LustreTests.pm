@@ -394,7 +394,7 @@ sub _findSuiteTests {
     open( SCRIPT, "<$script" ) or confess "Cannot read file $script";
     while (<SCRIPT>) {
         if ( $_ =~
-/^(run_test|run_test_with_stat)\s+([0-9]+[A-Za-z]*)\s+\"([^\"]+)\"\s*$/
+/^(run_test|run_test_with_stat)\s+([\d\w]+)\s+\"([^\"]+)\"\s*$/
           )
         {
             push @tests, { id => $2 };
