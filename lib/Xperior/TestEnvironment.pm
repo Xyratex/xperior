@@ -68,19 +68,22 @@ sub init{
     my $self = shift;
     my $yamlcfg = shift;
     $self->cfg($yamlcfg);
-    foreach my $n (@{$yamlcfg->{'Nodes'}}){
+    $self->initNodes($self->cfg->{'Nodes'});
+}
+
+sub initNodes {
+    my $self = shift;
+    my $nodeArrayRef = shift;
+    foreach my $n (@{$nodeArrayRef}) {
         my $node = Xperior::Node->new;
         $node->id($n->{'id'});
         $node->ip($n->{'ip'});
         $node->ctrlproto( $n->{'ctrlproto'});
         $node->user( $n->{'user'});
         $node->pass($n->{'pass'});
-        if(defined($n->{'console'})){
-            $node->console($n->{'console'});
-        }else{
-            $node->console(undef);
-        }
-        push @{$self->{'nodes'}},$node;
+        $node->console($n->{'console'});
+
+        push @{$self->{'nodes'}}, $node;
     }
 }
 

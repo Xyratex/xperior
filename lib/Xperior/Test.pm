@@ -56,6 +56,8 @@ has 'testcfg'  => ( is => 'rw' ,traits => [qw(Clone)]);
 has 'groupcfg' => ( is => 'rw' ,traits => [qw(Clone)]);
 has 'tap'      => ( is => 'rw' ,traits => [qw(Clone)]);
 has 'results'  => ( is => 'rw' ,traits => [qw(Clone)]);
+has 'excluded' => ( is => 'rw' ,traits => [qw(Clone)]);
+has 'skipped'  => ( is => 'rw' ,traits => [qw(Clone)]);
 
 sub init {
     my $self = shift;

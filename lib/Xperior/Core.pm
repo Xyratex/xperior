@@ -94,6 +94,7 @@ has 'options'    => (is => 'rw');
 has 'tests'      => (is => 'rw');    # isa => 'ArrayRef[]', );
 has 'testgroups' => (is => 'rw');
 has 'env'        => (is => 'rw');
+has 'extoptions' => (is => 'rw');
 
 =head2 _multiplyTests
 
@@ -168,44 +169,55 @@ sub _createExecutor {
 }
 
 sub _runtest {
-    DEBUG "Xperior::Core::_runtest";
-    my ($self, $test, $excluded) = @_;
-    DEBUG "Starting tests " . $test->getParam('id');
+    my ($self, $test) = @_;
+    DEBUG "Starting test " . $test->getParam('id');
 
     #DEBUG "Test is:". Dumper $test;
     my $executorname = $test->getParam('executor');
     my $roles        = $test->getParam('roles');
-    if (defined($excluded) and ($excluded == 1)) {
+    if ($test->{excluded}) {
         $executorname = 'Xperior::Executor::Skip';
         $roles        = '';
     }
     my $executor = $self->_createExecutor($executorname, $roles);
 
-    #DEBUG "excluded : $excluded";
-    #exit 111;
     $executor->init($test, $self->options, $self->env);
 
-    #TODO: cover following code with tests
-    if (defined $self->options->{'extoptfile'}) {
-        INFO "Load external options from file ["
-            . $self->options->{'extoptfile'} . "]";
-        my $extopt;
-        eval {$extopt = LoadFile($self->options->{'extoptfile'})}
-            or confess "$!";
-
-        for my $opt (keys %{$extopt->{'extoptions'}}) {
-            $executor->setExtOpt($opt, $extopt->{'extoptions'}->{$opt});
+    my $opt = $self->{extoptions};
+    if (ref ($opt) eq 'HASH') {
+        DEBUG "Setting executor external options";
+        for my $k (keys %{$opt}) {
+            $executor->setExtOpt($k, $opt->{$k});
         }
     }
 
+    $executor->execute();
+    $executor->report();
+    $executor->tap() if $self->options->{'tap'};
+    return $executor;
+}
+
+sub getExtOptions {
+    my $self    = shift;
+    my $options = shift;
+
+    my %extoptions;
+    if (defined $options->{'extoptfile'}) {
+        my $path = $options->{'extoptfile'};
+        INFO "Load external options from file [$path]";
+        my $extopt;
+        eval {$extopt = LoadFile($path)}
+            or confess "$!";
+        %extoptions = (%{$extopt->{'extoptions'}});
+    }
+
     #TODO: move parsing of extopt out of Core package
-    if (   (defined($self->options->{'extopt'}))
-        && (scalar @{$self->options->{'extopt'}}))
+    if (@{$options->{'extopt'}})
     {
         INFO "Apply external options";
-        foreach my $param (@{$self->options->{'extopt'}}) {
+        foreach my $param (@{$options->{'extopt'}}) {
             if ($param =~ m/^([\w\d]+)\s*\:(.+)$/) {
-                $executor->setExtOpt($1, $2);
+                $extoptions{$1} = $2;
             }
             else {
                 INFO "Cannot parse --extopt parameter [$param], ",
@@ -213,11 +225,7 @@ sub _runtest {
             }
         }
     }
-
-    $executor->execute;
-    $executor->report();
-    $executor->tap() if $self->options->{'tap'};
-    return $executor;
+    return \%extoptions;
 }
 
 =item run
@@ -241,6 +249,7 @@ sub run {
     DEBUG "Start framework";
     my $tags = $self->loadTags();
     $self->tests($self->loadTests());
+    $self->extoptions($self->getExtOptions($options));
     $self->env($self->loadEnv($options->{'configfile'}));
     if ($self->env->checkEnv < 0) {
         WARN "Found problems while testing configuration";
@@ -270,14 +279,12 @@ sub run {
 
     $completelist = findCompleteTests($self->options->{'workdir'})
         if ($self->options->{'continue'});
-    my $skipCounter = 0;
-    my $execCounter = 0;
+
     foreach my $test (@{$self->{'tests'}}) {
         my $testName     = $test->getName();
         my $testFullName = $test->getGroupName . '/' . $test->getName;
-        my $skip         = 0;
-        my $exclude      = 0;
 
+        my $skip = 0;
         INFO "Preprocessing $testFullName";
         if (@includeonly) {
             $skip = 1 unless first {$testFullName =~ m/^$_$/} @includeonly;
@@ -290,7 +297,7 @@ sub run {
                 last;
             }
             if (defined $excludelist) {
-                $exclude = 1
+                $test->excluded(1)
                     if first {$testFullName =~ m/^$_$/} @$excludelist;
             }
             if (defined $includelist) {
@@ -302,14 +309,23 @@ sub run {
         $skip = 1 if first {"$testFullName.yaml" =~ m/^$_$/} @$completelist;
 
         if ($skip) {
-            INFO "Skipped";
-            $skipCounter++;
-            next;
+            INFO "Test [$testFullName] will be skipped";
+            $test->skipped(1);
         }
+    }
 
+    if ($action eq 'run') {
         WARN "Starting test execution";
-        if ($action eq 'run') {
-            my $exe    = $self->_runtest($test, $exclude);
+        my $execCounter = 0;
+        my $skipCounter = 0;
+        my $error;
+        foreach my $test (@{$self->{'tests'}}) {
+            if ($test->skipped()) {
+                $skipCounter++;
+                next;
+            }
+            my $testName     = $test->getName();
+            my $exe    = $self->_runtest($test, $test->{excluded});
             my $res    = $exe->result_code;
             my $status = $test->results->{'status'};
 
@@ -324,47 +340,48 @@ sub run {
                 if ($self->{'env'}->checkEnv < 0) {
                     WARN
 "Found problems while testing configuration after failed test, exiting";
-                    WARN "Executed $execCounter tests, skipped $skipCounter";
-                    $self->_reportHtml;
-                    exit(ERROR_CONFIG_FAILURE2);
+                    $error = ERROR_CONFIG_FAILURE2;
+                    last;
                 }
-                unless (($res == 1)
-                    and ($exe->yaml->{'fail_reason'} eq 'No_status_found')
-                    and ($exe->yaml->{'killed'} eq 'no'))
+                if (($res == 1) and 
+                    ($exe->yaml->{'fail_reason'} eq 'No_status_found') and 
+                    ($exe->yaml->{'killed'} eq 'no'))
+                {
+                    WARN "Not a dangerous test failure detected, continuing...";
+                }
+                else
                 {
                     if ($test->getParam('dangerous', 'yes')) {
                         WARN "Dangerous test failure detected, exiting";
-                        WARN"Executed $execCounter tests, skipped $skipCounter";
-                        $self->_reportHtml;
-                        exit(ERROR_DANGEROUS_TEST_FAILURE);
+                        $error = ERROR_DANGEROUS_TEST_FAILURE;
+                        last;
                     }
-                }
-                else {
-                    WARN "Unclean test failure, don't exit after it";
                 }
             }
             else {
                 if ($test->getParam('exitafter', 'yes')) {
                     WARN "Test requires stop after complete, exiting";
-                    WARN "Executed $execCounter tests, skipped $skipCounter";
-                    $self->_reportHtml;
-                    exit(ERROR_TEST_BREAK_REQUIRED);
+                    $error = ERROR_TEST_BREAK_REQUIRED;
+                    last;
                 }
             }
         }
-        elsif ($action eq 'list') {
+        INFO "Test execution completed" unless $error;
+        INFO "Executed tests: $execCounter";
+        INFO "Skipped tests:  $skipCounter";
+        $self->_reportHtml;
+        exit ($error) if ($error);
+    }
+    elsif ($action eq 'list') {
+        foreach my $test (grep { ! $_->skipped() } @{$self->{'tests'}}) {
             print "====================\n";
-            print $test->getDescription;
+            print $test->getDescription();
             print "====================\n";
-
-        }
-        else {
-            confess "Cannot selected action for : $action";
         }
     }
-    $self->_reportHtml;
-    INFO "Execution completed";
-    INFO "Executed $execCounter tests, skipped $skipCounter";
+    else {
+        confess "Unknown action detected: $action";
+    }
 }
 
 =item loadEnv
@@ -378,17 +395,13 @@ file. See Xperior user guide.
 sub loadEnv {
     DEBUG 'Xperior::Core->loadEnv';
     my $self = shift;
-    my $fn   = shift;
-    $fn = 'systemcfg.yaml' unless defined $fn;
-    INFO "Load env configuration file [ $fn ]";
-    my $envcfg = LoadFile($fn) or confess $!;
+    my $config_file = shift || 'systemcfg.yaml';
+    INFO "Load env configuration file [ $config_file ]";
+    my $config = LoadFile($config_file) or confess $!;
 
-    #DEBUG Dumper $envcfg;
-    my $env = undef;
-    $env = Xperior::TestEnvironment->new;
-    $env->init($envcfg);
+    my $env = Xperior::TestEnvironment->new;
+    $env->init($config);
 
-    #DEBUG Dumper $env;
     return $env;
 }
 
@@ -397,7 +410,7 @@ sub loadTests {
     my $self = shift;
     my @testNames;
     my @tests;
-    INFO "Reading tests from dir:[" . $self->{'options'}->{'testdir'} . "]";
+    INFO "Reading tests from dir: [" . $self->{'options'}->{'testdir'} . "]";
     find(
         sub {
             push(@testNames, $File::Find::name)
