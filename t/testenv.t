@@ -58,8 +58,8 @@ shutdown        _shutdown => sub {  };
 #########################################
 
 test plan => 10, aGetNodeConfiguration    => sub {
-    my $osss = $cfg->getOSSs;
-    my $nid  = ((@$osss)[0])->{'node'};
+    my @osss = $cfg->getOSSs;
+    my $nid  = ((@osss)[0])->{'node'};
     DEBUG "OSS ID=".$nid;
     my $node = $cfg->getNodeById($nid);
     DEBUG "Cfg dump".$node;
@@ -120,7 +120,7 @@ test plan => 3, nCheckRemoteControls => sub{
 test plan => 5, cCheckLustreObjects    => sub {
     ok (defined $cfg, "Check parsing results");
 
-    my $osss = $cfg->getOSSs;
+    my @osss = $cfg->getOSSs;
     #print "OSSs:".Dumper $osss;
     my @exp1 = (
           {
@@ -136,9 +136,9 @@ test plan => 5, cCheckLustreObjects    => sub {
             'device' => '/dev/loop2'
           }
     );
-    is_deeply($osss,\@exp1,"Check getOSSs");
+    is_deeply(\@osss,\@exp1,"Check getOSSs");
 
-    my $mdss = $cfg->getMDSs;
+    my @mdss = $cfg->getMDSs();
     my @exp2 = (
           {
             'type' => 'mds',
@@ -148,7 +148,7 @@ test plan => 5, cCheckLustreObjects    => sub {
           }
         );
     #print "MDSs:".Dumper $mdss;
-    is_deeply($mdss,\@exp2,"Check getMDSs");
+    is_deeply(\@mdss,\@exp2,"Check getMDSs");
 
     my $clients = $cfg->getClients;
     my @exp3 = (

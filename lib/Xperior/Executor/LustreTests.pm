@@ -64,7 +64,7 @@ has 'lustretestdir' => ( is => 'rw' );
 after 'init' => sub {
     my $self = shift;
     $self->appname('sanity');
-    $self->lustretestdir('/usr/lib64/lustre/tests/');
+    $self->lustretestdir('/usr/lib64/lustre/tests');
 
     #$self->reset;
     $self->reason('');
@@ -129,23 +129,23 @@ sub _saveStatusLog {
 sub _prepareCommands {
     my $self = shift;
     $self->_prepareEnvOpts;
-    my $td  = '';
+
+    my $device_type = $self->env->cfg->{'lustre_device_type'} || 'loop';
     my $ext = '.sh';
-    $td = $self->env->cfg->{'tempdir'} if defined $self->env->cfg->{'tempdir'};
-    my $dir    = $self->env->cfg->{'client_mount_point'} . $td;
-    my $tid    = 'ONLY=' . $self->test->testcfg->{id};
-    my $script = $self->test->getParam('groupname');
-    my $eopts  = '';
+    my $tempdir = $self->env->cfg->{'tempdir'} || '';
+    my $dir     = $self->env->cfg->{'client_mount_point'} . $tempdir;
+    my $tid     = 'ONLY=' . $self->test->testcfg->{id};
+    my $script  = $self->test->getParam('groupname') || confess "Group name is undefined";
+    my $eopts   = $self->env->cfg->{extoptions} || '';
 
     #TODO add test on it
-    $eopts = $self->env->cfg->{extoptions}
-      if defined $self->env->cfg->{extoptions};
+
     if ( defined( $self->test->getParam('script') ) ) {
         $script = $self->test->getParam('script');
         $tid    = '';                                #no default test number
         $ext = '';    #ext must be set also when script is set
     }
-
+    my $lustre_script = "$self->{lustretestdir}/${script}${ext}";
     my @opt = (
                 "SLOW=YES",
                 "NAME=ncli",
@@ -156,9 +156,16 @@ sub _prepareCommands {
                 $tid,
                 "DIR=${dir}",
                 "PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\"",
-                $self->lustretestdir . $script . $ext
     );
-    $self->cmd( join( ' ', @opt ) );
+    if ($device_type eq 'block') {
+        push @opt,
+            "MDS_MOUNT_OPTS=\\\"-o rw,user_xattr\\\"",
+            "OST_MOUNT_OPTS=\\\"-o user_xattr\\\"";
+    }
+    elsif ($device_type eq 'loop') {
+        DEBUG "No additional options required for 'loop' devices";
+    }
+    $self->cmd( join( ' ', @opt, $lustre_script) );
 }
 
 =over 12
@@ -274,33 +281,33 @@ sub processLogs {
 
 sub _prepareEnvOpts {
     my $self    = shift;
-    my $mdss    = $self->env->getMDSs;
-    my $osss    = $self->env->getOSSs;
+    my @mdss    = $self->env->getMDSs;
+    my @osss    = $self->env->getOSSs;
     my $clients = $self->env->getClients;
     my $c;
 
     my @mds_opt;
     $c = 1;
-    foreach my $m (@$mdss) {
+    foreach my $m (@mdss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
         push @mds_opt, "mds${c}_HOST=$host", "mds_HOST=$host";
         push @mds_opt, "MDSDEV$c=" . $m->{'device'}
           if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
         $c++;
     }
-    push @mds_opt, "MDSCOUNT=" . scalar @$mdss;
+    push @mds_opt, "MDSCOUNT=" . scalar @mdss;
     $self->mdsopt( join( ' ', @mds_opt ) );
 
     my @oss_opt;
     $c = 1;
-    foreach my $m (@$osss) {
+    foreach my $m (@osss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
         push @oss_opt, "ost${c}_HOST=$host";
         push @oss_opt, "OSTDEV$c=" . $m->{'device'}
           if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
         $c++;
     }
-    push @oss_opt, "OSTCOUNT=" . scalar @$osss;
+    push @oss_opt, "OSTCOUNT=" . scalar @osss;
     $self->ossopt( join( ' ', @oss_opt ) );
 
     #include only master client for sanity suite

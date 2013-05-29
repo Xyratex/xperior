@@ -67,11 +67,25 @@ use Data::Dumper;
 use Cwd qw(chdir);
 use File::chdir;
 use File::Path;
+use File::Temp qw(:mktemp);
+
 use Log::Log4perl qw(:easy);
 use Carp;
 use Proc::Simple;
 use Xperior::Utils;
 use Time::HiRes;
+
+# Do not assign anything, because it is determined in BEGIN block
+my $UserKnownHostsFile;
+BEGIN {
+	my $f;
+	($f, $UserKnownHostsFile) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXX");
+	close $f;
+}
+
+END {
+	unlink $UserKnownHostsFile;
+}
 
 with qw(MooseX::Clone);
 
@@ -124,6 +138,8 @@ has killed => ( is => 'rw' );
 has hostname  => ( is => 'rw' );
 has osversion => ( is => 'rw' );
 
+
+
 =back
 
 =head2 Functions
@@ -168,7 +184,7 @@ sub _sshSyncExecS {
         "ssh -o  'BatchMode yes' "
       . "-o 'AddressFamily inet' "
       . "-o 'ConnectTimeout=25' "
-      . "-o 'UserKnownHostsFile=/dev/null' "
+      . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
       . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectionAttempts=3' "
       . "-o 'ServerAliveInterval=600' "
@@ -237,7 +253,7 @@ sub _sshAsyncExec {
     my $cc =
         "ssh  -o  'BatchMode yes' "
       . "-o 'AddressFamily inet' "
-      . "-o 'UserKnownHostsFile=/dev/null' "
+      . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
       . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectTimeout=25' " . "-f "
       . $self->user . "@"
@@ -260,7 +276,7 @@ sub _sshAsyncExec {
             $sc = $self->bprocess->exit_status();
             $time++;
             if ( $time > $asyncstarttimeout ) {
-                ERROR "App alive more then timeout, kill it";
+                ERROR "App alive more then $asyncstarttimeout seconds, kill it";
                 $self->bprocess->kill;
             }
         }
@@ -601,7 +617,7 @@ sub putFile {
     my $destination = $self->user . '@' . $self->host . ':' . $remotefile;
     DEBUG "Copying $localfile to $destination";
     runEx(  "scp -rp "
-          . "-o 'UserKnownHostsFile=/dev/null' "
+          . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
           . "-o 'StrictHostKeyChecking=no' "
           . "-o 'ConnectionAttempts=3' "
           . "-o 'ConnectTimeout=25' "
@@ -622,7 +638,7 @@ sub getFile {
     DEBUG "Copying [$source] to [$lfile]";
 
     return runEx( "scp -rp "
-          . "-o 'UserKnownHostsFile=/dev/null' "
+          . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
           . "-o 'StrictHostKeyChecking=no' "
           . "-o 'ConnectionAttempts=3' "
           . "-o 'ConnectTimeout=25' "

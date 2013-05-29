@@ -313,7 +313,7 @@ sub run {
             my $res    = $exe->result_code;
             my $status = $test->results->{'status'};
 
-            WARN "TEST $testName STATUS: $status";
+            INFO "TEST $testName STATUS: $status";
 
             $execCounter++;
 
@@ -363,8 +363,8 @@ sub run {
         }
     }
     $self->_reportHtml;
-    WARN "Execution completed";
-    WARN "Executed $execCounter tests, skipped $skipCounter";
+    INFO "Execution completed";
+    INFO "Executed $execCounter tests, skipped $skipCounter";
 }
 
 =item loadEnv
