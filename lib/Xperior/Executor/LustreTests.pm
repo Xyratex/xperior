@@ -290,9 +290,15 @@ sub _prepareEnvOpts {
     $c = 1;
     foreach my $m (@mdss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
-        push @mds_opt, "mds${c}_HOST=$host", "mds_HOST=$host";
-        push @mds_opt, "MDSDEV$c=" . $m->{'device'}
-          if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+        push @mds_opt, "mds${c}_HOST=$host";
+        push @mds_opt, "MDSDEV$c=$m->{device}"
+            if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+
+        if ($c eq 1) { # lustre 1.8 legacy support
+            push @mds_opt, "mds_HOST=$host";
+            push @mds_opt, "MDSDEV=$m->{device}"
+                if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+        }
         $c++;
     }
     push @mds_opt, "MDSCOUNT=" . scalar @mdss;
