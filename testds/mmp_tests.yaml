@@ -21,36 +21,22 @@
 #
 # GPL HEADER END
 #
-# Copyright 2012 Xyratex Technology Limited
+# Copyright 2013 Xyratex Technology Limited
 #
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
 ---
 Tests:
-  -
-    id: lfsck
-    script: lfsck.sh
-    executor: Xperior::Executor::LustreSingleTests
-  -
-    id: lnet-selftest
-    script: lnet-selftest.sh
-    executor: Xperior::Executor::LustreSingleTests
-    timeout: 2000
-  -
-    id: metadata-updates
-    script: metadata-updates.sh
-  -
-    id: runtests
-    script: runtests
-    executor: Xperior::Executor::LustreSingleTests
+
+
 cleanup_max_time: -1
 dangerous: 'yes'
-description: Set  of Lustre single tests
+description: Lustre multiple mount protection (MMP) tests
 executor: Xperior::Executor::LustreTests
-expected_time: 10
-groupname: lustre-single
+expected_time: 60
+groupname: mmp
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole  GetDiagnostics
+roles: StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: functional
-timeout: 600
+timeout: 300
