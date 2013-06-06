@@ -41,66 +41,70 @@ use Xperior::Test;
 use Xperior::Executor::LustreTests;
 use Xperior::Executor::LustreSingleTests;
 
-my %options = (
-    testdir => 't/testcfgs/lustre/',
-    workdir => '/tmp/test_wd',
-
-);
-
 startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
 };
-setup           _setup    => sub {
-
-};
+setup           _setup    => sub { };
 teardown        _teardown => sub { };
-shutdown        _shutdown => sub {  };
+shutdown        _shutdown => sub { };
 #########################################
+my %options = (
+    testdir => 't/testcfgs/lustre',
+    workdir => '/tmp/test_wd',
+);
+my $group_config = {
+    executor  => 'Xperior::Executor::LustreSingleTests',
+    groupname => 'single',
+    timeout   => 600,
+};
 
-test plan => 3, aCheckLustreSingleTests => sub{
-    my $tmpdir = '/tmp/mnt/lustre/';
+my @test_cases = (
+    {
+        test_config => {
+            id  => 'pass',
+            script => 'pass.sh',
+        },
+        expected => {
+            result_code => 0,
+            fail_reason => undef,
+        },
+    },
+    {
+        test_config => {
+            id  => 'fail',
+            script => 'fail.sh',
+        },
+        expected => {
+            result_code => 1,
+            fail_reason => "Test return non-zero exit code :1",
+        },
+    },
+);
+
+test plan => 2 * @test_cases, aCheckLustreSingleTests => sub {
+    my $tmpdir = '/tmp/mnt/lustre';
     mkdir $tmpdir;
     my $wd = $CWD;
-    my %gh = (
-      executor  => 'Xperior::Executor::LustreSingleTests',
-      groupname => 'single',
-      timeout   => 600,
-        );
-    my %pth = (
-      id  => 'pass',
-      script => 'pass.sh',
-     ); 
-    
-    my %fth = (
-      id  => 'fail',
-      script => 'fail.sh',
-     ); 
 
     my $testcore =  Xperior::Core->new();
-    $testcore->options(\%options);
+    $testcore->options({%options});
     my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
-    #########
-    my $testp = Xperior::Test->new;
-    $testp->init(\%pth,\%gh);
-    my $exep = Xperior::Executor::LustreSingleTests->new();
-    $exep->init($testp, \%options, $cfg);
-    $exep->lustretestdir("$wd/t/lustre/bin/");
-    $exep->execute();
-    DEBUG 'Test:Result code :'.$exep->result_code;
-    DEBUG 'Test:Reason      :'.$exep->getReason();
-    is($exep->result_code,0,"Check exit code from pass.sh");
-    ########
-    my $testf = Xperior::Test->new;
-    $testf->init(\%fth,\%gh);
-    my $exef = Xperior::Executor::LustreSingleTests->new();
-    $exef->init($testf, \%options, $cfg);
-    $exef->lustretestdir("$wd/t/lustre/bin/");
-    $exef->execute();
-    DEBUG 'Test:Result code :'.$exef->result_code;
-    DEBUG 'Test:Reason      :'.$exef->getReason();
-    is($exef->result_code,1,"Check exit code from fail.sh");
-    is($exef->yaml->{'fail_reason'} ,'Test return non-zero exit code :1'
-        ,'Check reason');
+    for my $case (@test_cases) {
+        my $test = Xperior::Test->new;
+        $test->init($case->{test_config}, $group_config);
+        my $exec = Xperior::Executor::LustreSingleTests->new();
+        $exec->init($test, {%options}, $cfg);
+        $exec->lustretestdir("$wd/t/lustre/bin");
+        $exec->execute();
+        DEBUG 'Test:Result code :'.$exec->result_code;
+        DEBUG 'Test:Reason      :'.$exec->getReason();
+        is($exec->result_code,
+            $case->{expected}->{result_code},
+                "Check exit code from $case->{test_config}->{script}");
+        is($exec->yaml->{'fail_reason'}, 
+            $case->{expected}->{fail_reason},
+                "Check fail reason");
+    }
 
     remove_tree($tmpdir);
 };

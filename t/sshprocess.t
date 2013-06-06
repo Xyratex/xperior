@@ -56,11 +56,11 @@ shutdown        _shutdown => sub { };
 test plan => 3, bCreateExitCodes     => sub{
 
     my $res = $sp->create('sleep','/bin/sleep 30');
-    ok(($res>0),'Correct exit code');
+    is($res, 0,'Correct exit code');
     sleep 10;
 
     $res = $sp->create('sleep','ls /etc/passwd');
-    ok(($res>0),'Check result for too smal application');
+    is($res, 0,'Check result for too smal application');
 
     $sp->host('bad_host');
     $res = $sp->create('sleep','/bin/sleep 30');

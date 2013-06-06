@@ -73,7 +73,7 @@ Configuration cannot pass testing on initialization step
 
 Configuration cannot pass testing on after test
 
-=item 12
+=item 11
 
 Dangerous test failed.
 

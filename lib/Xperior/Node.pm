@@ -286,7 +286,10 @@ sub getFile
 
 =head3 getRemoteConnector
 
-Return connector for node. This connector is the main node connector and should be used for short (synchronous) execution and main single execution for avoid memory wasting. If consumer need more then one long a synchronous execution next connector can be get via connector clone or via getUncontrolledRC
+Return connector for node. This connector is the main node connector and should
+be used for short (synchronous) execution and main single execution for avoid
+memory wasting. If consumer need more then one long a synchronous execution
+next connector can be get via connector clone or via getUncontrolledRC
 
 =cut
 
@@ -308,18 +311,15 @@ sub getRemoteConnector{
 
 =head3 getExclusiveRC
 
-Return a connector which can be used exclusively by consumer. Nobody more can get it.
-
+Return a connector which can be used exclusively by consumer. Nobody more can
+get it.
 
 =cut
 
 sub getExclusiveRC{
     my $self = shift;
-    my $rc = $self->getRemoteConnector;
-    my $urc = undef;
-    if( defined ( $rc)){
-        $urc = $rc->clone;
-    }
+    my $rc = $self->getRemoteConnector() || return;
+    my $urc = $rc->clone();
     $urc->initTemp;
     return $urc;
 }

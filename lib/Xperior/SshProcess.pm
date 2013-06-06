@@ -30,30 +30,33 @@
 
 =head1 NAME
 
-Xperior::SshProcess - The module implements remote process control for 
-single process over ssh
+Xperior::SshProcess - The module implements remote process control for single
+process over ssh
 
 =head1  DESCRIPTION
 
-The module is specially designed to be easily replaced by other module
-which provide same interface, possible via other protocol.
+The module is specially designed to be easily replaced by other module which
+provide same interface, possible via other protocol.
 
-Modules support two serial workflows, opposed to a parallel, that a user is resposible to control.
+Modules support two serial workflows, opposed to a parallel, that a user is
+resposible to control.
 
 =over 2
 
 =item Workflow 1
 
-User creates long-time process on remote nodes, the process is executed in background on a target node
-and deattached from console.
-The stderr/stdout capturing and download is a user responsibility, that can be done, for example,
-by standard output rediction via command line.
+User creates long-time process on remote nodes, the process is executed in
+background on a target node and deattached from console.
+The stderr/stdout capturing and download is a user responsibility, that can be
+done, for example, by standard output rediction via command line.
 
-Functions to be used: B<create>, B<kill>, B<isAlive> and fields B<exitcode> and B<pid>.
+Functions to be used: B<create>, B<kill>, B<isAlive> and fields B<exitcode> and
+B<pid>.
 
 =item Workflow 2
 
-Create short-time process on remote nodes with capturing stderr/stdout. It behaves as perl B<``> (backtics) command.
+Create short-time process on remote nodes with capturing stderr/stdout. It
+behaves as perl B<``> (backtics) command.
 
 Function to be used: B<createSync> and field B<syncexitcode>
 
@@ -68,7 +71,7 @@ use Cwd qw(chdir);
 use File::chdir;
 use File::Path;
 use File::Temp qw(:mktemp);
-
+use File::Slurp qw(write_file);
 use Log::Log4perl qw(:easy);
 use Carp;
 use Proc::Simple;
@@ -247,7 +250,6 @@ sub _sshSyncExecS {
 
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
-    DEBUG "Xperior::SshProcess->_sshAsyncExec";
     my $asyncstarttimeout = 30;
     my $sc                = 1;
     my $cc =
@@ -349,25 +351,24 @@ sub init {
 #TODO test on it
 sub _findPid {
     my $self = shift;
-    $self->pid(-1);
-    my $out = $self->_sshSyncExec( "cat " . $self->pidfile, 30 );
-
-    return -1 unless defined $out;
+    $self->pid(undef);
+    my $out = $self->_sshSyncExec( "cat " . $self->pidfile, 30 ) || return;
 
     foreach my $s ( split( /\n/, $out ) ) {
         DEBUG "Check line for PID [$s]\n";
-        if ( $s =~ m/pid\:\[(\d+)\]/ ) {
-            $self->pid($1);
-            DEBUG "PID found: [" . $self->pid . "]\n";
-            return 1;
+        my ($pid) = ($s =~ m/^(\d+)/);
+        if ($pid) {
+            $self->pid($pid);
+            DEBUG "PID found: [$pid]\n";
+            return $pid;
         }
     }
-    return -1;
 }
 
 =head3 createSync ($command, $timeout)
 
-Execute remote process and catch stderr/std and exit code. Function exit when remote execution done.
+Execute remote process and catch stderr/std and exit code. Function exit when
+remote execution done.
 
 Function have one parameter - command for start on emote node.
 
@@ -451,31 +452,35 @@ Cannot start application
 =cut
 
 sub create {
-    my ( $self, $name, $app ) = @_;
+    my ( $self, $name, $cmd ) = @_;
+    chomp ($cmd);
+    DEBUG "Starting remote shell command in background on host '$self->{host}'";
+    DEBUG "[$cmd]";
+
     $self->appname($name);
-    $self->appcmd($app);
-    DEBUG "[$name]: Xperior::SshProcess create";
-    DEBUG "[$name]: App to run [$app] on host[" . $self->host . "]";
+    $self->appcmd($cmd);
     $self->killed(0);
 
-    my $pf = $self->pidfile;
-    my $rd = $self->_sshSyncExec( "rm -rf " . $pf );
-    DEBUG "Del remote pid file: $pf";
-    my $ecf = $self->ecodefile;
-    my $ss  = <<"SS";
-$app &
-pid=\\\$!
-echo pid:[\\\$pid] > $pf
-wait \\\$pid
-echo \\\$? > $ecf
-SS
+    my $shell_file = $self->rscrfile();
+    my $err_file   = $self->ecodefile();
+    my $pid_file   = $self->pidfile();
+ 
+    DEBUG "Del remote pid file: $pid_file";
+    my $rd = $self->_sshSyncExec( "rm -rf " . $pid_file );
 
-    #TODO  clean /tmp after execution and test it
-    my $tef = $self->rscrfile;
-    my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
-    DEBUG "Starting async ............";
-    my $s = $self->_sshAsyncExec("sh $tef");
-    unless ( $s == 0 ) {
+    my $script = <<"SCRIPT";
+$cmd & pid=\$!
+echo \$pid > $pid_file
+wait \$pid
+echo \$? > $err_file
+SCRIPT
+
+    DEBUG "Uploading script:\n$script";
+    my ($f, $t) = mkstemp("/tmp/ssh_remote_script_XXXX");
+    write_file($t, $script);
+    $self->putFile($t, $shell_file);
+
+    if ( $self->_sshAsyncExec("sh $shell_file") ) {
         WARN "Cannot create remote process";
         return -2;
     }
@@ -485,18 +490,13 @@ SS
 
     #cycle workaround for long remote part start
     # wait 6*5 sec for pid file on remote side
-    $self->_findPid();
-
-    if ( $self->pid == -1 ) {
-
+    unless ($self->_findPid()) {
         #confess
         WARN "Remote process doesn't start or found in pid file";
         return -1;
     }
 
-    DEBUG "App [$app] started on " . $self->host . "\n";
-    DEBUG "[$name]: Run aplication [$app] ";
-    return $self->pid;
+    return 0;
 }
 
 =head3 kill ($mode)
@@ -531,7 +531,8 @@ sub kill {
 
 =head3 isAlive
 
-Check process status on remote system via saved pid. Also this function get exit code from remote side if application is exited or killed.
+Check process status on remote system via saved pid. Also this function get
+exit code from remote side if application is exited or killed.
 
 =cut
 
@@ -612,15 +613,16 @@ Return 0 if file copied and scp exit code if error occurred.
 =cut
 
 sub putFile {
-    my ( $self, $localfile, $remotefile ) = @_;
-    my $destination = $self->user . '@' . $self->host . ':' . $remotefile;
-    DEBUG "Copying $localfile to $destination";
-    runEx(  "scp -rp "
-          . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
-          . "-o 'StrictHostKeyChecking=no' "
-          . "-o 'ConnectionAttempts=3' "
-          . "-o 'ConnectTimeout=25' "
-          . "$localfile $destination" );
+    my ( $self, $local_file, $remote_file ) = @_;
+    my $destination = $self->user . '@' . $self->host . ':' . $remote_file;
+    DEBUG "Copying $local_file to $destination";
+    my $e = shell( [ "scp", "-rp ",
+                            "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
+                            "-o 'StrictHostKeyChecking=no'",
+                            "-o 'ConnectionAttempts=3'",
+                            "-o 'ConnectTimeout=25'",
+                            "$local_file $destination" ] );
+    return $e;
 }
 
 =head3 getFile ($remote_file, $local_file)
@@ -632,16 +634,16 @@ Return 0 if file copied and scp exit code if error occurred.
 =cut
 
 sub getFile {
-    my ( $self, $rfile, $lfile ) = @_;
-    my $source = $self->user . '@' . $self->host . ':' . $rfile;
-    DEBUG "Copying [$source] to [$lfile]";
+    my ( $self, $remote_file, $local_file ) = @_;
+    my $source = $self->user . '@' . $self->host . ':' . $remote_file;
+    DEBUG "Copying [$source] to [$local_file]";
 
-    return runEx( "scp -rp "
-          . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
-          . "-o 'StrictHostKeyChecking=no' "
-          . "-o 'ConnectionAttempts=3' "
-          . "-o 'ConnectTimeout=25' "
-          . "$source $lfile" );
+    my $e = shell(["scp", "-rp", "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
+                                 "-o 'StrictHostKeyChecking=no'",
+                                 "-o 'ConnectionAttempts=3'",
+                                 "-o 'ConnectTimeout=25'",
+                                 "$source", "$local_file" ]);
+    return $e;
 }
 
 1;
