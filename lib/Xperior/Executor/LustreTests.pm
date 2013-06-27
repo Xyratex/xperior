@@ -149,6 +149,7 @@ sub _prepareCommands {
     my @opt = (
                 "SLOW=YES",
                 "NAME=ncli",
+                "SHARED_DIRECTORY=/shared/kiev",
                 $self->mdsopt,
                 $self->ossopt,
                 $self->clntopt,
