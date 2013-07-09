@@ -340,10 +340,9 @@ sub init {
     }
 
     my $h = trim $self->_sshSyncExec( "hostname", 15 );
-    INFO "Executing on host [$h]";
     $self->hostname($h);
-    DEBUG "Remote system is <$ver>";
     $self->osversion($ver);
+	DEBUG "Initialized ssh process on host [$h] version [$ver]";
     return 0;
 }
 
@@ -514,11 +513,11 @@ sub kill {
     $mode = 0 unless defined $mode;
 
     if ( ( !defined($pid) ) or ( $pid eq '' ) ) {
-        INFO "PID is empty, exiting";
+        DEBUG "PID is empty, nothing to be killed";
         return;
     }
 
-    DEBUG "[$name]: Killing job [" . $name . "], mode[$mode] \n";
+    DEBUG "Killing remote process [$name:$pid], mode [$mode]";
     if ( $mode == 0 ) {
         $self->_sshSyncExec("kill -15 $pid");
         sleep 10;
