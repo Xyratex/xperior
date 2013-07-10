@@ -48,6 +48,7 @@ use File::Path;
 use File::chdir;
 use File::Copy;
 use File::Find;
+use File::Slurp;
 use Xperior::html::HTML;
 use TAP::Parser::Aggregator;
 use TAP::Parser;
@@ -488,6 +489,7 @@ sub _reportHtml {
     closedir $dh;
     my %data;
     my %etimes;
+    mkdir "$wd/report";
 
     #read yaml xperior results and generate one tap
     foreach my $suite (@suites) {
@@ -538,6 +540,7 @@ sub _reportHtml {
         }
         $i--;
         $data{$suite} = "TAP version 13\n" . "1..$i\n" . $report . "\n";
+        write_file("$wd/report/$suite.tap", $data{$suite});
 
     }
 
@@ -559,7 +562,6 @@ sub _reportHtml {
 
         $aggregate->stop;
     }
-    mkdir "$wd/report";
     $fmt->abs_file_paths(1);
     $CWD = $libdir;
     $fmt->template("$CWD/xperior_report.tt2");

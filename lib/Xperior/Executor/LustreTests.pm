@@ -143,7 +143,12 @@ sub _prepareCommands {
         my $groupname  = $self->test->getParam('groupname') ||
             confess "Group name is undefined";
         $script = "$groupname.sh";
-        $tid = $self->test->testcfg->{id};
+        # For multiple mode test execution use presaved original test id
+        if(defined( $self->test->testcfg->{original_id})){
+            $tid = $self->test->testcfg->{original_id};
+        }else{
+            $tid = $self->test->testcfg->{id};
+        }
     }
 
     my $lustre_script = "$self->{lustretestdir}/${script}";
