@@ -97,10 +97,15 @@ see html report in C</tmp/wd> (or value of I<--workdir> option).
 
 =back
 
-=head3 System configuration for basic one node cluster
+=head2 Xperior system configuration examples
 
+=over
 
-I<Remove leading space after copying>
+=item 1. System configuration for basic one node cluster
+
+One mgs/mds/oss combined node with one mdt and two ost's.
+One master client and one remote client both are runing
+on the same host above.
 
  ---
  Nodes:
@@ -136,9 +141,67 @@ I<Remove leading space after copying>
      type        : client
 
  #Variables
+ DefaultLustreClient:
+     master      : no
+     mount_point : /mnt/lustre
+ DefaultNode:
+     ctrlproto : ssh
+     user      : root
+ lustre_mount_point      : /mnt/lustre
+ lustre_device_type      : loop   
  client_mount_point      : /mnt/lustre
  benchmark_tests_file    : testfile
  tempdir                 : /tmp
+
+=item 2. Failover configuration example
+
+One failover pair of one target combined mgs/mds node in active-passive mode.
+
+One failover pair of two target oss nodes in active-active mode.
+
+ ---
+ Nodes:
+   - id           : mgs-mds-1
+     ip           : vmhost1
+   - id           : mgs-mds-2
+     ip           : vmhost2
+   - id           : oss-1
+     ip           : vmhost3
+   - id           : oss-2
+     ip           : vmhost4
+   - id           : master-client
+     ip           : vmhost5
+
+ LustreObjects:
+   - id          : mdt1
+     device      : /tmp/lustre-mdt1
+     node        : mgs-mds-1
+     failover    : mgs-mds-2
+     type        : mds
+
+   - id          : ost1
+     device      : /tmp/lustre-ost1
+     node        : oss-1
+     failover    : oss-2
+     type        : oss
+
+   - id          : ost2
+     device      : /tmp/lustre-ost2
+     node        : oss-2
+     failover    : oss-1
+     type        : oss
+
+   - id          : master-client
+     node        : master-client
+     type        : client
+     master      : yes
+
+ #Variables
+ client_mount_point      : /mnt/lustre
+ benchmark_tests_file    : testfile
+ tempdir                 : /tmp
+
+=back
 
 =head2 Input/output data for Xperior
 
@@ -183,7 +246,12 @@ Sample test descriptor 2
  #options          :
  tags             : functional
  dangerous        : yes
-    Tests:
+ # Per test environment variables
+ Env:
+    POWER_UP        : "ssh root@kvmhost virsh start"
+    POWER_DOWN      : "ssh root@kvmhost virsh destroy"
+    FAILURE_MODE    : HARD
+ Tests:
     - id               : 0b
     - id               : 0c
     - id               : 1a

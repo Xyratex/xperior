@@ -131,37 +131,47 @@ sub _prepareCommands {
     $self->_prepareEnvOpts;
 
     my $device_type = $self->env->cfg->{'lustre_device_type'} || 'loop';
-    my $ext = '.sh';
     my $tempdir = $self->env->cfg->{'tempdir'} || '';
     my $dir     = $self->env->cfg->{'client_mount_point'} . $tempdir;
-    my $tid     = 'ONLY=' . $self->test->testcfg->{id};
-    my $script  = $self->test->getParam('groupname') || confess "Group name is undefined";
     my $eopts   = $self->env->cfg->{extoptions} || '';
 
     #TODO add test on it
 
-    if ( defined( $self->test->getParam('script') ) ) {
-        $script = $self->test->getParam('script');
-        $tid    = '';                                #no default test number
-        $ext = '';    #ext must be set also when script is set
+    my $tid;
+    my $script = $self->test->getParam('script');
+    unless ( $script ) {
+        my $groupname  = $self->test->getParam('groupname') ||
+            confess "Group name is undefined";
+        $script = "$groupname.sh";
+        $tid = $self->test->testcfg->{id};
     }
-    my $lustre_script = "$self->{lustretestdir}/${script}${ext}";
+
+    my $lustre_script = "$self->{lustretestdir}/${script}";
     my @opt = (
                 "SLOW=YES",
                 "NAME=ncli",
                 "SHARED_DIRECTORY=/shared/kiev",
-                $self->mdsopt,
-                $self->ossopt,
-                $self->clntopt,
+                $self->mdsopt(),
+                $self->ossopt(),
+                $self->clntopt(),
                 $eopts,
-                $tid,
                 "DIR=${dir}",
                 "PDSH=\"/usr/bin/pdsh -R ssh -S -w \"",
     );
+    # Test id can be 0, that is why checking for defined
+    push @opt, "ONLY=$tid" if (defined $tid);
+
     if ($device_type eq 'block') {
         push @opt,
             "MDS_MOUNT_OPTS=\"-o rw,user_xattr\"",
             "OST_MOUNT_OPTS=\"-o user_xattr\"";
+    }
+    my $env = $self->test->getParam("env");
+    if (ref($env) eq 'HASH') {
+        for my $k (keys %$env) {
+            push @opt,
+                "$k=\"" . $env->{$k} . "\"";
+        }
     }
     elsif ($device_type eq 'loop') {
         DEBUG "No additional options required for 'loop' devices";
@@ -286,36 +296,49 @@ sub _prepareEnvOpts {
     my @osss    = $self->env->getOSSs;
     my $clients = $self->env->getClients;
     my $c;
+    my @opt;
 
-    my @mds_opt;
+    @opt = ();
     $c = 1;
     foreach my $m (@mdss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
-        push @mds_opt, "mds${c}_HOST=$host";
-        push @mds_opt, "MDSDEV$c=$m->{device}"
+        push @opt, "mds${c}_HOST=$host";
+        push @opt, "MDSDEV$c=$m->{device}"
             if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
 
         if ($c eq 1) { # lustre 1.8 legacy support
-            push @mds_opt, "mds_HOST=$host";
-            push @mds_opt, "MDSDEV=$m->{device}"
+            push @opt, "mds_HOST=$host";
+            push @opt, "MDSDEV=$m->{device}"
                 if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+        }
+
+        if ($m->{'failover'}) {
+            my $failover = $self->env->getNodeAddress($m->{'failover'});
+            push @opt, "MGSNID=$host\@tcp:$failover\@tcp" if ($c eq 1);
+            push @opt, "mds${c}failover_HOST=$failover";
+            # lustre 1.8 legacy
+            push @opt, "mdsfailover_HOST=$failover" if ($c eq 1);
         }
         $c++;
     }
-    push @mds_opt, "MDSCOUNT=" . scalar @mdss;
-    $self->mdsopt( join( ' ', @mds_opt ) );
+    push @opt, "MDSCOUNT=" . scalar @mdss;
+    $self->mdsopt( join( ' ', @opt ) );
 
-    my @oss_opt;
+    @opt = ();
     $c = 1;
     foreach my $m (@osss) {
         my $host = $self->env->getNodeAddress( $m->{'node'} );
-        push @oss_opt, "ost${c}_HOST=$host";
-        push @oss_opt, "OSTDEV$c=" . $m->{'device'}
+        push @opt, "ost${c}_HOST=$host";
+        push @opt, "OSTDEV$c=" . $m->{'device'}
           if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+        if ($m->{'failover'}) {
+            my $failover = $self->env->getNodeAddress($m->{'failover'});
+            push @opt, "ost${c}failover_HOST=$failover";
+        }
         $c++;
     }
-    push @oss_opt, "OSTCOUNT=" . scalar @osss;
-    $self->ossopt( join( ' ', @oss_opt ) );
+    push @opt, "OSTCOUNT=" . scalar @osss;
+    $self->ossopt( join( ' ', @opt ) );
 
     #include only master client for sanity suite
     $self->clntopt('CLIENTS=');
