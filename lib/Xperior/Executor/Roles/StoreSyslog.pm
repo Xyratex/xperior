@@ -49,19 +49,19 @@ requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
 
 before 'execute' => sub{
     my $self    = shift;
-    my %h;
-    $self->ison(\%h);
+    $self->ison({});
     foreach my $node (@{$self->env->nodes}) {
-        my $c = $node->getExclusiveRC;
         my $tlog = $self->storedir . '/messages.' . Time::HiRes::gettimeofday();
-        $c->create('mkdir', "mkdir -p " . $self->storedir);
         $self->tlog($tlog);
-        $self->ison->{$node->id} = $c;
+        my $c = $node->getExclusiveRC;
+        $c->create('mkdir', "mkdir -p " . $self->storedir);
         $c->create('tail', "tail -f -n 0 -v $self->{remotelog} > $tlog ");
 
         if($c->syncexitcode) {
             $self->addMessage('Cannot harvest log data for node ' . $node->id);
-            $self->ison->{$node->id} = 0;
+        }
+        else {
+            $self->ison->{$node->id} = $c;
         }
     }
 
@@ -71,10 +71,10 @@ before 'execute' => sub{
 after   'execute' => sub{
     my $self    = shift;
 
-    foreach my $n (@{$self->env->nodes}){
-        if($self->ison->{$n->id}!=0){
-            my $id = $n->id;
-            my $logfile =  $self->getNormalizedLogName($self->logname.'.'.$id);
+    foreach my $n (@{$self->env->nodes}) {
+        my $id = $n->id;
+        my $logfile = $self->getNormalizedLogName("$self->{logname}.$id");
+        if($self->ison->{$id}){
             my $c = $self->ison->{$id};
             $c->kill(1);
             my $res = $c->getFile( $self->tlog,$logfile);

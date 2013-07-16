@@ -156,12 +156,12 @@ sub _prepareCommands {
                 $eopts,
                 $tid,
                 "DIR=${dir}",
-                "PDSH=\\\"/usr/bin/pdsh -R ssh -S -w \\\"",
+                "PDSH=\"/usr/bin/pdsh -R ssh -S -w \"",
     );
     if ($device_type eq 'block') {
         push @opt,
-            "MDS_MOUNT_OPTS=\\\"-o rw,user_xattr\\\"",
-            "OST_MOUNT_OPTS=\\\"-o user_xattr\\\"";
+            "MDS_MOUNT_OPTS=\"-o rw,user_xattr\"",
+            "OST_MOUNT_OPTS=\"-o user_xattr\"";
     }
     elsif ($device_type eq 'loop') {
         DEBUG "No additional options required for 'loop' devices";
@@ -330,7 +330,7 @@ sub _prepareEnvOpts {
         }
     }
     $self->clntopt(
-           "CLIENTS=$mclient RCLIENTS=\\\"" . join( ',', @rclients ) . "\\\"" );
+           "CLIENTS=$mclient RCLIENTS=\"" . join( ',', @rclients ) . "\"" );
 }
 
 __PACKAGE__->meta->make_immutable;
