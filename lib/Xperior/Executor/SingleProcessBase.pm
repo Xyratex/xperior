@@ -46,7 +46,7 @@ Inherited fom L<Xperior::Executor::Base>
 package Xperior::Executor::SingleProcessBase;
 use Moose;
 use Data::Dumper;
-use Carp;
+use Carp qw(cluck);
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
@@ -102,14 +102,10 @@ sub execute {
     #$testp->createSync ('rm -rf /var/log/xperior/');
     $testproc->createSync('mkdir  /var/log/xperior/');
 
-    ## create temprory dir on target fs
-    my $tempdir = $self->env->cfg->{'tempdir'}
-      or carp("Undefined 'tempdir'");
-
     my $mountpoint = $self->env->cfg->{'client_mount_point'}
-      or carp("Undefined 'client_mount_point'");
+      or cluck("Undefined 'client_mount_point'");
 
-    $testproc->createSync("mkdir -p ${mountpoint}/${tempdir}");
+    $testproc->createSync("mkdir -p ${mountpoint}");
 
     #TODO add exit value check there. Now it doesn't have value until
     #own lustre mount manager
@@ -141,7 +137,7 @@ sub execute {
         #monitoring timeout
         sleep $polltime;
         if ( $testproc->isAlive != 0 ) {
-            INFO "Remote app is not alive, exiting";
+            DEBUG "Remote app is not alive, exiting";
             last;
         }
         DEBUG "Test alive, next wait cycle";
@@ -181,7 +177,8 @@ sub execute {
 
     #cleanup tempdir after execution
     #TODO make this removing safe!!!
-    $testproc->createSync( 'rm -rf ' . $mountpoint . $tempdir . "/*" );
+    $testproc->createSync( 'rm -rf ' . "$mountpoint/*" )
+	if ($mountpoint and $mountpoint ne "");
 
     ### get logs
 

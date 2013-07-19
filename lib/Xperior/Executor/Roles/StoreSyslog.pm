@@ -40,7 +40,7 @@ package Xperior::Executor::Roles::StoreSyslog ;
 use Moose::Role;
 use Time::HiRes;
 use Xperior::Utils;
-has tlog      => ( is =>'rw');
+has tlog      => ( is =>'rw', isa => 'HashRef');
 has ison      => ( is =>'rw', isa => 'HashRef');
 has storedir  => ( is =>'rw', default => '/var/log/xperior/syslog');
 has remotelog => ( is =>'rw', default => '/var/log/messages');
@@ -50,9 +50,10 @@ requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
 before 'execute' => sub{
     my $self    = shift;
     $self->ison({});
+    $self->tlog({});
     foreach my $node (@{$self->env->nodes}) {
         my $tlog = $self->storedir . '/messages.' . Time::HiRes::gettimeofday();
-        $self->tlog($tlog);
+        $self->tlog->{$node->id} = $tlog;
         my $c = $node->getExclusiveRC;
         $c->create('mkdir', "mkdir -p " . $self->storedir);
         $c->create('tail', "tail -f -n 0 -v $self->{remotelog} > $tlog ");
@@ -74,16 +75,17 @@ after   'execute' => sub{
     foreach my $n (@{$self->env->nodes}) {
         my $id = $n->id;
         my $logfile = $self->getNormalizedLogName("$self->{logname}.$id");
+        my $tlog = $self->tlog->{$id};
         if($self->ison->{$id}){
             my $c = $self->ison->{$id};
             $c->kill(1);
-            my $res = $c->getFile( $self->tlog,$logfile);
+            my $res = $c->getFile($tlog, $logfile);
             if ($res == 0){
                 $self->registerLogFile($logfile,$logfile);
                 $self->processSystemLog($c,$logfile);
             }else{
                 $self->addMessage(
-                    "Cannot copy log file [".$self->tlog."]: $res");
+                    "Cannot copy log file [".$tlog."]: $res");
             }
         }
     }

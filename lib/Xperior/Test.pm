@@ -82,7 +82,8 @@ sub getName {
 
 =head2 getParamNames
 
-Return list of available parameters for test (from test description and group description considering inheritance ).
+Return list of available parameters for test (from test description and group
+description considering inheritance).
 
 =back
 
