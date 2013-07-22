@@ -257,7 +257,7 @@ sub _getLog {
             $self->getNormalizedLogName($logname) );
     }
     else {
-        $self->addMessage( 'Cannot copy log file [' . $logfile . "]: $res" );
+        $self->addMessage( "Cannot copy log file [$logfile]: $res" );
     }
     return $res;
 }
@@ -267,9 +267,7 @@ sub _getMasterClient {
     foreach my $client ( @{ $self->env->getClients } ) {
         DEBUG "Check client " . Dumper $client;
         return $client
-          if (
-            defined( $client->{'master'} && ( $client->{'master'} eq 'yes' ) )
-          );
+            if ($client->{'master'} && $client->{'master'} eq 'yes');
     }
     return undef;
 }
