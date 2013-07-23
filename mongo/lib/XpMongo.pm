@@ -73,7 +73,7 @@ sub opendb {
     INFO "Connecting to MongoDB";
     my $conn = MongoDB::Connection->new( host => $host )
       or confess "The server cannot be reached";
-    my $db = $conn ->${dbname};
+    my $db = $conn ->get_database($dbname);
     my $stat = $db->run_command( { serverStatus => -1 } );
     INFO "MongoDB ver: " . $stat->{version} . "\n";
 
@@ -113,35 +113,30 @@ sub _validate_doc_data {
 }
 
 sub _post_yaml_doc {
-    my ( $db, $file, $ats ) = @_;
+    my ( $db, $file, $attach ) = @_;
     my ( $name, $basedir, $suffix ) = fileparse( $file, ".yaml" );
     #INFO "Posting document: $name";
     my $yaml_data = YAML::Syck::LoadFile($file);
 
     my $grid = $db->get_gridfs;
-    my @aids;
-    foreach my $a (@{$ats}){
+    my @ids;
+    foreach my $a (@{$attach}){
+        my $attach_file = basename($a);
         my $fh = IO::File->new($a, "r") or confess "Cannot open attachement file [$a]";
-        my $sa= 'no_name';
-        if($a =~ m/[\/\\]([^\/\\]+)$/){
-            $sa = $1;
-        }
-        my $id = $grid->insert($fh, {"filename" => $sa,"test"=> $yaml_data->{'id'}, "starttime" => $yaml_data->{'starttime'}});
-        DEBUG "Added attachemnt [".$yaml_data->{'id'}.
-                "] for test [".$yaml_data->{'id'}."]";
-        push @aids,$id;
+        my $id = $grid->insert($fh, {
+            "filename"  => $attach_file,
+            "test"      => $yaml_data->{'id'},
+            "starttime" => $yaml_data->{'starttime'},
+        });
+        DEBUG "Added attachment for test [$yaml_data->{'id'}]: [$attach_file]";
+        push @ids, $id;
     }
-    $yaml_data->{attachments_ids}=\@aids;;
+    $yaml_data->{attachments_ids}=\@ids;
     _validate_doc_data($yaml_data);
 
-    $db ->${collection}->insert($yaml_data);    #,safe=>1);
+    $db->get_collection($collection)->insert($yaml_data);    #,safe=>1);
 
     my $err = $db->last_error();
-
-    #INFO "Last error". Dumper $err;
-    #TODO atach files
-    #INFO "Added document [$doc->{id}]";
-    return;
 }
 
 
