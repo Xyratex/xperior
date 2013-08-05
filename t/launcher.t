@@ -50,7 +50,7 @@ shutdown _shutdown => sub { };
 ########################################
 test
   plan           => 3,
-  akGenerateHTML => sub {
+  kGenerateHTML => sub {
     remove_tree('/tmp/test_wd');
     dircopy( 't/checkhtmldata', '/tmp/test_wd/' );
     my $out;
@@ -79,7 +79,7 @@ test
   nMultirun => sub {
 
     my $out =
-`bin/xper --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug`;
+`bin/xper --workdir=/tmp/wd --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug`;
     my @ids;
     foreach my $str ( split( /\n/, $out ) ) {
         DEBUG ">$str";
@@ -95,8 +95,9 @@ test
 test
   plan      => 3,
   mMultirun => sub {
+    mkdir '/tmp/wd';
     my $out =
-`bin/xper --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug --includeonly='sanity/2b.*'`;
+`bin/xper --workdir=/tmp/wd --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug --includeonly='sanity/2b.*'`;
     my @ids;
     foreach my $str ( split( /\n/, $out ) ) {
         DEBUG ">$str";
@@ -104,14 +105,15 @@ test
             push @ids, $1;
         }
     }
-    is( scalar(@ids), 5,              'Number of tests' );
+    DEBUG "\n".Dumper @ids;
+    is( scalar(@ids), 5,              'Number of tests with multirun and  include only' );
     is( $ids[1],      'sanity/2b__1', 'Value check 2' );
     is( $ids[4],      'sanity/2b__4', 'Value check 3' );
-  };
+};
 
 #########################################
 test
-  plan      => 5,
+  plan      => 4,
   oMultirun => sub {
     DEBUG `rm -rf /tmp/wd/`;
     my $out =
@@ -127,23 +129,23 @@ test
         }
     }
     is( scalar(@ids), 5,       'Number of tests' );
-    is( $ids[1],      '2b__1', 'Value check 2' );
-    is( $ids[4],      '2b__4', 'Value check 3' );
+    is( $ids[1],      'sanity->2b__1', 'Value check 2' );
+    is( $ids[4],      'sanity->2b__4', 'Value check 3' );
 
+    #DEBUG `rm -rf /tmp/wd/`; avoid it because test --continue
     my $out1 =
 `bin/xper --workdir=/tmp/wd --testdir=t/testcfgs/simple  --action=run  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 6 --debug --includeonly='sanity/2b.*' --continue`;
-    DEBUG $out1;
+    #DEBUG "out1= ". $out1;
     my @ids1;
     foreach my $str ( split( /\n/, $out1 ) ) {
-
         #DEBUG ">$str";
         if ( $str =~ m/TEST\s+(.*)\s+STATUS\:\s+passed$/ ) {
             push @ids1, $1;
         }
     }
-    is( scalar(@ids1), 1,       'Number of tests' );
-    is( $ids1[0],      '2b__5', 'Value check 4' );
-  };
+    DEBUG Dumper @ids1;
+    is( scalar(@ids1), 0, 'Number of tests 0 - all executed' );
+};
 
 #########################################
 test

@@ -49,6 +49,7 @@ use File::chdir;
 use File::Copy;
 use File::Find;
 use File::Slurp;
+use List::Util qw(shuffle);
 use Xperior::html::HTML;
 use TAP::Parser::Aggregator;
 use TAP::Parser;
@@ -91,11 +92,29 @@ use constant ERROR_TEST_BREAK_REQUIRED    => 12;
 
 our $VERSION = "0.0.2";
 
-has 'options'    => (is => 'rw');
-has 'tests'      => (is => 'rw');    # isa => 'ArrayRef[]', );
-has 'testgroups' => (is => 'rw');
-has 'env'        => (is => 'rw');
-has 'extoptions' => (is => 'rw');
+has 'options'          => (is => 'rw');
+has 'tests'            => (is => 'rw');    # isa => 'ArrayRef[]', );
+has 'testplan'         => (is => 'rw');    # isa => 'ArrayRef[]', );
+has 'testgroups'       => (is => 'rw');
+has 'env'              => (is => 'rw');
+has 'extoptions'       => (is => 'rw');
+has 'testplanfile'     => (is => 'rw', default=>'testorderplan.lst');
+has 'testexecutionlog' => (is => 'rw', default=>'testexecution.log');
+
+
+=head2 _randomizeTests
+
+Return  C<$self-tests> in randomized order
+
+=cut
+
+sub _randomizeTests {
+    my ($self) = shift;
+    DEBUG "Randomize tests";
+    my @newtests = shuffle @{$self->{'tests'}};
+    return \@newtests;
+}
+
 
 =head2 _multiplyTests
 
@@ -133,12 +152,11 @@ sub _runtest {
 
     #DEBUG "Test is:". Dumper $test;
     my $executorname = $test->getParam('executor');
-    my $roles        = $test->getParam('roles');
+    my $roles        = $test->getParam('roles') || '';
     if ($test->{excluded}) {
         $executorname = 'Xperior::Executor::Skip';
         $roles        = '';
     }
-
     my $executor = $self->_createExecutor($executorname, split(/\s+/, trim($roles)));
 
     $executor->init($test, $self->options, $self->env);
@@ -215,8 +233,15 @@ sub run {
         WARN "Found problems while testing configuration";
         exit(ERROR_CONFIG_FAILURE);
     }
-
     $self->tests($self->_multiplyTests($self->options->{'multirun'}));
+    #preserve test plan
+    if ($self->options->{'continue'} and $self->restoreTestOrder()){
+        $self->replanningTests();
+    }else{
+        $self->tests($self->_randomizeTests())
+                if ($self->options->{'random'});
+        $self->saveTestPlan();
+    }
 
     #TODO check tests applicability there
 
@@ -245,9 +270,13 @@ sub run {
         my $testFullName = $test->getGroupName . '/' . $test->getName;
 
         my $skip = 0;
+        # in multiplication case test names will be
+        # replay-dual/9__2
+        # replay-vbr/1a__0
         INFO "Preprocessing $testFullName";
         if (@includeonly) {
-            $skip = 1 unless first {$testFullName =~ m/^$_$/} @includeonly;
+            DEBUG 'Include only defined, excluding check skipped';
+            $skip = 1 unless first {$testFullName =~ m/^$_(\_\_\d+)*$/} @includeonly;
         }
         else {
             foreach my $tag (@{$test->getTags}) {
@@ -258,15 +287,18 @@ sub run {
             }
             if (defined $excludelist) {
                 $test->excluded(1)
-                    if first {$testFullName =~ m/^$_$/} @$excludelist;
+                    if first {$testFullName =~ m/^$_(\_\_\d+)*$/} @$excludelist;
             }
             if (defined $includelist) {
                 $skip = 1
-                    unless first {$testFullName =~ m/^$_$/} @$includelist;
+                    unless first {$testFullName =~ m/^$_(\_\_\d+)*$/} @$includelist;
             }
         }
 
-        $skip = 1 if first {"$testFullName.yaml" =~ m/^$_$/} @$completelist;
+        if( first {"$testFullName.yaml" =~ m/^$_$/} @$completelist) {
+            INFO "Test [${testFullName}.yaml] already executed";
+            $skip = 1 ;
+        }
 
         if ($skip) {
             INFO "Test [$testFullName] will be skipped";
@@ -279,17 +311,21 @@ sub run {
         my $execCounter = 0;
         my $skipCounter = 0;
         my $error;
+        my $wd   = $self->{options}->{workdir};
         foreach my $test (@{$self->{'tests'}}) {
             if ($test->skipped()) {
                 $skipCounter++;
                 next;
             }
             my $testName     = $test->getName();
+            my $testGroup    = $test->getGroupName();
             my $exe    = $self->_runtest($test, $test->{excluded});
             my $res    = $exe->result_code;
             my $status = $test->results->{'status'};
-
-            INFO "TEST $testName STATUS: $status";
+            write_file("$wd/".$self->testexecutionlog(),
+                        {err_mode => 'croak', append => 1},
+                        time()."\t${testGroup}//${testName}\n");
+            INFO "TEST ${testGroup}->${testName} STATUS: $status";
 
             $execCounter++;
 
@@ -329,8 +365,13 @@ sub run {
         INFO "Test execution completed" unless $error;
         INFO "Executed tests: $execCounter";
         INFO "Skipped tests:  $skipCounter";
-        $self->_reportHtml;
-        exit ($error) if ($error);
+        $self->_reportHtml();
+        if ($error){
+            write_file("$wd/".$self->testexecutionlog(),
+                {err_mode => 'croak', append => 1},
+                time()."\texit\t${error}\n");
+            exit ($error);
+        }
     }
     elsif ($action eq 'list') {
         foreach my $test (grep { ! $_->skipped() } @{$self->{'tests'}}) {
@@ -341,6 +382,88 @@ sub run {
     }
     else {
         confess "Unknown action detected: $action";
+    }
+}
+
+=item restoreTestOrder
+
+Class method
+Load test list for continuing execution after crash or exit. See
+replanningTests and saveTestPlan
+=cut
+
+
+sub restoreTestOrder{
+    DEBUG 'Xperior::Core->restoreTestOrder';
+    my $self = shift;
+    my $wd   = $self->{options}->{workdir};
+    my $tpf = "$wd/".$self->testplanfile();
+    if( -e $tpf ){
+        my @plan = read_file($tpf,
+                        {err_mode => 'croak'});
+        chomp(@plan);
+        $self->testplan(\@plan);
+        INFO "Test plan loaded from $tpf";
+        return 1;
+    }else{
+        INFO "File $tpf does not exists";
+        return 0;
+    }
+}
+
+=item replanningTests
+
+Class method
+Restore previously defined in test list execution order
+after crash or exit
+
+=cut
+
+sub replanningTests{
+    DEBUG 'Xperior::Core->replanningTests';
+    my $self = shift;
+    my @tests = @{$self->tests()};
+    my @sortedtests;
+    foreach my $line (@{$self->testplan()}){
+        my($gname,$name) = split(/\//,$line);
+        DEBUG "Searching test [$gname][$name]";
+        my $ff = 0;
+        foreach my $test (@tests){
+            if(($test->getParam('groupname') eq $gname)
+                 && ($test->getName() eq $name)){
+                $ff=1;
+                push @sortedtests, $test;
+            }
+        }
+        if($ff == 0 ){
+            confess "Cannot find corresponding test for".
+            " [$gname][$name] test plan recod";
+        }
+    }
+    INFO 'Tests reordered';
+    $self->tests(\@sortedtests);
+}
+
+=item saveTestPlan
+
+Class method
+Save test list for continuing execution after crash or exit
+
+=cut
+
+sub saveTestPlan{
+    DEBUG 'Xperior::Core->replanningTests';
+    my $self = shift;
+    my @tests = @{$self->tests()};
+    my $wd   = $self->{options}->{workdir};
+    my @plan;
+    if( @tests and (scalar(@tests) > 0)){
+        @plan = map{$_->getParam('groupname').'/'.$_->getName()."\n"} @tests;
+        write_file("$wd/".$self->testplanfile(),{err_mode => 'croak'}, @plan);
+        $self->testplan(\@plan);
+        INFO "Test plan saved to $wd/".$self->testplanfile();
+    }else{
+        confess 'Test list is empty, cannot save it';
     }
 }
 

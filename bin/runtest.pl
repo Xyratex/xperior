@@ -94,6 +94,10 @@ from the next test after last written one which is possibly not finished.
 Report the results. If L<--continue> is not set, then the previous results
 in the working directory are overwritten.
 
+=item --random
+
+Execute tests in random order
+
 =item --multirun
 
 Optional, defines how much times every test should be executed. 
@@ -322,6 +326,7 @@ my $tap;
 my $html;
 my $logfile	= undef;
 my $multirun;
+my $random;
 
 GetOptions(
     "config:s"       => \$configfile,
@@ -335,6 +340,7 @@ GetOptions(
     "excludelist:s"  => \$excludelist,
     "includelist:s"  => \$includelist,
     "flist:s"        => \$flist,
+    "random!"        => \$random,
     "multirun:i"     => \$multirun,
     "workdir:s"      => \$workdir,
     "testdir:s"      => \$testdir,
@@ -421,6 +427,7 @@ if( $action eq 'run'){
     includeonly => \@includeonly,
     action   => $action,
     continue => $continue,
+    random   => $random,
     configfile => $configfile,
     tap      => $tap,
     html     => $html,
