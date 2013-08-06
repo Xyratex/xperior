@@ -433,6 +433,7 @@ Tests:
     id: 51a
   -
     id: 51b
+    timeout: 900
   -
     id: 51bb
   -
