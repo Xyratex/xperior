@@ -180,9 +180,16 @@ sub newSuite {
         reference   => "http://wiki.lustre.org/index.php/Testing_Lustre_Code",
         Tests       => \@tests,
     };
-    if (-f $default) {
+    my $default_content;
+    if (ref($default) eq 'HASH') {
+        $default_content = $default;
+    }
+    elsif (-f $default) {
         DEBUG "Loading default suite: $default";
-        $content = _mergeSuites($content, LoadFile($default));
+        $default_content = LoadFile($default);
+    }
+    if (defined $default_content) {
+        $content = _mergeSuites($content, $default_content);
     }
     return $content;
 }
