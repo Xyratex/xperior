@@ -1,0 +1,31 @@
+Logging to local directory: /tmp/test_logs/1375655872
+only running test 26a
+excepting tests: 52 60
+mft64: Checking config lustre mounted on /mnt/lustre
+mft63: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients mft63,mft64 environments
+Using TIMEOUT=20
+disable quota as required
+
+
+== recovery-small test 26a: evict dead exports == 18:37:55 (1375655875)
+starting with 4 OST exports
+fail_loc=0x505
+Waiting 55 secs for update
+Waiting 45 secs for update
+Waiting 35 secs for update
+Waiting 25 secs for update
+Waiting 15 secs for update
+Updated after 48s: wanted '3' got '3'
+fail_loc=0x0
+Resetting fail_loc on all nodes...done.
+PASS 26a (54s)
+== recovery-small test complete, duration 57 sec == 18:38:49 (1375655929)
+ recovery-small : @@@@@@ FAIL: remove sub-test dirs failed 
+  Trace dump:
+  = /usr/lib64/lustre/tests/../tests/test-framework.sh:4185:error_noexit()
+  = /usr/lib64/lustre/tests/../tests/test-framework.sh:4212:error()
+  = /usr/lib64/lustre/tests/../tests/test-framework.sh:3792:check_and_cleanup_lustre()
+  = /usr/lib64/lustre/tests/recovery-small.sh:1787:main()
+Dumping lctl log to /tmp/recovery-small..*.1375655932.log

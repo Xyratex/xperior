@@ -137,19 +137,15 @@ sub _prepareCommands {
 
     #TODO add test on it
 
-    my $tid;
     my $script = $self->test->getParam('script');
     unless ( $script ) {
         my $groupname  = $self->test->getParam('groupname') ||
             confess "Group name is undefined";
         $script = "$groupname.sh";
-        # For multiple mode test execution use presaved original test id
-        if(defined( $self->test->testcfg->{original_id})){
-            $tid = $self->test->testcfg->{original_id};
-        }else{
-            $tid = $self->test->testcfg->{id};
-        }
     }
+
+    my $tid = $self->test->testcfg->{original_id};
+    $tid = $self->test->testcfg->{id} unless (defined($tid));
 
     my $lustre_script = "$self->{lustretestdir}/${script}";
     my @opt = (
@@ -250,6 +246,7 @@ sub processLogs {
     my $result    = $self->NOTSET;
     my $defreason = 'No_status_found';
     my $reason    = $defreason;
+    my $is_completed = 0;
     my @results;
 
     while ( defined( my $s = <F> ) ) {
@@ -257,6 +254,7 @@ sub processLogs {
         if ( my ($dumplog) = ( $s =~ m/Dumping lctl log to\s+(.*)$/ ) ) {
             DEBUG "Log files template [$dumplog] found in log";
             my $files = $connector->createSync("ls -Aw1 $dumplog");
+            DEBUG "Found files : $files";
             if ( ( $connector->syncexitcode != 0 ) or ( $files eq '' ) ) {
                 $self->addMessage("Cannot list lctl logs files[$dumplog]");
             }
@@ -270,21 +268,22 @@ sub processLogs {
                 }
             }
         }
-
-        if ( $s =~ m/^PASS/ ) {
-            $result = $self->PASSED;
-            $reason = '';
-            last;
-        }
-        if ( $s =~ m/^FAIL(.*)/ ) {
-            $result = $self->FAILED;
-            $reason = $1 if defined $1;
-            last;
-        }
-        if ( $s =~ /^SKIP(.*)/ ) {
-            $result = $self->SKIPPED;
-            $reason = $1 if $1;
-            last;
+        if ( not $is_completed ) {
+            if ( $s =~ m/^PASS/ ) {
+                $result = $self->PASSED;
+                $reason = '';
+                $is_completed = 1;
+            }
+            if ( $s =~ m/^FAIL(.*)/ ) {
+                $result = $self->FAILED;
+                $reason = $1 if defined $1;
+                $is_completed = 1;
+            }
+            if ( $s =~ /^SKIP(.*)/ ) {
+                $result = $self->SKIPPED;
+                $reason = $1 if $1;
+                $is_completed = 1;
+            }
         }
 
     }
