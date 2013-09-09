@@ -21,33 +21,32 @@
 #
 # GPL HEADER END
 #
-# Copyright 2012 Xyratex Technology Limited
+# Copyright 2013 Xyratex Technology Limited
 #
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
 ---
 Tests:
   -
-    id: failover_mds
+    id: 7
+    timeout: 600
   -
-    id: failover_ost
-# DURATION 36000 = 60 x 60 x 10 (secs) = 10 (hours)
-# SERVER_FAILOVER_PERIOD 300 = 60 * 5 (secs)
+    id: 8
+    timeout: 600
+
 env:
-#    DURATION: 36000
-    DURATION: 3600
     ENABLE_QUOTA: yes
     FAILURE_MODE: HARD
     REQFAIL_PERCENT: 100
     SERVER_FAILOVER_PERIOD: 300
 cleanup_max_time: -1
 dangerous: 'yes'
-description: Lustre recovery mds scale tests
+description: Lustre multiple mount protection (MMP) tests
 executor: Xperior::Executor::LustreTests
-groupname: recovery-mds-scale
+expected_time: 60
+groupname: mmp
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
-tags: stress failover
-#timeout: 36060
-timeout: 3660
+tags: functional failover
+timeout: 300

@@ -28,26 +28,99 @@
 ---
 Tests:
   -
-    id: failover_mds
+    id: 1a
   -
-    id: failover_ost
-# DURATION 36000 = 60 x 60 x 10 (secs) = 10 (hours)
-# SERVER_FAILOVER_PERIOD 300 = 60 * 5 (secs)
+    id: 1b
+  -
+    id: 1c
+  -
+    id: 2a
+  -
+    id: 2b
+  -
+    id: 3a
+  -
+    id: 3b
+  -
+    id: 4a
+  -
+    id: 4b
+  -
+    id: 4c
+  -
+    id: 4d
+  -
+    id: 4e
+  -
+    id: 4f
+  -
+    id: 4g
+  -
+    id: 4h
+  -
+    id: 4i
+  -
+    id: 4j
+  -
+    id: 4k
+  -
+    id: 5a
+  -
+    id: 5b
+  -
+    id: 5c
+  -
+    id: 6a
+  -
+    id: 6b
+  -
+    id: 6c
+  -
+    id: 6d
+  -
+    id: 7a
+  -
+    id: 7b
+  -
+    id: 7c
+  -
+    id: 7d
+  -
+    id: 7e
+  -
+    id: 7f
+  -
+    id: 7g
+  -
+    id: 7h
+  -
+    id: 7i
+  -
+    id: 8a
+  -
+    id: 8b
+  -
+    id: 8c
+  -
+    id: 10b
+  -
+    id: 11a
+  -
+    id: 11b
+  -
+    id: 12a
 env:
-#    DURATION: 36000
-    DURATION: 3600
     ENABLE_QUOTA: yes
     FAILURE_MODE: HARD
     REQFAIL_PERCENT: 100
     SERVER_FAILOVER_PERIOD: 300
 cleanup_max_time: -1
 dangerous: 'yes'
-description: Lustre recovery mds scale tests
+description: Lustre replay-vbr failover tests
 executor: Xperior::Executor::LustreTests
-groupname: recovery-mds-scale
+groupname: replay-vbr
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics
+roles: StoreSyslog StoreConsole  GetDiagnostics
 schema: data/schemas/testds.yaml
-tags: stress failover
-#timeout: 36060
-timeout: 3660
+tags: functional failover
+timeout: 900

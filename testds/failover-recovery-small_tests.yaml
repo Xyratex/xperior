@@ -28,26 +28,125 @@
 ---
 Tests:
   -
-    id: failover_mds
+    id: 1
   -
-    id: failover_ost
-# DURATION 36000 = 60 x 60 x 10 (secs) = 10 (hours)
-# SERVER_FAILOVER_PERIOD 300 = 60 * 5 (secs)
+    id: 2
+  -
+    id: 3
+  -
+    id: 4
+  -
+    id: 5
+  -
+    id: 6
+  -
+    id: 7
+  -
+    id: 8
+  -
+    id: 9
+  -
+    id: 10
+  -
+    id: 11
+  -
+    id: 12
+  -
+    id: 13
+  -
+    id: 14
+  -
+    id: 15
+  -
+    id: 16
+  -
+    id: 17
+  -
+    id: 18a
+  -
+    id: 18b
+  -
+    id: 18c
+  -
+    id: 19a
+  -
+    id: 19b
+  -
+    id: 20a
+  -
+    id: 20b
+  -
+    id: 21a
+  -
+    id: 21b
+  -
+    id: 21c
+  -
+    id: 21d
+  -
+    id: 21e
+  -
+    id: 21f
+  -
+    id: 21g
+  -
+    id: 21h
+  -
+    id: 22
+  -
+    id: 23
+  -
+    id: 24
+  -
+    id: 26a
+  -
+    id: 26b
+  -
+    id: 27
+  -
+    id: 28
+  -
+    id: 29a
+  -
+    id: 29b
+  -
+    id: 50
+  -
+    id: 51
+  -
+    id: 52
+    timeout: 1200
+  -
+    id: 53
+  -
+    id: 54
+  -
+    id: 55
+  -
+    id: 56
+  -
+    id: 57
+  -
+    id: 58
+  -
+    id: 59
+  -
+    id: 60
+  -
+    id: 61
 env:
-#    DURATION: 36000
-    DURATION: 3600
     ENABLE_QUOTA: yes
     FAILURE_MODE: HARD
     REQFAIL_PERCENT: 100
     SERVER_FAILOVER_PERIOD: 300
 cleanup_max_time: -1
 dangerous: 'yes'
-description: Lustre recovery mds scale tests
+description: Lustre recovery-small tests
 executor: Xperior::Executor::LustreTests
-groupname: recovery-mds-scale
+expected_time: 10
+groupname: recovery-small
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
-tags: stress failover
-#timeout: 36060
-timeout: 3660
+tags: functional failover
+timeout: 300
