@@ -32,8 +32,8 @@ Tests:
 # DURATION: 36000 = 60 x 60 x 10 (secs) = 10 (hours)
 # SERVER_FAILOVER_PERIOD: 300 = 60 x 5 (secs) = 5 (minutes)
 env:
-#    DURATION: 36000
-    DURATION: 3600
+    DURATION: 36000
+#    DURATION: 3600
     ENABLE_QUOTA: yes
     FAILURE_MODE: HARD
     REQFAIL_PERCENT: 100
@@ -47,5 +47,5 @@ reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: stress failover
-#timeout: 36060
-timeout: 3660
+timeout: 36060
+#timeout: 3660
