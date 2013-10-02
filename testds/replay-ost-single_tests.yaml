@@ -41,7 +41,7 @@ Tests:
     id: 4
   -
     id: 5
-    timeout: 600
+    timeout: 1500
   -
     id: 6
   -
