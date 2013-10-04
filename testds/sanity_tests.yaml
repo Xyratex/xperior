@@ -885,6 +885,8 @@ Tests:
     timeout: 360
   -
     id: 900
+env:
+    ACCEPTOR_PORT: 64
 cleanup_max_time: -1
 dangerous: 'yes'
 description: Lustre sanity tests
