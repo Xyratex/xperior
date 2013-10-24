@@ -46,7 +46,7 @@ teardown        _teardown => sub {};
 shutdown        _shutdown => sub {};
 #########################################
 
-test plan => 6, a_generateAndMergeTestSuiteExclude => sub {
+test plan => 5, a_generateAndMergeTestSuiteExclude => sub {
 
     my $exarrempty = Compat::LustreTests::_generateTestSuiteExclude
             ('replay-ost-single','t/lustre/tests/replay-ost-single.sh');
@@ -55,8 +55,10 @@ test plan => 6, a_generateAndMergeTestSuiteExclude => sub {
 
     my $exarr = Compat::LustreTests::_generateTestSuiteExclude
             ('sanity','t/lustre/tests/sanity.sh');
-    is(scalar(@{$exarr}), 8, "8 excluded tests");
-    is($exarr->[0],'sanity/27u',"Check name correctness");
+    my @expect_exarr = qw(
+        sanity/27u sanity/42a sanity/42b sanity/42c sanity/42d
+        sanity/45[^0-9]* sanity/51d sanity/68b);
+    is_deeply($exarr, \@expect_exarr, "Check exclude list values");
 
     my $elist = Compat::LustreTests::_mergeWithPredefinedExclude
             ($exarr,'sanity','t/lustre/exclude.list');

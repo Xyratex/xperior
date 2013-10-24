@@ -258,6 +258,14 @@ sub _findSuiteExclusions {
     }
     close SCRIPT;
     INFO "Found excluded tests: ", scalar @items;
+    # Append the matching alpha regex to all numeric test id's without
+    # trailing letters, so corresponding sub-tests can be excluded,
+    # for example:
+    #   123 => 123[^0-9]*
+    @items = map {
+        s/^([0-9]+)$/${1}\[\^0-9\]\*/;
+        $_
+    } @items;
     return @items;
 }
 
