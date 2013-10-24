@@ -76,9 +76,11 @@ before 'execute' => sub {
     my $mres = '';
     foreach my $node ( @{ $self->env->{'nodes'} } ) {
         my $c     = $node->getRemoteConnector;
-        my $lfs_i   = $c->createSync('lfs df -i');
+        my $lfs_i = $c->createSync('lfs df -i');
         my $lfs   = $c->createSync('lfs df');
         my $mount = $c->createSync('mount | grep lustre');
+        my $lustre_rpm = $c->createSync('rpm -qi lustre');
+        my $client_rpm = $c->createSync('rpm -qi lustre-client');
         my $free  = $c->createSync('free');
         my $df    = $c->createSync('df');
         my $node  = $node->{'ip'};
@@ -90,7 +92,10 @@ $lfs_i
 $lfs
 <mount | grep lustre>
 $mount
-
+<lustre>
+$lustre_rpm
+<lustre-client>
+$client_rpm
 DATA
           ;
         my $mdata = <<DATA
