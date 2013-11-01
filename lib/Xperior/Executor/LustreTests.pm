@@ -77,6 +77,7 @@ before 'execute' => sub {
     foreach my $node ( @{ $self->env->{'nodes'} } ) {
         my $c     = $node->getRemoteConnector;
         my $lfs_i = $c->createSync('lfs df -i');
+        my $lctl_dl = $c->createSync('lctl dl');
         my $lfs   = $c->createSync('lfs df');
         my $mount = $c->createSync('mount | grep lustre');
         my $lustre_rpm = $c->createSync('rpm -qi lustre');
@@ -90,6 +91,8 @@ before 'execute' => sub {
 $lfs_i
 <lfs df>
 $lfs
+<lctl dl>
+$lctl_dl
 <mount | grep lustre>
 $mount
 <lustre>
