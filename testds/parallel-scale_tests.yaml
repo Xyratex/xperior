@@ -29,7 +29,7 @@
 Tests:
   -
     id: connectathon
-    timeout: 600
+    timeout: 900
 
 cleanup_max_time: -1
 dangerous: 'yes'
@@ -52,5 +52,6 @@ env:
     ior_DURATION: 15
     METABENCH: /test-tools/metabench/src/metabench
     mbench_OPTIONS: "-p /test-tools/metabench/dictionary"
+    MDTEST: /test-tools/mdtest-1.9.1/mdtest
     MACHINEFILE_OPTION: " "
     MACHINEFILE: " "
