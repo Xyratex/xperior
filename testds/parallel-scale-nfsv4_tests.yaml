@@ -23,19 +23,19 @@
 #
 # Copyright 2013 Xyratex Technology Limited
 #
-# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+# Author: Elena Gryaznova<Elena_Gryaznova@xyratex.com>
 #
 ---
 Tests:
   -
     id: connectathon
-    timeout: 2000
+    timeout: 900
 
 cleanup_max_time: -1
 dangerous: 'yes'
 description: NFS v4 over Lustre tests
 executor: Xperior::Executor::LustreTests
-expected_time: 300
+expected_time: 1200
 groupname: parallel-scale-nfs
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreSyslog StoreConsole GetDiagnostics
@@ -44,4 +44,14 @@ tags: nfs
 timeout: 1200
 env:
     cnt_DIR: /test-tools/cthon04
+    cbench_DIR: /test-tools/compilebench-0.6
+    IOR: /test-tools/ior-2.10.3/src/C/IOR
+    ior_blockSize: 1
+    ior_THREADS: 1
+    ior_DURATION: 15
+    METABENCH: /test-tools/metabench/src/metabench
+    mbench_OPTIONS: "-p /test-tools/metabench/dictionary"
+    MDTEST: /test-tools/mdtest-1.9.1/mdtest
+    MACHINEFILE_OPTION: " "
+    MACHINEFILE: " "
     NFSVERSION: 4
