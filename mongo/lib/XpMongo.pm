@@ -104,8 +104,9 @@ sub _iterate_hash {
 
 sub _validate_doc_data {
     my ($data) = @_;
-    $data->{extoptions}->{sessionstarttime} =
-      int( $data->{extoptions}->{sessionstarttime} );
+    my $starttime = int( $data->{extoptions}->{sessionstarttime} );
+    $data->{extoptions}->{sessionstarttime} = $starttime;
+    $data->{sessionstarttime} = $starttime;
 
     # replacing . to _pnt_ in keys
     _iterate_hash($data);
