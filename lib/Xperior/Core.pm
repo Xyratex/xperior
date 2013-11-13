@@ -161,6 +161,12 @@ sub _createExecutor {
                     $obj);
                 DEBUG 'ok';
             }
+            elsif ($role eq 'StartMpdbootBefore') {
+                use Xperior::Executor::Roles::StartMpdbootBefore;
+                Xperior::Executor::Roles::StartMpdbootBefore->meta->apply(
+                    $obj);
+                DEBUG 'ok';
+            }
             else {
                 confess "Unknows role [$role]";
             }

@@ -103,6 +103,10 @@ has 'crashdir'     => (
                         isa => 'Str'
                     );
 
+has 'ismpdready'   => ( is => 'rw',
+                        default => undef
+                    );
+
 sub BUILD {
     my $self   = shift;
     my $params = shift;

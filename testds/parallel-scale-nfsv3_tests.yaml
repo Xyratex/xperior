@@ -51,6 +51,7 @@ env:
     ior_DURATION: 15
     METABENCH: /test-tools/metabench/src/metabench
     mbench_OPTIONS: "-p /test-tools/metabench/dictionary"
+    mbench_NFILES: 10000
     MDTEST: /test-tools/mdtest-1.9.1/mdtest
     MACHINEFILE_OPTION: " "
     MACHINEFILE: " "
