@@ -38,7 +38,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 1200
 groupname: parallel-scale-nfs
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics
+roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: nfs
 timeout: 1200
