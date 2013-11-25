@@ -149,19 +149,21 @@ sub _prepareCommands {
     #TODO add test on it
 
     my $tid;
-    my $script = $self->test->getParam('script');
-    unless ( $script ) {
-        # Workaround: tid should not be provided for 'lustre single' kind test
-        # because ONLY is used to select, or we shouldn't provide an id
-        # in test description for those scripts (that can harm logging)
+    # Workaround: tid should not be provided for 'lustre single' kind test
+    # because ONLY is used to select, or we shouldn't provide an id
+    # in test description for those scripts (that can harm logging)
+    if( $self->test->getParam('groupname') ne 'lustre-single' ){
         $tid = $self->test->testcfg->{original_id};
         $tid = $self->test->testcfg->{id} unless (defined($tid));
+    }
+
+    my $script = $self->test->getParam('script');
+    unless ( $script ) {
         # build script name from 'groupname'
         my $groupname  = $self->test->getParam('groupname') ||
             confess "Group name is undefined";
         $script = "$groupname.sh";
     }
-
 
     my $lustre_script = "$self->{lustretestdir}/${script}";
     my @opt = (
