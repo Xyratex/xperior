@@ -45,14 +45,14 @@ timeout: 1200
 env:
     cnt_DIR: /test-tools/cthon04
     cbench_DIR: /test-tools/compilebench-0.6
-    SIMUL: /test-tools/simul-1.14/simul
-    IOR: /test-tools/ior-2.10.3/src/C/IOR
+    SIMUL: /test-tools/mpich2/simul-1.14/simul
+    IOR: /test-tools/mpich2/ior-2.10.3/src/C/IOR
     ior_blockSize: 1
     ior_THREADS: 1
     ior_DURATION: 15
-    METABENCH: /test-tools/metabench/src/metabench
-    mbench_OPTIONS: "-p /test-tools/metabench/dictionary"
+    METABENCH: /test-tools/mpich2/metabench/src/metabench
+    mbench_OPTIONS: "-p /test-tools/mpich2/metabench/dictionary"
     mbench_NFILES: 10000
-    MDTEST: /test-tools/mdtest-1.9.1/mdtest
+    MDTEST: /test-tools/mpich2/mdtest-1.9.1/mdtest
     MACHINEFILE_OPTION: " "
     MACHINEFILE: " "
