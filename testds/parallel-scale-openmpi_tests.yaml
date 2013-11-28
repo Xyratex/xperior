@@ -55,3 +55,4 @@ env:
     mbench_NFILES: 10000
     MDTEST: /test-tools/openmpi/mdtest-1.9.1/mdtest
     PATH: "/usr/lib64/openmpi/bin/:$PATH"
+    MPIRUN_OPTIONS: "-x PATH=/usr/lib64/lustre/tests:/usr/lib/lustre/tests:$PATH"
