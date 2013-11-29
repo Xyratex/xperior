@@ -26,6 +26,10 @@
 # Author: Elena Gryaznova<Elena_Gryaznova@xyratex.com>
 #
 ---
+Tests:
+  -
+    id: write_disjoint
+    timeout: 2100
 cleanup_max_time: -1
 dangerous: 'yes'
 description: parallel scale Lustre tests
