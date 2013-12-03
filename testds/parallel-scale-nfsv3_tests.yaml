@@ -26,6 +26,10 @@
 # Author: Elena Gryaznova<Elena_Gryaznova@xyratex.com>
 #
 ---
+Tests:
+  -
+    id: connectathon
+    timeout: 1400
 cleanup_max_time: -1
 dangerous: 'yes'
 description: NFS v3 over Lustre tests
