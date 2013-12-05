@@ -255,8 +255,9 @@ sub processLogs {
     my ( $self, $file ) = @_;
 
     my $mclient    = $self->_getMasterClient;
-    my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
-    my $connector  = $mclientobj->getRemoteConnector;
+    my $mclientobj = $self->env->getNodeById($mclient->{'node'});
+    my $connector  = $mclientobj->getRemoteConnector();
+
     DEBUG("Processing log file [$file]");
     open( F, "  $file" );
 
@@ -268,23 +269,7 @@ sub processLogs {
 
     while ( defined( my $s = <F> ) ) {
         chomp $s;
-        if ( my ($dumplog) = ( $s =~ m/Dumping lctl log to\s+(.*)$/ ) ) {
-            DEBUG "Log files template [$dumplog] found in log";
-            my $files = $connector->createSync("ls -Aw1 $dumplog");
-            DEBUG "Found files : $files";
-            if ( ( $connector->syncexitcode != 0 ) or ( $files eq '' ) ) {
-                $self->addMessage("Cannot list lctl logs files[$dumplog]");
-            }
-            else {
-                foreach my $file ( split( /\n/, $files ) ) {
-                    INFO "Attaching log file [$file]";
-                    my $sname = $file;
-                    $sname =~ s/^.*\///;
-                    $sname =~ s/\.log$//;
-                    $self->_getLog( $connector, $file, "lctllog.$sname" );
-                }
-            }
-        }
+        $self->_parseLogFile($s,$connector);
         if ( not $is_completed ) {
             if ( $s =~ m/^PASS/ ) {
                 $result = $self->PASSED;
@@ -309,6 +294,28 @@ sub processLogs {
     }
     close(F);
     return $result;
+}
+
+sub _parseLogFile{
+    my $self      = shift;
+    my $str       = shift;
+    my $connector = shift;
+    if ( my ($dumplog) = ( $str =~ m/Dumping lctl log to\s+(.*)$/ ) ) {
+        DEBUG "Log files template [$dumplog] found in log";
+        my $files = $connector->createSync("ls -Aw1 $dumplog");
+        DEBUG "Found files : $files";
+        if ( ( $connector->syncexitcode != 0 ) or ( $files eq '' ) ) {
+            $self->addMessage("Cannot list lctl logs files[$dumplog]");
+        }else {
+            foreach my $file ( split( /\n/, $files ) ) {
+                INFO "Attaching log file [$file]";
+                my $sname = $file;
+                $sname =~ s/^.*\///;
+                $sname =~ s/\.log$//;
+                $self->_getLog( $connector, $file, "lctllog.$sname" );
+            }
+        }
+    }
 }
 
 sub _prepareEnvOpts {

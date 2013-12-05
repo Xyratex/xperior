@@ -76,8 +76,19 @@ Return values:
 
 sub processLogs {
     my ( $self, $file ) = @_;
-    DEBUG("Processing log file skipped");
-    return 0;
+
+    my $mclient    = $self->_getMasterClient();
+    my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
+    my $connector  = $mclientobj->getRemoteConnector();
+
+    DEBUG("Processing log file [$file]");
+    open(F, "  $file");
+    while ( defined( my $s = <F> ) ) {
+        chomp $s;
+        $self->_parseLogFile($s,$connector);
+    }
+    close(F);
+    return $self->PASSED;
 }
 
 __PACKAGE__->meta->make_immutable;

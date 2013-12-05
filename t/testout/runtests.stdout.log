@@ -1,0 +1,76 @@
+Logging to shared log directory: /tmp/test_logs/1386235279
+Checking servers environments
+Checking clients mft53 environments
+Loading modules from /usr/lib64/lustre/tests/..
+debug=vfstrace rpctrace dlmtrace neterror ha config ioctl super
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Setup mgs, mdt, osts
+Starting mds1: -o rw,user_xattr  /dev/vdb /mnt/mds1
+Started lustre-MDT0000
+Starting ost1: -o user_xattr  /dev/vdc /mnt/ost1
+Started lustre-OST0000
+Starting ost2: -o user_xattr  /dev/vdd /mnt/ost2
+Started lustre-OST0001
+Starting client: mft53: -o user_xattr,flock mft53@tcp:/lustre /mnt/lustre
+Starting client mft53: -o user_xattr,flock mft53@tcp:/lustre /mnt/lustre
+Started clients mft53: 
+mft53@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+Using TIMEOUT=20
+disable quota as required
+setting all flavor to null
+already have total 5 null connections
+touching /mnt/lustre at Thu Dec  5 04:22:44 EST 2013
+create an empty file /mnt/lustre/hosts.19358
+copying /etc/hosts to /mnt/lustre/hosts.19358
+comparing /etc/hosts and /mnt/lustre/hosts.19358
+renaming /mnt/lustre/hosts.19358 to /mnt/lustre/hosts.19358.ren
+copying /etc/hosts to /mnt/lustre/hosts.19358 again
+truncating /mnt/lustre/hosts.19358
+removing /mnt/lustre/hosts.19358
+truncating /mnt/lustre/hosts.19358.2 to 123 bytes
+creating /mnt/lustre/runtest.19358
+copying files from /etc /bin to /mnt/lustre/runtest.19358/etc /bin at Thu Dec  5 04:22:45 EST 2013
+comparing newly copied files at Thu Dec  5 04:22:48 EST 2013
+finished at Thu Dec  5 04:22:50 EST 2013 (6)
+Stopping clients: mft53 /mnt/lustre (opts:)
+Stopping client mft53 /mnt/lustre opts:
+Stopping clients: mft53 /mnt/lustre2 (opts:)
+Stopping /mnt/mds1 (opts:-f) on mft53
+Stopping /mnt/ost1 (opts:-f) on mft53
+Stopping /mnt/ost2 (opts:-f) on mft53
+Checking servers environments
+Checking clients mft53 environments
+Loading modules from /usr/lib64/lustre/tests/..
+debug=vfstrace rpctrace dlmtrace neterror ha config ioctl super
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Setup mgs, mdt, osts
+Starting mds1: -o rw,user_xattr  /dev/vdb /mnt/mds1
+Started lustre-MDT0000
+Starting ost1: -o user_xattr  /dev/vdc /mnt/ost1
+Started lustre-OST0000
+Starting ost2: -o user_xattr  /dev/vdd /mnt/ost2
+Started lustre-OST0001
+Starting client: mft53: -o user_xattr,flock mft53@tcp:/lustre /mnt/lustre
+Starting client mft53: -o user_xattr,flock mft53@tcp:/lustre /mnt/lustre
+Started clients mft53: 
+mft53@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+Using TIMEOUT=20
+disable quota as required
+comparing previously copied files
+Files /etc/selinux/targeted/contexts/files/file_contexts and /mnt/lustre/runtest.19358//etc/selinux/targeted/contexts/files/file_contexts differ
+Files /etc/selinux/targeted/policy/policy.24 and /mnt/lustre/runtest.19358//etc/selinux/targeted/policy/policy.24 differ
+Files /etc/selinux/targeted/modules/active/file_contexts.template and /mnt/lustre/runtest.19358//etc/selinux/targeted/modules/active/file_contexts.template differ
+Files /etc/selinux/targeted/modules/active/policy.kern and /mnt/lustre/runtest.19358//etc/selinux/targeted/modules/active/policy.kern differ
+Files /etc/selinux/targeted/modules/active/commit_num and /mnt/lustre/runtest.19358//etc/selinux/targeted/modules/active/commit_num differ
+Files /etc/selinux/targeted/modules/active/file_contexts and /mnt/lustre/runtest.19358//etc/selinux/targeted/modules/active/file_contexts differ
+ runtests : @@@@@@ FAIL: old and new files are different: rc=22 
+  Trace dump:
+  = /usr/lib64/lustre/tests/../tests/test-framework.sh:3184:error_noexit
+  = /usr/lib64/lustre/tests/../tests/test-framework.sh:3206:error
+  = /usr/lib64/lustre/tests/../tests/test-framework.sh:3211:error_exit
+  = /usr/lib64/lustre/tests/runtests:93:main
+Dumping lctl log to /tmp/runtests..*.1386235452.log
+status        script            Total(sec) E(xcluded) S(low) 
+------------------------------------------------------------------------------------
