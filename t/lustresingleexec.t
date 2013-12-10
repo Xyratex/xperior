@@ -36,6 +36,7 @@ use Data::Dumper;
 use Carp;
 use File::Path qw(make_path remove_tree);
 use File::chdir;
+use File::Copy::Recursive qw(fcopy );
 
 use Xperior::Test;
 use Xperior::Executor::LustreTests;
@@ -52,11 +53,11 @@ my %options = (
     testdir => 't/testcfgs/lustre',
     workdir => '/tmp/test_wd',
 );
-my $group_config = {
+my %group_config = (
     executor  => 'Xperior::Executor::LustreSingleTests',
     groupname => 'single',
     timeout   => 600,
-};
+    );
 
 my @test_cases = (
     {
@@ -81,7 +82,7 @@ my @test_cases = (
     },
 );
 
-test plan => 2 * @test_cases, aCheckLustreSingleTests => sub {
+test plan => 2 * @test_cases, cCheckLustreSingleTests => sub {
     my $tmpdir = '/tmp/mnt/lustre';
     mkdir $tmpdir;
     my $wd = $CWD;
@@ -91,7 +92,7 @@ test plan => 2 * @test_cases, aCheckLustreSingleTests => sub {
     my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
     for my $case (@test_cases) {
         my $test = Xperior::Test->new;
-        $test->init($case->{test_config}, $group_config);
+        $test->init($case->{test_config}, \%group_config);
         my $exec = Xperior::Executor::LustreSingleTests->new();
         $exec->init($test, {%options}, $cfg);
         $exec->lustretestdir("$wd/t/lustre/bin");
@@ -108,5 +109,28 @@ test plan => 2 * @test_cases, aCheckLustreSingleTests => sub {
 
     remove_tree($tmpdir);
 };
+
+test
+  plan             => 2,
+  aaadCheckLogParsing => sub {
+    my $exe  = Xperior::Executor::LustreSingleTests->new();
+    my $test = Xperior::Test->new;
+    my %test_config = (
+            id  => 'runtests',
+            script => 'runtests',
+            );
+    fcopy('t/testout/runtests.stdout.log',
+        '/tmp/runtests..123.1386235452.log');
+    $test->init(\%test_config, \%group_config);
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
+    $exe->init( $test, \%options, $cfg );
+    my $res = $exe->processLogs('t/testout/runtests.stdout.log');
+    is( $res, 0, 'Check PASS log' );
+    ok(-e '/tmp/test_wd/single/runtests.lctllog.runtests..123.1386235452.log',
+        'Check copied file existence');
+};
+
 
 lustresingleexec->run_tests;
