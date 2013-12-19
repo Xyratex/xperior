@@ -29,7 +29,7 @@
 Tests:
   -
     id: 1
-    timeout: 960
+    timeout: 400
 cleanup_max_time: -1
 dangerous: 'yes'
 description: Lustre racer tests
@@ -37,7 +37,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 10
 groupname: racer
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics
+roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: functional
 timeout: 300

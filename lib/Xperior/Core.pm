@@ -130,16 +130,6 @@ sub _createExecutor {
                 Xperior::Executor::Roles::LustreClientStatus->meta->apply($obj);
                 DEBUG 'ok';
             }
-            elsif ($role eq 'StoreSyslog') {
-                use Xperior::Executor::Roles::StoreSyslog;
-                Xperior::Executor::Roles::StoreSyslog->meta->apply($obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'StoreConsole') {
-                use Xperior::Executor::Roles::StoreConsole;
-                Xperior::Executor::Roles::StoreConsole->meta->apply($obj);
-                DEBUG 'ok';
-            }
             elsif ($role eq 'GetDiagnostics') {
                 use Xperior::Executor::Roles::GetDiagnostics;
                 Xperior::Executor::Roles::GetDiagnostics->meta->apply($obj);
@@ -155,15 +145,31 @@ sub _createExecutor {
                 Xperior::Executor::Roles::GetCoverage->meta->apply($obj);
                 DEBUG 'ok';
             }
+            elsif ($role eq 'StartMpdbootBefore') {
+                use Xperior::Executor::Roles::StartMpdbootBefore;
+                Xperior::Executor::Roles::StartMpdbootBefore->meta->apply(
+                    $obj);
+                DEBUG 'ok';
+            }
+            elsif ($role eq 'StoreSyslog') {
+                use Xperior::Executor::Roles::StoreSyslog;
+                Xperior::Executor::Roles::StoreSyslog->meta->apply($obj);
+                DEBUG 'ok';
+            }
+            elsif ($role eq 'StoreConsole') {
+                use Xperior::Executor::Roles::StoreConsole;
+                Xperior::Executor::Roles::StoreConsole->meta->apply($obj);
+                DEBUG 'ok';
+            }
             elsif ($role eq 'NetconsoleCollector') {
                 use Xperior::Executor::Roles::NetconsoleCollector;
                 Xperior::Executor::Roles::NetconsoleCollector->meta->apply(
                     $obj);
                 DEBUG 'ok';
             }
-            elsif ($role eq 'StartMpdbootBefore') {
-                use Xperior::Executor::Roles::StartMpdbootBefore;
-                Xperior::Executor::Roles::StartMpdbootBefore->meta->apply(
+            elsif ($role eq 'StacktraceGenerator') {
+                use Xperior::Executor::Roles::StacktraceGenerator;
+                Xperior::Executor::Roles::StacktraceGenerator->meta->apply(
                     $obj);
                 DEBUG 'ok';
             }
