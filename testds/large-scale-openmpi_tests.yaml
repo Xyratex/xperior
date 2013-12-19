@@ -31,7 +31,7 @@ dangerous: 'yes'
 description: parallel scale Lustre tests
 executor: Xperior::Executor::LustreTests
 expected_time: 2000
-groupname: large-scale
+groupname: large-scale-openmpi
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
