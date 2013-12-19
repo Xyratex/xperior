@@ -40,6 +40,7 @@ extends 'Xperior::Executor::SingleProcessBase';
 
 our $VERSION = '0.01';
 
+has teststatus => ( is =>'rw', default => 'pass');
 
 sub execute{
     my $self = shift;
@@ -60,8 +61,13 @@ ML
     $self->addYE('completed','yes');
     $self->addYE('endtime_planned',time);
     $self->addYE('endtime',time);
-
-    $self->pass;
+    if($self->teststatus() eq 'fail'){
+        $self->fail();
+    }elsif($self->teststatus() eq 'skip'){
+        $self->skip();
+    }else{
+        $self->pass();
+    }
     $self->test->results ($self->yaml);
 }
 
