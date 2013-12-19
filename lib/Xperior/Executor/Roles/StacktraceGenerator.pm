@@ -25,6 +25,7 @@
 #
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
+
 =pod
 
 =head1 NAME
@@ -39,7 +40,7 @@ Info about sysrt : https://www.kernel.org/doc/Documentation/sysrq.txt
 The role could be used in cases when test failure detected and developer needs
 more infomation about current system state. When role switched on it going
 over all nodes in system configuration and call 'echo t > /proc/sysrq-trigger'
-and 'echo m > /proc/sysrq-trigger'.  
+and 'echo m > /proc/sysrq-trigger'.
 Stacktrace will be stored in system console so, it is recommended to use
 StacktraceGenerator with NetconsoleCollector or StoreConsole.
 
@@ -53,28 +54,28 @@ use Moose::Role;
 use Data::Dumper;
 use Log::Log4perl qw(:easy);
 
-has sysrqtcmd   => ( is =>'rw', default => 'echo t > /proc/sysrq-trigger');
-has sysrqmcmd   => ( is =>'rw', default => 'echo m > /proc/sysrq-trigger');
-has lctldkcmd   => ( is =>'rw', default => 'lctl dk');
-has sysrqt_timeout => ( is =>'rw', default => 120);
-has lctldk_timeout => ( is =>'rw', default => 120);
+has sysrqtcmd      => (is => 'rw', default => 'echo t > /proc/sysrq-trigger');
+has sysrqmcmd      => (is => 'rw', default => 'echo m > /proc/sysrq-trigger');
+has lctldkcmd      => (is => 'rw', default => 'lctl dk');
+has sysrqt_timeout => (is => 'rw', default => 120);
+has lctldk_timeout => (is => 'rw', default => 120);
 
 after 'execute' => sub {
-	my $self      = shift;
-    foreach my $n (@{$self->env->nodes}) {
-    	if ( ( $self->yaml->{status_code} ) == 1 ) {    #test failed    		
-			my $c = $n->getExclusiveRC();
-			DEBUG("Call 'lctl dk' on node [".$n->ip()."]");
-			my $rlogfile="/tmp/lctl_dk.out.".time();
-			my $log = $c->createSync(
-				$self->lctldkcmd. " > $rlogfile",120);
-			$self->_getLog($c,$rlogfile,'lctl_dk.'.$n->ip());
-	        INFO("Call 'sysrq' commands on node [".$n->ip()."]");
-	        $c->createSync($self->sysrqtcmd(),3*60);
-	        $c->createSync($self->sysrqmcmd(),3*60);
-    	};
-    };
+    my $self = shift;
+    foreach my $n (@{ $self->env->nodes }) {
+        if (($self->yaml->{status_code}) == 1) {
+            my $c = $n->getExclusiveRC();
+            DEBUG("Call 'lctl dk' on node [" . $n->ip() . "]");
+            my $rlogfile = "/tmp/lctl_dk.out." . time ();
+            my $log = $c->createSync($self->lctldkcmd . " > $rlogfile", 120);
+            $self->_getLog($c, $rlogfile, 'lctl_dk.' . $n->ip());
+            INFO("Call 'sysrq' commands on node [" . $n->ip() . "]");
+            $c->createSync($self->sysrqtcmd(), 3 * 60);
+            $c->createSync($self->sysrqmcmd(), 3 * 60);
+        }
+    }
 };
+
 
 1;
 
