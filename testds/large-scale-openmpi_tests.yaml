@@ -33,7 +33,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 2000
 groupname: large-scale-openmpi
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics
+roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: scale
 timeout: 2000

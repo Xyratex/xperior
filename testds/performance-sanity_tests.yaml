@@ -40,7 +40,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 1200
 groupname: performance-sanity
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics
+roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: scale
 timeout: 1200
