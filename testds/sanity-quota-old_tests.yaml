@@ -34,7 +34,7 @@ expected_time: 10
 groupname: sanity-quota
 script: sanity-quota.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole
+roles: StoreSyslog StoreConsole StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: functional
 timeout: 900

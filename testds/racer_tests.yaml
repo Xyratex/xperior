@@ -29,7 +29,7 @@
 Tests:
   -
     id: 1
-    timeout: 400
+    timeout: 1080
 cleanup_max_time: -1
 dangerous: 'yes'
 description: Lustre racer tests
