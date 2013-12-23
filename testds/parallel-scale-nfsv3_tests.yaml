@@ -36,6 +36,7 @@ description: NFS v3 over Lustre tests
 executor: Xperior::Executor::LustreTests
 expected_time: 1200
 groupname: parallel-scale-nfsv3
+script: parallel-scale-nfs.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
