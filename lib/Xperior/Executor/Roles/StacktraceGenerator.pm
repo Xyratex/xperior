@@ -61,21 +61,24 @@ has sysrqcmd_timeout => (is => 'rw', default => 60);
 has dumpend_timeout  => (is => 'rw', default => 120);
 
 after 'execute' => sub {
-	my $self = shift;
-	foreach my $n (@{ $self->env->nodes }) {
-		if (($self->yaml->{status_code}) == 1) {
-			my $c = $n->getExclusiveRC();
-			DEBUG("Call 'lctl dk' on node [" . $n->ip() . "]");
-			my $rlogfile = "/tmp/lctl_dk.out." . time ();
-			my $log = $c->createSync($self->lctldkcmd . " > $rlogfile", 120);
-			$self->_getLog($c, $rlogfile, 'lctl_dk.' . $n->ip());
-			INFO("Call 'sysrq' commands on node [" . $n->ip() . "]");
-			$c->createSync($self->sysrqtcmd(), $self->sysrqcmd_timeout());
-			$c->createSync($self->sysrqmcmd(), $self->sysrqcmd_timeout());
-		}
-	}
-	#wait end of sysrq dumping
-	sleep ($self->dumpend_timeout());
+    my $self = shift;
+    if (($self->yaml->{status_code}) == 1) {
+        foreach my $n (@{ $self->env->nodes }) {
+
+            my $c = $n->getExclusiveRC();
+            DEBUG("Call 'lctl dk' on node [" . $n->ip() . "]");
+            my $rlogfile = "/tmp/lctl_dk.out." . time ();
+            my $log = $c->createSync($self->lctldkcmd . " > $rlogfile", 120);
+            $self->_getLog($c, $rlogfile, 'lctl_dk.' . $n->ip());
+            INFO("Call 'sysrq' commands on node [" . $n->ip() . "]");
+            $c->createSync($self->sysrqtcmd(), $self->sysrqcmd_timeout());
+            $c->createSync($self->sysrqmcmd(), $self->sysrqcmd_timeout());
+        }
+
+        #FIXME disable until deep fix
+        #wait end of sysrq dumping
+        #sleep ($self->dumpend_timeout());
+    }
 };
 
 1;
