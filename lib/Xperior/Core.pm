@@ -53,14 +53,14 @@ use Xperior::html::HTML;
 use TAP::Parser::Aggregator;
 use TAP::Parser;
 use TAP::Formatter::HTML::Session;
-
+use List::Util qw(first);
 use Module::Load;
 
 use Xperior::Test;
 use Xperior::TestEnvironment;
 use Xperior::Utils;
+use Xperior::Executor::Roles::RoleLoader;
 
-use List::Util qw(first);
 
 =head Exit codes
 
@@ -116,69 +116,15 @@ sub _multiplyTests {
 }
 
 sub _createExecutor {
-    my ($self, $es, $roles) = @_;
+    my ($self, $es, @roles) = @_;
     DEBUG "Loading module [$es]";
     load $es;
-    my $obj = $es->new;
-    if (defined($roles)) {
-        foreach my $role (split(/\s+/, trim($roles))) {
-            chomp $role;
-            DEBUG "Applying role [$role]";
-
-            if ($role eq 'LustreClientStatus') {
-                use Xperior::Executor::Roles::LustreClientStatus;
-                Xperior::Executor::Roles::LustreClientStatus->meta->apply($obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'GetDiagnostics') {
-                use Xperior::Executor::Roles::GetDiagnostics;
-                Xperior::Executor::Roles::GetDiagnostics->meta->apply($obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'ReformatBefore') {
-                use Xperior::Executor::Roles::ReformatBefore;
-                Xperior::Executor::Roles::ReformatBefore->meta->apply($obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'GetCoverage') {
-                use Xperior::Executor::Roles::GetCoverage;
-                Xperior::Executor::Roles::GetCoverage->meta->apply($obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'StartMpdbootBefore') {
-                use Xperior::Executor::Roles::StartMpdbootBefore;
-                Xperior::Executor::Roles::StartMpdbootBefore->meta->apply(
-                    $obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'StoreSyslog') {
-                use Xperior::Executor::Roles::StoreSyslog;
-                Xperior::Executor::Roles::StoreSyslog->meta->apply($obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'StoreConsole') {
-                use Xperior::Executor::Roles::StoreConsole;
-                Xperior::Executor::Roles::StoreConsole->meta->apply($obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'NetconsoleCollector') {
-                use Xperior::Executor::Roles::NetconsoleCollector;
-                Xperior::Executor::Roles::NetconsoleCollector->meta->apply(
-                    $obj);
-                DEBUG 'ok';
-            }
-            elsif ($role eq 'StacktraceGenerator') {
-                use Xperior::Executor::Roles::StacktraceGenerator;
-                Xperior::Executor::Roles::StacktraceGenerator->meta->apply(
-                    $obj);
-                DEBUG 'ok';
-            }
-            else {
-                confess "Unknows role [$role]";
-            }
-        }
+    my $exe = $es->new;
+    if(@roles){
+        my $loader = Xperior::Executor::Roles::RoleLoader->new();
+        $loader->applyRoles($exe,@roles);
     }
-    return $obj;
+    return $exe;
 }
 
 sub _runtest {
@@ -192,7 +138,8 @@ sub _runtest {
         $executorname = 'Xperior::Executor::Skip';
         $roles        = '';
     }
-    my $executor = $self->_createExecutor($executorname, $roles);
+
+    my $executor = $self->_createExecutor($executorname, split(/\s+/, trim($roles)));
 
     $executor->init($test, $self->options, $self->env);
 

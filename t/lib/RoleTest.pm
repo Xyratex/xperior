@@ -21,23 +21,40 @@
 #
 # GPL HEADER END
 #
-# Copyright 2012 Xyratex Technology Limited
+# Copyright 2014 Xyratex Technology Limited
 #
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
----
-Tests:
-  -
-    id: 1
-    timeout: 1080
-cleanup_max_time: -1
-dangerous: 'yes'
-description: Lustre racer tests
-executor: Xperior::Executor::LustreTests
-expected_time: 10
-groupname: racer
-reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
-schema: data/schemas/testds.yaml
-tags: functional
-timeout: 900
+package RoleTest;
+use namespace::autoclean;
+use strict;
+use warnings;
+use Xperior::SshProcess;
+use Moose::Role;
+use Log::Log4perl qw(:easy);
+
+
+my $title = 'RoleTest';
+our $test_sleep_time_before = 1;
+our $test_sleep_time_after  = 3;
+our @EXPORT = qw($test_sleep_time_after $test_sleep_time_before);
+
+
+before 'execute' => sub {
+    my $self = shift;
+    $self->beforeBeforeExecute($title);
+    DEBUG 'Role::Do before';
+    sleep($test_sleep_time_before);
+    $self->afterBeforeExecute($title);
+};
+
+after 'execute' => sub {
+    my $self = shift;
+    $self->beforeAfterExecute($title);
+    DEBUG 'Role::Do after';
+    sleep($test_sleep_time_after);
+    $self->afterAfterExecute($title);
+};
+
+
+1;

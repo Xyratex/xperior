@@ -46,9 +46,11 @@ has storedir  => ( is =>'rw', default => '/var/log/xperior/syslog');
 has remotelog => ( is =>'rw', default => '/var/log/messages');
 has logname   => ( is => 'rw', default => 'messages');
 requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
+my $title = 'StoreSyslog';
 
 before 'execute' => sub{
     my $self    = shift;
+    $self->beforeBeforeExecute($title);
     $self->ison({});
     $self->tlog({});
     foreach my $node (@{$self->env->nodes}) {
@@ -65,13 +67,13 @@ before 'execute' => sub{
             $self->ison->{$node->id} = $c;
         }
     }
-
+    $self->afterBeforeExecute($title);
 };
 
 
 after   'execute' => sub{
     my $self    = shift;
-
+    $self->beforeAfterExecute($title);
     foreach my $n (@{$self->env->nodes}) {
         my $id = $n->id;
         my $logfile = $self->getNormalizedLogName("$self->{logname}.$id");
@@ -89,6 +91,7 @@ after   'execute' => sub{
             }
         }
     }
+    $self->afterAfterExecute($title);
 };
 
 1;

@@ -35,9 +35,17 @@ Xperior::Executor::Roles::NetconsoleCollector - Extensions for collecting log fr
 =head1 DESCRIPTION
 Technology description could be seen there:
 http://wiki.lustre.org/index.php/Netconsole
+https://www.kernel.org/doc/Documentation/networking/netconsole.txt
 
 This module starts local UDP server and receiving messages from nodes.
 Message are sorting by source IP or DNS name and saved in log files.
+
+Netconsole could be configured
+    * statically, via option in boot cmd,
+      e.g. linux ... netconsole=@192.168.200.102/eth1,5555@192.168.200.1/
+    * dynamically via modprobe,
+      e.g. modprobe netconsole netconsole=@192.168.200.102/eth1,5555@192.168.200.1/
+    * dynamically via /sys/kernel/config/netconsole/
 
 =cut
 
@@ -56,13 +64,14 @@ use Data::Dumper;
 use IO::Socket;
 use Log::Log4perl qw(:easy);
 
-my $ENDMSG = "__NETCONSOLE_COLLECTION_END__";
 
+my $ENDMSG = "__NETCONSOLE_COLLECTION_END__";
+my $title ='NetconsoleCollector';
+has executeutils  => ( is => 'rw');
 has udpserverthr => ( is => 'rw' );
 has udpserver    => ( is => 'rw' );
 has logs         => ( is => 'rw' );
 has namecache    => ( is => 'rw' );
-
 has port   => ( is => 'rw', default => 5555 );
 has maxlen => ( is => 'rw', default => 1024 );
 
@@ -123,7 +132,9 @@ sub _listen {
 }
 
 before 'execute' => sub {
-    my $self      = shift;
+    my $self = shift;
+    $self->beforeBeforeExecute($title);
+    #TODO in future add dynamic netcosole configuration
     my $udpserver = IO::Socket::INET->new(
         LocalPort => $self->port,
         Proto     => "udp"
@@ -146,10 +157,12 @@ before 'execute' => sub {
     DEBUG "Thread started:" . $self->udpserverthr;
     sleep 1;    #to be sure that we bind before test started 
                 #and may be get messages before test
+    $self->afterBeforeExecute($title);
 };
 
 after 'execute' => sub {
-    my $self      = shift;
+    my $self = shift;
+    $self->beforeAfterExecute($title);
     my $udpclient = IO::Socket::INET->new(
         PeerPort => $self->port,
         PeerAddr => '127.0.0.1',
@@ -159,8 +172,13 @@ after 'execute' => sub {
       . $self->port
       . "] : $@\n";
     $udpclient->send($ENDMSG);
-    $self->udpserverthr->join();
+    if($self->udpserverthr->is_joinable()){
+        $self->udpserverthr->join();
+    }else{
+        DEBUG 'udpserverthr alredy joined';
+    }
     $self->udpserver->close() or confess "Cannot close server socket: $!";
+    $self->afterAfterExecute($title);
 };
 
 1;

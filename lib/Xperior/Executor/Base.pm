@@ -57,7 +57,7 @@ use YAML;
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
-
+use Carp;
 
 our $YVERSION = 'Xperior1'; #yaml output version. other modules also can add fields.
 our $EXT  = '.yaml';
@@ -72,11 +72,14 @@ has 'yaml'              => ( is => 'rw');
 
 has 'steptimeout'       => ( is => 'rw');#sec
 
-#TODO looks like nee t move to one class with execute
+#TODO probably needs to move to one class with execute implementation
 has cmd                 => (is=>'rw');
 has appname             => (is=>'rw');
 has remote_out          => (is=>'rw');
 has remote_err          => (is=>'rw');
+
+has before_start_time => (is=>'rw', isa => 'HashRef[Int]');
+has after_start_time => (is=>'rw', isa => 'HashRef[Int]');
 
 sub init{
     my ($self, $test, $opt, $env) = @_;
@@ -96,7 +99,9 @@ sub init{
     foreach my $k ( @{$test->getParamNames}){
         $self->addYE($k,$test->getParam($k));
     }
-    $self->_write;
+    $self->_write();
+    $self->before_start_time ({});
+    $self->after_start_time  ({});
 }
 
 =head2 addYE(KEY, VALUE)
@@ -329,7 +334,100 @@ sub getReason{
     return "Non-zero exit code";
 }
 
+=head2 beforeBeforeExecute($title)
 
+Roles debug helper for using together with B<afterBeforeExecute>.
+Save time per role and report it  in  call B<afterBeforeExecute>.
+
+Parameters:
+ * title - key for separating one role from another
+
+Example
+
+    my $title = 'roleX'
+
+    before 'execute' => sub {
+        my $self = shift;
+        $self->beforeBeforeExecute($title);
+        .... some code ...
+        $self->afterBeforeExecute($title);
+    };
+
+
+=cut
+
+sub beforeBeforeExecute{
+    my $self = shift;
+    my $title = shift;
+    my $time = time();
+    confess 'Base is not initialized'
+        unless (defined( $self->before_start_time()));
+    $self->before_start_time->{'title'}=$time;
+    DEBUG "BEFORE[beforeExecute]:".$title."[$time]";
+};
+
+=head2 afterBeforeExecute($title)
+
+See B<beforeBeforeExecute($title)>
+
+=cut
+
+sub afterBeforeExecute {
+    my $self = shift;
+    my $title = shift;
+    my $time = time();
+    DEBUG "AFTER[beforeExecute]:"
+        .$title.
+        "[$time], elapsed [".
+        ($time-$self->before_start_time->{'title'})."]";
+    $self->before_start_time->{'title'}=0;
+};
+
+=head2 beforeAfterExecute($title)
+
+Roles debug helper for using together with B<beforeAfterExecute>.
+Save time per role and report it  in  call B<afterAfterExecute>.
+
+Parameters:
+ * title - key for separating one role from another
+
+Example
+
+    my $title = 'roleX'
+
+    before 'execute' => sub {
+        my $self = shift;
+        $self->beforeAfterExecute($title);
+        .... some code ...
+        $self->afterAfterExecute($title);
+    };
+
+
+=cut
+
+sub beforeAfterExecute{
+    my $self = shift;
+    my $title = shift;
+    my $time = time();
+    $self->after_start_time->{'title'}=$time;
+    DEBUG "BEFORE[afterExecute]:".$title."[$time]";
+};
+
+=head2 afterAfterExecute($title)
+
+See B<beforeAfterExecute($title)>
+
+=cut
+
+sub afterAfterExecute{
+    my $self = shift;
+    my $title = shift;
+    my $time = time();
+    DEBUG "AFTER[afterExecute]:"
+        .$title."[$time], elapsed [".
+        ($time-$self->after_start_time->{'title'})."]";
+    $self->after_start_time->{'title'}=0;
+};
 
 sub _write{
      my $self = shift;
