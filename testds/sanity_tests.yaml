@@ -222,6 +222,7 @@ Tests:
   -
     dangerous: 'yes'
     id: 27m
+    timeout: 450
   -
     dangerous: 'yes'
     id: 27n
@@ -510,6 +511,7 @@ Tests:
     id: 64a
   -
     id: 64b
+    timeout: 850
   -
     id: 65a
   -
