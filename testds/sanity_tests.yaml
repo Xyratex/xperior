@@ -434,7 +434,7 @@ Tests:
     id: 51a
   -
     id: 51b
-    timeout: 900
+    timeout: 2000
   -
     id: 51bb
   -
