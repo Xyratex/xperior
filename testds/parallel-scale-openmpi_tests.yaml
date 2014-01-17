@@ -53,5 +53,5 @@ env:
     METABENCH: "/test-tools/openmpi/metabench/src/metabench -p /test-tools/openmpi/metabench/dictionary"
     mbench_NFILES: 10000
     MDTEST: /test-tools/openmpi/mdtest-1.9.1/mdtest
-    PATH: "/usr/lib64/openmpi/bin/:$PATH"
+    PATH: "/usr/lib64/openmpi/bin/:/usr/lib64/openmpi/1.4-gcc/bin/:$PATH"
     MPIRUN_OPTIONS: "-x PATH=/usr/lib64/lustre/tests:/usr/lib/lustre/tests:$PATH"

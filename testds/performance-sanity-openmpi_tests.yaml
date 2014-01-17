@@ -46,4 +46,4 @@ schema: data/schemas/testds.yaml
 tags: mdsrate scale
 timeout: 1200
 env:
-    PATH: "/usr/lib64/openmpi/bin/:$PATH"
+    PATH: "/usr/lib64/openmpi/bin/:/usr/lib64/openmpi/1.4-gcc/bin/:$PATH"
