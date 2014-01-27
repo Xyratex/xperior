@@ -1,0 +1,58 @@
+#
+# GPL HEADER START
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2013 Xyratex Technology Limited
+#
+# Author: Elena Gryaznova<Elena_Gryaznova@xyratex.com>
+#
+---
+cleanup_max_time: -1
+dangerous: 'yes'
+description: parallel scale Lustre tests
+executor: Xperior::Executor::LustreTests
+expected_time: 7200
+groupname: parallel-scale-stress
+script: parallel-scale.sh
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+schema: data/schemas/testds.yaml
+tags: scale
+timeout: 7200
+env:
+    cnt_DIR: /test-tools/cthon04
+    cbench_DIR: /test-tools/compilebench-0.6
+    SIMUL: /test-tools/mpich2/simul-1.14/simul
+    IOR: /test-tools/mpich2/ior-2.10.3/src/C/IOR
+    ior_THREADS: 3
+    ior_iteration: 5
+    METABENCH: /test-tools/mpich2/metabench/src/metabench
+    mbench_OPTIONS: "-p /test-tools/mpich2/metabench/dictionary"
+    mbench_NFILES: 50000
+    MDTEST: /test-tools/mpich2/mdtest-1.9.1/mdtest
+    casc_THREADS: 8
+    mdtest_nFiles: 500000
+    mdtest_THREADS: 8
+    statahead_NUMMNTPTS: 100
+    write_REP: 20000
+    MACHINEFILE_OPTION: " "
+    MACHINEFILE: " "
