@@ -43,7 +43,8 @@ use File::Path qw(make_path remove_tree);
 use Xperior::Executor::Noop;
 use Xperior::Test;
 use Xperior::Executor::Roles::StacktraceGenerator;
-
+use Xperior::Executor::Roles::NetconsoleCollector;
+use Xperior::Executor::Roles::StoreConsole;
 my %options = (
     workdir => '/tmp/test_wd',
 );
@@ -54,7 +55,7 @@ my %th = (
 );
 
 my %gh = (
-      executor  => 'Xperior::Executor::XTest',
+      executor  => 'Xperior::Executor::Noop',
       groupname => 'sanity',
 );
 
@@ -82,9 +83,11 @@ test plan =>2, eCheckSimpleLog => sub{
     #
     $exe = Xperior::Executor::Noop->new();
     Xperior::Executor::Roles::StacktraceGenerator->meta->apply($exe);
+    Xperior::Executor::Roles::NetconsoleCollector->meta->apply($exe);
+    Xperior::Executor::Roles::StoreConsole->meta->apply($exe);
     $exe->init($test, \%options, $cfg);
     $exe->teststatus('fail');
-    $exe->execute;
+    $exe->execute();
     is( scalar( keys( %{$exe->yaml->{'log'}} ) ),
         3, 'Check log  attachment array size' );
     is(

@@ -30,7 +30,11 @@
 
 =head1 NAME
 
-Xperior::Executor::Roles::StoreConsole - Role define harvesting info from master client host
+Xperior::Executor::Roles::StoreConsole - Role defines harvesting info
+from files which contains console fileson host where Xperior isexecuted.
+Main usage scenario with console files from virtual machines.
+
+See also Xperior::Executor::Roles::NetconsoleCollector
 
 =cut
 
@@ -42,13 +46,14 @@ use Proc::Simple;
 use Xperior::Utils;
 use Log::Log4perl qw(:easy);
 
-
+my $title = 'StoreConsole';
+has title => (is => 'ro', default => 'StoreConsole');
 has procs => ( is =>'rw', isa => 'HashRef');
-
 requires    'env', 'addMessage', 'getNormalizedLogName';
 
 before 'execute' => sub{
-    my $self    = shift;
+    my $self = shift;
+    $self->beforeBeforeExecute($title);
     my %h;
     $self->procs(\%h);
     foreach my $n (@{$self->env->nodes}){
@@ -75,13 +80,12 @@ before 'execute' => sub{
                     "Cannot read console file on node [".$n->id."]");
         }
     }
-
+    $self->afterBeforeExecute($title);
 };
 
-
-after   'execute' => sub{
-    my $self    = shift;
-
+after 'execute' => sub {
+    my $self = shift;
+    $self->beforeAfterExecute($title);
     foreach my $n (@{$self->env->nodes}){
         if(defined($self->procs->{$n->id})){
             my $proc = $self->procs->{$n->id};
@@ -90,7 +94,7 @@ after   'execute' => sub{
 
         }
     }
-
+    $self->afterAfterExecute($title);
 };
 1;
 
