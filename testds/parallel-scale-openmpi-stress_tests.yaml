@@ -37,29 +37,28 @@ dangerous: 'yes'
 description: parallel scale Lustre tests
 executor: Xperior::Executor::LustreTests
 expected_time: 7200
-groupname: parallel-scale-stress
+groupname: parallel-scale-openmpi-stress
 script: parallel-scale.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
-tags: scale
+tags: openmpi scale
 timeout: 7200
 env:
     cnt_DIR: /test-tools/cthon04
     cbench_DIR: /test-tools/compilebench-0.6
-    SIMUL: /test-tools/mpich2/simul-1.14/simul
-    IOR: /test-tools/mpich2/ior-2.10.3/src/C/IOR
+    SIMUL: /test-tools/openmpi/simul-1.14/simul
+    IOR: /test-tools/openmpi/ior-2.10.3/src/C/IOR
     ior_THREADS: 3
     ior_iteration: 5
-    METABENCH: /test-tools/mpich2/metabench/src/metabench
-    mbench_OPTIONS: "-p /test-tools/mpich2/metabench/dictionary"
+    METABENCH: "/test-tools/openmpi/metabench/src/metabench -p /test-tools/openmpi/metabench/dictionary"
     mbench_NFILES: 50000
-    MDTEST: /test-tools/mpich2/mdtest-1.9.1/mdtest
+    MDTEST: /test-tools/openmpi/mdtest-1.9.1/mdtest
     mdtest_nFiles: 200000
     mdtest_THREADS: 8
     mdtest_iteration: 5
     casc_THREADS: 8
     statahead_NUMMNTPTS: 100
     write_REP: 20000
-    MACHINEFILE_OPTION: " "
-    MACHINEFILE: " "
+    PATH: "/usr/lib64/openmpi/bin/:/usr/lib64/openmpi/1.4-gcc/bin/:$PATH"
+    MPIRUN_OPTIONS: "-x PATH=/usr/lib64/lustre/tests:/usr/lib/lustre/tests:$PATH"
