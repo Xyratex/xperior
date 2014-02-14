@@ -47,7 +47,8 @@ sub getTests{
             push @res, $1;
         }
     }
-    return \@res;
+    my @sortres = sort @res;
+    return \@sortres;
 }
 
 
@@ -62,7 +63,7 @@ test plan => 1, cFullList => sub {
 
     my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml  --testdir=t/testlists/testds`;
     my $tts = getTests(\@out);
-    my @exp = (
+    my @exp = sort ((
           'replay-vbr/1a',
           'replay-vbr/1bx',
           'replay-vbr/1c',
@@ -73,7 +74,7 @@ test plan => 1, cFullList => sub {
           'replay-dual/6',
           'replay-dual/8',
           'replay-dual/9'
-          );
+          ));
     is_deeply($tts,\@exp,"Full list");
     #print Dumper $tts;
 
@@ -86,7 +87,7 @@ test plan => 2, eIncludeList => sub {
     my $tts = getTests(\@out);
 
     print "Ready results:".Dumper $tts;
-    my @exp = (
+    my @exp = sort (
            'replay-vbr/1a',
            'replay-dual/9'
           );
@@ -113,8 +114,8 @@ test plan => 3, alIELists => sub {
 
     #print "Ready results:".Dumper $tts;
     my @exp = (
+           'replay-dual/9',
            'replay-vbr/1a',
-           'replay-dual/9'
           );
 
     is_deeply($tts,\@exp,"Simple include list/exclude list 1");
@@ -139,6 +140,25 @@ test plan => 3, alIELists => sub {
                 'replay-dual/8',
                 'replay-dual/9');
     is_deeply($tts1,\@exp1,"Not empty result");
+};
+
+test plan => 1, aaIteratedIELists => sub {
+
+    my @out = `bin/runtest.pl  --action=list --workdir=/tmp/lwd1  --config=t/testcfgs/localtestsystemcfg.yaml --testdir=t/testlists/testds --includelist=t/testlists/include.simple.list   --multirun 3 --excludelist=t/testlists/exclude.list`;
+    print "Output:".Dumper @out;
+    my $tts = getTests(\@out);
+
+    print "Ready results:".Dumper $tts;
+    my @exp = (
+           'replay-dual/9__0',
+           'replay-dual/9__1',
+           'replay-dual/9__2',
+           'replay-vbr/1a__0',
+           'replay-vbr/1a__1',
+           'replay-vbr/1a__2',
+          );
+
+    is_deeply($tts,\@exp,"Simple include list/exclude list 1");
 };
 
 ielists->run_tests;

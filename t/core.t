@@ -50,8 +50,30 @@ setup           some_setup    => sub {
 };
 
 
+test plan => 5, aan_randomizeTests        => sub {
+
+    my %options = (
+        testdir => 't/testcfgs/sanity/',
+        workdir => '/tmp/test_wd/',
+    );
+    $testcore->options(\%options);
+
+    my @tests = @{$testcore->loadTests()};
+    $testcore->tests(\@tests);
+    my @newtests = @{$testcore->_randomizeTests};
+    is(scalar @tests,scalar @newtests,
+                            'test count is not changed');
+    #print Dumper \@tests;
+    is($tests[0]->{testcfg}->{id},'0b','0. original');
+    isnt($newtests[0]->{testcfg}->{id},'0b','0. randomized');
+
+    is($tests[10]->{testcfg}->{id},'4b','10. original');
+    isnt($newtests[10]->{testcfg}->{id},'4b','10. randomized');
+
+};
+
 ##################################################
-test plan => 8, m_multiplyTestsOption          => sub {
+test plan => 8, m_multiplyTestsCall          => sub {
     my @tests = @{$testcore->loadTests};
     my $tn = @tests;
     is ( $tn, 2, 'Check original test number' );
@@ -72,7 +94,7 @@ test plan => 8, m_multiplyTestsOption          => sub {
                                         'Check groupname');   
 };
 ##################################################
-test plan => 11, n_multiplyTests          => sub {
+test plan => 11, n_multiplyTestsTestOption          => sub {
     my @tests = @{$testcore->loadTests()};
     my $tn = @tests;
     $tests[0]{'testcfg'}{'multirun'}=10;

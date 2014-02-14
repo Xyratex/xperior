@@ -172,18 +172,20 @@ sub getDescription {
     if ( defined( $self->testcfg->{'description'} ) ) {
         $td = $self->testcfg->{'description'};
     }
+    my $original_id = $self->getParam('original_id');
+    $original_id = 'not set' unless defined $original_id;
     return
         "Test full name    : ["
       . $self->getParam('groupname') . "/"
-      . $self->getName . "]\n"
+      . $self->getName() . "]\n"
       . "Group description : "
       . $self->groupcfg->{'description'} . "\n"
       . "Test description  : "
       . $td . "\n"
       . "Test group        : "
       . $self->getParam('groupname') . "\n"
-      . "Test name         : "
-      . $self->getName . "\n"
+      . "Test name         : ". $self->getName() . "\n"
+      . "Test original_id  : ". $original_id. "\n"
       . "Test tags         : "
       . join( ',', @{ $self->getTags } ) . "\n";
 }
