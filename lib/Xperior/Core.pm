@@ -235,9 +235,11 @@ sub run {
     }
     $self->tests($self->_multiplyTests($self->options->{'multirun'}));
     #preserve test plan
+    my $isTestOrderReady=0;
     if ($self->options->{'continue'} and $self->restoreTestOrder()){
-        $self->replanningTests();
-    }else{
+        $isTestOrderReady = $self->replanningTests();
+    }
+    if(not $isTestOrderReady){
         $self->tests($self->_randomizeTests())
                 if ($self->options->{'random'});
         $self->saveTestPlan();
@@ -436,12 +438,15 @@ sub replanningTests{
             }
         }
         if($ff == 0 ){
-            confess "Cannot find corresponding test for".
+            ERROR "Cannot find corresponding test for".
             " [$gname][$name] test plan recod";
+            ERROR "Regeneratig test order";
+            return 0;
         }
     }
     INFO 'Tests reordered';
     $self->tests(\@sortedtests);
+    return 1;
 }
 
 =item saveTestPlan
