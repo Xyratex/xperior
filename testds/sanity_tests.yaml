@@ -792,6 +792,9 @@ Tests:
   -
     id: 160
   -
+    id: 160c
+    timeout: 600
+  -
     id: 161
   -
     dangerous: 'no'
