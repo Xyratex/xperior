@@ -172,6 +172,7 @@ after 'execute' => sub {
       . $self->port
       . "] : $@\n";
     $udpclient->send($ENDMSG);
+    sleep 1; #give a chance for correct closing receiving thread
     if($self->udpserverthr->is_joinable()){
         $self->udpserverthr->join();
     }else{
