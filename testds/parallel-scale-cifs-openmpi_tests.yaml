@@ -1,0 +1,55 @@
+#
+# GPL HEADER START
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2013 Xyratex Technology Limited
+#
+# Author: Elena Gryaznova<Elena_Gryaznova@xyratex.com>
+#
+---
+Tests:
+  -
+    id: connectathon
+    timeout: 1400
+cleanup_max_time: -1
+dangerous: 'yes'
+description: parallel scale CIFS Lustre tests
+executor: Xperior::Executor::LustreTests
+expected_time: 1200
+groupname: parallel-scale-cifs-openmpi
+script: parallel-scale-cifs.sh
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: cifs openmpi scale
+timeout: 1200
+env:
+    cnt_DIR: /test-tools/cthon04
+    cbench_DIR: /test-tools/compilebench-0.6
+    IOR: /test-tools/openmpi/ior-2.10.3/src/C/IOR
+    ior_blockSize: 1
+    ior_THREADS: 2
+    ior_DURATION: 15
+    METABENCH: "/test-tools/openmpi/metabench/src/metabench -p /test-tools/openmpi/metabench/dictionary"
+    mbench_NFILES: 10000
+    MDTEST: /test-tools/openmpi/mdtest-1.9.1/mdtest
+    PATH: "/usr/lib64/openmpi/bin/:/usr/lib64/openmpi/1.4-gcc/bin/:$PATH"
