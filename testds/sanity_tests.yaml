@@ -793,7 +793,7 @@ Tests:
     id: 160
   -
     id: 160c
-    timeout: 600
+    timeout: 750
   -
     id: 161
   -
