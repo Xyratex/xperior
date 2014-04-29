@@ -62,10 +62,11 @@ has 'skipped'  => ( is => 'rw' ,traits => [qw(Clone)]);
 sub init {
     my $self = shift;
     $self->{'testcfg'}  = shift;
+    $self->{'testcfg'}->{'testname'} = $self->{'testcfg'}->{'id'};
     $self->{'groupcfg'} = shift;
 }
 
-=head getName
+=head getId
 
 Returns name of a test. Name could be defined as I<name> in test descriptor.
 Test id is returned if I<name> is not defined.
@@ -74,10 +75,23 @@ Test id is returned if I<name> is not defined.
 
 =cut
 
-sub getName {
+sub getId {
     my $self = shift;
-    return $self->testcfg->{'name'} if ( defined( $self->testcfg->{'name'} ) );
     return $self->testcfg->{'id'};
+}
+
+=head getTestName
+
+Returns name of a test. Name could be defined as I<name> in test descriptor.
+Test id is returned if I<name> is not defined.
+
+=back
+
+=cut
+
+sub getTestName {
+    my $self = shift;
+    return $self->testcfg->{'testname'} if ( defined( $self->testcfg->{'testname'} ) );
 }
 
 =head2 getParamNames
@@ -172,20 +186,21 @@ sub getDescription {
     if ( defined( $self->testcfg->{'description'} ) ) {
         $td = $self->testcfg->{'description'};
     }
-    my $original_id = $self->getParam('original_id');
-    $original_id = 'not set' unless defined $original_id;
+    my $testname = $self->getParam('testname');
+    $testname = 'not set' unless defined $testname;
     return
         "Test full name    : ["
       . $self->getParam('groupname') . "/"
-      . $self->getName() . "]\n"
+      . $self->getId() . "]\n"
       . "Group description : "
       . $self->groupcfg->{'description'} . "\n"
       . "Test description  : "
       . $td . "\n"
       . "Test group        : "
       . $self->getParam('groupname') . "\n"
-      . "Test name         : ". $self->getName() . "\n"
-      . "Test original_id  : ". $original_id. "\n"
+      . "Test Id           : ". $self->getId() . "\n"     
+      . "Test name         : ". $self->getTestName() . "\n"
+      . "Test testname     : ". $testname. "\n"
       . "Test tags         : "
       . join( ',', @{ $self->getTags } ) . "\n";
 }
@@ -198,14 +213,14 @@ sub clean {
 
 Returns test array based on current test.
 Option 'multirun' defines number of test in returned array. In
-generated tests will be added fields 'original_id', 'copynumber'
+generated tests will be added fields 'testname', 'copy_id'
 and 'numberofcopies'.
 
 If parameter 'multirun' set to '0' or undefined then test option 
 'multirun' is used. If test option 'multirun' is not set also then test
 will not change.
 
-If parameter 'multirun' set to '1' then only fields 'copynumber' and
+If parameter 'multirun' set to '1' then only fields 'copy_id' and
 'numberofcopies' will be added to test.
 
 =cut
@@ -216,7 +231,7 @@ sub multiply {
     my @newtests;
     $count = $multiply if $multiply;
     if ( $count && $count == 1 ) {
-        $self->{'testcfg'}->{'copynumber'} = 1;
+        $self->{'testcfg'}->{'copy_id'} = 1;
         $self->{'testcfg'}->{'numberofcopies'} =1;
         push( @newtests, $self );
     }
@@ -224,8 +239,8 @@ sub multiply {
         for ( my $i = 0 ; $i < $count ; $i++ ) {
             my $test = $self->clone();
             $test->{'testcfg'}->{'id'} = $self->{'testcfg'}->{'id'} . "__$i";
-            $test->{'testcfg'}->{'original_id'} = $self->{'testcfg'}->{'id'};
-            $test->{'testcfg'}->{'copynumber'} = $i;
+            $test->{'testcfg'}->{'testname'} = $self->{'testcfg'}->{'id'};
+            $test->{'testcfg'}->{'copy_id'} = $i;
             $test->{'testcfg'}->{'numberofcopies'} = $count;
             push( @newtests, $test );
         }
