@@ -86,7 +86,7 @@ test plan => 8, m_multiplyTestsCall          => sub {
     is ( $newtests[5]->getParam('expected_time'), 10, 'Check ex time');
 
     is ( $newtests[19]->getParam('id'), '1a__19', 'Check id');
-    is ( $newtests[19]->getParam('copynumber'), 19, 'Check copynumber');
+    is ( $newtests[19]->getParam('copy_id'), 19, 'Check copy_id');
 
 
     is ( $newtests[20]->getParam('id'), '2b__0' , 'Check id');
@@ -106,21 +106,21 @@ test plan => 11, n_multiplyTestsTestOption          => sub {
 
     is ( $newtests[3]->getParam('id'), '1a__3', 'Check id');
     is ( $newtests[3]->getParam('expected_time'), 10, 'Check ex time');
-    is ( $newtests[3]->getParam('original_id'), '1a',
-                                        'Check original id');
+    is ( $newtests[3]->getParam('testname'), '1a',
+                                        'Check testname');
 
 
     is ( $newtests[9]->getParam('id'), '1a__9', 'Check id 2');
     is ( $newtests[9]->getParam('multirun'), 10,
                                     'Check multirun 2');
-    is ( $newtests[9]->getParam('original_id'), '1a',
-                                    'Check original id 2');
+    is ( $newtests[9]->getParam('testname'), '1a',
+                                    'Check testname 2');
 
     is ( $newtests[10]->getParam('id'), '2b' , 'Check id 3');
     is ( $newtests[10]->getParam('groupname'), 'sanity' ,
                                         'Check groupname 3');
-    is ( $newtests[10]->getParam('original_id'), undef ,
-                                        'Check original id 3');
+    is ( $newtests[10]->getParam('testname'), '2b' ,
+                                        'Check testname 3');
 };
 
 
@@ -157,15 +157,17 @@ test plan => 1, cCheckTagLoad           => sub {
 };
 
 #################################################
-test  plan => 6, dCheckTests           => sub {
+test  plan => 8, dCheckTests           => sub {
     my @tests = @{$testcore->loadTests};
     my $tn = @tests;
     is ( $tn, 2, 'Check test number' );
     is ( $tests[0]->getParam('id'), '1a', 'Check id');
+    is ( $tests[0]->getParam('testname'), '1a', 'Check testname, simply case');
     is ( $tests[0]->getParam('expected_time'), 10, 'Check ex time');
-    is ( $tests[1]->getParam('id'), '2b' , 'Check id');
+    is ( $tests[1]->getParam('id'), '2b' , 'Check id 1');
+    is ( $tests[1]->getParam('testname'), '2b' , 'Check testname, simply case 1');
     is ( $tests[1]->getParam('groupname'), 'sanity' ,
-                                        'Check groupname');
+                                        'Check groupname 1');
     diag( "2 groupname = ". $tests[1]->getParam('groupname') );
 
     my @tae = ('functional','sanity');

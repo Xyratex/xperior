@@ -268,8 +268,8 @@ sub run {
         if ($self->options->{'continue'});
 
     foreach my $test (@{$self->{'tests'}}) {
-        my $testName     = $test->getName();
-        my $testFullName = $test->getGroupName . '/' . $test->getName;
+        my $testName     = $test->getId();
+        my $testFullName = $test->getGroupName().'/'.$test->getId();
 
         my $skip = 0;
         # in multiplication case test names will be
@@ -319,7 +319,7 @@ sub run {
                 $skipCounter++;
                 next;
             }
-            my $testName     = $test->getName();
+            my $testName     = $test->getId();
             my $testGroup    = $test->getGroupName();
             my $exe    = $self->_runtest($test, $test->{excluded});
             my $res    = $exe->result_code;
@@ -432,7 +432,7 @@ sub replanningTests{
         my $ff = 0;
         foreach my $test (@tests){
             if(($test->getParam('groupname') eq $gname)
-                 && ($test->getName() eq $name)){
+                 && ($test->getId() eq $name)){
                 $ff=1;
                 push @sortedtests, $test;
             }
@@ -463,7 +463,7 @@ sub saveTestPlan{
     my $wd   = $self->{options}->{workdir};
     my @plan;
     if( @tests and (scalar(@tests) > 0)){
-        @plan = map{$_->getParam('groupname').'/'.$_->getName()."\n"} @tests;
+        @plan = map{$_->getParam('groupname').'/'.$_->getId()."\n"} @tests;
         write_file("$wd/".$self->testplanfile(),{err_mode => 'croak'}, @plan);
         $self->testplan(\@plan);
         INFO "Test plan saved to $wd/".$self->testplanfile();

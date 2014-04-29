@@ -137,7 +137,6 @@ sub addYEE{
     return $overridden;
 }
 
-
 =head2 addMessage
 
 Save message to tests. User for message frpm Xperior, e.g.
@@ -459,13 +458,13 @@ sub _reportDir{
 sub _reportFile{
     my $self = shift;
     return $self->_reportDir.'/'.
-           $self->test->getName.$EXT;
+           $self->test->getId().$EXT;
 }
 
 sub _tapFile{
     my $self = shift;
     return $self->_reportDir.'/'.
-           $self->test->getName.$TEXT;
+           $self->test->getId().$TEXT;
 }
 
 
@@ -473,7 +472,7 @@ sub _tapFile{
 sub _resourceFilePrefix{
     my $self = shift;
     return $self->_reportDir.'/'.
-           $self->test->getName.'.';
+           $self->test->getId().'.';
 
 }
 __PACKAGE__->meta->make_immutable;

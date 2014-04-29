@@ -153,8 +153,7 @@ sub _prepareCommands {
     # because ONLY is used to select, or we shouldn't provide an id
     # in test description for those scripts (that can harm logging)
     if( $self->test->getParam('groupname') ne 'lustre-single' ){
-        $tid = $self->test->testcfg->{original_id};
-        $tid = $self->test->testcfg->{id} unless (defined($tid));
+        $tid = $self->test->testcfg->{testname};
     }
 
     my $script = $self->test->getParam('script');

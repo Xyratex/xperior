@@ -100,6 +100,7 @@ ok 1
      schema: Xperior1
      status: passed
      status_code: 0
+     testname: 1
    message: ''
    source: sanity1
 ...
@@ -129,6 +130,7 @@ not ok 1  #reason
      result: 'not ok 1  #reason'
      status: failed
      status_code: 1
+     testname: 1
    message: ''
    source: sanity1
 ...
@@ -154,6 +156,7 @@ ok 1# SKIP  #skip reason
      result: 'ok 1# SKIP  #skip reason'
      status: skipped
      status_code: 2
+     testname: 1
    message: ''
    source: sanity1
 ...
