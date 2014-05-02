@@ -57,7 +57,7 @@ with qw( Xperior::Nodes::NodeManager );
 
 has 'ipmi' => ( is => 'rw', isa => 'Str' );
 
-use constant PMITERATIONS  => 5;
+use constant IPMITERATIONS  => 5;
 use constant SLEEPAFTEROFF => 30;    #sec
 
 sub sync{
@@ -93,7 +93,7 @@ sub restoreSystem {
 sub _powermanDo {
     my ( $self, $action ) = @_;
     my $i = 0;
-    while ( $i < PMITERATIONS ) {
+    while ( $i < IPMITERATIONS ) {
         $i++;
         if ( $action eq 'start' ) {
             my $oncmd =
@@ -108,8 +108,10 @@ sub _powermanDo {
             if ( $onr =~ m/\:\s+ok\s*$/ ) {
                 INFO "Node [" . $self->ip . "] started";
                 return 0;
-            }
-            else {
+            }elsif ( $onr =~ m/\:\s+timeout\s*$/ ) {
+                WARN "Cannot connect to node [" . $self->ip . "]";
+                next;
+            }else {
                 confess "Cannot power on node Node ["
                   . $self->ip . "]:["
                   . $self->ipmi
@@ -129,12 +131,13 @@ sub _powermanDo {
             if ( $statr =~ m/\:\s+on\s*$/ ) {
                 INFO "Node [" . $self->ip . "] on";
                 return 'on';
-            }
-            elsif ( $statr =~ m/\:\s+off\s*$/ ) {
+            }elsif ( $statr =~ m/\:\s+off\s*$/ ) {
                 INFO "Node [" . $self->ip . "] off";
                 return 'off';
-            }
-            else {
+            }elsif ( $statr =~ m/\:\s+connection\s+timeout/ ) {
+                WARN "Cannot connect to node [" . $self->ip . "]";
+                next;
+            }else {
                 confess "Cannot check power status for node ["
                   . $self->ip . "]:["
                   . $self->ipmi
@@ -155,8 +158,10 @@ sub _powermanDo {
             if ( $offr =~ m/\:\s+ok\s*$/ ) {
                 INFO "Node [" . $self->ip . "] started";
                 return 0;
-            }
-            else {
+            }elsif ( $offr =~ m/\:\s+timeout\s*$/ ) {
+                WARN "Cannot connect to node [" . $self->ip . "]";
+                next;
+            }else {
                 confess "Cannot power down node Node ["
                   . $self->ip . "]:["
                   . $self->ipmi
@@ -165,7 +170,7 @@ sub _powermanDo {
         }
         confess "No supported command found for action [$action]";
     }
-    confess "Cannot do [$action] in [" . PMITERATIONS . "]";
+    confess "Cannot do [$action] in [" . IPMITERATIONS . "]";
 }
 
 sub _isBMCError {
