@@ -1,0 +1,6 @@
+==> /tmp/serial_fre905_out <==
+Lustre: DEBUG MARKER: Using TIMEOUT=20
+Lustre: DEBUG MARKER: only running test 56w
+Lustre: DEBUG MARKER: excepting tests: 76 42a 42b 42c 42d 45 51d 68b
+Lustre: DEBUG MARKER: == sanity test 56w: check lfs_migrate -c stripe_count works == 10:39:21 (1398767961)
+Lustre: DEBUG MARKER: == sanity test complete, duration 14 sec == 10:39:30 (1398767970)

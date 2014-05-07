@@ -46,20 +46,65 @@ setup _setup       => sub { };
 teardown _teardown => sub { };
 shutdown _shutdown => sub { };
 
-#
+########################################
+test
+  plan           => 8,
+  tGenerateJJUnit => sub {
+    my $wd  = '--workdir=/tmp/test_wd/';
+    my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
+    remove_tree('/tmp/test_wd');
+    remove_tree('/tmp/test_jjunit');
+    dircopy( 't/checkhtmldata', '/tmp/test_wd/' );
+    my $out;
+    eval {
+    $out =
+    `bin/xper --action=generatejjunit  $cfg --jjunit=/tmp/test_jjunit --debug`;
+    };
+    my $fail = ${^CHILD_ERROR_NATIVE};
+    isnt( 0, $fail,
+        'Check incorrect cmd for jjunit generation (no wd)' );
+
+    eval {
+        $out =
+        `bin/xper --action=generatejjunit $wd $cfg --debug`;
+        };
+    $fail = ${^CHILD_ERROR_NATIVE};
+    isnt( 0, $fail,
+        'Check correct cmd for jjunit generation (no junit path)' );
+
+    eval {
+        $out =
+    `bin/xper $wd $cfg --action=generatejjunit --jjunit=/tmp/test_jjunit --debug`;
+    };
+    my $pass = ${^CHILD_ERROR_NATIVE};
+    is( 0, $pass, 'Check correct jjunit cmd' );
+    ok( -e '/tmp/test_jjunit','check jjunit report existence');
+    ok (-e '/tmp/test_jjunit/sanity.junit','Check jjunit report N1' );
+    ok (-e '/tmp/test_jjunit/ost-pools.junit','Check jjunit report N2' );
+    ok (-e '/tmp/test_jjunit/ost-pools.1/1.stdout.log',
+            'Check jjunit report N3' );
+    ok (-e '/tmp/test_jjunit/sanity.100/100.console.server-oss.log',
+            'Check jjunit report N4' );
+    remove_tree('/tmp/test_wd');
+    remove_tree('/tmp/test_jjunit');
+  };
+
+
 ########################################
 test
   plan           => 3,
   kGenerateHTML => sub {
+    my $wd  = '--workdir=/tmp/test_wd/';
+    my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
     remove_tree('/tmp/test_wd');
     dircopy( 't/checkhtmldata', '/tmp/test_wd/' );
     my $out;
-    eval { $out = `bin/xper   --action=generatehtml --debug`; };
+    eval { $out = `bin/xper $cfg --action=generatehtml --debug`; };
     my $fail = ${^CHILD_ERROR_NATIVE};
-    isnt( 0, $fail, 'Check correct cmd' );
+    isnt( 0, $fail, 'Check incorrect cmd' );
     eval {
         $out =
-          `bin/xper --workdir=/tmp/test_wd/  --action=generatehtml --debug`;
+          `bin/xper $wd $cfg  --action=generatehtml --debug`;
     };
     my $pass = ${^CHILD_ERROR_NATIVE};
     is( 0, $pass, 'Check correct cmd' );

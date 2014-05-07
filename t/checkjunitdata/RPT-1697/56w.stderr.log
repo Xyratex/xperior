@@ -1,0 +1,5 @@
+fre906: error: set_param: /proc/{fs,sys}/{lnet,lustre}/osd-ldiskfs/track_declares_assert: Found no match
+fre905: error: set_param: /proc/{fs,sys}/{lnet,lustre}/osd-ldiskfs/track_declares_assert: Found no match
+running as uid/gid/euid/egid 500/500/500/500, groups:
+ [touch] [/mnt/lustre/d0_runas_test/f4719]
+mke2fs 1.42.7.wc2 (07-Nov-2013)

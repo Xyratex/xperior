@@ -61,6 +61,7 @@ use Xperior::Test;
 use Xperior::TestEnvironment;
 use Xperior::Utils;
 use Xperior::Executor::Roles::RoleLoader;
+use Xperior::Reports::JenkinsJunit;
 
 
 =head Exit codes
@@ -119,7 +120,7 @@ sub _randomizeTests {
 =head2 _multiplyTests
 
 Return test set same as C<$self-tests> with increased number of tests.
-Factor set via cmd option 'multirun' set. If cmd 'multirun' set 0 or 
+Factor set via cmd option 'multirun' set. If cmd 'multirun' set 0 or
 undefined test option 'multirun' will be used.
 
 =cut
@@ -219,10 +220,16 @@ sub run {
 
     my $action = $self->options->{'action'};
     if ($action eq 'generatehtml') {
-        $self->_reportHtml;
-        INFO "Report generation completed";
+        $self->_reportHtml();
+        INFO "HTML report generation completed";
         exit 0;
     }
+    if ($action eq 'generatejjunit') {
+        $self->_reportJJunit();
+        INFO "Jenkins Junit generation completed";
+        exit 0;
+    }
+
 
     DEBUG "Start framework";
     my $tags = $self->loadTags();
@@ -275,7 +282,7 @@ sub run {
         # in multiplication case test names will be
         # replay-dual/9__2
         # replay-vbr/1a__0
-        INFO "Preprocessing $testFullName";
+        INFO "Preprocessing [$testFullName]";
         if (@includeonly) {
             DEBUG 'Include only defined, excluding check skipped';
             $skip = 1 unless first {$testFullName =~ m/^$_(\_\_\d+)*$/} @includeonly;
@@ -341,8 +348,8 @@ sub run {
                     $error = ERROR_CONFIG_FAILURE2;
                     last;
                 }
-                if (($res == 1) and 
-                    ($exe->yaml->{'fail_reason'} eq 'No_status_found') and 
+                if (($res == 1) and
+                    ($exe->yaml->{'fail_reason'} eq 'No_status_found') and
                     ($exe->yaml->{'killed'} eq 'no'))
                 {
                     WARN "Not a dangerous test failure detected, continuing...";
@@ -367,7 +374,10 @@ sub run {
         INFO "Test execution completed" unless $error;
         INFO "Executed tests: $execCounter";
         INFO "Skipped tests:  $skipCounter";
-        $self->_reportHtml();
+        $self->_reportHtml()
+            if $self->options->{'html'};
+        $self->_reportJJunit()
+            if $self->options->{'jjunit'};
         if ($error){
             write_file("$wd/".$self->testexecutionlog(),
                 {err_mode => 'croak', append => 1},
@@ -551,20 +561,32 @@ sub loadTags {
     return $cfg->{'tags'};
 }
 
+=head3 _reportJJunit
+
+Generate Jenkins Junit report for work directory with results.
+Every executed suite is converted to Junit test result.
+
+=cut
+
+
+sub _reportJJunit{
+    my $self = shift;
+    confess "Please set --jjunit option!\n"
+        unless $self->{options}->{jjunit};
+    my $junitReport = Xperior::Reports::JenkinsJunit->new();
+    $junitReport->generateReport($self->{options});
+}
+
 =head3 _reportHtml
 
 Generate HTML report for work directory with results.
-Every executed suite is converted to TAP test result and 
+Every executed suite is converted to TAP test result and
 HTML report is generated via using customized TAP::Formatter::HTML
-  
+
 =cut
 
 sub _reportHtml {
     my $self = shift;
-    return
-        unless ($self->{options}->{html}
-        or ($self->options->{'action'} eq 'generatehtml'));
-
     my $wd     = $self->{options}->{workdir};
     my $libdir = $self->{options}->{xperiorbasedir} . '/Xperior/html';
     my @suites;
@@ -572,7 +594,11 @@ sub _reportHtml {
 
     #read executed test group list from workdir dir
     # filter report dir if report was previous generated
-    @suites = grep {!/report/} grep {!/^\.\.?$/} readdir $dh;
+    @suites = grep {!/testexecution.log/}
+              grep {!/testorderplan.lst/}
+                grep {!/report/}
+                grep {!/^\.\.?$/}
+                    readdir $dh;
     closedir $dh;
     my %data;
     my %etimes;

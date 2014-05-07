@@ -1,0 +1,46 @@
+Logging to local directory: /tmp/test_logs/1398767957
+fre908: Checking config lustre mounted on /mnt/lustre
+fre907: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients fre907,fre908 environments
+Using TIMEOUT=20
+jobstats not supported by server
+enable quota as required
+only running test 56w
+excepting tests: 76 42a 42b 42c 42d 45 51d 68b
+preparing for tests involving mounts
+
+debug=-1
+
+
+== sanity test 56w: check lfs_migrate -c stripe_count works == 10:39:21 (1398767961)
+/usr/bin/lfs_migrate -y -c 1 /mnt/lustre/d0.sanity/d56w/file1
+/mnt/lustre/d0.sanity/d56w/file1: cannot get dataversion on /mnt/lustre/d0.sanity/d56w/file1 (Operation not supported)
+error: migrate: migrate stripe file '/mnt/lustre/d0.sanity/d56w/file1' failed
+falling back to rsync-based migration
+done
+/usr/bin/lfs_migrate -y -c 1 /mnt/lustre/d0.sanity/d56w/dir1
+/mnt/lustre/d0.sanity/d56w/dir1/file2: cannot get dataversion on /mnt/lustre/d0.sanity/d56w/dir1/file2 (Operation not supported)
+error: migrate: migrate stripe file '/mnt/lustre/d0.sanity/d56w/dir1/file2' failed
+falling back to rsync-based migration
+done
+/mnt/lustre/d0.sanity/d56w/dir1/file1: done
+/mnt/lustre/d0.sanity/d56w/dir1/file3: done
+lfs find -stripe_count 2 -type f /mnt/lustre/d0.sanity/d56w |
+         /usr/bin/lfs_migrate -y -c 1
+/mnt/lustre/d0.sanity/d56w/file2: error on ioctl 0x4008669a for '/mnt/lustre/d0.sanity/d56w/.:VOLATILE::' (3): stripe already set
+cannot create volatile file in /mnt/lustre/d0.sanity/d56w (File exists)
+error: migrate: migrate stripe file '/mnt/lustre/d0.sanity/d56w/file2' failed
+falling back to rsync-based migration
+done
+/mnt/lustre/d0.sanity/d56w/file3: done
+/mnt/lustre/d0.sanity/d56w/dir2/file2: done
+/mnt/lustre/d0.sanity/d56w/dir2/file1: done
+/mnt/lustre/d0.sanity/d56w/dir2/file3: done
+/mnt/lustre/d0.sanity/d56w/dir3/file2: done
+/mnt/lustre/d0.sanity/d56w/dir3/file1: done
+/mnt/lustre/d0.sanity/d56w/dir3/file3: done
+Resetting fail_loc on all nodes...done.
+PASS 56w (9s)
+== sanity test complete, duration 14 sec == 10:39:30 (1398767970)
+debug=super ioctl neterror warning dlmtrace error emerg ha rpctrace vfstrace config console

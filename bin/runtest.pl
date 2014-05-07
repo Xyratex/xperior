@@ -35,7 +35,7 @@ Xperior
 
 =head1 SYNOPSIS
 
-    xper --action <run|list> [--continue] [<options>]
+    xper --action <run|list|generatehtml|generatejjunit> [--continue] [<options>]
 
 =head1 DESCRIPTION
 
@@ -48,7 +48,7 @@ collects logs and saves a report.
 
 =over 2
 
-=item --action=<run|list>
+=item --action=<run|list|generatejjunit|generatehtml>
 
 =over 6
 
@@ -63,7 +63,12 @@ and filters.
 
 =item generatehtml
 
-Generate html report based on exist workdir with execution results. 
+Generate html report based on exist workdir with execution results.
+
+=item generatejjunit
+
+Generate Jenkins Junit report based on exist workdir with execution results.
+Option --jjunit must be set also.
 
 =back
 
@@ -87,6 +92,10 @@ Generate tap files in working directory
 
 Generate html report in working directory: C<report/report.html>
 
+=item --jjunit=<path>
+
+Generate Jenkins Junit report in <path> directory.
+
 =item --continue
 
 Continue execution in specified working directory. Execution is continued
@@ -100,18 +109,18 @@ Execute tests in random order
 
 =item --multirun
 
-Optional, defines how much times every test should be executed. 
+Optional, defines how much times every test should be executed.
 Alternatively, could be set for specific test via test parameter
 in test descriptor:
 
     - id       : test1
     .....
-    multirun : 10 
+    multirun : 10
 
-Command line option overrides test parameter. After end of execution 
+Command line option overrides test parameter. After end of execution
 for multiplied tests will be generated results with with 'id' ends '__x',
 where is 'x' - number in series.
-E.g. 
+E.g.
     tests1_0.yaml (for first execution)
     tests1_1.yaml
     ...........
@@ -324,6 +333,7 @@ my $manflag;
 my $continue;
 my $tap;
 my $html;
+my $jjunit  = '';
 my $logfile	= undef;
 my $multirun;
 my $random;
@@ -354,6 +364,7 @@ GetOptions(
     "continue!"      => \$continue,
     "tap!"           => \$tap,
     "html!"          => \$html,
+    "jjunit:s"       => \$jjunit,
     "log-file:s"     => \$logfile,
 );
 
@@ -373,8 +384,10 @@ else {
 
 #check test description configuration existence
 if((defined $action) &&($action ne '') ){
-    unless (($action eq 'run') 
-    || ( $action eq 'list') || ( $action eq 'generatehtml')){
+    unless (($action eq 'run')
+    || ( $action eq 'list')
+    || ( $action eq 'generatejjunit')
+    || ( $action eq 'generatehtml')){
         print "Incorrect action set : $action\n";
         pod2usage(3);
     }
@@ -399,14 +412,15 @@ if (-d $testdir) {
 }
 
 
-unless(defined($workdir)){
-    print "No workdir specified\n";
+unless($workdir){
+    print "No workdir specified, please set --workdir  \n";
     exit 1;
 }
 
 if( $action eq 'run'){
     if (-d $workdir) {
-        INFO "Test directory [$workdir] found, overwriting old results";
+        INFO "Test directory [$workdir] found, overwriting old ".
+             "results if --continue is not set";
     }else{
         INFO "No workdir directory [$workdir] found, create it.";
         unless( mkdir $workdir){
@@ -431,6 +445,7 @@ if( $action eq 'run'){
     configfile => $configfile,
     tap      => $tap,
     html     => $html,
+    jjunit   => $jjunit,
     extopt   => \@extopt,
     extoptfile => $extoptfile,
 );

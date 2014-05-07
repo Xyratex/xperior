@@ -1,0 +1,160 @@
+----------------- fre905 -----------------
+<lfs df -i>
+
+<lfs df>
+
+<lctl dl>
+  0 UP mgs MGS MGS 11
+  1 UP mgc MGC192.168.122.5@tcp 64e7c486-025a-945a-ab32-9719ebb9f7f4 5
+  2 UP lov lustre-MDT0000-mdtlov lustre-MDT0000-mdtlov_UUID 4
+  3 UP mdt lustre-MDT0000 lustre-MDT0000_UUID 7
+  4 UP mds mdd_obd-lustre-MDT0000 mdd_obd_uuid-lustre-MDT0000 3
+  5 UP osc lustre-OST0000-osc-MDT0000 lustre-MDT0000-mdtlov_UUID 5
+  6 UP osc lustre-OST0001-osc-MDT0000 lustre-MDT0000-mdtlov_UUID 5
+
+<mount | grep lustre>
+/dev/vdb on /mnt/mds1 type lustre (rw,user_xattr)
+
+<lustre>
+Name        : lustre                       Relocations: (not relocatable)
+Version     : 2.1.0.x5                          Vendor: (none)
+Release     : 116_2.6.32_220.7.1.el6.lustre.4221.x86_64_g931c403   Build Date: Fri 25 Apr 2014 10:59:07 PM UTC
+Install Date: Tue 29 Apr 2014 07:30:49 AM UTC      Build Host: localhost.localdomain
+Group       : Utilities/System              Source RPM: lustre-2.1.0.x5-116_2.6.32_220.7.1.el6.lustre.4221.x86_64_g931c403.src.rpm
+Size        : 27907204                         License: GPL
+Signature   : (none)
+URL         : http://wiki.whamcloud.com/
+Summary     : Lustre File System
+Description :
+Userspace tools and files for the Lustre file system.
+
+<lustre-client>
+package lustre-client is not installed
+
+
+----------------- fre906 -----------------
+<lfs df -i>
+
+<lfs df>
+
+<lctl dl>
+  0 UP mgc MGC192.168.122.5@tcp 166a0206-58ce-be2a-01d0-855dbc4f3047 5
+  1 UP ost OSS OSS_uuid 3
+  2 UP obdfilter lustre-OST0000 lustre-OST0000_UUID 9
+  3 UP obdfilter lustre-OST0001 lustre-OST0001_UUID 9
+
+<mount | grep lustre>
+/dev/vdb on /mnt/ost1 type lustre (rw,user_xattr)
+/dev/vdc on /mnt/ost2 type lustre (rw,user_xattr)
+
+<lustre>
+Name        : lustre                       Relocations: (not relocatable)
+Version     : 2.1.0.x5                          Vendor: (none)
+Release     : 116_2.6.32_220.7.1.el6.lustre.4221.x86_64_g931c403   Build Date: Fri 25 Apr 2014 10:59:07 PM UTC
+Install Date: Tue 29 Apr 2014 07:30:52 AM UTC      Build Host: localhost.localdomain
+Group       : Utilities/System              Source RPM: lustre-2.1.0.x5-116_2.6.32_220.7.1.el6.lustre.4221.x86_64_g931c403.src.rpm
+Size        : 27907204                         License: GPL
+Signature   : (none)
+URL         : http://wiki.whamcloud.com/
+Summary     : Lustre File System
+Description :
+Userspace tools and files for the Lustre file system.
+
+<lustre-client>
+package lustre-client is not installed
+
+
+----------------- fre907 -----------------
+<lfs df -i>
+UUID                      Inodes       IUsed       IFree IUse% Mounted on
+lustre-MDT0000_UUID       250048          42      250006   0% /mnt/lustre[MDT:0]
+lustre-OST0000_UUID        43776          82       43694   0% /mnt/lustre[OST:0]
+lustre-OST0001_UUID        43776          90       43686   0% /mnt/lustre[OST:1]
+
+filesystem summary:       250048          42      250006   0% /mnt/lustre
+
+
+<lfs df>
+UUID                   1K-blocks        Used   Available Use% Mounted on
+lustre-MDT0000_UUID       374872       21208      329464   6% /mnt/lustre[MDT:0]
+lustre-OST0000_UUID       688976       32940      620972   5% /mnt/lustre[OST:0]
+lustre-OST0001_UUID       688976       32940      620972   5% /mnt/lustre[OST:1]
+
+filesystem summary:      1377952       65880     1241944   5% /mnt/lustre
+
+
+<lctl dl>
+  0 UP mgc MGC192.168.122.5@tcp 095efcf9-6fef-a21d-bed7-15b291f5e57a 5
+  1 UP lov lustre-clilov-ffff880037412400 0ffdaac3-9c24-36a0-3900-a2362220b709 4
+  2 UP lmv lustre-clilmv-ffff880037412400 0ffdaac3-9c24-36a0-3900-a2362220b709 4
+  3 UP mdc lustre-MDT0000-mdc-ffff880037412400 0ffdaac3-9c24-36a0-3900-a2362220b709 5
+  4 UP osc lustre-OST0000-osc-ffff880037412400 0ffdaac3-9c24-36a0-3900-a2362220b709 5
+  5 UP osc lustre-OST0001-osc-ffff880037412400 0ffdaac3-9c24-36a0-3900-a2362220b709 5
+
+<mount | grep lustre>
+fre905@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+
+<lustre>
+package lustre is not installed
+
+<lustre-client>
+Name        : lustre-client                Relocations: (not relocatable)
+Version     : 2.5.1                             Vendor: (none)
+Release     : 2.6.32_431.5.1.el6.x86_64_ga701fbf   Build Date: Mon 28 Apr 2014 04:06:39 PM UTC
+Install Date: Tue 29 Apr 2014 07:30:34 AM UTC      Build Host: morpheus
+Group       : Utilities/System              Source RPM: lustre-client-2.5.1-2.6.32_431.5.1.el6.x86_64_ga701fbf.src.rpm
+Size        : 14575460                         License: GPL
+Signature   : (none)
+URL         : http://wiki.whamcloud.com/
+Summary     : Lustre File System
+Description :
+Userspace tools and files for the Lustre file system.
+
+
+----------------- fre908 -----------------
+<lfs df -i>
+UUID                      Inodes       IUsed       IFree IUse% Mounted on
+lustre-MDT0000_UUID       250048          42      250006   0% /mnt/lustre[MDT:0]
+lustre-OST0000_UUID        43776          82       43694   0% /mnt/lustre[OST:0]
+lustre-OST0001_UUID        43776          90       43686   0% /mnt/lustre[OST:1]
+
+filesystem summary:       250048          42      250006   0% /mnt/lustre
+
+
+<lfs df>
+UUID                   1K-blocks        Used   Available Use% Mounted on
+lustre-MDT0000_UUID       374872       21208      329464   6% /mnt/lustre[MDT:0]
+lustre-OST0000_UUID       688976       32940      620972   5% /mnt/lustre[OST:0]
+lustre-OST0001_UUID       688976       32940      620972   5% /mnt/lustre[OST:1]
+
+filesystem summary:      1377952       65880     1241944   5% /mnt/lustre
+
+
+<lctl dl>
+  0 UP mgc MGC192.168.122.5@tcp 4513dcbf-230d-7061-2c23-61e6238ea35a 5
+  1 UP lov lustre-clilov-ffff88005b9f3400 2d47f14c-97e0-c2bd-3536-36f6fb9b4b0a 4
+  2 UP lmv lustre-clilmv-ffff88005b9f3400 2d47f14c-97e0-c2bd-3536-36f6fb9b4b0a 4
+  3 UP mdc lustre-MDT0000-mdc-ffff88005b9f3400 2d47f14c-97e0-c2bd-3536-36f6fb9b4b0a 5
+  4 UP osc lustre-OST0000-osc-ffff88005b9f3400 2d47f14c-97e0-c2bd-3536-36f6fb9b4b0a 5
+  5 UP osc lustre-OST0001-osc-ffff88005b9f3400 2d47f14c-97e0-c2bd-3536-36f6fb9b4b0a 5
+
+<mount | grep lustre>
+fre905@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+
+<lustre>
+package lustre is not installed
+
+<lustre-client>
+Name        : lustre-client                Relocations: (not relocatable)
+Version     : 2.5.1                             Vendor: (none)
+Release     : 2.6.32_431.5.1.el6.x86_64_ga701fbf   Build Date: Mon 28 Apr 2014 04:06:39 PM UTC
+Install Date: Tue 29 Apr 2014 07:30:39 AM UTC      Build Host: morpheus
+Group       : Utilities/System              Source RPM: lustre-client-2.5.1-2.6.32_431.5.1.el6.x86_64_ga701fbf.src.rpm
+Size        : 14575460                         License: GPL
+Signature   : (none)
+URL         : http://wiki.whamcloud.com/
+Summary     : Lustre File System
+Description :
+Userspace tools and files for the Lustre file system.
+
+

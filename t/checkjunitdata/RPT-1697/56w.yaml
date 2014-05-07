@@ -1,0 +1,62 @@
+---
+cleanup_max_time: -1
+cmd: "SLOW=YES NAME=ncli mds1_HOST=fre905 MDSDEV1=/dev/vdb mds_HOST=fre905 MDSDEV=/dev/vdb MDSCOUNT=1 ost1_HOST=fre906 OSTDEV1=/dev/vdb ost2_HOST=fre906 OSTDEV2=/dev/vdc OSTCOUNT=2 CLIENTS=fre907 RCLIENTS=\"fre908\"  DIR=/mnt/lustre PDSH=\"/usr/bin/pdsh -R ssh -S -w \" ONLY=56w MDS_MOUNT_OPTS=\"-o rw,user_xattr\" OST_MOUNT_OPTS=\"-o user_xattr\" ENABLE_QUOTA=\"yes\" ACCEPTOR_PORT=\"64\" MAXFREE=\"1400000\" mdtest_nFiles=\"50000\" mdtest_iteration=\"5\" POWER_DOWN=\"eval ssh -o 'UserKnownHostsFile=/tmp/lustre-known-hosts' -o 'StrictHostKeyChecking=no' kvm9 virsh destroy\" POWER_UP=\"eval ssh -o 'UserKnownHostsFile=/tmp/lustre-known-hosts' -o 'StrictHostKeyChecking=no' kvm9 virsh start\" SHARED_DIRECTORY=\"/shared/fremont/test-results/reg-betazoid-2.5-patchless/2//kvm9-quartet-2/shared-dir//sanity\" /usr/lib64/lustre/tests/sanity.sh 2>     /var/log/xperior/test_stderr.24173.log 1>  /var/log/xperior/test_stdout.24173.log"
+completed: yes
+dangerous: yes
+description: Lustre sanity tests
+endtime: 1398767978
+endtime_planned: 1398768258
+env:
+  ACCEPTOR_PORT: 64
+  ENABLE_QUOTA: yes
+  MAXFREE: 1400000
+  POWER_DOWN: eval ssh -o 'UserKnownHostsFile=/tmp/lustre-known-hosts' -o 'StrictHostKeyChecking=no' kvm9 virsh destroy
+  POWER_UP: eval ssh -o 'UserKnownHostsFile=/tmp/lustre-known-hosts' -o 'StrictHostKeyChecking=no' kvm9 virsh start
+  SHARED_DIRECTORY: /shared/fremont/test-results/reg-betazoid-2.5-patchless/2//kvm9-quartet-2/shared-dir//sanity
+  mdtest_iteration: 5
+  mdtest_nFiles: 50000
+executor: Xperior::Executor::LustreTests
+exitcode: 0
+expected_time: 10
+extoptions:
+  arch: x86_64
+  branch: Betazoid-b116-2.5-patchless
+  buildurl: 'http://morpheus.xyus.xyratex.com:8080/jenkins/job/reg-betazoid-2.5-patchless/SUITES=sanity,label=quartet/2/'
+  configuration: quartet
+  distr: SL61
+  executiontype: Integration
+  ofed: builtin
+  release: none
+  sessionstarttime: 1398756491
+  test_opts: ~
+  type: full
+groupname: sanity
+id: 56w
+killed: no
+log:
+  /shared/fremont/test-results/reg-betazoid-2.5-patchless/2//kvm9-quartet-2/xperior-workdir/sanity/56w.memory-info.log: 56w.memory-info.log
+  /shared/fremont/test-results/reg-betazoid-2.5-patchless/2//kvm9-quartet-2/xperior-workdir/sanity/56w.mount-info.log: 56w.mount-info.log
+  console.fre905: 56w.console.fre905.log
+  console.fre906: 56w.console.fre906.log
+  console.fre907: 56w.console.fre907.log
+  console.fre908: 56w.console.fre908.log
+  stderr: 56w.stderr.log
+  stdout: 56w.stdout.log
+masterclient:
+  id: client1
+  master: yes
+  node: fre907
+  type: client
+masterhostdown: no
+messages: ''
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+result: 'ok 1 '
+result_code: 0
+roles: StoreConsole GetDiagnostics StacktraceGenerator
+schema: data/schemas/testds.yaml
+script: sanity.sh
+starttime: 1398767958
+status: passed
+status_code: 0
+tags: functional
+timeout: 300

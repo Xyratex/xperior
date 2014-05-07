@@ -1,0 +1,77 @@
+----------------- fre905 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1274804     793804     481000          0     349464     233556
+-/+ buffers/cache:     210784    1064020
+Swap:      1514488          0    1514488
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+rootfs                19150120   1588904  16588416   9% /
+udev                    607256       148    607108   1% /dev
+tmpfs                   637400         0    637400   0% /dev/shm
+/dev/vda1             19150120   1588904  16588416   9% /
+kvm9.xyus.xyratex.com:/storage/
+                     1067408384 124472320 888715264  13% /shared
+/dev/vdb                374872     21208    329464   7% /mnt/mds1
+
+
+
+----------------- fre906 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1274796     338736     936060          0      24272     213148
+-/+ buffers/cache:     101316    1173480
+Swap:      1514488          0    1514488
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+rootfs                19150120   1588604  16588716   9% /
+udev                    607252       152    607100   1% /dev
+tmpfs                   637396         0    637396   0% /dev/shm
+/dev/vda1             19150120   1588604  16588716   9% /
+kvm9.xyus.xyratex.com:/storage/
+                     1067408384 124472320 888715264  13% /shared
+/dev/vdb                688976     32940    621036   6% /mnt/ost1
+/dev/vdc                688976     32940    621036   6% /mnt/ost2
+
+
+
+----------------- fre907 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1274336     260976    1013360          0      32572      95512
+-/+ buffers/cache:     132892    1141444
+Swap:      2538488          0    2538488
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+rootfs                18142536   1844860  15376076  11% /
+devtmpfs                625860       144    625716   1% /dev
+tmpfs                   637168         0    637168   0% /dev/shm
+/dev/vda1             18142536   1844860  15376076  11% /
+kvm9.xyus.xyratex.com:/storage/
+                     1067408384 124472320 888715264  13% /shared
+fre905@tcp:/lustre     1377952     65880   1241944   6% /mnt/lustre
+
+
+
+----------------- fre908 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       1274336     193648    1080688          0      22104      84788
+-/+ buffers/cache:      86756    1187580
+Swap:      2538488          0    2538488
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+rootfs                18142536   1780572  15440364  11% /
+devtmpfs                625860       144    625716   1% /dev
+tmpfs                   637168         0    637168   0% /dev/shm
+/dev/vda1             18142536   1780572  15440364  11% /
+kvm9.xyus.xyratex.com:/storage/
+                     1067408384 124472320 888715264  13% /shared
+fre905@tcp:/lustre     1377952     65880   1241944   6% /mnt/lustre
+
+
+
