@@ -267,7 +267,7 @@ Tests:
     id: 90
   -
     id: 92
-    timeout: 600
+    timeout: 1200
 cleanup_max_time: -1
 dangerous: 'yes'
 description: Lustre replay-single tests
