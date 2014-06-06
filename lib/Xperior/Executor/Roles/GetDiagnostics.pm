@@ -67,6 +67,7 @@ after 'execute' => sub {
 
         my $res = $c->getFile( $td,
             $self->getNormalizedLogName('diagnostic.xml.'.$n->id));
+        $c->createSync("rm -f $td");
             if ($res == 0){
                 $self->registerLogFile('diagnostic.xml.'.$n->id,
                      $self->getNormalizedLogName

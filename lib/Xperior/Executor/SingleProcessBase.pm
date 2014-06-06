@@ -30,13 +30,13 @@
 
 =head1 NAME
 
-Xperior::Executor::SingleProcessBase - 
-    base module for control remote execution 
+Xperior::Executor::SingleProcessBase -
+    base module for control remote execution
 
 =head1 DESCRIPTION
 
 This is base module for control remote execution of single process. Reused
- in several other modules which override functions. 
+ in several other modules which override functions.
 Inherited fom L<Xperior::Executor::Base>
 
 =head1 METHODS
@@ -78,7 +78,7 @@ When remote process not found observation stopped and execution status calculate
 
 sub execute {
     my $self    = shift;
-    my $mclient = $self->_getMasterClient;
+    my $mclient = $self->_getMasterClient();
 
     #saving env data
     $self->addYE( 'masterclient', $mclient );
@@ -91,7 +91,7 @@ sub execute {
 
     #get remote processor
     my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
-    my $testproc   = $mclientobj->getRemoteConnector;
+    my $testproc   = $mclientobj->getRemoteConnector();
     unless ( defined($testproc) ) {
         ERROR 'Master client obj is:' . Dumper $mclientobj;
         confess "SSH to master client is undef";
@@ -234,7 +234,12 @@ sub execute {
 
     #$self->write();
     #return $self->tap();
+    $self->cleanup();
     return;
+}
+
+sub cleanup {
+    my $self = shift;
 }
 
 sub getReason {

@@ -30,7 +30,7 @@
 
 =head1 NAME
 
-Xperior::Executor::Roles::StoreSyslog - Role define harvesting info from 
+Xperior::Executor::Roles::StoreSyslog - Role define harvesting info from
 master client host
 
 =cut
@@ -82,6 +82,7 @@ after   'execute' => sub{
             my $c = $self->ison->{$id};
             $c->kill(1);
             my $res = $c->getFile($tlog, $logfile);
+            $c->createSync("rm -f $tlog");
             if ($res == 0){
                 $self->registerLogFile($logfile,$logfile);
                 $self->processSystemLog($c,$logfile);

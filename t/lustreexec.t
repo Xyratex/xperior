@@ -40,6 +40,7 @@ use File::Slurp;
 use Xperior::Test;
 use Xperior::Executor::LustreTests;
 use Xperior::Executor::LustreSingleTests;
+use Xperior::Executor::Roles::StoreSyslog;
 
 my %options = (
     testdir => 't/testcfgs/lustre/',
@@ -93,7 +94,7 @@ test
 
     DEBUG "CLNT OPT:" . $exe->clntopt;
     is( $exe->clntopt,
-        'CLIENTS=lclient RCLIENTS="mds"',        
+        'CLIENTS=lclient RCLIENTS="mds"',
         'Check Clients options' );
   };
 
@@ -122,11 +123,11 @@ qr/Cannot list lctl logs files\[\/tmp\/test_logs\/1365001494\/replay-dual.test_9
     my $teststr2 = 'xperior test file 2';
     my $file3    = '/tmp/recovery-small..1.1375655932.log';
     my $teststr3 = 'xperior test file 3';
-    
+
     write_file( $file1, $teststr1 ) or confess "Can't create $file1: $!";
     write_file( $file2, $teststr2 ) or confess "Can't create $file2: $!";
     write_file( $file3, $teststr3 ) or confess "Can't create $file3: $!";
-    
+
     remove_tree('/tmp/test_wd');
     make_path('/tmp/test_wd/sanity/');
     $exe->init( $test, \%options, $cfg );

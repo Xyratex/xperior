@@ -73,6 +73,7 @@ after 'execute' => sub {
             my $remotelogfile = "/tmp/lctl_dk.out." . time ();
             $c->createSync($self->lctldkcmd . " > $remotelogfile", 120);
             $self->_getLog($c, $remotelogfile, 'lctl_dk.' . $n->ip());
+            $c->createSync("rm -f $remotelogfile");
             INFO("Call 'sysrq' commands on node [" . $n->ip() . "]");
             $c->createSync($self->sysrqtcmd(), $self->sysrqcmd_timeout());
             $c->createSync($self->sysrqmcmd(), $self->sysrqcmd_timeout());

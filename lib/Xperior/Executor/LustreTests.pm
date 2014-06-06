@@ -70,6 +70,14 @@ after 'init' => sub {
     $self->reason('');
 };
 
+after 'cleanup' => sub {
+    my $self = shift;
+    my $mclient = $self->_getMasterClient();
+    my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
+    my $testproc   = $mclientobj->getRemoteConnector();
+    $testproc->createSync('rm -rf /tmp/test_logs')
+};
+
 before 'execute' => sub {
     my $self = shift;
     my $lres = '';
@@ -241,7 +249,7 @@ Return values:
     Xperior::Executor::SingleProcessBase::PASSED
     Xperior::Executor::SingleProcessBase::SKIPPED
     Xperior::Executor::SingleProcessBase::FAILED
-    Xperior::Executor::SingleProcessBase::NOTSET -no result set based 
+    Xperior::Executor::SingleProcessBase::NOTSET -no result set based
                                                   on parsing, failed too
 
 Also failure reason accessible (if defined) via call C<getReason>.
