@@ -33,7 +33,7 @@ expected_time: 360
 groupname: flock-nfs
 script: flock-nfs.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: nfs lock flock
 timeout: 360

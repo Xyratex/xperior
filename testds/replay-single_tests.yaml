@@ -275,7 +275,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 10
 groupname: replay-single
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: functional
 timeout: 300

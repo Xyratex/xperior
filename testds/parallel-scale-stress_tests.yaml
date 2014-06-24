@@ -40,7 +40,7 @@ expected_time: 7200
 groupname: parallel-scale-stress
 script: parallel-scale.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+roles: StoreStat StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: scale
 timeout: 7200

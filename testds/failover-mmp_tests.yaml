@@ -46,7 +46,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 60
 groupname: mmp
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: functional failover
 timeout: 300

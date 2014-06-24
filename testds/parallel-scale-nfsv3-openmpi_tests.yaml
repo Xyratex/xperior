@@ -38,7 +38,7 @@ expected_time: 1200
 groupname: parallel-scale-nfsv3-openmpi
 script: parallel-scale-nfs.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: nfs openmpi scale
 timeout: 1200

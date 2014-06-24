@@ -734,7 +734,7 @@ Tests:
     id: 128
   -
     id: 129
-    roles: StoreSyslog StoreConsole GetDiagnostics LustreClientStatus
+    roles: StoreStat StoreSyslog StoreConsole GetDiagnostics LustreClientStatus
   -
     id: 130a
   -
@@ -899,7 +899,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 10
 groupname: sanity
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreConsole GetDiagnostics StacktraceGenerator
+roles: StoreStat StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: functional
 timeout: 300

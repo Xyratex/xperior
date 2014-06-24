@@ -38,7 +38,7 @@ expected_time: 1200
 groupname: parallel-scale-nfsv4
 script: parallel-scale-nfs.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics
+roles: StoreStat StartMpdbootBefore StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: nfs
 timeout: 1200

@@ -46,7 +46,7 @@ description: Lustre recovery mds scale tests
 executor: Xperior::Executor::LustreTests
 groupname: recovery-mds-scale
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: stress failover
 timeout: 36060

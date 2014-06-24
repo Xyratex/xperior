@@ -34,7 +34,7 @@ expected_time: 2000
 groupname: large-scale-openmpi
 script: large-scale.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: scale
 timeout: 2000

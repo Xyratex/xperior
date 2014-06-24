@@ -78,64 +78,6 @@ after 'cleanup' => sub {
     $testproc->createSync('rm -rf /tmp/test_logs')
 };
 
-before 'execute' => sub {
-    my $self = shift;
-    my $lres = '';
-    my $mres = '';
-    foreach my $node ( @{ $self->env->{'nodes'} } ) {
-        my $c     = $node->getRemoteConnector;
-        my $lfs_i = $c->createSync('lfs df -i');
-        my $lctl_dl = $c->createSync('lctl dl');
-        my $lfs   = $c->createSync('lfs df');
-        my $mount = $c->createSync('mount | grep lustre');
-        my $lustre_rpm = $c->createSync('rpm -qi lustre');
-        my $client_rpm = $c->createSync('rpm -qi lustre-client');
-        my $free  = $c->createSync('free');
-        my $df    = $c->createSync('df');
-        my $node  = $node->{'ip'};
-        my $ldata = <<DATA
------------------ $node -----------------
-<lfs df -i>
-$lfs_i
-<lfs df>
-$lfs
-<lctl dl>
-$lctl_dl
-<mount | grep lustre>
-$mount
-<lustre>
-$lustre_rpm
-<lustre-client>
-$client_rpm
-DATA
-          ;
-        my $mdata = <<DATA
------------------ $node -----------------
-<free>
-$free
-<df>
-$df
-
-DATA
-          ;
-
-        $lres .= "$ldata\n";
-        $mres .= "$mdata\n";
-    }
-    $self->_saveStatusLog( 'mount-info',  $lres );
-    $self->_saveStatusLog( 'memory-info', $mres );
-};
-
-sub _saveStatusLog {
-    my ( $self, $name, $res ) = @_;
-    my $logfile = $self->getNormalizedLogName($name);
-    if ( defined( write_file( $logfile, { err_mode => 'carp' }, $res ) ) ) {
-        $self->registerLogFile( $logfile, $logfile );
-    }
-    else {
-        $self->addMessage("Cannot create log file [$logfile ]: $res");
-    }
-}
 
 =over 12
 

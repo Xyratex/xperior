@@ -120,7 +120,7 @@ description: Lustre replay-vbr failover tests
 executor: Xperior::Executor::LustreTests
 groupname: replay-vbr
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole  GetDiagnostics
+roles: StoreStat StoreSyslog StoreConsole  GetDiagnostics
 schema: data/schemas/testds.yaml
 tags: functional failover
 timeout: 900

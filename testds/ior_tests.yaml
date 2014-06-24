@@ -36,7 +36,7 @@ expected_time: 60
 groupname: ior
 iorcmd: /usr/bin/IOR -a POSIX -i 5 -C -g -v -e -w -r -b 10m -t 4k -o @mount_point@/@test_file@
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: LustreClientStatus
+roles: StoreStat LustreClientStatus
 schema: data/schemas/testds.yaml
 tags: benchmark
 timeout: 300

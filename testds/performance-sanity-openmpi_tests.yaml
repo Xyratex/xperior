@@ -41,7 +41,7 @@ expected_time: 1200
 groupname: performance-sanity-openmpi
 script: performance-sanity.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: mdsrate scale
 timeout: 1200
