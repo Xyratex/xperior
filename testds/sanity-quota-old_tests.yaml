@@ -31,7 +31,7 @@ dangerous: 'yes'
 description: Lustre sanity-quota tests
 executor: Xperior::Executor::LustreTests
 expected_time: 10
-groupname: sanity-quota
+groupname: sanity-quota-old
 script: sanity-quota.sh
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreStat StoreSyslog StoreConsole StacktraceGenerator
