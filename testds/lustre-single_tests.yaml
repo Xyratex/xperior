@@ -50,7 +50,7 @@ executor: Xperior::Executor::LustreTests
 expected_time: 10
 groupname: lustre-single
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreStat StoreSyslog StoreConsole  GetDiagnostics StacktraceGenerator
+roles: StoreStat StartMpdbootBefore StoreSyslog StoreConsole  GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: functional
 timeout: 600
