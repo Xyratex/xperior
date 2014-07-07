@@ -33,10 +33,10 @@ cleanup_max_time: -1
 dangerous: 'yes'
 description: Lustre multiple mount protection (MMP) tests
 executor: Xperior::Executor::LustreTests
-expected_time: 60
+expected_time: 360
 groupname: mmp
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
-roles: StoreStat StoreSyslog StoreConsole GetDiagnostics
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: functional
-timeout: 300
+timeout: 360
