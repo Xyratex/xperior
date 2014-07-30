@@ -106,7 +106,11 @@ sub _validate_doc_data {
     my ($data) = @_;
     my $starttime = int( $data->{extoptions}->{sessionstarttime} );
     $data->{extoptions}->{sessionstarttime} = $starttime;
+
+    #move data to the root level for better performance
     $data->{sessionstarttime} = $starttime;
+    $data->{cli_branch_name} = $data->{extoptions}->{cli_branch};
+    $data->{srv_branch_name} = $data->{extoptions}->{srv_branch};
 
     # replacing . to _pnt_ in keys
     _iterate_hash($data);
