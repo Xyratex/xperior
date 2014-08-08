@@ -108,8 +108,13 @@ Tests:
     id: 32
   -
     id: 32a
+    timeout: 500
   -
     id: 32b
+    timeout: 500
+  -
+    id: 32d
+    timeout: 500
   -
     id: 33a
   -
