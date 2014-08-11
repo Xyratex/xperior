@@ -35,7 +35,7 @@ Xperior
 
 =head1 SYNOPSIS
 
-    xper --action <run|list|generatehtml|generatejjunit> [--continue] [<options>]
+    xper --action <run|list|generate-html|generate-jjunit> [--continue] [<options>]
 
 =head1 DESCRIPTION
 
@@ -48,7 +48,7 @@ collects logs and saves a report.
 
 =over 2
 
-=item --action=<run|list|generatejjunit|generatehtml>
+=item --action=<run|list|generate-jjunit|generate-html>
 
 =over 6
 
@@ -61,13 +61,13 @@ Execute tests selected in configuration and filters.
 Print list of tests which will be ready to execute considering configuration
 and filters.
 
-=item generatehtml
+=item generate-html
 
 Generate html report based on exist workdir with execution results.
 
-=item generatejjunit
+=item generate-jjunit
 
-Generate Jenkins Junit report based on exist workdir with execution results.
+Generate Jenkins Junit report based on existing workdir with execution results.
 Option --jjunit must be set also.
 
 =back
@@ -386,8 +386,8 @@ else {
 if((defined $action) &&($action ne '') ){
     unless (($action eq 'run')
     || ( $action eq 'list')
-    || ( $action eq 'generatejjunit')
-    || ( $action eq 'generatehtml')){
+    || ( $action eq 'generate-jjunit')
+    || ( $action eq 'generate-html')){
         print "Incorrect action set : $action\n";
         pod2usage(3);
     }
@@ -397,7 +397,7 @@ if((defined $action) &&($action ne '') ){
 
 if (-e $configfile) {
     INFO "Configuration file is [$configfile]";
-} elsif ( $action eq 'generatehtml'){
+} elsif ( $action eq 'generate-html'){
     INFO "Configuration file is not needed in this mode";
 }else{
     confess "Cannot find configuration file [$configfile]" ;
@@ -405,7 +405,7 @@ if (-e $configfile) {
 
 if (-d $testdir) {
     INFO "Test directory [$testdir] found";
-} elsif ( $action eq 'generatehtml'){
+} elsif ( $action eq 'generate-html'){
     INFO "Test directory is not needed in this mode";
 }else{
     confess "Cannot find test directory [$testdir]" ;

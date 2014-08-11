@@ -107,8 +107,6 @@ sub generateJunit {
             }
         }
 
-        $obj{'system-out'}{'content'} = $stdout;
-        $obj{'system-err'}{'content'} = $stderr;
         $obj{'name'}      = 'test';
         $obj{'classname'} = $testclass . '.' . $yaml->{'id'};
         if(defined ($yaml->{'endtime'}) ){
@@ -121,12 +119,30 @@ sub generateJunit {
         make_path($adir);
         #this is hack
         #correct way is getting filenames from yaml file
+        $stdout = $stdout."\n---jenkins metadata---\n";
+
         foreach my $lf ( values %{ $yaml->{'log'} } ) {
             #ignore coverage
             next if $lf =~ m/coverage/;
             runEx( "cp $wd/$testclass/$lf $adir", 0 );
+            # see details in
+            # http://kohsuke.org/?s=junit+attachment
+            # https://wiki.jenkins-ci.org/display/
+            # JENKINS/JUnit+Attachments+Plugin
+            $stdout = $stdout. '[[ATTACHMENT|'.$adir.'/'.$lf."]]\n";
         }
+
         runEx( "cp $file    $adir", 1 );
+        # see details
+        #https://wiki.jenkins-ci.org/display/JENKINS/Measurement+Plots+Plugin
+        #http://stackoverflow.com/questions/7559973/jenkins-with-the-
+        #measurement-plots-plugin-does-not-plot-measurements
+        $obj{'system-out'}{'content'} =
+            $stdout.
+            "<measurement><name>Time</name>".
+            "<value>".$obj{'time'}."</value></measurement>";
+        $obj{'system-err'}{'content'} = $stderr;
+
 
         #$yaml->{'executor'};
         if ( $yaml->{'status'} eq 'passed' ) {

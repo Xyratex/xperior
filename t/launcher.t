@@ -58,7 +58,7 @@ test
     my $out;
     eval {
     $out =
-    `bin/xper --action=generatejjunit  $cfg --jjunit=/tmp/test_jjunit --debug`;
+    `bin/xper --action=generate-jjunit  $cfg --jjunit=/tmp/test_jjunit --debug`;
     };
     my $fail = ${^CHILD_ERROR_NATIVE};
     isnt( 0, $fail,
@@ -66,7 +66,7 @@ test
 
     eval {
         $out =
-        `bin/xper --action=generatejjunit $wd $cfg --debug`;
+        `bin/xper --action=generate-jjunit $wd $cfg --debug`;
         };
     $fail = ${^CHILD_ERROR_NATIVE};
     isnt( 0, $fail,
@@ -74,7 +74,7 @@ test
 
     eval {
         $out =
-    `bin/xper $wd $cfg --action=generatejjunit --jjunit=/tmp/test_jjunit --debug`;
+    `bin/xper $wd $cfg --action=generate-jjunit --jjunit=/tmp/test_jjunit --debug`;
     };
     my $pass = ${^CHILD_ERROR_NATIVE};
     is( 0, $pass, 'Check correct jjunit cmd' );
@@ -99,12 +99,12 @@ test
     remove_tree('/tmp/test_wd');
     dircopy( 't/checkhtmldata', '/tmp/test_wd/' );
     my $out;
-    eval { $out = `bin/xper $cfg --action=generatehtml --debug`; };
+    eval { $out = `bin/xper $cfg --action=generate-html --debug`; };
     my $fail = ${^CHILD_ERROR_NATIVE};
     isnt( 0, $fail, 'Check incorrect cmd' );
     eval {
         $out =
-          `bin/xper $wd $cfg  --action=generatehtml --debug`;
+          `bin/xper $wd $cfg  --action=generate-html --debug`;
     };
     my $pass = ${^CHILD_ERROR_NATIVE};
     is( 0, $pass, 'Check correct cmd' );

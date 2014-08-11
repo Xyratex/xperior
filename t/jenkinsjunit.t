@@ -91,7 +91,7 @@ test
 };
 
 test
-  plan      => 7,
+  plan      => 10,
   fSkipChecks => sub {
     my $wd  = '--workdir=$wd';
     my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
@@ -112,8 +112,15 @@ test
     ok($data =~ m/skipped="1"/, 'Check xml N2' );
     ok($data =~ m/<system-err><\/system-err>/,
          'Check skip xml N4' );
-    ok($data =~ m/<system-out><\/system-out>/,
+    ok($data =~ m/<system-out>/,
          'Check skip xml N5' );
+    ok($data =~ m/<\/system-out>/,
+         'Check skip xml N6' );
+    ok($data =~ m/measurement/,
+         'Check skip xml N7' );
+    ok($data =~ m/value/,
+         'Check skip xml N8' );
+
 };
 
 test
@@ -133,7 +140,7 @@ test
     my $data = read_file("$resdir/junittest.junit", err_mode => 'carp' );
     ok((scalar(split(/\n/,$data) >10 )), 'Check size');
     ok($data =~ m/d0\.sanity\/d56w\/\.\?\:VOLATILE\:\:/,
-         'Check skip xml N5' );
+         'Check skip xml N5 reg' );
 };
 
 jenkinsjunit->run_tests;

@@ -219,12 +219,12 @@ sub run {
     $self->{'options'} = $options;
 
     my $action = $self->options->{'action'};
-    if ($action eq 'generatehtml') {
+    if ($action eq 'generate-html') {
         $self->_reportHtml();
         INFO "HTML report generation completed";
         exit 0;
     }
-    if ($action eq 'generatejjunit') {
+    if ($action eq 'generate-jjunit') {
         $self->_reportJJunit();
         INFO "Jenkins Junit generation completed";
         exit 0;
