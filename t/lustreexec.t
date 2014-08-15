@@ -70,7 +70,7 @@ shutdown _shutdown => sub { };
 
 test
   plan         => 3,
-  eCheckSimple => sub {
+  dCheckSimple => sub {
     my $testcore = Xperior::Core->new();
     $testcore->options( \%options );
     my $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg.yaml');
@@ -82,7 +82,7 @@ test
     $exe->_prepareEnvOpts;
     DEBUG "MDS OPT:" . $exe->mdsopt;
     is( $exe->mdsopt,
-        'mds1_HOST=mds MDSDEV1=/dev/loop0 mds_HOST=mds MDSDEV=/dev/loop0 MDSCOUNT=1',
+        'NETTYPE=tcp mds1_HOST=mds MDSDEV1=/dev/loop0 mds_HOST=mds MDSDEV=/dev/loop0 MDSCOUNT=1',
         'Check MDS OPT' );
 
     DEBUG "OSS OPT:" . $exe->ossopt;
@@ -99,8 +99,52 @@ test
   };
 
 test
+  plan         => 1,
+  aeCheckIB => sub {
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/testsystemibcfg.yaml');
+
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $exe = Xperior::Executor::LustreTests->new();
+    $exe->init( $test, \%options, $cfg );
+    $exe->_prepareEnvOpts;
+    DEBUG "MDS OPT:" . $exe->mdsopt;
+    is( $exe->mdsopt, 'NETTYPE=o2ib mds1_HOST=mds MDSDEV1=/dev/loop0 mds_HOST=mds MDSDEV=/dev/loop0 MDSCOUNT=1',
+          'Check MDS OPT for o2ib nettype' );
+  };
+
+test
+  plan         => 3,
+  eCheckClientOnly => sub {
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/testsystemclnonlycfg.yaml');
+
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $exe = Xperior::Executor::LustreTests->new();
+    $exe->init( $test, \%options, $cfg );
+    $exe->_prepareEnvOpts;
+    DEBUG "MDS OPT:" . $exe->mdsopt;
+    is( $exe->mdsopt, 'MGSNID=192.168.3.12@tcp:192.168.3.13@tcp:/testfs CLIENTONLY=1',
+          'Check MDS OPT for client only' );
+
+    DEBUG "OSS OPT:" . $exe->ossopt;
+    is($exe->ossopt,' ','Check OSS OPT for client only');
+
+    DEBUG "CLNT OPT:" . $exe->clntopt;
+    is( $exe->clntopt,
+        'CLIENTS=lclient RCLIENTS="mds"',
+        'Check Clients options' );
+  };
+
+
+
+test
   plan                   => 8,
-  aaafCheckStdOutLogParsing => sub {
+  gCheckStdOutLogParsing => sub {
     my $exe = Xperior::Executor::LustreTests->new();
     Xperior::Executor::Roles::StoreSyslog->meta->apply($exe);
     my $test = Xperior::Test->new;
@@ -237,8 +281,11 @@ test
     is( $exe->yaml->{'executor'},
         'Xperior::Executor::LustreTests',
         'Check result' );
+    SKIP: {
+      skip 'should be moved to test for storestat role';
     is( -e '/tmp/test_wd/sanity/1a.mount-info.log',
         1, 'Check that mountinfo is saved' );
+    }
   };
 
 lustreexec->run_tests;

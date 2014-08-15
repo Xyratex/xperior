@@ -621,25 +621,32 @@ sub _reportHtml {
 
             my $yaml = LoadFile("$wd/$suite/$tfile") or confess $!;
             my $message = '';
+            my $failreason = $yaml->{'fail_reason'} || '';
+            my $killed     = $yaml->{'killed'}        || '';
+            my $timeout    = $yaml->{'timeout'}       || '';
             if ($yaml->{'status_code'} == 0) {
-                $message = "ok $i # id=" . $yaml->{id};
+                $failreason = $message = "ok $i # id=" . $yaml->{id};
             }
             elsif ($yaml->{'status_code'} == 2) {
                 $message =
-                    "ok $i # skip # id=$yaml->{id} $yaml->{'fail_reason'}";
+                    "ok $i # skip # id=$yaml->{id} $failreason";
                 $yaml->{killed}    = 'no';
                 $yaml->{endtime}   = 0;
                 $yaml->{starttime} = 0;
             }
             else {
-                $message ="not ok $i # id=$yaml->{'id'} $yaml->{'fail_reason'}";
+                $message ="not ok $i # id=$yaml->{'id'} $failreason";
+            }
+            my $elapsedtime = '-1';
+            if(($yaml->{endtime}) and ($yaml->{starttime})){
+                $elapsedtime = $yaml->{endtime} - $yaml->{starttime};
             }
             $report =
                   "$report$message \n"
-                . "# killed  : $yaml->{killed} .  \n# timeout :$yaml->{timeout} \n"
-                . "\# elapsed time    :"
-                . ($yaml->{endtime} - $yaml->{starttime}) . "\n";
-            $etimes{$suite} = $yaml->{endtime} - $yaml->{starttime};
+                . "# killed  : $killed\n"
+                . "# timeout :$timeout \n"
+                . "# elapsed time    : $elapsedtime\n";
+            $etimes{$suite} = $elapsedtime;
             foreach my $lname (keys %{$yaml->{log}}) {
                 $report =
                       $report

@@ -81,7 +81,8 @@ after 'cleanup' => sub {
 
 =over 12
 
-=item * B<_prepareCommands> - generate command line for Lustre test based on L<configuration|XperiorUserGuide/"System descriptor"> and test descriptor.
+=item * B<_prepareCommands> - generate command line for Lustre test based on 
+L<configuration|XperiorUserGuide/"System descriptor"> and test descriptor.
 
 =back
 
@@ -273,49 +274,73 @@ sub _prepareEnvOpts {
     my @osss    = $self->env->getOSSs;
     my $clients = $self->env->getClients;
     my $c;
-    my @opt;
+    my @opt = ();
+    my $nettype='tcp';
+    if($self->env->cfg->{'nettype'}){
+        $nettype=$self->env->cfg->{'nettype'};
+    }
+    
+    if($self->env->cfg->{'mgsnid'}){
+        push @opt, 'MGSNID='.$self->env->cfg->{'mgsnid'};
+    }else{
+        DEBUG "No MSGNID defined, could be an reason for test failures";
+    }
 
-    @opt = ();
-    $c = 1;
-    foreach my $m (@mdss) {
-        my $host = $self->env->getNodeAddress( $m->{'node'} );
-        push @opt, "mds${c}_HOST=$host";
-        push @opt, "MDSDEV$c=$m->{device}"
-            if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+    if(defined($self->env->cfg->{'clientonly'}) 
+        && $self->env->cfg->{'clientonly'} == 1){
+        DEBUG "CLIENT ONLY mode selected";
+        if(not $self->env->cfg->{'mgsnid'}){
+            INFO "No MSGNID defined, could be an reason for test failures";
+        }
+        push @opt, "CLIENTONLY=1";
+        $self->mdsopt( join( ' ', @opt ) );
+        $self->ossopt(' ');
+    }else{
 
-        if ($c eq 1) { # lustre 1.8 legacy support
-            push @opt, "mds_HOST=$host";
-            push @opt, "MDSDEV=$m->{device}"
+        DEBUG "FULL FEATURED mode selected";
+        $c = 1;
+        push @opt, "NETTYPE=$nettype";
+        foreach my $m (@mdss) {
+            my $host = $self->env->getNodeAddress( $m->{'node'} );
+            push @opt, "mds${c}_HOST=$host";
+            push @opt, "MDSDEV$c=$m->{device}"
                 if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+            if ($c eq 1) { # lustre 1.8 legacy support
+                push @opt, "mds_HOST=$host";
+                push @opt, "MDSDEV=$m->{device}"
+                    if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+            }
+            if ($m->{'failover'}) {
+                my $failover = $self->env->getNodeAddress($m->{'failover'});
+                if((not $self->env->cfg->{'mgsnid'}) && ($c eq 1)){
+                    DEBUG "Construct MGSNID";
+                    push @opt, "MGSNID=$host\@$nettype:$failover\@$nettype"
+                }
+                push @opt, "mds${c}failover_HOST=$failover";
+                # lustre 1.8 legacy
+                push @opt, "mdsfailover_HOST=$failover" if ($c eq 1);
+            }
+            $c++;
         }
+        push @opt, "MDSCOUNT=" . scalar @mdss;
+        $self->mdsopt( join( ' ', @opt ) );
 
-        if ($m->{'failover'}) {
-            my $failover = $self->env->getNodeAddress($m->{'failover'});
-            push @opt, "MGSNID=$host\@tcp:$failover\@tcp" if ($c eq 1);
-            push @opt, "mds${c}failover_HOST=$failover";
-            # lustre 1.8 legacy
-            push @opt, "mdsfailover_HOST=$failover" if ($c eq 1);
+        @opt = ();
+        $c = 1;
+        foreach my $m (@osss) {
+            my $host = $self->env->getNodeAddress( $m->{'node'} );
+            push @opt, "ost${c}_HOST=$host";
+            push @opt, "OSTDEV$c=" . $m->{'device'}
+              if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+            if ($m->{'failover'}) {
+                my $failover = $self->env->getNodeAddress($m->{'failover'});
+                push @opt, "ost${c}failover_HOST=$failover";
+            }
+            $c++;
         }
-        $c++;
+        push @opt, "OSTCOUNT=" . scalar @osss;
+        $self->ossopt( join( ' ', @opt ) );
     }
-    push @opt, "MDSCOUNT=" . scalar @mdss;
-    $self->mdsopt( join( ' ', @opt ) );
-
-    @opt = ();
-    $c = 1;
-    foreach my $m (@osss) {
-        my $host = $self->env->getNodeAddress( $m->{'node'} );
-        push @opt, "ost${c}_HOST=$host";
-        push @opt, "OSTDEV$c=" . $m->{'device'}
-          if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
-        if ($m->{'failover'}) {
-            my $failover = $self->env->getNodeAddress($m->{'failover'});
-            push @opt, "ost${c}failover_HOST=$failover";
-        }
-        $c++;
-    }
-    push @opt, "OSTCOUNT=" . scalar @osss;
-    $self->ossopt( join( ' ', @opt ) );
 
     #include only master client for sanity suite
     $self->clntopt('CLIENTS=');

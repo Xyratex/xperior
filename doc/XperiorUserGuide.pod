@@ -159,18 +159,40 @@ One failover pair of one target combined mgs/mds node in active-passive mode.
 
 One failover pair of two target oss nodes in active-active mode.
 
+This configuration targeted to IB network
+
  ---
  Nodes:
    - id           : mgs-mds-1
      ip           : vmhost1
+     nodetype     : KVMNode
+     console      : /tmp/serial-vmhost1.log
+     kvmdomain    : vmhost1
+
    - id           : mgs-mds-2
      ip           : vmhost2
+     nodetype     : KVMNode
+     console      : /tmp/serial-vmhost2.log
+     kvmdomain    : vmhost2
+
    - id           : oss-1
      ip           : vmhost3
+     nodetype     : KVMNode
+     console      : /tmp/serial-vmhost3.log
+     kvmdomain    : vmhost3
+
    - id           : oss-2
      ip           : vmhost4
+     nodetype     : KVMNode
+     console      : /tmp/serial-vmhost4.log
+     kvmdomain    : vmhost4
+
    - id           : master-client
      ip           : vmhost5
+     nodetype     : KVMNode
+     console      : /tmp/serial-vmhost5.log
+     kvmdomain    : vmhost5
+
 
  LustreObjects:
    - id          : mdt1
@@ -197,9 +219,55 @@ One failover pair of two target oss nodes in active-active mode.
      master      : yes
 
  #Variables
+ nettype                 : o2ib
  client_mount_point      : /mnt/lustre
  benchmark_tests_file    : testfile
  tempdir                 : /tmp
+
+=item 3. Clientonly configuration example
+
+This configuration should be used for setups where only
+client available for actions, e.g. on ready clusters with HA
+
+---
+Nodes:
+
+   - id           : cng0
+     ip           : kvm1n1c006
+     ctrlproto    : ssh
+     user         : root
+     nodetype     : Basic
+
+   - id           : cng1
+     ip           : kvm1n1c007
+     ctrlproto    : ssh
+     user         : root
+     nodetype     : Basic
+
+
+LustreObjects:
+
+
+   - id          : client
+     node        : cng0
+     type        : client
+     master      : yes
+
+   - id          : client
+     node        : cng1
+     type        : client
+
+
+
+
+#Variables
+mgsnid        : 192.168.3.12@tcp:192.168.3.13@tcp:/testfs
+clientonly              : 1
+client_mount_point      : /mnt/testfs
+benchmark_tests_file    : testfile
+tempdir                 : /
+#/tmp/
+
 
 =back
 

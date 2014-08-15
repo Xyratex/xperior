@@ -148,8 +148,33 @@ sub getMasterClient{
     return undef;
 }
 
+=over 12
 
-#object functions
+=item * B<getLustreNodeAddress> - retrun lustre ip address(B<lustreip>) if 
+defined or common ip.  See also B<getNodeAddress>
+
+=back
+
+=cut
+
+sub getLustreNodeAddress{
+    my ($self, $id) = @_;
+    foreach my $n (@{$self->nodes}){
+        return $n->lustreip 
+            if(($n->id eq $id)and
+                (defined($n->lustreip)));
+        return $n->ip    if( $n->id eq $id);
+    }
+    return undef;
+}
+
+=over 12
+
+=item * B<getNodeAddress> - return common ip address which must be defined for node.
+
+=back
+
+=cut
 
 sub getNodeAddress{
     my ($self, $id) = @_;

@@ -1,0 +1,63 @@
+---
+Nodes:
+   - id          : mds1 
+     ip          : mds    
+     ctrlproto   : ssh
+     user        : root
+
+   - id           : oss1
+#     ip           : 192.168.200.110
+     ip           : 192.168.200.102    
+     ctrlproto    : ssh
+     user         : root
+
+   - id          : oss2
+     ip          : 192.168.200.102
+     user        : root
+
+   - id           : client1
+     ip           : lclient 
+#     ip           : 192.168.200.150
+     ctrlproto    : ssh
+     user         : root 
+
+   - id           : client2
+     ip           : mds 
+#    ip           : 192.168.200.102
+     ctrlproto    : ssh
+     user         : root
+
+
+
+
+LustreObjects:
+   - id          : mds1 
+     device      : /dev/loop0 
+     node        : mds1
+     type        : mds
+   
+   - id          : oos1 
+     device      : /dev/loop1 
+     node        : oss1
+     type        : oss
+
+   - id          : oos2 
+     device      : /dev/loop2 
+     node        : oss2
+     type        : oss
+
+   - id          : client1
+     node        : client1
+     type        : client
+     master      : yes
+
+   - id          : client2
+     node        : client2
+     type        : client
+
+#Variables
+nettype                 : o2ib
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile
+tempdir                 : /tmp/
+

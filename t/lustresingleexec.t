@@ -67,7 +67,7 @@ my @test_cases = (
         },
         expected => {
             result_code => 0,
-            fail_reason => undef,
+            fail_reason => '',
         },
     },
     {

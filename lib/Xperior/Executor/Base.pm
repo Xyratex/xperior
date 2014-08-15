@@ -89,7 +89,7 @@ sub init{
     $self->yaml->{'status_code'} = -1;
     $self->yaml->{'messages'}    = '';
     $self->yaml->{'schema'}    = $YVERSION;
-
+    $self->yaml->{'fail_reason'} = '';
 
     $self->steptimeout(5);
 

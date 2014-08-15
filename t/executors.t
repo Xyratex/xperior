@@ -80,7 +80,7 @@ test plan => 2, dCheckExternalLog    => sub {
     ok(-e $file);
     $exe->registerLogFile('test1',$file);
     $exe->pass;
-    my $res = $exe->tap;
+    my $res = $exe->tap();
     DEBUG $res;
     my $exp = <<OUT
 TAP version 13
@@ -90,6 +90,7 @@ ok 1
    datetime: ~
    extensions:
      executor: Xperior::Executor::Noop
+     fail_reason: ''
      groupname: sanity
      id: 1
      inf: more info
