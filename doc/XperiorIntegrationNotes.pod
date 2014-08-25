@@ -29,7 +29,7 @@
 
 =head1 Xperior integration notes
 
-One of main purpose of developing Xperior was simplifying integration with CIT
+One of the main purpose of Xperior development was simplifying integration with CIT
 and other test automation tools.
 
 =head2 Integration with L<Jenkins|http://jenkins-ci.org/>

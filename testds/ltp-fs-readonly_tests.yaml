@@ -1,0 +1,12 @@
+---
+Tests:
+  - cmd: ROBind $LTPROOT/testscripts/test_robind.sh
+    id: ROBind
+description: LTP ltp-fs-readonly tests
+executor: Xperior::Executor::LTPTests
+groupname: ltp-fs-readonly
+reference: http://ltp.sourceforge.net/
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+timeout: 300
+tags: functional
+

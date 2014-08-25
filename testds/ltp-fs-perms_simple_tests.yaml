@@ -1,0 +1,45 @@
+---
+Tests:
+  - cmd: fs_perms01 fs_perms 005 99 99 12 100 x 0
+    id: fs_perms01
+  - cmd: fs_perms02 fs_perms 050 99 99 200 99 x 0
+    id: fs_perms02
+  - cmd: fs_perms03 fs_perms 500 99 99 99 500 x 0
+    id: fs_perms03
+  - cmd: fs_perms04 fs_perms 002 99 99 12 100 w 0
+    id: fs_perms04
+  - cmd: fs_perms05 fs_perms 020 99 99 200 99 w 0
+    id: fs_perms05
+  - cmd: fs_perms06 fs_perms 200 99 99 99 500 w 0
+    id: fs_perms06
+  - cmd: fs_perms07 fs_perms 004 99 99 12 100 r 0
+    id: fs_perms07
+  - cmd: fs_perms08 fs_perms 040 99 99 200 99 r 0
+    id: fs_perms08
+  - cmd: fs_perms09 fs_perms 400 99 99 99 500 r 0
+    id: fs_perms09
+  - cmd: fs_perms10 fs_perms 000 99 99 99 99  r 1
+    id: fs_perms10
+  - cmd: fs_perms11 fs_perms 000 99 99 99 99  w 1
+    id: fs_perms11
+  - cmd: fs_perms12 fs_perms 000 99 99 99 99  x 1
+    id: fs_perms12
+  - cmd: fs_perms13 fs_perms 010 99 99 99 500 x 1
+    id: fs_perms13
+  - cmd: fs_perms14 fs_perms 100 99 99 200 99 x 1
+    id: fs_perms14
+  - cmd: fs_perms15 fs_perms 020 99 99 99 500 w 1
+    id: fs_perms15
+  - cmd: fs_perms16 fs_perms 200 99 99 200 99 w 1
+    id: fs_perms16
+  - cmd: fs_perms17 fs_perms 040 99 99 99 500 r 1
+    id: fs_perms17
+  - cmd: fs_perms18 fs_perms 400 99 99 200 99 r 1
+    id: fs_perms18
+description: LTP ltp-fs-perms_simple tests
+executor: Xperior::Executor::LTPTests
+groupname: ltp-fs-perms_simple
+reference: http://ltp.sourceforge.net/
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+timeout: 300
+tags: functional

@@ -65,7 +65,11 @@ and Lustre one-node cluster in virtual machine (B<lnode>)>
 I<This setup should not be used for regular execution,
 see L<XperiorIntegrationNotes> for more details>
 
+I<For LTP specific info test see  L<Xperior::Executor::LTPTests> >
+
+
 =over 12
+
 
 =item 1. Nodes preparation
 

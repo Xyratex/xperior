@@ -100,4 +100,5 @@ LustreObjects:
 client_mount_point      : /mnt/lustre
 benchmark_tests_file    : testfile
 tempdir                 : /
+ltp_root_dir            : /opt/ltp
 #/tmp/

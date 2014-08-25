@@ -31,21 +31,60 @@
 
 =head1 NAME
 
-xxx.pl
+gentests.pl
 
 =head1 SYNOPSIS
 
- xxxl --dir <directory>  [<options>]
+ gentests.pl --testds <directory> --groupname <groupname> --script <path to script>
+ --tmpl <path to template> --fw <lustre|ltp>
 
 =head1 DESCRIPTION
 
-Simple program 
+The program generates Xperior test descriptor based on external frameworks
+scripts and templates (not ready  for LTP, TBD).
+
+On first step  list of tests, which are defined in test framework script
+via parsing this script,  is generated .
+
+On second step test group and test options are collected from template and applied
+for found tests  from script.
+
+Template is partially filled test descriptor especially for test which needs specific
+parameters, .e.g. long timeout.
 
 =head1 OPTIONS
 
 =over 2
 
-=item --dir
+=item --testds
+
+Path to directory where store new file
+
+=item --groupname
+
+Name of test group for new tests
+
+=item --script
+
+Path to target test file, e.g. sanity.sh
+
+=item --tmpl
+
+Path to template for test group, e.g. previously customized test decscriptor.
+
+=item --fw
+
+Define which which type of script parsing should be used. Now are
+supported B<lustre> (for lustre test-framework.sh based tests) and
+B<ltp> for LTP tests.
+
+=item --help
+
+Print this message
+
+=item --man
+
+Help in man way
 
 =back
 
@@ -61,13 +100,22 @@ use Log::Log4perl qw(:easy);
 use YAML qw "Bless LoadFile Load Dump DumpFile";
 use Carp;
 use Pod::Usage;
+use Cwd;
+
+my $XPERIORBASEDIR;
+BEGIN {
+
+    $XPERIORBASEDIR = dirname(Cwd::abs_path($PROGRAM_NAME));
+    push @INC, "$XPERIORBASEDIR/../lib";
+
+};
 use Compat::LustreTests;
-#use Compat::LTPTests;
+use Compat::LTPTests;
 Log::Log4perl->easy_init( { level => $DEBUG } );
 my $nopts;
 $nopts = 1 unless ( $ARGV[0] );
 
-my ($testds, $groupname,  $script, $tmpl, $fw, $helpflag, $manflag, $dir );
+my ($testds, $groupname,  $script, $tmpl, $fw, $helpflag, $manflag,);
 
 GetOptions(
     "testds:s"     => \$testds,
@@ -85,13 +133,13 @@ pod2usage( -verbose => 2 ) if ($manflag);
 
 my $content;
 if($fw eq 'ltp'){
-    #$content = newLTPSuite( 'groupname'=> $groupname, 'cmdfile' => $script);
+    #TODO implement template usage for ltp
+    $content = newLTPSuite( 'groupname'=> $groupname, 'cmdfile' => $script);
 }elsif($fw eq 'lustre'){
     $content = Compat::LustreTests::newSuite(
                             name    => $groupname, 
                             script  => $script,
                             default => $tmpl);
-    
 }else{
     confess "Support for framework [$fw] is not implemeted"; 
 }

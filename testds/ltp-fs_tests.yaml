@@ -1,0 +1,129 @@
+---
+Tests:
+  - cmd: gf01 growfiles -W gf01 -b -e 1 -u -i 0 -L 20 -w -C 1 -l -I r -T 10 -f glseek20 -S 2 -d $TMPDIR
+    id: gf01
+  - cmd: gf02 growfiles -W gf02 -b -e 1 -L 10 -i 100 -I p -S 2 -u -f gf03_ -d $TMPDIR
+    id: gf02
+  - cmd: gf03 growfiles -W gf03 -b -e 1 -g 1 -i 1 -S 150 -u -f gf05_ -d $TMPDIR
+    id: gf03
+  - cmd: gf04 growfiles -W gf04 -b -e 1 -g 4090 -i 500 -t 39000 -u -f gf06_ -d $TMPDIR
+    id: gf04
+  - cmd: gf05 growfiles -W gf05 -b -e 1 -g 5000 -i 500 -t 49900 -T10 -c9 -I p -u -f gf07_ -d $TMPDIR
+    id: gf05
+  - cmd: gf06 growfiles -W gf06 -b -e 1 -u -r 1-5000 -R 0--1 -i 0 -L 30 -C 1 -f g_rand10 -S 2 -d $TMPDIR
+    id: gf06
+  - cmd: gf07 growfiles -W gf07 -b -e 1 -u -r 1-5000 -R 0--2 -i 0 -L 30 -C 1 -I p -f g_rand13 -S 2 -d $TMPDIR
+    id: gf07
+  - cmd: gf08 growfiles -W gf08 -b -e 1 -u -r 1-5000 -R 0--2 -i 0 -L 30 -C 1 -f g_rand11 -S 2 -d $TMPDIR
+    id: gf08
+  - cmd: gf09 growfiles -W gf09 -b -e 1 -u -r 1-5000 -R 0--1 -i 0 -L 30 -C 1 -I p -f g_rand12 -S 2 -d $TMPDIR
+    id: gf09
+  - cmd: gf10 growfiles -W gf10 -b -e 1 -u -r 1-5000 -i 0 -L 30 -C 1 -I l -f g_lio14 -S 2 -d $TMPDIR
+    id: gf10
+  - cmd: gf11 growfiles -W gf11 -b -e 1 -u -r 1-5000 -i 0 -L 30 -C 1 -I L -f g_lio15 -S 2 -d $TMPDIR
+    id: gf11
+  - cmd: gf12 mkfifo $TMPDIR/gffifo17; growfiles -b -W gf12 -e 1 -u -i 0 -L 30 $TMPDIR/gffifo17
+    id: gf12
+  - cmd: gf13 mkfifo $TMPDIR/gffifo18; growfiles -b -W gf13 -e 1 -u -i 0 -L 30 -I r -r 1-4096 $TMPDIR/gffifo18
+    id: gf13
+  - cmd: gf14 growfiles -W gf14 -b -e 1 -u -i 0 -L 20 -w -l -C 1 -T 10 -f glseek19 -S 2 -d $TMPDIR
+    id: gf14
+  - cmd: gf15 growfiles -W gf15 -b -e 1 -u -r 1-49600 -I r -u -i 0 -L 120 -f Lgfile1 -d $TMPDIR
+    id: gf15
+  - cmd: gf16 growfiles -W gf16 -b -e 1 -i 0 -L 120 -u -g 4090 -T 101 -t 408990 -l -C 10 -c 1000 -S 10 -f Lgf02_ -d $TMPDIR
+    id: gf16
+  - cmd: gf17 growfiles -W gf17 -b -e 1 -i 0 -L 120 -u -g 5000 -T 101 -t 499990 -l -C 10 -c 1000 -S 10 -f Lgf03_ -d $TMPDIR
+    id: gf17
+  - cmd: gf18 growfiles -W gf18 -b -e 1 -i 0 -L 120 -w -u -r 10-5000 -I r -l -S 2 -f Lgf04_ -d $TMPDIR
+    id: gf18
+  - cmd: 'gf19 growfiles -W gf19 -b -e 1 -g 5000 -i 500 -t 49900 -T10 -c9 -I p -o O_RDWR,O_CREAT,O_TRUNC -u -f gf08i_ -d $TMPDIR'
+    id: gf19
+  - cmd: gf20 growfiles -W gf20 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -r 1-256000:512 -R 512-256000 -T 4 -f gfbigio-$$ -d $TMPDIR
+    id: gf20
+  - cmd: gf21 growfiles -W gf21 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -g 20480 -T 10 -t 20480 -f gf-bld-$$ -d $TMPDIR
+    id: gf21
+  - cmd: gf22 growfiles -W gf22 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -g 20480 -T 10 -t 20480 -f gf-bldf-$$ -d $TMPDIR
+    id: gf22
+  - cmd: gf23 growfiles -W gf23 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -r 512-64000:1024 -R 1-384000 -T 4 -f gf-inf-$$ -d $TMPDIR
+    id: gf23
+  - cmd: gf24 growfiles -W gf24 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -g 20480 -f gf-jbld-$$ -d $TMPDIR
+    id: gf24
+  - cmd: gf25 growfiles -W gf25 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -r 1024000-2048000:2048 -R 4095-2048000 -T 1 -f gf-large-gs-$$ -d $TMPDIR
+    id: gf25
+  - cmd: gf26 growfiles -W gf26 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -r 128-32768:128 -R 512-64000 -T 4 -f gfsmallio-$$ -d $TMPDIR
+    id: gf26
+  - cmd: gf27 growfiles -W gf27 -b -D 0 -w -g 8b -C 1 -b -i 1000 -u -f gfsparse-1-$$ -d $TMPDIR
+    id: gf27
+  - cmd: gf28 growfiles -W gf28 -b -D 0 -w -g 16b -C 1 -b -i 1000 -u -f gfsparse-2-$$ -d $TMPDIR
+    id: gf28
+  - cmd: gf29 growfiles -W gf29 -b -D 0 -r 1-4096 -R 0-33554432 -i 0 -L 60 -C 1 -u -f gfsparse-3-$$ -d $TMPDIR
+    id: gf29
+  - cmd: 'gf30 growfiles -W gf30 -D 0 -b -i 0 -L 60 -u -B 1000b -e 1 -o O_RDWR,O_CREAT,O_SYNC -g 20480 -T 10 -t 20480 -f gf-sync-$$ -d $TMPDIR'
+    id: gf30
+  - cmd: rwtest01 export LTPROOT; rwtest -N rwtest01 -c -q -i 60s  -f sync 10%25000:$TMPDIR/rw-sync-$$
+    id: rwtest01
+  - cmd: rwtest02 export LTPROOT; rwtest -N rwtest02 -c -q -i 60s  -f buffered 10%25000:$TMPDIR/rw-buffered-$$
+    id: rwtest02
+  - cmd: 'rwtest03 export LTPROOT; rwtest -N rwtest03 -c -q -i 60s -n 2  -f buffered -s mmread,mmwrite -m random -Dv 10%25000:$TMPDIR/mm-buff-$$'
+    id: rwtest03
+  - cmd: 'rwtest04 export LTPROOT; rwtest -N rwtest04 -c -q -i 60s -n 2  -f sync -s mmread,mmwrite -m random -Dv 10%25000:$TMPDIR/mm-sync-$$'
+    id: rwtest04
+  - cmd: rwtest05 export LTPROOT; rwtest -N rwtest05 -c -q -i 50 -T 64b 500b:$TMPDIR/rwtest01%f
+    id: rwtest05
+  - cmd: 'iogen01 export LTPROOT; rwtest -N iogen01 -i 120s -s read,write -Da -Dv -n 2 500b:$TMPDIR/doio.f1.$$ 1000b:$TMPDIR/doio.f2.$$'
+    id: iogen01
+  - cmd: fs_inod01 fs_inod $TMPDIR 10 10 10
+    id: fs_inod01
+  - cmd: linker01 linktest.sh 1000 1000
+    id: linker01
+  - cmd: openfile01 openfile -f10 -t10
+    id: openfile01
+  - cmd: inode01 inode01
+    id: inode01
+  - cmd: inode02 inode02
+    id: inode02
+  - cmd: stream01 stream01
+    id: stream01
+  - cmd: stream02 stream02
+    id: stream02
+  - cmd: stream03 stream03
+    id: stream03
+  - cmd: stream04 stream04
+    id: stream04
+  - cmd: stream05 stream05
+    id: stream05
+  - cmd: ftest01 ftest01
+    id: ftest01
+  - cmd: ftest02 ftest02
+    id: ftest02
+  - cmd: ftest03 ftest03
+    id: ftest03
+  - cmd: ftest04 ftest04
+    id: ftest04
+  - cmd: ftest05 ftest05
+    id: ftest05
+  - cmd: ftest06 ftest06
+    id: ftest06
+  - cmd: ftest07 ftest07
+    id: ftest07
+  - cmd: ftest08 ftest08
+    id: ftest08
+  - cmd: lftest01	lftest 100
+    id: lftest01
+  - cmd: writetest01	writetest
+    id: writetest01
+  - cmd: fs_di fs_di -d $TMPDIR
+    id: fs_di
+  - cmd: proc01 proc01 -m 128
+    id: proc01
+  - cmd: fs_racer fs_racer.sh -t 5
+    id: fs_racer
+  - cmd: quota_remount_test01 quota_remount_test01.sh
+    id: quota_remount_test01
+description: LTP ltp-fs tests
+executor: Xperior::Executor::LTPTests
+groupname: ltp-fs
+reference: http://ltp.sourceforge.net/
+roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator
+timeout: 300
+tags: functional

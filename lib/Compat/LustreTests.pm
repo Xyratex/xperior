@@ -46,7 +46,6 @@ use English;
 use Carp;
 use Cwd;
 use YAML qw "Bless LoadFile Load Dump DumpFile";
-my $XPERIORBINDIR;
 our @ISA;
 our @EXPORT;
 
@@ -55,6 +54,10 @@ our @EXPORT;
 Module provides functionality for generating Xperior
 L<test descriptors|XperiorUserGuide/"Test descriptor"> and Xperior exclude
 list based on Lustre test scripts.
+It needed for generating actual test descriptors which are correctly
+corresponds with Lustre build because every Lustre setup has own
+set of tests
+
 
 Sample code how use it:
 
@@ -67,11 +70,12 @@ BEGIN {
     @ISA = ("Exporter");
     @EXPORT = qw(
                     &newSuite &newExcludeList
-                    &writeGeneratedTagsFile &writeGeneratedTestSuiteFile &writeTestSuiteExclude  
-                    &getGeneratedTestSuite &getGeneratedTestSuiteExclude
+                    &writeGeneratedTagsFile
+                    &writeGeneratedTestSuiteFile
+                    &writeTestSuiteExclude
+                    &getGeneratedTestSuite
+                    &getGeneratedTestSuiteExclude
                 );
-    $XPERIORBINDIR = dirname( Cwd::abs_path($PROGRAM_NAME) );
-    push @INC, "$XPERIORBINDIR/../lib";
     Log::Log4perl->easy_init( { level => $DEBUG } );
 
 }
@@ -103,7 +107,7 @@ sub writeTestSuiteExclude {
       or confess "Cannot create exclude list: " . $!;
     print EX $excludelist;
     close EX;
-}    ## --- end sub writeTestSuiteExclude
+}
 
 =head2  writeTestSuiteFile($outputDir, $suiteName, $predefinedDir, $lustreTestsDir)
 
@@ -137,7 +141,7 @@ sub writeGeneratedTestSuiteFile {
 
 =head2 newSuite
 
-Compose new suite content from given shell script 
+Compose new suite content from given shell script
 
 =over
 
@@ -217,7 +221,7 @@ sub getGeneratedTestSuiteExclude {
     my $exclist =
       _mergeWithPredefinedExclude( $excludeTests, $tsname, $predefinedlist );
     return $exclist;
-}    ## --- end sub getGeneratedTestSuiteExclude
+}
 
 sub _generateTestSuiteExclude {
     my ( $tsname, $script ) = @_;
@@ -290,8 +294,8 @@ Default suite yaml file path
 =back
 
 Usage:
-    
-    my @exclude_list 
+
+    my @exclude_list
         = map { newExcludeList(script => "$_.sh", name => $_  } @tests;
     write_file("exclude.list", @exclude_list);
 
