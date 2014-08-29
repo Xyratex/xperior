@@ -40,3 +40,4 @@ timeout: 300
 env:
     MACHINEFILE_OPTION: " "
     MACHINEFILE: " "
+    REFORMAT: yes
