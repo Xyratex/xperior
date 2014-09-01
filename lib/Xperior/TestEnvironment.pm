@@ -81,8 +81,18 @@ sub initNodes {
         $node->ctrlproto( $n->{'ctrlproto'});
         $node->user( $n->{'user'});
         $node->pass($n->{'pass'});
-        $node->console($n->{'console'});
-
+        $node->console($n->{'console'})
+            if $n->{'console'} ;
+            
+        $node->pingport($n->{'pingport'});
+        if($n->{'bridge'}){
+            $node->bridge($n->{'bridge'});
+            #switch off ping for case when ssh
+            #bridge is used for access to node 
+            #and node cannot be simple reached 
+            $node->pingport(0)
+                unless $n->{'pingport'} ;
+        }
         push @{$self->{'nodes'}}, $node;
     }
 }
@@ -150,8 +160,11 @@ sub getMasterClient{
 
 =over 12
 
-=item * B<getLustreNodeAddress> - retrun lustre ip address(B<lustreip>) if 
-defined or common ip.  See also B<getNodeAddress>
+=item * B<getLustreNodeAddress> 
+
+retrun lustre ip address if defined or single ip.  See also B<getNodeAddress>.
+Could be used for setups when node have management interfaces(ssh) and lustre
+interface(e.g. ib).This is not used by Lustre test framework.sh based tests.
 
 =back
 
@@ -160,7 +173,7 @@ defined or common ip.  See also B<getNodeAddress>
 sub getLustreNodeAddress{
     my ($self, $id) = @_;
     foreach my $n (@{$self->nodes}){
-        return $n->lustreip 
+        return $n->lustreip
             if(($n->id eq $id)and
                 (defined($n->lustreip)));
         return $n->ip    if( $n->id eq $id);

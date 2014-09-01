@@ -1,12 +1,12 @@
 #
 # GPL HEADER START
-# 
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 only,
 # as published by the Free Software Foundation.
-# 
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -15,14 +15,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # version 2 along with this program; If not, see http://www.gnu.org/licenses
-# 
+#
 # Please  visit http://www.xyratex.com/contact if you need additional information or
 # have any questions.
-# 
+#
 # GPL HEADER END
-# 
+#
 # Copyright 2012 Xyratex Technology Limited
-# 
+#
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
 
@@ -87,14 +87,14 @@ test
   };
 
 
-test plan => 2, nNegativePingCheck => sub {
+test plan => 3, nNegativePingCheck => sub {
     my $node = Xperior::Node->new(
         user => 'tomcat',
         ip   => 'localhost123',
         id   => 'localhost'
     );
     my $res =  $node->ping;
-    is($res, undef, "positive ping check");
+    is($res, undef, "negative ping check, hostname");
 
     $node = Xperior::Node->new(
         user => 'tomcat',
@@ -102,9 +102,54 @@ test plan => 2, nNegativePingCheck => sub {
         id   => 'localhost'
     );
     $res =  $node->ping;
-    is($res, 0, "positive ping check");
+    is($res, 0, "negative ping check, address");
+
+    my $node = Xperior::Node->new(
+        user => 'tomcat',
+        ip   => 'localhost',
+        id   => 'localhost',
+        pingport => 22333,
+    );
+    my $res =  $node->ping();
+    is($res, 0, "negative ping check, port");
 
 };
+
+test plan => 3, kPingPortCheck => sub {
+    #TODO add to test autodetect other then ssh open port
+    #on local host
+    my $node = Xperior::Node->new(
+        user => 'tomcat',
+        ip   => 'localhost',
+        id   => 'localhost',
+        pingport => 22,
+    );
+    my $res =  $node->ping();
+    SKIP: {
+        skip 'should use  non-ssh port',1;
+        is($res, 1, "positive ping port check");
+    };
+    my $node = Xperior::Node->new(
+        user => 'tomcat',
+        ip   => 'localhost123',
+        id   => 'localhost',
+        pingport => 0,
+    );
+    my $res =  $node->ping();
+    is($res, 1, "disabled ping check");
+
+    my $node = Xperior::Node->new(
+        user => 'tomcat',
+        ip   => 'localhost123',
+        id   => 'localhost',
+        pingport => 'qwerty',
+    );
+    eval{ $res =  $node->ping();};
+    like($@,qr/Incorrect port set for node localhost/,
+            "Inccorect port ok");
+
+};
+
 
 test plan => 2, nNegativeWaitUpCehck => sub{
     my $node = Xperior::Node->new(

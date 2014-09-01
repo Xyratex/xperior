@@ -232,6 +232,16 @@ This configuration targeted to IB network
 
 This configuration should be used for setups where only
 client available for actions, e.g. on ready clusters with HA
+In this setup you could also sample for using 'bridge' and
+'pingport' parameters.
+
+'bridge' is used when Xperior could access only via ssh bridge to
+node. In this case ssh connection Xperior node -> bridge node and
+bridge node -> target node should be passwordless.
+
+'pingport' is used to point which port should be used for quick check
+that node is reachable (just open/close connection). Default port is 22.
+If set 0 then no check will be done (set by default is bridge is set)
 
 ---
 Nodes:
@@ -240,12 +250,14 @@ Nodes:
      ip           : kvm1n1c006
      ctrlproto    : ssh
      user         : root
+     bridge       : 1.2.3.4
      nodetype     : Basic
 
    - id           : cng1
      ip           : kvm1n1c007
      ctrlproto    : ssh
      user         : root
+     pingport     : 22
      nodetype     : Basic
 
 

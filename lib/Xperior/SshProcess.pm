@@ -66,6 +66,8 @@ Function to be used: B<createSync> and field B<syncexitcode>
 
 package Xperior::SshProcess;
 use Moose;
+#TODO enable after adding  package to common setup
+#use namespace::autoclean;
 use Data::Dumper;
 use Cwd qw(chdir);
 use File::chdir;
@@ -80,21 +82,24 @@ use Time::HiRes;
 
 # Do not assign anything, because it is determined in BEGIN block
 my $UserKnownHostsFile;
+my $UserKnownHostsFileBr;
 BEGIN {
 	my $f;
-	($f, $UserKnownHostsFile) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXX");
+	($f, $UserKnownHostsFile)   = mkstemp("/tmp/ssh_user_known_hosts_file_XXXX");
+	($f, $UserKnownHostsFileBr) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXX");
 	close $f;
 }
 
 END {
 	unlink $UserKnownHostsFile;
+	unlink $UserKnownHostsFileBr;
 }
 
 with qw(MooseX::Clone);
 
 =head2 Fields
 
-=head3 port 
+=head3 port
 
 Port which is used for ssh connection
 
@@ -120,10 +125,11 @@ Flag set if killed latest executed command via C<create> call.
 
 =cut
 
-has port => ( is => 'rw' );
-has host => ( is => 'rw' );
-has user => ( is => 'rw' );
-has pass => ( is => 'rw' );
+has port   => ( is => 'rw' );
+has host   => ( is => 'rw' );
+has bridge => (is => 'rw' );
+has user   => ( is => 'rw' );
+has pass   => ( is => 'rw' );
 
 has pidfile       => ( is => 'rw' );
 has ecodefile     => ( is => 'rw' );
@@ -148,6 +154,23 @@ has osversion => ( is => 'rw' );
 =head2 Functions
 
 =cut
+
+sub _getBridge{
+    my $self = shift;
+    if($self->bridge()){
+      return
+        "ssh -t "
+      . " -o 'AddressFamily inet' "
+      . " -o 'UserKnownHostsFile=$UserKnownHostsFileBr' "
+      . " -o 'StrictHostKeyChecking=no' "
+      . " -o 'ConnectTimeout=25' "
+      . " -o  'BatchMode yes' "
+      . " -f "
+      . 'root@'.$self->bridge(). " ";
+    }else{
+        return '';
+    }
+}
 
 #TODO speed improvement via socket sharing
 
@@ -183,15 +206,21 @@ sub _sshSyncExec {
 
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
+    my $nonbridgeparams = 
+         "-o  'BatchMode yes' "
+        ."-o 'AddressFamily inet' "
+        ." -f ";
+    $nonbridgeparams= '' if($self->_getBridge());
     my $cc =
-        "ssh -o  'BatchMode yes' "
-      . "-o 'AddressFamily inet' "
+      $self->_getBridge()
+      . "ssh "
+      . $nonbridgeparams
       . "-o 'ConnectTimeout=25' "
       . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
       . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectionAttempts=3' "
       . "-o 'ServerAliveInterval=600' "
-      . "-o 'ServerAliveCountMax=15' " . " -f "
+      . "-o 'ServerAliveCountMax=15' " #. " -f "
       . $self->user . "@"
       . $self->host
       . " \"$cmd\" 2>&1 ";
@@ -252,12 +281,18 @@ sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
     my $asyncstarttimeout = 30;
     my $sc                = 1;
+    my $nonbridgeparams = 
+         "-o  'BatchMode yes' "
+        ."-o 'AddressFamily inet' "
+        ." -f ";
+    $nonbridgeparams= '' if($self->_getBridge());
     my $cc =
-        "ssh  -o  'BatchMode yes' "
-      . "-o 'AddressFamily inet' "
+      $self->_getBridge()
+      . "ssh "
+      . $nonbridgeparams
       . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
       . "-o 'StrictHostKeyChecking=no' "
-      . "-o 'ConnectTimeout=25' " . "-f "
+      . "-o 'ConnectTimeout=25' "
       . $self->user . "@"
       . $self->host
       . " \"$cmd\"  ";
@@ -289,9 +324,9 @@ sub _sshAsyncExec {
     return $sc;
 }
 
-=head3 init ($host, $user, $port)
+=head3 initTemp ()
 
-Initialize module. Protocol is only ssh.
+Initialize temporary variables.
 
 =cut
 
@@ -305,14 +340,32 @@ sub initTemp {
 
 }
 
-sub init {
-    DEBUG "Automator::SshUnixProcess->init";
-    my $self = shift;
-    $self->host(shift);
-    $self->user(shift);
-    $self->port(shift);
-    my $nocrash = shift;
+=head3 init ($host, $user, $port)
 
+Initialize module. Only ssh is supported.
+
+=cut
+
+
+sub init {
+    DEBUG "Xperior::SshUnixProcess->init";
+    my $self = shift;
+    my $param1 = shift;
+    if($param1->isa( 'Xperior::Node' )){
+        my $node=$param1;
+        DEBUG "Xperior::SshUnixProcess->init, new initialization";
+        $self->host($node->ip());
+        $self->user($node->user());
+        $self->port($node->port());
+        $self->bridge($node->bridge());
+    }else{
+        DEBUG "Xperior::SshUnixProcess->init, old initialization";
+        $self->host($param1);
+        $self->user(shift);
+        $self->port(shift);
+    }
+    my $nocrash = shift;
+#exit 99;
     $self->initTemp;
     $self->killed(0);
     $self->exitcode(0);
@@ -464,7 +517,7 @@ sub create {
     my $shell_file = $self->rscrfile();
     my $err_file   = $self->ecodefile();
     my $pid_file   = $self->pidfile();
- 
+
     DEBUG "Del remote pid file: $pid_file";
     my $rd = $self->_sshSyncExec( "rm -rf " . $pid_file );
 

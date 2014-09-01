@@ -109,12 +109,12 @@ test plan => 6, fSynExecution => sub {
   is($sp->syncexitcode,0,"Check exit code for correct syn execution");
   ok($etime-$stime< 15, "Check execution time");
   $sp->createSync('ls -la /folder/which/nobody/never/creates/');
-  is($sp->syncexitcode,2,"Check exit code for failed syn execution");
+  is($sp->syncexitcode,2,"Check exit code for failed sync execution");
 
   $stime = time;
-  $sp->createSync('/bin/sleep 15',5);
+  $sp->createSync('/bin/sleep 60',5);
   $etime=time;
-  isnt($sp->syncexitcode,0,"Check exit code for failed syn operation");
+  isnt($sp->syncexitcode,0,"Check exit code for timeouted sync operation");
   DEBUG "Execution was:".($etime-$stime);
   ok($etime-$stime < 40, "Check time of timeouted operation");
 

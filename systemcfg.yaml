@@ -40,7 +40,7 @@ Nodes:
      ctrlproto    : ssh
      user         : root
      nodetype     : KVMNode
-     console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
+     console      : /home/ryg/work/xyratex/kvm/serial_mds.log
      kvmdomain    : mds
 
    - id           : oss2
@@ -48,23 +48,24 @@ Nodes:
      ctrlproto    : ssh
      user         : root
      nodetype     : KVMNode
-     console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
+     console      : /home/ryg/work/xyratex/kvm/serial_mds.log
      kvmdomain    : mds
 
    - id           : client1
      ip           : lclient
      ctrlproto    : ssh
      user         : root
+     pingport     : 22
      nodetype     : KVMNode
      console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
-     kvmdomain    : mds
+     kvmdomain    : lclient
 
    - id           : client2
      ip           : mds
      ctrlproto    : ssh
      user         : root
      nodetype     : KVMNode
-     console      : /home/ryg/work/xyratex/kvm/serial_lclient.log
+     console      : /home/ryg/work/xyratex/kvm/serial_mds.log
      kvmdomain    : mds
 
 

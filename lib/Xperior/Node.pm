@@ -42,9 +42,11 @@ Class implements different functions to work with node and get information about
 
 package Xperior::Node;
 use Moose;
+#TODO enable after adding  package to common setup
+#use namespace::autoclean;
 use Error  qw(try finally except otherwise);
 use Moose::Util::TypeConstraints;
-
+use POSIX;
 use Net::Ping;
 use Log::Log4perl qw(:easy);
 
@@ -71,9 +73,12 @@ has 'ctrlproto'    => ( is => 'rw' );
 has 'user'         => ( is => 'rw' );
 has 'pass'         => ( is => 'rw' );
 has 'ip'           => ( is => 'rw' );
+has 'port'         => ( is => 'rw' );
 has 'id'           => ( is => 'rw' );
 has 'console'      => ( is => 'rw' );
+has 'bridge'       => ( is => 'rw' );
 has 'nodetype'     => ( is => 'rw' );
+has 'pingport'     => ( is => 'rw', default =>22 );
 
 #has '_ssh'         => ( is => 'rw'); # isa => 'Xperior::SshProcess');
 has '_pinger'      => ( is => 'rw', isa => 'Net::Ping');
@@ -147,7 +152,7 @@ sub isReachable{
     my $initcode;
     eval{
         my $sc = Xperior::SshProcess->new();
-        $initcode = $sc->init($self->ip,$self->user);
+        $initcode = $sc->init($self);
     };
     if( $@){
          WARN "Cannot connect to host".$@;
@@ -304,7 +309,7 @@ sub getRemoteConnector{
 
     my $sc = Xperior::SshProcess->new();
 
-    if ($sc->init($self->ip,$self->user) < 0){
+    if ($sc->init($self) < 0){
         $self->rconnector(undef);
         return undef;
     }
@@ -439,10 +444,29 @@ reachable and 0 if it is not.
 =cut
 
 sub ping {
- my $self = shift;
- $self->_pinger(Net::Ping->new()) unless defined $self->_pinger;
- DEBUG "Ping host [".$self->{ip}."]";
- return $self->_pinger->ping($self->ip);
+    my $self = shift;
+    confess "Incorrect port set for node ".$self->id()
+                                unless(isdigit $self->pingport());
+
+    if((isdigit $self->pingport())
+                and ($self->pingport() == 0)){
+        return 1;
+    }
+
+    if( not defined $self->_pinger){
+        if(($self->pingport() > 0)
+            and ($self->pingport() <65535)){
+            $self->_pinger(Net::Ping->new('tcp',15));
+            $self->_pinger->port_number($self->pingport());
+            DEBUG "Set ping port to ".$self->pingport();
+        }else{
+            confess "Port out of range"
+            . $self->pingport()
+            ." for node ".$self->id();
+        }
+    }
+    DEBUG "Ping host [".$self->{ip}."]";
+    return $self->_pinger->ping($self->ip);
 }
 
 sub _waitForNodeUp {
