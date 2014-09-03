@@ -39,7 +39,7 @@ The module contains LTP execution functionality
 This module inherit L<Xperior::Executor::SingleProcessBase> and provide
 functionality for generating command line  for LTP tests and parse
 these tests output. LTP tests are executing on master client, minimal
-lustre setup should define only the one client node with C<'master: yes'>.
+lustre setup should define: only the one client node with C<'master: yes'>.
 
 Sample test descriptor there F<testds/ltp-fs_tests.yaml>.
 

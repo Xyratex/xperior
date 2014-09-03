@@ -67,6 +67,7 @@ see L<XperiorIntegrationNotes> for more details>
 
 I<For LTP specific info test see  L<Xperior::Executor::LTPTests> >
 
+I<For LoadSim specific info test see  L<Xperior::Executor::LoadSimTests> >
 
 =over 12
 
