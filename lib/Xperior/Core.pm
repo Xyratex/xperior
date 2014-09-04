@@ -348,19 +348,10 @@ sub run {
                     $error = ERROR_CONFIG_FAILURE2;
                     last;
                 }
-                if (($res == 1) and
-                    ($exe->yaml->{'fail_reason'} eq 'No_status_found') and
-                    ($exe->yaml->{'killed'} eq 'no'))
-                {
-                    WARN "Not a dangerous test failure detected, continuing...";
-                }
-                else
-                {
-                    if ($test->getParam('dangerous', 'yes')) {
-                        WARN "Dangerous test failure detected, exiting";
-                        $error = ERROR_DANGEROUS_TEST_FAILURE;
-                        last;
-                    }
+                if (($res == 1) and $test->getParam('dangerous', 'yes')){
+                    WARN "Dangerous test failure detected, exiting";
+                    $error = ERROR_DANGEROUS_TEST_FAILURE;
+                    last;
                 }
             }
             else {
