@@ -79,15 +79,20 @@ use Carp;
 use Proc::Simple;
 use Xperior::Utils;
 use Time::HiRes;
+use File::Basename;
 
 # Do not assign anything, because it is determined in BEGIN block
 my $UserKnownHostsFile;
 my $UserKnownHostsFileBr;
 BEGIN {
 	my $f;
-	($f, $UserKnownHostsFile)   = mkstemp("/tmp/ssh_user_known_hosts_file_XXXX");
-	($f, $UserKnownHostsFileBr) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXX");
+	($f, $UserKnownHostsFile)   = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
 	close $f;
+	($f, $UserKnownHostsFileBr) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
+	close $f;
+	unlink $UserKnownHostsFile;
+	unlink $UserKnownHostsFileBr;
+
 }
 
 END {
@@ -125,11 +130,12 @@ Flag set if killed latest executed command via C<create> call.
 
 =cut
 
-has port   => ( is => 'rw' );
-has host   => ( is => 'rw' );
-has bridge => (is => 'rw' );
-has user   => ( is => 'rw' );
-has pass   => ( is => 'rw' );
+has port          => ( is => 'rw' );
+has host          => ( is => 'rw' );
+has user          => ( is => 'rw' );
+has pass          => ( is => 'rw' );
+has bridge        => ( is => 'rw' );
+has bridgeuser    => ( is => 'rw', default => 'root');
 
 has pidfile       => ( is => 'rw' );
 has ecodefile     => ( is => 'rw' );
@@ -147,26 +153,38 @@ has killed => ( is => 'rw' );
 has hostname  => ( is => 'rw' );
 has osversion => ( is => 'rw' );
 
-
+has bridgetmpdir =>( is => 'ro', default => '/tmp/xperior_bridge_dir');
 
 =back
 
 =head2 Functions
 
+=head3 _getBridgeCmd(mode)
+
+Function returns prepared part of command for executing command
+via bridge.
+
+Return empty line if bridge is not set.
+
+If parameter set to 'bg' then 'ssh .. -f..' will be returned which useful
+for moving ssh to backgroudn asap.
+
 =cut
 
-sub _getBridge{
-    my $self = shift;
+sub _getBridgeCmd{
+    my $self  = shift;
+    my $async = shift || '';
+    $async = '-f' if($async and ($async eq 'bg'));
     if($self->bridge()){
       return
-        "ssh -t "
+        "ssh -T "
       . " -o 'AddressFamily inet' "
       . " -o 'UserKnownHostsFile=$UserKnownHostsFileBr' "
       . " -o 'StrictHostKeyChecking=no' "
       . " -o 'ConnectTimeout=25' "
       . " -o  'BatchMode yes' "
-      . " -f "
-      . 'root@'.$self->bridge(). " ";
+      . " $async "
+      . $self->bridgeuser().'@'.$self->bridge(). " ";
     }else{
         return '';
     }
@@ -206,13 +224,13 @@ sub _sshSyncExec {
 
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
-    my $nonbridgeparams = 
+    my $nonbridgeparams =
          "-o  'BatchMode yes' "
         ."-o 'AddressFamily inet' "
         ." -f ";
-    $nonbridgeparams= '' if($self->_getBridge());
+    $nonbridgeparams= '' if($self->_getBridgeCmd());
     my $cc =
-      $self->_getBridge()
+      $self->_getBridgeCmd()
       . "ssh "
       . $nonbridgeparams
       . "-o 'ConnectTimeout=25' "
@@ -281,13 +299,13 @@ sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
     my $asyncstarttimeout = 30;
     my $sc                = 1;
-    my $nonbridgeparams = 
+    my $nonbridgeparams =
          "-o  'BatchMode yes' "
         ."-o 'AddressFamily inet' "
         ." -f ";
-    $nonbridgeparams= '' if($self->_getBridge());
+    $nonbridgeparams= '' if($self->_getBridgeCmd());
     my $cc =
-      $self->_getBridge()
+      $self->_getBridgeCmd('bg')
       . "ssh "
       . $nonbridgeparams
       . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
@@ -318,7 +336,6 @@ sub _sshAsyncExec {
             }
         }
         $sc = $self->bprocess->exit_status();
-        DEBUG "[$step] local async result = [$sc]";
         $step++;
     }
     return $sc;
@@ -358,6 +375,7 @@ sub init {
         $self->user($node->user());
         $self->port($node->port());
         $self->bridge($node->bridge());
+        $self->bridgeuser($node->bridgeuser()) if $node->bridgeuser();
     }else{
         DEBUG "Xperior::SshUnixProcess->init, old initialization";
         $self->host($param1);
@@ -365,7 +383,7 @@ sub init {
         $self->port(shift);
     }
     my $nocrash = shift;
-#exit 99;
+
     $self->initTemp;
     $self->killed(0);
     $self->exitcode(0);
@@ -435,13 +453,17 @@ sub createSync {
     my $ecf = $self->syncecodefile;
     $self->killed(0);
     $self->syncexitcode(undef);
-    my $ss = <<"SS";
+    my $sscript = <<"SSCRIPT";
 $app
-echo \\\$? > $ecf
-SS
+echo \$? > $ecf
+SSCRIPT
 
+    DEBUG "Uploading script:\n$sscript";
     my $tef = $self->rscrfile;
-    my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
+    #my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
+    my ($f, $t) = mkstemp("/tmp/ssh_remote_sync_script_XXXX");
+    write_file($t, $sscript);
+    $self->putFile($t, $tef);
 
     my $s = $self->_sshSyncExec( "sh $tef", $timeout );
     DEBUG "Remote app completed";
@@ -454,8 +476,8 @@ SS
             $self->syncexitcode( trim $ecfc );
         }
         else {
-            WARN
-"No remote exit code is get, looks like connection problem observed, set undef";
+            WARN "No remote exit code is get, looks like".
+                 " connection problem observed, set undef";
             $self->syncexitcode(undef);
         }
 
@@ -467,7 +489,8 @@ SS
 
 =head3 create ($name, $command)
 
-Execute remote process with unattached stderr/stdout and exit. Pid is savednon remote fs. Exit code is saved after process end.
+Execute remote process with unattached stderr/stdout and exit.
+Pid is savednon remote fs. Exit code is saved after process end.
 
 Parameters:
 
@@ -522,7 +545,8 @@ sub create {
     my $rd = $self->_sshSyncExec( "rm -rf " . $pid_file );
 
     my $script = <<"SCRIPT";
-$cmd & pid=\$!
+$cmd &
+pid=\$!
 echo \$pid > $pid_file
 wait \$pid
 echo \$? > $err_file
@@ -667,20 +691,68 @@ Return 0 if file copied and scp exit code if error occurred.
 
 sub putFile {
     my ( $self, $local_file, $remote_file ) = @_;
-    my $destination = $self->user . '@' . $self->host . ':' . $remote_file;
-    DEBUG "Copying $local_file to $destination";
-    my $e = shell( [ "scp", "-rp ",
-                            "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
-                            "-o 'StrictHostKeyChecking=no'",
-                            "-o 'ConnectionAttempts=3'",
-                            "-o 'ConnectTimeout=25'",
-                            "$local_file $destination" ] );
-    return $e;
+
+    my($filename, $dirs, $suffix) = fileparse("$remote_file");
+    my $tmp_file = $self->bridgetmpdir().'/'.$filename;
+
+    if( (not $remote_file) or ($remote_file  =~ m/^\/\s*$/)){
+        ERROR "Remote target is incorrect or not set:[$remote_file]";
+        return 110;
+    }
+
+    my $targethost  = $self->user.'@'.$self->host;
+    my $destination = $targethost.':'.$remote_file;
+
+    if( $self->bridge() ){
+        DEBUG "Copying $local_file to $destination via bridge";
+
+        my $bridgetmpdir = $self->bridgetmpdir();
+        my $bridgeuser   = $self->bridgeuser();
+        my $bridgehost   = $self->bridge();
+        my $bridgecmd    = $self->_getBridgeCmd();
+
+        my $script = <<"PSCRIPT";
+
+        $bridgecmd mkdir -p $bridgetmpdir
+        scp -rp -o 'UserKnownHostsFile=$UserKnownHostsFile' \\
+            -o 'StrictHostKeyChecking=no'                   \\
+            -o 'ConnectionAttempts=3'                       \\
+            -o 'ConnectTimeout=25'                          \\
+        $local_file $bridgeuser\@$bridgehost:$tmp_file
+
+        $bridgecmd                                            \\
+            scp -rp -o 'UserKnownHostsFile=$UserKnownHostsFile' \\
+                -o 'StrictHostKeyChecking=no'                   \\
+                -o 'ConnectionAttempts=3'                       \\
+                -o 'ConnectTimeout=25'                          \\
+            $tmp_file $destination
+       $bridgecmd  rm -fv $tmp_file
+
+PSCRIPT
+        DEBUG "Save put script:\n$script";
+        my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
+        write_file($t, $script);
+        my $res = shell("sh -e $t");
+        unlink $t;
+        return $res;
+
+
+    }else{
+        DEBUG "Copying $local_file to $destination";
+        my $e = shell( [
+            "scp", "-rp ",
+                "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
+                "-o 'StrictHostKeyChecking=no'",
+                "-o 'ConnectionAttempts=3'",
+                "-o 'ConnectTimeout=25'",
+                "$local_file $destination" ] );
+        return $e;
+    }
 }
 
 =head3 getFile ($remote_file, $local_file)
 
-Get file from remote system.
+Copy file from remote system to local.
 
 Return 0 if file copied and scp exit code if error occurred.
 
@@ -688,15 +760,53 @@ Return 0 if file copied and scp exit code if error occurred.
 
 sub getFile {
     my ( $self, $remote_file, $local_file ) = @_;
-    my $source = $self->user . '@' . $self->host . ':' . $remote_file;
-    DEBUG "Copying [$source] to [$local_file]";
+    my($filename, $dirs, $suffix) = fileparse("$remote_file");
+    my $tmp_file = $self->bridgetmpdir().'/'.$filename;
+    my $source  = $self->user . '@' . $self->host . ':' . $remote_file;
 
-    my $e = shell(["scp", "-rp", "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
-                                 "-o 'StrictHostKeyChecking=no'",
-                                 "-o 'ConnectionAttempts=3'",
-                                 "-o 'ConnectTimeout=25'",
-                                 "$source", "$local_file" ]);
-    return $e;
+    if( $self->bridge() ){
+        DEBUG "Copying [$source] to [$local_file] via bridge";
+
+        my $bridgetmpdir = $self->bridgetmpdir();
+        my $bridgeuser   = $self->bridgeuser();
+        my $bridgehost   = $self->bridge();
+        my $bridgecmd    = $self->_getBridgeCmd();
+
+        my $script = <<"PSCRIPT";
+
+        $bridgecmd mkdir -p $bridgetmpdir
+        $bridgecmd                                              \\
+            scp -rp -o 'UserKnownHostsFile=$UserKnownHostsFile' \\
+                -o 'StrictHostKeyChecking=no'                   \\
+                -o 'ConnectionAttempts=3'                       \\
+                -o 'ConnectTimeout=25'                          \\
+            $source $tmp_file
+
+            scp -rp -o 'UserKnownHostsFile=$UserKnownHostsFile' \\
+                -o 'StrictHostKeyChecking=no'                   \\
+                -o 'ConnectionAttempts=3'                       \\
+                -o 'ConnectTimeout=25'                          \\
+            $bridgeuser\@$bridgehost:$tmp_file $local_file
+       $bridgecmd  rm -fv $tmp_file
+
+PSCRIPT
+        DEBUG "Save put script:\n$script";
+        my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
+        write_file($t, $script);
+        my $res = shell("sh -e $t");
+        unlink $t;
+        return $res;
+
+    }else{
+        DEBUG "Copying [$source] to [$local_file]";
+        my $e = shell([
+             "scp", "-rp", "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
+                 "-o 'StrictHostKeyChecking=no'",
+                 "-o 'ConnectionAttempts=3'",
+                 "-o 'ConnectTimeout=25'",
+                 $source, $local_file ]);
+        return $e;
+    }
 }
 
 1;

@@ -57,10 +57,10 @@ before 'execute' => sub{
         my $tlog = $self->storedir . '/messages.' . Time::HiRes::gettimeofday();
         $self->tlog->{$node->id} = $tlog;
         my $c = $node->getExclusiveRC;
-        $c->create('mkdir', "mkdir -p " . $self->storedir);
+        $c->createSync('mkdir', "mkdir -p " . $self->storedir);
         $c->create('tail', "tail -f -n 0 -v $self->{remotelog} > $tlog ");
 
-        if($c->syncexitcode) {
+        if($c->exitcode) {
             $self->addMessage('Cannot harvest log data for node ' . $node->id);
         }
         else {

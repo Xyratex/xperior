@@ -61,7 +61,7 @@ sub generateReport {
     foreach my $file (@files) {
         DEBUG "Process suite [$file]";
         if(-d "$wd/$file" ){
-            DEBUG "Call generateReport [$file]";
+            DEBUG "Call generateReport for [$file]";
             $self->generateJunit( $options, $file );
         }
     }
@@ -92,18 +92,28 @@ sub generateJunit {
         my $stdout = '';
         my $stderr = '';
         if ( defined( $yaml->{'log'}->{'stdout'} ) ) {
-            my @lines = read_file( "$wd/$testclass/" . $yaml->{'log'}->{'stdout'} );
-            foreach my $s (@lines) {
-                    $s = $self->_doTextSafe($s);
-                    $stdout = $stdout . $s;
+            my @lines = read_file( "$wd/$testclass/" . $yaml->{'log'}->{'stdout'},
+                err_mode => 'carp');
+            if(defined $lines[0]){
+                foreach my $s (@lines) {
+                        $s = $self->_doTextSafe($s);
+                        $stdout = $stdout . $s;
+                }
+            }else{
+                $stdout="No stdout data found"
             }
         }
 
         if ( defined( $yaml->{'log'}->{'stderr'} ) ) {
-            my @lines = read_file( "$wd/$testclass/" . $yaml->{'log'}->{'stderr'} );
-            foreach my $s (@lines) {
-                $s = $self->_doTextSafe($s);
-                $stderr = $stderr . $s;
+            my @lines = read_file( "$wd/$testclass/" . $yaml->{'log'}->{'stderr'},
+                err_mode => 'carp');
+            if(defined $lines[0]){
+                foreach my $s (@lines) {
+                    $s = $self->_doTextSafe($s);
+                    $stderr = $stderr . $s;
+                }
+            }else{
+                $stdout="No stdout data found"
             }
         }
 

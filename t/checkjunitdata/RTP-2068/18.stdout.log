@@ -1,0 +1,20 @@
+Logging to local directory: /tmp/test_logs/1412963008
+kvm1n1c006: Checking config lustre mounted on /mnt/testfs
+kvm1n1c007: Checking config lustre mounted on /mnt/testfs
+CLIENTONLY mode, skip mount_check_servers
+Checking clients kvm1n1c006,kvm1n1c007 environments
+Using TIMEOUT=20
+keeping jobstats as disable
+disable quota as required
+excepting tests: 76 42a 42b 42c 42d 45 51d 68b
+preparing for tests involving mounts
+
+debug=-1
+
+
+== sanity test 18: touch .../f ; ls ... ================================ 10:43:32 (1412963012)
+f
+Resetting fail_loc on all nodes...done.
+PASS 18 (1s)
+== sanity test complete, duration 6 sec == 10:43:34 (1412963014)
+debug=super ioctl neterror warning dlmtrace error emerg ha rpctrace vfstrace config console

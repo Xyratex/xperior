@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #
 # GPL HEADER START
 #
@@ -295,6 +295,7 @@ use Log::Log4perl qw(:easy);
 use Carp;
 use Pod::Usage;
 use Cwd qw(abs_path);
+use File::Path qw(make_path);
 my $XPERIORBASEDIR;
 BEGIN {
 
@@ -423,7 +424,8 @@ if( $action eq 'run'){
              "results if --continue is not set";
     }else{
         INFO "No workdir directory [$workdir] found, create it.";
-        unless( mkdir $workdir){
+        my $number_of_created_dir = make_path($workdir, {verbose => 1});
+        unless( $number_of_created_dir){
             print "Cannot create workdir [$workdir]\n";
             exit 10;
         }

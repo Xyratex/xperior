@@ -143,4 +143,26 @@ test
          'Check skip xml N5 reg' );
 };
 
+test
+  plan      => 3,
+  lRTP_2068_Checks => sub {
+    my $wd  = '--workdir=$wd';
+    my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
+    for my $file (glob 't/checkjunitdata/RTP-2068/18.*') {
+        print "$file\n";
+        fcopy ($file, $jwd) or confess $!;
+    }
+    my $junitReport = Xperior::Reports::JenkinsJunit->new();
+    $junitReport->generateJunit($options, 'junittest');
+
+    ok(-e "$resdir/junittest.junit",
+        "Check file [$resdir/junittest.junit] existence");
+
+    my $data = read_file("$resdir/junittest.junit", err_mode => 'carp' );
+    ok((scalar(split(/\n/,$data) >10 )), 'Check size no_stdout');
+    ok($data =~ m/No stdout data found/,
+         'Check xml no sdtout' );
+};
+
+
 jenkinsjunit->run_tests;

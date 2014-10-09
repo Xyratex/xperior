@@ -82,9 +82,9 @@ sub initNodes {
         $node->user( $n->{'user'});
         $node->pass($n->{'pass'});
         $node->console($n->{'console'})
-            if $n->{'console'} ;
-            
-        $node->pingport($n->{'pingport'});
+            if $n->{'console'};
+        $node->pingport($n->{'pingport'})
+            if $n->{'pingport'};
         if($n->{'bridge'}){
             $node->bridge($n->{'bridge'});
             #switch off ping for case when ssh

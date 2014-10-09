@@ -100,7 +100,7 @@ sub execute {
     ##remove and recreate directory for logs
     #TODO cleanup should be done out of sub execute
     #$testp->createSync ('rm -rf /var/log/xperior/');
-    $testproc->createSync('mkdir  /var/log/xperior/');
+    $testproc->createSync('mkdir -p /var/log/xperior/');
 
     my $mountpoint = $self->env->cfg->{'client_mount_point'}
       or cluck("Undefined 'client_mount_point'");

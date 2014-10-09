@@ -1,0 +1,40 @@
+----------------- kvm1n1c006 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       5860940     729688    5131252          0          0     485664
+-/+ buffers/cache:     244024    5616916
+Swap:            0          0          0
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+none                   2930468         0   2930468   0% /dev/shm
+none                       512         0       512   0% /data
+none                       512         0       512   0% /WIBS
+none                   2930468      2640   2927828   1% /tmp
+none                       512         0       512   0% /mnt
+192.168.3.12@tcp:192.168.3.13@tcp:/testfs
+                      32465616     84192  30691728   1% /mnt/testfs
+nfsserv:/mnt/nfsdata/ctdb/shared
+                      18562048   8440832   9179136  48% /mnt/ctdb
+
+
+----------------- kvm1n1c007 -----------------
+<free>
+             total       used       free     shared    buffers     cached
+Mem:       5860940     724144    5136796          0          0     484332
+-/+ buffers/cache:     239812    5621128
+Swap:            0          0          0
+
+<df>
+Filesystem           1K-blocks      Used Available Use% Mounted on
+none                   2930468         0   2930468   0% /dev/shm
+none                       512         0       512   0% /data
+none                       512         0       512   0% /WIBS
+none                   2930468      2376   2928092   1% /tmp
+none                       512         0       512   0% /mnt
+192.168.3.12@tcp:192.168.3.13@tcp:/testfs
+                      32465616     84192  30691728   1% /mnt/testfs
+nfsserv:/mnt/nfsdata/ctdb/shared
+                      18562048   8440832   9179136  48% /mnt/ctdb
+
+

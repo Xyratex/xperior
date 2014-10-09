@@ -1,12 +1,12 @@
 #
 # GPL HEADER START
-# 
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 only,
 # as published by the Free Software Foundation.
-# 
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -15,14 +15,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # version 2 along with this program; If not, see http://www.gnu.org/licenses
-# 
+#
 # Please  visit http://www.xyratex.com/contact if you need additional information or
 # have any questions.
-# 
+#
 # GPL HEADER END
-# 
+#
 # Copyright 2012 Xyratex Technology Limited
-# 
+#
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
 
@@ -38,18 +38,28 @@ use Carp;
 use Xperior::Test;
 use Xperior::SshProcess;
 use Xperior::Utils;
+use Xperior::Node;
 $|=1;
 my $sp;
-
+my $node;
 startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
+    $node = Xperior::Node->new;
+    $node->id('test node');
+    $node->ip('localhost');
+    $node->ctrlproto('ssh');
+    $node->user('tomcat');
+    $node->bridge('localhost');
+    $node->bridgeuser('tomcat');
 };
 
 setup           _setup    => sub {
     $sp =  Xperior::SshProcess->new();
     $sp->init('localhost','tomcat');
 };
-teardown        _teardown => sub { };
+teardown        _teardown => sub {
+    $sp =undef;
+};
 shutdown        _shutdown => sub { };
 #########################################
 
@@ -69,6 +79,22 @@ test plan => 3, bCreateExitCodes     => sub{
 
 #exit 1;
 };
+
+test plan => 3, abCreateExitCodesBridge     => sub{
+    $sp->init($node);
+    my $res = $sp->create('sleepbr','/bin/sleep 30');
+    is($res, 0,'Correct exit code for bridge case');
+    sleep 10;;
+
+    $res = $sp->create('sleepbr','ls /etc/passwd');
+    is($res, 0,'Check result for too smal application for bridge case');
+
+    $sp->host('bad_host');
+    $res = $sp->create('sleep','/bin/sleep 30');
+    is($res,-1,'Check result for bad host for bridge case');
+
+};
+
 
 test plan => 7, kCreateAliveKill    => sub {
     #highlevel functional test
@@ -172,11 +198,11 @@ test plan => 5, fClone    => sub {
 
 };
 
-test plan => 5, wPutFile => sub {
-    my $if = '/tmp/xxxYYYzzz';
-    my $of = '/tmp/xxxYYYwww';
-    my $nif = '/tmp/xxxYYYzzzN';
-    my $nof = '/tmp/xxxYYYwwwN';
+test plan => 5, waPutFile => sub {
+    my $if = '/tmp/xxxYYYzzzp';
+    my $of = '/tmp/xxxYYYwwwp';
+    my $nif = '/tmp/xxxYYYzzzNp';
+    my $nof = '/tmp/xxxYYYwwwNp';
 
     DEBUG `touch $if`;
     my $res = $sp->putFile($if,$of);
@@ -190,12 +216,31 @@ test plan => 5, wPutFile => sub {
     is($sp->exitcode,0,"Check exit code for correct removing");
 };
 
+test plan => 5, wbPutFileBridge => sub {
+    $sp->init($node);
+    my $if = '/tmp/xxxYYYzzzbrr';
+    my $of = '/tmp/xxxYYYwwwbrr';
+    my $nif = '/tmp/xxxYYYzzzNbrr';
+    my $nof = '/tmp/xxxYYYwwwNbrr';
 
-test plan => 4, vGetFile => sub {
-    my $if = '/tmp/xxxYYYzzz';
-    my $of = '/tmp/xxxYYYwww';
-    my $nif = '/tmp/xxxYYYzzzN';
-    my $nof = '/tmp/xxxYYYwwwN';
+    DEBUG `touch $if`;
+    my $res = $sp->putFile($if,$of);
+    is($res,0,"Check ok result  for bridge case");
+    ok (-e $of, "Check new file  for bridge case" );
+    $res = $sp->putFile($nif,$nof);
+    DEBUG $res;
+    isnt($res,0,'Check not exist file copy');
+    ok ( (! -e $nof), "Check no new file for bad source for bridge case" );
+    $sp->createSync('rm -f $if $of');
+    is($sp->exitcode,0,"Check exit code for correct removing for bridge case");
+};
+
+
+test plan => 4, vaGetFile => sub {
+    my $if = '/tmp/xxxYYYzzzg';
+    my $of = '/tmp/xxxYYYwwwg';
+    my $nif = '/tmp/xxxYYYzzzNg';
+    my $nof = '/tmp/xxxYYYwwwNg';
 
     DEBUG `sudo rm $of `;
     DEBUG `touch $if`;
@@ -208,6 +253,30 @@ test plan => 4, vGetFile => sub {
     ok ( (! -e $nof), "Check no new file for bad source" );
     DEBUG `rm -f $if $of`;
 };
+
+test plan => 4, vbGetFileBridge => sub {
+    $sp->init($node);
+
+    my $if = '/tmp/xxxYYYzzzbr';
+    my $of = '/tmp/xxxYYYwwwbr';
+    my $nif = '/tmp/xxxYYYzzzNbr';
+    my $nof = '/tmp/xxxYYYwwwNbr';
+
+    DEBUG `sudo rm $of `;
+    DEBUG `touch $if`;
+    my $res = $sp->getFile($if,$of);
+    is($res,0,"Check ok result  for bridge case");
+    ok (-e $of, "Check new file  for bridge case" );
+
+
+    $res = $sp->getFile($nif,$nof);
+    DEBUG $res;
+    isnt($res,0,'Check not exist file copy for bridge case');
+    ok ( (! -e $nof), "Check no new file for bad source  for bridge case" );
+    DEBUG `rm -f $if $of`;
+
+};
+
 
 #TODO add stress test and sendFile
 

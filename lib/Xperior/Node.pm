@@ -77,6 +77,7 @@ has 'port'         => ( is => 'rw' );
 has 'id'           => ( is => 'rw' );
 has 'console'      => ( is => 'rw' );
 has 'bridge'       => ( is => 'rw' );
+has 'bridgeuser'   => ( is => 'rw', default =>'root' );
 has 'nodetype'     => ( is => 'rw' );
 has 'pingport'     => ( is => 'rw', default =>22 );
 

@@ -562,7 +562,7 @@ Every executed suite is converted to Junit test result.
 
 sub _reportJJunit{
     my $self = shift;
-    confess "Please set --jjunit option!\n"
+    confess "Please set value for --jjunit option!\n"
         unless $self->{options}->{jjunit};
     my $junitReport = Xperior::Reports::JenkinsJunit->new();
     $junitReport->generateReport($self->{options});

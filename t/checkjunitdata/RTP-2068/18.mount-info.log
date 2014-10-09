@@ -1,0 +1,92 @@
+----------------- kvm1n1c006 -----------------
+<lfs df -i>
+UUID                      Inodes       IUsed       IFree IUse% Mounted on
+testfs-MDT0000_UUID     70728840         220    70728620   0% /mnt/testfs[MDT:0]
+testfs-OST0000_UUID       240000         259      239741   0% /mnt/testfs[OST:0]
+testfs-OST0001_UUID       240000         258      239742   0% /mnt/testfs[OST:1]
+
+filesystem summary:       479703         220      479483   0% /mnt/testfs
+
+
+<lfs df>
+UUID                   1K-blocks        Used   Available Use% Mounted on
+testfs-MDT0000_UUID    106040364     4261148    94522956   4% /mnt/testfs[MDT:0]
+testfs-OST0000_UUID     16232808       42096    15345864   0% /mnt/testfs[OST:0]
+testfs-OST0001_UUID     16232808       42096    15345864   0% /mnt/testfs[OST:1]
+
+filesystem summary:     32465616       84192    30691728   0% /mnt/testfs
+
+
+<lctl dl>
+  0 UP mgc MGC192.168.3.12@tcp 771810d6-3a50-47c3-f815-dfcd5bb82e50 5
+  1 UP lov testfs-clilov-ffff88019ae9b800 3df193d5-b6db-b744-40d7-da4fa2a7c84d 4
+  2 UP lmv testfs-clilmv-ffff88019ae9b800 3df193d5-b6db-b744-40d7-da4fa2a7c84d 4
+  3 UP mdc testfs-MDT0000-mdc-ffff88019ae9b800 3df193d5-b6db-b744-40d7-da4fa2a7c84d 5
+  4 UP osc testfs-OST0000-osc-ffff88019ae9b800 3df193d5-b6db-b744-40d7-da4fa2a7c84d 5
+  5 UP osc testfs-OST0001-osc-ffff88019ae9b800 3df193d5-b6db-b744-40d7-da4fa2a7c84d 5
+
+<mount | grep lustre>
+192.168.3.12@tcp:192.168.3.13@tcp:/testfs on /mnt/testfs type lustre (rw,flock,user_xattr,flock,user_xattr)
+
+<lustre>
+Name        : lustre                       Relocations: (not relocatable)
+Version     : 2.5.1.x6                          Vendor: (none)
+Release     : 60_2.6.32_431.17.1.x1.6.28.x86_64_gbce866f   Build Date: Fri 26 Sep 2014 01:58:45 PM PDT
+Install Date: Thu 02 Oct 2014 04:37:34 AM PDT      Build Host: rebld-fre1
+Group       : Utilities/System              Source RPM: lustre-2.5.1.x6-60_2.6.32_431.17.1.x1.6.28.x86_64_gbce866f.src.rpm
+Size        : 14688911                         License: GPL
+Signature   : (none)
+URL         : http://wiki.whamcloud.com/
+Summary     : Lustre File System
+Description :
+Userspace tools and files for the Lustre file system.
+
+<lustre-client>
+package lustre-client is not installed
+
+----------------- kvm1n1c007 -----------------
+<lfs df -i>
+UUID                      Inodes       IUsed       IFree IUse% Mounted on
+testfs-MDT0000_UUID     70728840         220    70728620   0% /mnt/testfs[MDT:0]
+testfs-OST0000_UUID       240000         259      239741   0% /mnt/testfs[OST:0]
+testfs-OST0001_UUID       240000         258      239742   0% /mnt/testfs[OST:1]
+
+filesystem summary:       479703         220      479483   0% /mnt/testfs
+
+
+<lfs df>
+UUID                   1K-blocks        Used   Available Use% Mounted on
+testfs-MDT0000_UUID    106040364     4261148    94522956   4% /mnt/testfs[MDT:0]
+testfs-OST0000_UUID     16232808       42096    15345864   0% /mnt/testfs[OST:0]
+testfs-OST0001_UUID     16232808       42096    15345864   0% /mnt/testfs[OST:1]
+
+filesystem summary:     32465616       84192    30691728   0% /mnt/testfs
+
+
+<lctl dl>
+  0 UP mgc MGC192.168.3.12@tcp b5fcf103-85f2-2153-2673-8a5b1e4613c0 5
+  1 UP lov testfs-clilov-ffff880197d31400 8959d3ea-b6f4-6adb-1640-d49622154fc7 4
+  2 UP lmv testfs-clilmv-ffff880197d31400 8959d3ea-b6f4-6adb-1640-d49622154fc7 4
+  3 UP mdc testfs-MDT0000-mdc-ffff880197d31400 8959d3ea-b6f4-6adb-1640-d49622154fc7 5
+  4 UP osc testfs-OST0000-osc-ffff880197d31400 8959d3ea-b6f4-6adb-1640-d49622154fc7 5
+  5 UP osc testfs-OST0001-osc-ffff880197d31400 8959d3ea-b6f4-6adb-1640-d49622154fc7 5
+
+<mount | grep lustre>
+192.168.3.12@tcp:192.168.3.13@tcp:/testfs on /mnt/testfs type lustre (rw,flock,user_xattr,flock,user_xattr)
+
+<lustre>
+Name        : lustre                       Relocations: (not relocatable)
+Version     : 2.5.1.x6                          Vendor: (none)
+Release     : 60_2.6.32_431.17.1.x1.6.28.x86_64_gbce866f   Build Date: Fri 26 Sep 2014 01:58:45 PM PDT
+Install Date: Thu 02 Oct 2014 04:37:34 AM PDT      Build Host: rebld-fre1
+Group       : Utilities/System              Source RPM: lustre-2.5.1.x6-60_2.6.32_431.17.1.x1.6.28.x86_64_gbce866f.src.rpm
+Size        : 14688911                         License: GPL
+Signature   : (none)
+URL         : http://wiki.whamcloud.com/
+Summary     : Lustre File System
+Description :
+Userspace tools and files for the Lustre file system.
+
+<lustre-client>
+package lustre-client is not installed
+

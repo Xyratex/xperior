@@ -1,0 +1,43 @@
+---
+cleanup_max_time: -1
+cmd: SLOW=YES NAME=ncli MGSNID=lkvm1n1c003@tcp:lkvm1n1c002@tcp CLIENTONLY=1   CLIENTS=kvm1n1c006 RCLIENTS="kvm1n1c007"  DIR=/mnt/testfs/ PDSH="/usr/bin/pdsh -R ssh -S -w " ONLY=18 CLIENTONLY="1" ACCEPTOR_PORT="64" RUNAS_ID="99" JOBID_VAR="existing" FSNAME="testfs" /usr/lib64/lustre/tests/sanity.sh 2>     /var/log/xperior/test_stderr.617827.log 1>  /var/log/xperior/test_stdout.617827.log
+completed: yes
+description: Lustre sanity tests
+endtime: 1412963018
+endtime_planned: 1412963307
+env:
+  ACCEPTOR_PORT: 64
+  CLIENTONLY: 1
+  FSNAME: testfs
+  JOBID_VAR: existing
+  RUNAS_ID: 99
+executor: Xperior::Executor::LustreTests
+exitcode: 0
+expected_time: 10
+fail_reason: ''
+groupname: sanity
+id: 18
+killed: no
+log:
+  /local/build/jenkins-int/workspace/neo-lustre-tests/wd/sanity/18.memory-info.log: 18.memory-info.log
+  /local/build/jenkins-int/workspace/neo-lustre-tests/wd/sanity/18.mount-info.log: 18.mount-info.log
+  stderr: 18.stderr.log
+  stdout: 18.stdout.log
+masterclient:
+  id: client
+  master: yes
+  node: cng0
+  type: client
+masterhostdown: no
+messages: ''
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+result: 'ok 1 '
+result_code: 0
+roles: StoreStat
+schema: data/schemas/testds.yaml
+starttime: 1412963007
+status: passed
+status_code: 0
+tags: functional
+testname: 18
+timeout: 300
