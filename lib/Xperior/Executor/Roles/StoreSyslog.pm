@@ -57,7 +57,7 @@ before 'execute' => sub{
         my $tlog = $self->storedir . '/messages.' . Time::HiRes::gettimeofday();
         $self->tlog->{$node->id} = $tlog;
         my $c = $node->getExclusiveRC;
-        $c->createSync('mkdir', "mkdir -p " . $self->storedir);
+        $c->createSync("mkdir -p " . $self->storedir);
         $c->create('tail', "tail -f -n 0 -v $self->{remotelog} > $tlog ");
 
         if($c->exitcode) {
