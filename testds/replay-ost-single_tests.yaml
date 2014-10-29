@@ -50,6 +50,7 @@ cleanup_max_time: -1
 description: Lustre replay-ost-single tests
 executor: Xperior::Executor::LustreTests
 expected_time: 10
+dangerous: 'yes'
 groupname: replay-ost-single
 reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreStat StoreSyslog StoreConsole GetDiagnostics StacktraceGenerator

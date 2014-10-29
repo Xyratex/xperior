@@ -178,11 +178,11 @@ sub _getBridgeCmd{
     if($self->bridge()){
       return
         "ssh -T "
-      . " -o 'AddressFamily inet' "
+      . " -o 'AddressFamily=inet' "
       . " -o 'UserKnownHostsFile=$UserKnownHostsFileBr' "
       . " -o 'StrictHostKeyChecking=no' "
       . " -o 'ConnectTimeout=25' "
-      . " -o  'BatchMode yes' "
+      . " -o  'BatchMode=yes' "
       . " $async "
       . $self->bridgeuser().'@'.$self->bridge(). " ";
     }else{
@@ -225,8 +225,8 @@ sub _sshSyncExec {
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
     my $nonbridgeparams =
-         "-o  'BatchMode yes' "
-        ."-o 'AddressFamily inet' "
+         "-o  'BatchMode=yes' "
+        ."-o 'AddressFamily=inet' "
         ." -f ";
     $nonbridgeparams= '' if($self->_getBridgeCmd());
     my $cc =
@@ -300,8 +300,8 @@ sub _sshAsyncExec {
     my $asyncstarttimeout = 30;
     my $sc                = 1;
     my $nonbridgeparams =
-         "-o  'BatchMode yes' "
-        ."-o 'AddressFamily inet' "
+         "-o  'BatchMode=yes' "
+        ."-o 'AddressFamily=inet' "
         ." -f ";
     $nonbridgeparams= '' if($self->_getBridgeCmd());
     my $cc =
@@ -732,20 +732,29 @@ PSCRIPT
         DEBUG "Save put script:\n$script";
         my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
         write_file($t, $script);
-        my $res = shell("sh -e $t");
+        #my $res = shell("sh -e $t");
+		my $res = runEx("sh -e $t");
         unlink $t;
         return $res;
 
 
     }else{
         DEBUG "Copying $local_file to $destination";
-        my $e = shell( [
-            "scp", "-rp ",
-                "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
-                "-o 'StrictHostKeyChecking=no'",
-                "-o 'ConnectionAttempts=3'",
-                "-o 'ConnectTimeout=25'",
-                "$local_file $destination" ] );
+#        my $e = shell( [
+#            "scp", "-rp ",
+#                "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
+#                "-o 'StrictHostKeyChecking=no'",
+#                "-o 'ConnectionAttempts=3'",
+#                "-o 'ConnectTimeout=25'",
+#                "$local_file $destination" ] );
+        my $e = runEx(
+            "scp -rp ".
+            " -o 'UserKnownHostsFile=$UserKnownHostsFile'".
+            " -o 'StrictHostKeyChecking=no'".
+            " -o 'ConnectionAttempts=3'".
+            " -o 'ConnectTimeout=25'".
+            " $local_file $destination" );
+
         return $e;
     }
 }
@@ -793,18 +802,26 @@ PSCRIPT
         DEBUG "Save put script:\n$script";
         my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
         write_file($t, $script);
-        my $res = shell("sh -e $t");
+        #my $res = shell("sh -e $t");
+		my $res = runEx("sh -e $t");
         unlink $t;
         return $res;
 
     }else{
         DEBUG "Copying [$source] to [$local_file]";
-        my $e = shell([
-             "scp", "-rp", "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
-                 "-o 'StrictHostKeyChecking=no'",
-                 "-o 'ConnectionAttempts=3'",
-                 "-o 'ConnectTimeout=25'",
-                 $source, $local_file ]);
+#        my $e = shell([
+#             "scp", "-rp", "-o 'UserKnownHostsFile=$UserKnownHostsFile'",
+#                 "-o 'StrictHostKeyChecking=no'",
+#                 "-o 'ConnectionAttempts=3'",
+#                 "-o 'ConnectTimeout=25'",
+#                 $source, $local_file ]);
+        my $e = runEx(
+            "scp -rp".
+			" -o 'UserKnownHostsFile=$UserKnownHostsFile'".
+            " -o 'StrictHostKeyChecking=no'".
+            " -o 'ConnectionAttempts=3'".
+            " -o 'ConnectTimeout=25'".
+            " $source $local_file" );
         return $e;
     }
 }

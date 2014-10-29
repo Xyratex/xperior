@@ -50,6 +50,8 @@ use File::Find;
 use Data::Dumper;
 use IO::Select;
 use IPC::Open3;
+use POSIX ":sys_wait_h";
+use Symbol 'gensym';
 
 our @ISA = ("Exporter");
 our @EXPORT = qw(&shell &trim &runEx &parseFilterFile &findCompleteTests);
@@ -103,6 +105,14 @@ Set prefix for both dumpers stderr and stdout.
 
 =back
 
+=item timeout
+
+Set timeout after which execution will be stopped
+Default is 300 sec
+
+=back
+
+
 USAGE
 
 =over
@@ -147,59 +157,97 @@ sub shell {
     my $prep = $params{prefix};
     my $err_prep = $params{err_prefix} || $shell_err_prefix;
     my $out_prep = $params{out_prefix} || $shell_out_prefix;
+    my $timeout  = $params{timeout} || 300;
+    my $select_timeout  = 2;
     if (defined $prep) {
         $err_prep = "${err_prep}${prep}";
         $out_prep = "${out_prep}${prep}";
     }
+
+
     my @lines;
     DEBUG "Current work directory: [$CWD]";
     DEBUG "Executing command: [" . join (' ', @$cmd) . "]";
     my $start_time = time;
-    my $pid = open3(\*IN, \*OUT, \*ERR, join(" ", @$cmd));
+    my ($in,$out,$err);
+    $err = gensym;
+    my $pid = open3($in, $out, $err, join(" ", @$cmd));
     my $io = new IO::Select;
-    $io->add(\*OUT,\*ERR);
-    while (my @h = $io->can_read) {
-        for my $f (@h) {
+    $io->add($out,$err);
+
+    #workaround
+    #see http://stackoverflow.com/questions/24732682/waitpid-and-open3-in-perl
+    my $exit_code_raw;
+    my $is_exited = 0;
+    while((time - $start_time)< $timeout){
+      my @h = $io->can_read($select_timeout);
+      if(scalar(@h)){
+         for my $f (@h) {
             my $line = readline($f);
             unless (defined $line) {
-                $io->remove($f);
-                next;
+               $io->remove($f);
+               next;
             }
 
-            if ($f eq \*ERR) {
-                if (ref($params{err}) eq 'ARRAY') {
-                    chomp($line);
-                    push @{$params{err}}, $line;
-                }
-                elsif (defined $params{err}) {
-                    ${$params{err}} .= $line;
-                }
-                chomp($line);
-                WARN "${err_prep}${line}";
+            if ($f eq $err) {
+               if (ref($params{err}) eq 'ARRAY') {
+                  chomp($line);
+                  push @{$params{err}}, $line;
+               }
+               elsif (defined $params{err}) {
+                  ${$params{err}} .= $line;
+               }
+               chomp($line);
+               WARN "${err_prep}${line}";
             }
-            if ($f eq \*OUT) {
-                if (ref($params{out}) eq 'ARRAY') {
-                    chomp($line);
-                    push @{$params{out}}, $line;
-                }
-                elsif (defined $params{out}) {
-                    ${$params{out}} .= $line;
-                }
-                chomp($line);
-                push @lines, $line if wantarray;
-                DEBUG "${out_prep}${line}";
+            if ($f eq $out) {
+               if (ref($params{out}) eq 'ARRAY') {
+                  chomp($line);
+                  push @{$params{out}}, $line;
+               }
+               elsif (defined $params{out}) {
+                  ${$params{out}} .= $line;
+               }
+               chomp($line);
+               push @lines, $line if wantarray;
+               DEBUG "${out_prep}${line}";
             }
-        }
+         }
+      }else{
+         if(waitpid( $pid, WNOHANG ) > 0){
+            $exit_code_raw=$?;
+            $is_exited = 1;
+            last;
+         }
+
+      }
+      sleep 1;
     }
-    waitpid ($pid, 0);
+
+#    $exit_code_raw=$?;
+#    my $kid = waitpid( $pid, WNOHANG);
+    if ( not $is_exited ) {
+       $exit_code_raw = $?;
+       if( (waitpid( $pid, WNOHANG ) < 1)){
+         $exit_code_raw = undef;
+         WARN "Term child process [$pid]";
+         kill 'TERM', $pid;
+         if (waitpid( $pid, WNOHANG ) < 1) {
+           WARN "Kill child process [$pid]";
+           kill 'KILL', $pid;
+         }
+       }
+    }
+
     my $elapsed_time = time - $start_time;
     DEBUG "Elapsed time: $elapsed_time (seconds)";
-    my $kill_signal = $? & 127;
-    my $core_dump   = $? & 128;
-    my $exit_code   = $? >> 8;
+    #my $kill_signal = $exit_code_raw & 127;
+    #my $core_dump   = $exit_code_raw & 128;
+    my $exit_code   = (defined($exit_code_raw))?
+                        $exit_code_raw >> 8 : 255;
     if ($?) {
         DEBUG "Exit code:   $exit_code";
-        DEBUG "Kill signal: $kill_signal";
+        #DEBUG "Kill signal: $kill_signal";
     }
     return @lines if wantarray;
     return $exit_code;
