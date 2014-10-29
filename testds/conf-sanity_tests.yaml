@@ -32,13 +32,13 @@ Tests:
     timeout: 300
   -
     id: 32a
-    timeout: 500
+    timeout: 600
   -
     id: 32b
-    timeout: 500
+    timeout: 600
   -
     id: 32d
-    timeout: 500
+    timeout: 600
   -
     id: 45
     timeout: 700
