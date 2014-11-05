@@ -27,6 +27,9 @@ Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 "Xperior" Script System for Automated Testing of Distributed Filesystems
 =====================================================
 
+Xperior generated perldoc help
+http://htmlpreview.github.io/?https://raw.githubusercontent.com/wiki/Xyratex/xperior/perldoc/index.html
+
 To generate the documentation please run
 
     bin/gendocs.pl
@@ -43,7 +46,7 @@ and class diagram will be not generated. Re-execute the script after installing
 the package. Please ignore this message
 "Warning: something's.../Autodia/Handler.pm line 50"
 
-Xperior is under active development by roman_grigoryev@xyratex.com. If you are
+Xperior is under active development by roman.grigoryev@seagate.com. If you are
 interested in contributing or suggesting improvements please send him
 email directly.
 

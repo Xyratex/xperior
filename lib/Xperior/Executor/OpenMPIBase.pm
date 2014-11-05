@@ -77,7 +77,7 @@ Reset previously generated values, f.e. clients list.
 
 sub reset{
     my $self    = shift;
-    my $clients = $self->env->getClients;
+    my $clients = $self->env->getLustreClients;
     $self->cmd('');
     my @e;
     $self->clients(\@e);
@@ -94,7 +94,7 @@ sub _prepareCommands{
     $self->reset;
 
     #no any filtering now, create list of clients nodes
-    foreach my $lc (@{$self->env->getClients}){
+    foreach my $lc (@{$self->env->getLustreClients}){
         my $nid = $lc->{'node'};
         my $ad = $self->env->getNodeAddress($nid);
         $self->addClient($ad);

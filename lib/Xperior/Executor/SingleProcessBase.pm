@@ -76,13 +76,14 @@ When remote process not found observation stopped and execution status calculate
 
 =cut
 
+
 sub execute {
     my $self    = shift;
-    my $mclient = $self->_getMasterClient();
+    my $mnodecfg = $self->_getMasterNode();
 
     #saving env data
-    $self->addYE( 'masterclient', $mclient );
-    DEBUG "Master Client:" . Dumper $mclient;
+    $self->addYE( 'masterclient', $mnodecfg);
+    DEBUG "Master Node:" . Dumper $mnodecfg;
     $self->_prepareCommands;
     $self->_addCmdLogFiles;
     $self->addYE( 'cmd', $self->cmd );
@@ -90,7 +91,7 @@ sub execute {
     #$self->_saveStageInfoBeforeTest;
 
     #get remote processor
-    my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
+    my $mclientobj = $self->env->getNodeById( $mnodecfg->{'node'} );
     my $testproc   = $mclientobj->getRemoteConnector();
     unless ( defined($testproc) ) {
         ERROR 'Master client obj is:' . Dumper $mclientobj;
@@ -267,14 +268,9 @@ sub _getLog {
     return $res;
 }
 
-sub _getMasterClient {
+sub _getMasterNode {
     my $self = shift;
-    foreach my $client ( @{ $self->env->getClients } ) {
-        DEBUG "Check client " . Dumper $client;
-        return $client
-            if ($client->{'master'} && $client->{'master'} eq 'yes');
-    }
-    return undef;
+    return $self->env->getMasterLustreClient();
 }
 
 sub _addCmdLogFiles {

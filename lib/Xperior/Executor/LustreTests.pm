@@ -72,7 +72,7 @@ after 'init' => sub {
 
 after 'cleanup' => sub {
     my $self = shift;
-    my $mclient = $self->_getMasterClient();
+    my $mclient = $self->_getMasterNode();
     my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
     my $testproc   = $mclientobj->getRemoteConnector();
     $testproc->createSync('rm -rf /tmp/test_logs')
@@ -204,7 +204,7 @@ Also failure reason accessible (if defined) via call C<getReason>.
 sub processLogs {
     my ( $self, $file ) = @_;
 
-    my $mclient    = $self->_getMasterClient;
+    my $mclient    = $self->_getMasterNode();
     my $mclientobj = $self->env->getNodeById($mclient->{'node'});
     my $connector  = $mclientobj->getRemoteConnector();
 
@@ -272,7 +272,7 @@ sub _prepareEnvOpts {
     my $self    = shift;
     my @mdss    = $self->env->getMDSs;
     my @osss    = $self->env->getOSSs;
-    my $clients = $self->env->getClients;
+    my $clients = $self->env->getLustreClients;
     my $c;
     my @opt = ();
     my $nettype='tcp';

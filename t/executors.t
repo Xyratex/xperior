@@ -195,8 +195,8 @@ test plan => 4, cCheckReportWriting    => sub {
 };
 
 
-test plan => 1, f_getMasterClient    => sub {
-  my $node = $exe->_getMasterClient;
+test plan => 1, f_getMasterNode    => sub {
+  my $node = $exe->_getMasterNode();
   is($node->{node},'client1','Check master node');
 
 };

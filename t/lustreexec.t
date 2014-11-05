@@ -212,7 +212,7 @@ test
     my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
     $exe->init( $test, \%options, $cfg );
 
-    my $mclient    = $exe->_getMasterClient;
+    my $mclient    = $exe->_getMasterNode();
     my $mclientobj = $exe->env->getNodeById( $mclient->{'node'} );
     my $connector  = $mclientobj->getRemoteConnector;
 

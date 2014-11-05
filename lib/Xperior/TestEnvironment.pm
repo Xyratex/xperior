@@ -134,7 +134,7 @@ sub getMDSs{
     return grep { $_->{'type'} eq 'mds' } @{$self->cfg->{'LustreObjects'}};
 }
 
-sub getClients{
+sub getLustreClients{
     my $self = shift;
     my @clients;
     #print Dumper $self->cfg;
@@ -147,7 +147,8 @@ sub getClients{
 
 }
 
-sub getMasterClient{
+
+sub getMasterLustreClient{
     my $self = shift;
     foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
         if(( $lo->{'type'} eq 'client')

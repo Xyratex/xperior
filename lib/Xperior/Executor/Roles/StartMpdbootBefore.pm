@@ -62,7 +62,7 @@ before 'execute' => sub {
     # shutdown mpdboot on each client;
     # this guarantees us that mpdboot is started
     # properly (i.e. only on master client)
-    my @nodes = map { $_->{'node'} } @{ $self->env->getClients() };
+    my @nodes = map { $_->{'node'} } @{ $self->env->getLustreClients() };
     foreach my $id ( @nodes ) {
         my $c = $self->env->getNodeById( $id )->getExclusiveRC();
         DEBUG $c->createSync( "su mpiuser sh -c \\\"mpdallexit\\\"", 300 );

@@ -77,7 +77,7 @@ Return values:
 sub processLogs {
     my ( $self, $file ) = @_;
 
-    my $mclient    = $self->_getMasterClient();
+    my $mclient    = $self->_getMasterNode();
     my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
     my $connector  = $mclientobj->getRemoteConnector();
 

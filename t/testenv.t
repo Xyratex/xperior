@@ -150,7 +150,7 @@ test plan => 5, cCheckLustreObjects    => sub {
     #print "MDSs:".Dumper $mdss;
     is_deeply(\@mdss,\@exp2,"Check getMDSs");
 
-    my $clients = $cfg->getClients;
+    my $clients = $cfg->getLustreClients;
     my @exp3 = (
           {
             'master' => 'yes',
@@ -165,7 +165,7 @@ test plan => 5, cCheckLustreObjects    => sub {
           }
     );
     print "Clients:".Dumper $clients;
-    is_deeply($clients,\@exp3,"Check getClients");
+    is_deeply($clients,\@exp3,"Check getLustreClients");
 
     my $mc = $cfg->getMasterClient;
     is($mc->{'node'},'client1',"Check getMasterClient");

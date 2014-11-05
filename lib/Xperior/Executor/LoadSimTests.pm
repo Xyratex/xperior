@@ -74,7 +74,7 @@ after 'init' => sub {
 
 after 'cleanup' => sub {
     my $self = shift;
-    my $mclient = $self->_getMasterClient();
+    my $mclient = $self->_getMasterNode();
     my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
     my $testproc   = $mclientobj->getRemoteConnector();
     $testproc->createSync(
