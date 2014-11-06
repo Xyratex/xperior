@@ -118,8 +118,9 @@ Tests:
     id: proc01
   - cmd: fs_racer fs_racer.sh -t 5
     id: fs_racer
-  - cmd: quota_remount_test01 quota_remount_test01.sh
-    id: quota_remount_test01
+# ltp-fs quota_remount_test01 always fail on lustre because Lustre quota enforcement differs from standard Linux quota enforcement.
+#  - cmd: quota_remount_test01 quota_remount_test01.sh
+#    id: quota_remount_test01
 description: LTP ltp-fs tests
 executor: Xperior::Executor::LTPTests
 groupname: ltp-fs
