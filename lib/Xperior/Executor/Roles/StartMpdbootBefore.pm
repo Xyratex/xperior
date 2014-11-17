@@ -56,7 +56,7 @@ before 'execute' => sub {
 
     # nothing to do if mpdboot is properly started already
     my $master = $self->env->getNodeById
-        ( $self->env->getMasterClient->{'node'} );
+        ( $self->_getMasterNode->{'node'} );
     return if $master->ismpdready();
 
     # shutdown mpdboot on each client;

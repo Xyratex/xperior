@@ -58,14 +58,13 @@ sub _saveStageInfo{
     my ($self,$item) = @_;
     my %info;
     my $mc = $self->env->getNodeById
-        ($self->env->getMasterClient->{'node'});
+        ($self->_getMasterNode->{'node'});
     $info{'lfs_freespace'}  = $mc->getLFFreeSpace;
     $info{'lfs_freeinodes'} = $mc->getLFFreeInodes;
     $info{'lfs_capacity'}   = $mc->getLFCapacity;
     $self->addYE($item."_execution",\%info);
 }
 
-#__PACKAGE__->meta->make_immutable;
 1;
 
 =head1 COPYRIGHT AND LICENSE

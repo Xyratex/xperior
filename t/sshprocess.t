@@ -101,15 +101,14 @@ test plan => 7, kCreateAliveKill    => sub {
     is($sp->killed,0, 'Check status before start');
     $sp->create('sleep','/bin/sleep 30');
     pass('App started');
-    my $res = $sp->isAlive;
+    my $res = $sp->isAlive();
     is($res,0, 'Check alive for alive app');
-    $sp->kill;
-    $res = $sp->isAlive;
+    $sp->kill();
+    $res = $sp->isAlive();
     is($res,-1, 'Check alive for exited app');
     isnt($sp->killed,0, 'Check status after kill');
     isnt($sp->exitcode,undef, 'Check 1 exit code after kill');
     isnt($sp->exitcode,0, 'Check 2 exit code after kill');
-#    exit 1;
 };
 
 test plan => 6, lCreateAliveExit    => sub {
@@ -128,7 +127,56 @@ test plan => 6, lCreateAliveExit    => sub {
     is($ec,  0, 'Check exit code for alive app');
 };
 
-test plan => 6, fSynExecution => sub {
+
+test plan => 8, fRunExecution => sub {
+  my $stime = time;
+  my $r = $sp->run('/bin/sleep 10');
+  my $etime = time;
+  is($r->{exitcode},0,"Check exit code for correct run");
+  ok($etime-$stime< 15, "Check execution time");
+  $r = $sp->run('ls -la /folder/which/nobody/never/creates/');
+  is($r->{exitcode},2,"Check exit code for failed run");
+
+  $stime = time;
+  $r = $sp->run('/bin/sleep 60',5);
+  $etime=time;
+  isnt($r->{exitcode},0,"Check exit code for timeouted run");
+  isnt($sp->syncexitcode,0,"Check exit code for timeouted run #2");
+  DEBUG "Execution was:".($etime-$stime);
+  ok($etime-$stime < 40, "Check time of timeouted run");
+
+  $r = $sp->run('/bin/sleep 10');
+  is($r->{exitcode},0,"Check exit code for restored run");
+  is($sp->syncexitcode,0,"Check exit code for restored run#2");
+};
+
+
+test plan => 12, gRunMultiCommandExecution => sub {
+  my $stime = time;
+  my @cmds = ('echo 12345 1>&2; echo 54321','echo qwerty','echo qazwsx');
+  my $r = $sp->run(\@cmds);
+  print Dumper $r;
+  is($r->{exitcode}, 0, 'test run array exit code ok');
+  is($r->{stderr}[0],'12345','test run array 1');
+  is($r->{stderr}[1],'','test run array 2');
+  is($r->{stdout}[0],'54321','test run array 3');
+  is($r->{stdout}[2],'qazwsx','test run array 4');
+  is(scalar(@{$r->{stdout}}),3,'test run array 5');
+  is(scalar(@{$r->{stderr}}),3,'test run array 6');
+
+  my @cmds = ('echo 54321','echo qwerty; sleep 30; echo ytrewq',
+                'echo qazwsx');
+  my $r = $sp->run(\@cmds,5);
+  is($r->{exitcode},$sp->sync_timeout_exit_code,
+    "Check exit code for timeouted run array");
+  isnt($r->{killed},0,"Check exit code for timeouted run array");
+  is(scalar(@{$r->{stdout}}),2,'test run array timeout,1');
+  is($r->{stdout}[0],'54321','test run timeout array 3');
+  is($r->{stdout}[1],'qwerty','test run timeou array 4');
+
+};
+
+test plan => 6, fCreateSyncExecution => sub {
   my $stime = time;
   $sp->createSync('/bin/sleep 10');
   my $etime = time;
@@ -145,11 +193,11 @@ test plan => 6, fSynExecution => sub {
   ok($etime-$stime < 40, "Check time of timeouted operation");
 
   $sp->createSync('/bin/sleep 10');
-  is($sp->syncexitcode,0,"Check exit code for failed syn operation");
+  is($sp->syncexitcode,0,"Check exit code for restored syn operation");
 };
 
 
-test plan => 20, xStress    => sub {
+test plan => 20,xStress    => sub {
     for(my $i=0; $i<10; $i++){
         $sp->create('sleep','/bin/sleep 10');
         my $res = $sp->isAlive;
@@ -177,10 +225,16 @@ test plan => 10, cInit    => sub {
     eval{ $sp->init('localhost','tomcat');};
     is($@,'',"Connection ok");
     #negative initialization
-    eval{ $sp->init('node_on_mars','tomcat');};
-    isnt($@,''," Connection failed as expected");
-    eval{ $sp->init('localhost','ryg_on_mars');};
-    isnt($@,''," Connection failed as expected");
+    #eval{ $sp->init('node_on_mars','tomcat');};
+    #isnt($@,''," Connection failed as expected 1");
+    my $res = $sp->init('node_on_mars','tomcat');
+    isnt($res,0,'Connection failed as expected 2');
+
+    #eval{ $sp->init('localhost','ryg_on_mars');};
+    #isnt($@,''," Connection failed as expected 3");
+    $res = $sp->init('localhost','tomcat_om_mars');
+    isnt($res,0,'Connection failed as expected 4');    
+    
 };
 
 

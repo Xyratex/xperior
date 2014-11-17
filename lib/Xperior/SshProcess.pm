@@ -58,7 +58,7 @@ B<pid>.
 Create short-time process on remote nodes with capturing stderr/stdout. It
 behaves as perl B<``> (backtics) command.
 
-Function to be used: B<createSync> and field B<syncexitcode>
+Function to be used: B<run> and field B<exitcode> in returned hash
 
 =back
 
@@ -73,7 +73,7 @@ use Cwd qw(chdir);
 use File::chdir;
 use File::Path;
 use File::Temp qw(:mktemp);
-use File::Slurp qw(write_file);
+use File::Slurp qw(write_file read_file);
 use Log::Log4perl qw(:easy);
 use Carp;
 use Proc::Simple;
@@ -139,21 +139,28 @@ has bridgeuser    => ( is => 'rw', default => 'root');
 
 has pidfile       => ( is => 'rw' );
 has ecodefile     => ( is => 'rw' );
-has syncecodefile => ( is => 'rw' );
+#has syncecodefile => ( is => 'rw' );
 has rscrfile      => ( is => 'rw' );
 has pid           => ( is => 'rw' );
-has appcmd        => ( is => 'rw' );
 has appname       => ( is => 'rw' );
 has exitcode      => ( is => 'rw' );
 has syncexitcode  => ( is => 'rw' );
 has bprocess      => ( is => 'rw' );
 
-has killed => ( is => 'rw' );
+has killed        => ( is => 'rw' );
+has hostname      => ( is => 'rw' );
+has osversion     => ( is => 'rw' );
 
-has hostname  => ( is => 'rw' );
-has osversion => ( is => 'rw' );
-
-has bridgetmpdir =>( is => 'ro', default => '/tmp/xperior_bridge_dir');
+has bridgetmpdir           =>(
+    is => 'ro', default => '/tmp/xperior_bridge_dir');
+has sync_timeout_exit_code => (
+    is => 'ro', default => -100);
+has stdout_delimiter => (
+    is => 'ro', default =>
+    '=================xperior_stdout_SshProcess_delimiter===============');
+has stderr_delimiter => (
+    is => 'ro', default =>
+    '=================xperior_stderr_SshProcess_delimiter===============');
 
 =back
 
@@ -206,17 +213,16 @@ sub _sshSyncExec {
     my $r    = undef;
     while ( $step < $AT ) {
         sleep $step;
+        # legacy behavior support
         $self->syncexitcode(undef);
-        $r = $self->_sshSyncExecS( $cmd, $timeout );
+
+        my $r = $self->_sshSyncExecS( $cmd, $timeout );
         return $r
-          if (
-                ( defined( $self->syncexitcode ) )
-            and ( $self->syncexitcode != -100 )     #timeout
-            and ( $self->syncexitcode != 65280 )    #connect
+          if (( defined( $r->{exitcode} ) )
+                and ( $r->{exitcode} != 255 ) #connect fault
           );
         $step++;
-        my $ec = $self->syncexitcode;
-        $ec = 'undef' unless ( defined( $self->syncexitcode ) );
+        my $ec = $r->{exitcode};
         DEBUG "Sync attemp [$step], exit code is :[$ec], retry...";
     }
     return $r;
@@ -225,9 +231,9 @@ sub _sshSyncExec {
 sub _sshSyncExecS {
     my ( $self, $cmd, $timeout ) = @_;
     my $nonbridgeparams =
-         "-o  'BatchMode=yes' "
-        ."-o 'AddressFamily=inet' "
-        ." -f ";
+        "-o  'BatchMode=yes' " .
+        "-o 'AddressFamily=inet' ";
+        #." -f ";
     $nonbridgeparams= '' if($self->_getBridgeCmd());
     my $cc =
       $self->_getBridgeCmd()
@@ -241,58 +247,50 @@ sub _sshSyncExecS {
       . "-o 'ServerAliveCountMax=15' " #. " -f "
       . $self->user . "@"
       . $self->host
-      . " \"$cmd\" 2>&1 ";
-    DEBUG "Remote cmd is [$cc], timeout is [$timeout]";
+      . " \"$cmd; exit \\\$? \" ";#2>&1 ";
+    DEBUG "Remote ssh sync cmd is [$cc], timeout is [$timeout]";
+    my ($f,$stdout,$stderr);
+    ($f, $stdout)   = mkstemp("/tmp/ssh_sync_stdout_XXXXXXX");
+    close $f;
+    ($f, $stderr)   = mkstemp("/tmp/ssh_sync_stderr_XXXXXXX");
+    close $f;
 
-    my $out = '';
-    eval {
-        local $SIG{ALRM} = sub {
-            $self->syncexitcode(-100);
+    my $proc = Proc::Simple->new();
+    $proc->redirect_output ($stdout, $stderr);
+    $proc->start($cc);
+    $proc->kill_on_destroy(1);
+    my $time = time();
+    my $killed = 0;
+    my $exitcode;
+    while ( $proc->poll() ) {
+        DEBUG "Wait for sync app finish";
+        sleep 1;
+        #DEBUG 'sleep 1 ' . `/bin/sleep 1`;    #hack, looks like perl's sleep
+                                              #doesn't work there
+        if ( ($time + $timeout) < time() ) {
+            # legacy behavior support
+            $self->syncexitcode($self->sync_timeout_exit_code);
             $self->killed(time);
-            print "*******************Killed by timeout !\n";
-            die "alarm clock restart";
-        };
-        alarm $timeout;
-
-        #do main action
-        my $rawout = '';    # `$cc`;
-
-        open( my $cmd, "$cc|" ) || confess "Execution failed: $!";
-        while (<$cmd>) {
-            my $s = $_;     # chomp;
-            $rawout = $rawout . $s;
-            unless ( $s =~ m/Warning:\sPermanently\sadded/ ) {
-                $out = $out . $s;
-            }
+            ###
+            $killed=time;
+            $exitcode = $self->sync_timeout_exit_code;
+            WARN "SSH sync execution killed by timeout !\n";
+            $proc->kill();
+            last;
         }
-        close $cmd;
-
-        #TODO rechec in future difference between  $? and CHILD_ERROR_NATIVE
-        #my $code = $?;
-
-        alarm 0;            # cancel the alarm asap
-    };
-    alarm 0;                # race condition protection
-
-    #DEBUG "****[$out]***";
-    #DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
-    #die if $@ && $@ !~ /alarm clock restart/; # reraise
-    if ( $@ =~ m/alarm\s+clock\s+restart/ ) {
-        $self->syncexitcode(-100);
-        $self->killed(time);
-        WARN "SSH sync execution killed by timeout !\n";
-        return undef;
+     }
+    if(not $killed){
+        DEBUG 'System exit code is :'.($proc->exit_status() >> 8);
+        $exitcode = $proc->exit_status() >> 8;
+        # legacy behavior support
+        $self->syncexitcode( $proc->exit_status() >> 8 );
     }
-    $self->syncexitcode( ${^CHILD_ERROR_NATIVE} );
-    if ( ${^CHILD_ERROR_NATIVE} == 0xFF00 ) {
-        WARN "SSH exit code mean connection problem  ["
-          . ${^CHILD_ERROR_NATIVE}
-          . "](sync mode)";
-        return undef;
-    }
+    my $out = read_file($stdout);
+    my $err = read_file($stderr);
+    unlink $stdout;
+    unlink $stderr;
+    return {stdout=>$out, stderr=>$err, exitcode=>$exitcode, killed => $killed};
 
-    #DEBUG "--------------";
-    return $out;
 }
 
 sub _sshAsyncExec {
@@ -332,7 +330,7 @@ sub _sshAsyncExec {
             $time++;
             if ( $time > $asyncstarttimeout ) {
                 ERROR "App alive more then $asyncstarttimeout seconds, kill it";
-                $self->bprocess->kill;
+                $self->bprocess->kill();
             }
         }
         $sc = $self->bprocess->exit_status();
@@ -352,7 +350,7 @@ sub initTemp {
     my $id   = Time::HiRes::gettimeofday();
     $self->pidfile("/tmp/xperior_pid_ssh_$id");
     $self->ecodefile("/tmp/remote_exit_code_$id");
-    $self->syncecodefile("/tmp/remote_sync_exit_code_$id");
+    #$self->syncecodefile("/tmp/remote_sync_exit_code_$id");
     $self->rscrfile("/tmp/remote_script_$id.sh");
 
 }
@@ -388,34 +386,40 @@ sub init {
     $self->killed(0);
     $self->exitcode(0);
 
-    my $ver = '';
-    $ver = $self->_sshSyncExec( "uname -a", 30 );
-    $ver = '' unless defined $ver;
-    chomp $ver;
-
-    #DEBUG "-------------------------------";
-    #DEBUG ${^CHILD_ERROR_NATIVE};
-    #DEBUG $self->exitcode;
-    #DEBUG $self->killed;
-    if (   ( ${^CHILD_ERROR_NATIVE} != 0 )
-        || ( $self->exitcode != 0 )
-        || ( $self->killed != 0 )
-        || ( $ver eq '' ) )
-    {
-        WARN "SshProcess cannot be initialized";
-        if ( defined($nocrash) && $nocrash ) {
-            return -99;
-        }
-        else {
-            confess "\nSSH returns non-zero values on previous command:"
-              . ${^CHILD_ERROR_NATIVE};
-        }
+    my ($ver, $unameres);
+    $unameres = $self->_sshSyncExec( "uname -a", 30 );
+    if(defined($unameres)){
+        $ver = trim($unameres->{stdout});
+    }else{
+        $ver='';
     }
 
-    my $h = trim $self->_sshSyncExec( "hostname", 15 );
+    #DEBUG "-------------------------------";
+    #DEBUG $self->exitcode;
+    #DEBUG $self->killed;
+    if (( not defined $unameres ) 
+               or ( $unameres->{exitcode} != 0 )
+               or ( $unameres->{killed} != 0 ) )
+    {
+        WARN "SshProcess cannot be initialized(version)";
+        return -99;
+    }
+
+    my $h = $self->_sshSyncExec( "hostname", 15 );
+    if(defined($h)){
+        $h = $h->{stdout};
+        $h = trim $h;
+    }else{
+        $h='';
+    }
+    if( $h eq '' )
+    {
+        WARN "SshProcess cannot be initialized(hostname)";
+        return -99;
+    }
     $self->hostname($h);
     $self->osversion($ver);
-	DEBUG "Initialized ssh process on host [$h] version [$ver]";
+    DEBUG "Initialized ssh process on host [$h] version [$ver]";
     return 0;
 }
 
@@ -423,9 +427,9 @@ sub init {
 sub _findPid {
     my $self = shift;
     $self->pid(undef);
-    my $out = $self->_sshSyncExec( "cat " . $self->pidfile, 30 ) || return;
+    my $res = $self->_sshSyncExec( "cat " . $self->pidfile, 30 ) || return;
 
-    foreach my $s ( split( /\n/, $out ) ) {
+    foreach my $s ( split( /\n/, $res->{stdout} ) ) {
         DEBUG "Check line for PID [$s]\n";
         my ($pid) = ($s =~ m/^(\d+)/);
         if ($pid) {
@@ -436,54 +440,129 @@ sub _findPid {
     }
 }
 
+
+=head3 run ($command, $timeout)
+
+Safe version of createSync, executes  command on remote
+node same as system. If timemout is exceeded process will
+be killed. Stdout, stderr gathered to scalar vars, this mean
+that output shoudl be comparabe small.
+
+Command could be multiline shell script.
+
+Parameters:
+
+  * command to run
+  * timeout
+
+Return value is hash ref of:
+
+  * stdout    - stdout from remote process
+  * stderr    - stderr from remote process
+  * exitcode  - exit code from remote process
+  * killled   - if not 0 mean process was killed by timeout
+
+or
+
+Parameters:
+
+  * array of command to run
+  * common timeout for all commands
+
+In this set of parameters, all commands  merged to one
+script via separator and stdout/stderr split after
+finish for every subcommand. In theory, it can't
+be error-free but for small text output it should be ok.
+
+Return value is hash ref of:
+
+  * array of stdouts   - stdout from remote process
+  * stdoutraw          - merged stdouts with delimiters
+  * stderrraw          - merged stderrs with delimiters
+  * array of stderr    - stderr from remote process
+  * exitcode  - common exit code from remotep rocess
+  * killled   - if not 0 mean common process was killed by timeout
+
+obj->syncexitcode is set by function but please don't use it!
+
+=cut
+
+sub run{
+    my ( $self, $app, $timeout ) = @_;
+    my $cmdarray=0;
+    DEBUG "Xperior::SshProcess->run on host ". $self->host . "]";
+    my $tef = $self->rscrfile;
+    my ($f, $t) = mkstemp("/tmp/ssh_remote_sync_script_XXXX");
+    close $f;
+    if(ref($app) eq 'ARRAY'){
+        $cmdarray=1;
+        my $delimiters =
+        "\n".
+        'echo  '.$self->stdout_delimiter."\n".
+        'echo  '.$self->stderr_delimiter." 1>&2 \n";
+        $app = join($delimiters,@$app);
+
+    }
+    DEBUG "Uploading script:\n$app";
+    write_file($t, $app);
+    $self->putFile($t, $tef);
+    unlink $t;
+    my $execres =  $self->_sshSyncExec( "sh $tef", $timeout );
+    if($cmdarray){
+        $execres->{stdoutraw} = $execres->{stdout};
+        $execres->{stderrraw} = $execres->{stderr};
+        my @ao = map {trim($_)} split($self->stdout_delimiter,$execres->{stdout});
+        $execres->{stdout}= \@ao;
+        my @ae = map {trim($_)} split($self->stderr_delimiter,$execres->{stderr});
+        $execres->{stderr}= \@ae;
+    }
+    return $execres;
+}
+
+
 =head3 createSync ($command, $timeout)
 
-Execute remote process and catch stderr/std and exit code. Function exit when
+Deprecated!
+
+Executes remote process and catch stderr/std and exit code. Function exits when
 remote execution done.
 
-Function have one parameter - command for start on emote node.
+Parameters:
+
+  * command to run, could be multiline shell code
+  * timeout
+
+Return values:
+
+  * stdout from executed command
+  * obj->syncexitcode - exit code from script
 
 =cut
 
 sub createSync {
     my ( $self, $app, $timeout ) = @_;
-    $self->appcmd($app);
     DEBUG "Xperior::SshProcess createSync";
     DEBUG "App to run [$app] on host[" . $self->host . "]";
-    my $ecf = $self->syncecodefile;
+    #my $ecf = $self->syncecodefile;
     $self->killed(0);
     $self->syncexitcode(undef);
     my $sscript = <<"SSCRIPT";
 $app
-echo \$? > $ecf
 SSCRIPT
 
     DEBUG "Uploading script:\n$sscript";
     my $tef = $self->rscrfile;
-    #my $fco = $self->_sshSyncExec("echo  '$ss' > $tef");
     my ($f, $t) = mkstemp("/tmp/ssh_remote_sync_script_XXXX");
+    close $f;
     write_file($t, $sscript);
     $self->putFile($t, $tef);
-
-    my $s = $self->_sshSyncExec( "sh $tef", $timeout );
+    unlink $t;
+    my $sr = $self->_sshSyncExec( "sh $tef", $timeout );
     DEBUG "Remote app completed";
-
-    if ( $self->killed == 0 ) {
-        my $ecfc = $self->_sshSyncExec("cat $ecf");
-        if ( defined($ecfc) ) {
-            chomp $ecfc;
-            DEBUG "Exit code is [$ecfc]";
-            $self->syncexitcode( trim $ecfc );
-        }
-        else {
-            WARN "No remote exit code is get, looks like".
-                 " connection problem observed, set undef";
-            $self->syncexitcode(undef);
-        }
-
-        #$self->exitcode($self->syncexitcode);
-    }
-    return $s;
+    INFO trim($sr->{stderr}) if trim($sr->{stderr});
+    return undef
+        if $sr->{killed};
+    return $sr->{stdout};
 
 }
 
@@ -534,7 +613,6 @@ sub create {
     DEBUG "[$cmd]";
 
     $self->appname($name);
-    $self->appcmd($cmd);
     $self->killed(0);
 
     my $shell_file = $self->rscrfile();
@@ -569,7 +647,7 @@ SCRIPT
     # wait 6*5 sec for pid file on remote side
     unless ($self->_findPid()) {
         #confess
-        WARN "Remote process doesn't start or found in pid file";
+        WARN "Remote process doesn't start or isn't found in pid file";
         return -1;
     }
 
@@ -638,19 +716,21 @@ sub isAlive {
     my $self = shift;
     my $pid  = $self->pid;
     my $name = $self->appname;
-    my $o;
     my $step     = 1;
     my $AT       = 6;
     my $exitcode = '';
+    my $o = '';
     while ( $AT > $step ) {
-        $o = $self->_sshSyncExec(" ps -o pid=  -p $pid h 2>&1; echo \$? ");
-        if ( defined($o) ) {
-            $o = trim $o;
+        my $execres = $self->_sshSyncExec(
+                    " ps -o pid=  -p $pid h 2>&1; echo \$? ");
+        if ( defined($execres) ) {
+            $o = trim $execres->{stdout};
         }
         if ( ( defined($o) ) and ( $o =~ m/^\s*$pid\s*/ ) ) {
             last;
         }
-        $exitcode = trim( $self->_sshSyncExec( "cat " . $self->ecodefile ) );
+        my $ecoderes =  $self->_sshSyncExec( "cat " . $self->ecodefile );
+        $exitcode = trim( $ecoderes->{stdout} );
 
         DEBUG "Exitcode = [$exitcode]";
         if ( ( defined($o) ) and ( $exitcode =~ m/^\d+$/ ) ) {
