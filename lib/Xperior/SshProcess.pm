@@ -85,20 +85,20 @@ use File::Basename;
 my $UserKnownHostsFile;
 my $UserKnownHostsFileBr;
 BEGIN {
-	my $f;
-	($f, $UserKnownHostsFile)   = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
-	close $f;
-	($f, $UserKnownHostsFileBr) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
-	close $f;
-	unlink $UserKnownHostsFile;
-	unlink $UserKnownHostsFileBr;
-
+    my $f;
+    ($f, $UserKnownHostsFile)   = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
+    close $f;
+    ($f, $UserKnownHostsFileBr) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
+    close $f;
+    unlink $UserKnownHostsFile;
+    unlink $UserKnownHostsFileBr;
 }
 
 END {
-	unlink $UserKnownHostsFile;
-	unlink $UserKnownHostsFileBr;
+    unlink $UserKnownHostsFile;
+    unlink $UserKnownHostsFileBr;
 }
+
 
 with qw(MooseX::Clone);
 
@@ -130,26 +130,28 @@ Flag set if killed latest executed command via C<create> call.
 
 =cut
 
-has port          => ( is => 'rw' );
-has host          => ( is => 'rw' );
-has user          => ( is => 'rw' );
-has pass          => ( is => 'rw' );
-has bridge        => ( is => 'rw' );
-has bridgeuser    => ( is => 'rw', default => 'root');
+has port           => ( is => 'rw' );
+has host           => ( is => 'rw' );
+has user           => ( is => 'rw' );
+has pass           => ( is => 'rw' );
+has bridge         => ( is => 'rw' );
+has bridgeuser     => ( is => 'rw', default => 'root');
 
-has pidfile       => ( is => 'rw' );
-has ecodefile     => ( is => 'rw' );
-#has syncecodefile => ( is => 'rw' );
-has rscrfile      => ( is => 'rw' );
-has pid           => ( is => 'rw' );
-has appname       => ( is => 'rw' );
-has exitcode      => ( is => 'rw' );
-has syncexitcode  => ( is => 'rw' );
-has bprocess      => ( is => 'rw' );
+has pidfile        => ( is => 'rw' );
+has ecodefile      => ( is => 'rw' );
+has controlmaster  => ( is => 'rw' );
+has stopmaster     => ( is => 'rw', default => 0 );
+has rscrfile       => ( is => 'rw' );
+has pid            => ( is => 'rw' );
+has appname        => ( is => 'rw' );
+has exitcode       => ( is => 'rw' );
+has syncexitcode   => ( is => 'rw' );
+has bprocess       => ( is => 'rw' );
+has masterprocess  => ( is => 'rw' );
 
-has killed        => ( is => 'rw' );
-has hostname      => ( is => 'rw' );
-has osversion     => ( is => 'rw' );
+has killed         => ( is => 'rw' );
+has hostname       => ( is => 'rw' );
+has osversion      => ( is => 'rw' );
 
 has bridgetmpdir           =>(
     is => 'ro', default => '/tmp/xperior_bridge_dir');
@@ -166,9 +168,78 @@ has stderr_delimiter => (
 
 =head2 Functions
 
+=cut
+
+sub DEMOLISH {
+    my $self = shift;
+    DEBUG "Clear master processes\n";
+    #$self->masterprocess()->kill();
+}
+
+
+=head3 _sshMasterProcess{
+
+Function start and support ssh master chanell
+
+=cut
+
+sub _supportMasterProcess{
+    my $self = shift;
+    if( ( defined $self->masterprocess() ) and
+        ( $self->masterprocess->poll())){
+        DEBUG "Already  started, ignoring";
+        return;
+    }
+    if($self->bridge){
+        WARN ('Master is not supported for bridge');
+        return -1;
+    }
+    DEBUG 'Starting master process';
+
+    $self->masterprocess( Proc::Simple->new() );
+
+    my $mc =
+       "ssh -n "
+      . "-o  'BatchMode=yes' "
+      . "-o 'AddressFamily=inet' "
+      . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
+      . "-o 'StrictHostKeyChecking=no' "
+      . "-o 'ConnectTimeout=25' "
+      . " -o 'ControlMaster=yes' "
+      . " -o 'ControlPath=".$self->controlmaster()."' "
+      . $self->user . "@"
+      . $self->host
+      . " 'for i in \`seq 1 3600\`; do  sleep 1 ; echo -n ;  done'  ";
+
+    $self->masterprocess->start($mc);
+    $self->masterprocess->kill_on_destroy(1);
+    $self->masterprocess->signal_on_destroy("KILL");
+    DEBUG 'Master started!';
+
+}
+
+=head3 _getMasterCmd
+
+Function returns prepared part of ssh command for executing
+with socket multiplexing.
+
+=cut
+
+sub _getMasterCmd{
+    my ($self, $master)  = @_;
+    my $socket = $self->controlmaster();
+    if($self->bridge()){
+        $socket = $socket.'_on_bridge';
+    }
+    return
+        " -o 'ControlMaster=no' ".
+        " -o 'ControlPath=".$self->controlmaster()."' ";
+    #" -o ControlPersist=".(60*60)." "; only ssh 6.x option
+}
+
 =head3 _getBridgeCmd(mode)
 
-Function returns prepared part of command for executing command
+Function returns prepared part of sshcommand for executing
 via bridge.
 
 Return empty line if bridge is not set.
@@ -206,7 +277,7 @@ sub _getBridgeCmd{
 
 #do pool check status to prevent false deatch report
 sub _sshSyncExec {
-    my ( $self, $cmd, $timeout ) = @_;
+    my ( $self, $cmd, $timeout, $need_tty ) = @_;
     $timeout = 30 unless defined $timeout;
     my $step = 0;
     my $AT   = 5;
@@ -215,30 +286,36 @@ sub _sshSyncExec {
         sleep $step;
         # legacy behavior support
         $self->syncexitcode(undef);
-
-        my $r = $self->_sshSyncExecS( $cmd, $timeout );
-        return $r
-          if (( defined( $r->{exitcode} ) )
-                and ( $r->{exitcode} != 255 ) #connect fault
-          );
+        $r = $self->_sshSyncExecS( $cmd, $timeout, $need_tty );
+        if (( defined( $r->{sshexitcode} ) )
+              and ( $r->{sshexitcode} != 255 )){ #connect fault
+            $r->{attempts}=$step+1;
+            return $r;
+          }
         $step++;
-        my $ec = $r->{exitcode};
-        DEBUG "Sync attemp [$step], exit code is :[$ec], retry...";
+        my $ec = $r->{sshexitcode};
+        DEBUG "Sync attemp [$step], ssh exit code is :[$ec], retry...";
     }
+    $r->{attempts}=$step;
     return $r;
 }
 
 sub _sshSyncExecS {
-    my ( $self, $cmd, $timeout ) = @_;
+    my ( $self, $cmd, $timeout, $need_tty ) = @_;
+    $self->_supportMasterProcess();
     my $nonbridgeparams =
         "-o  'BatchMode=yes' " .
         "-o 'AddressFamily=inet' ";
+    my $ttyopt = $need_tty ? " -t -t " : "";
         #." -f ";
-    $nonbridgeparams= '' if($self->_getBridgeCmd());
+    my $bridgecmd = $self->_getBridgeCmd();
+    $nonbridgeparams= '' if($bridgecmd);
     my $cc =
-      $self->_getBridgeCmd()
+      $bridgecmd
       . "ssh "
+      . $ttyopt
       . $nonbridgeparams
+      . " ". $self->_getMasterCmd()
       . "-o 'ConnectTimeout=25' "
       . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
       . "-o 'StrictHostKeyChecking=no' "
@@ -247,7 +324,7 @@ sub _sshSyncExecS {
       . "-o 'ServerAliveCountMax=15' " #. " -f "
       . $self->user . "@"
       . $self->host
-      . " \"$cmd; exit \\\$? \" ";#2>&1 ";
+      . " \"$cmd; ec=\\\$? ;echo -n 'Internal_exit_code:'; echo -n \\\$ec; exit 0 \"";
     DEBUG "Remote ssh sync cmd is [$cc], timeout is [$timeout]";
     my ($f,$stdout,$stderr);
     ($f, $stdout)   = mkstemp("/tmp/ssh_sync_stdout_XXXXXXX");
@@ -259,9 +336,11 @@ sub _sshSyncExecS {
     $proc->redirect_output ($stdout, $stderr);
     $proc->start($cc);
     $proc->kill_on_destroy(1);
+    $proc->signal_on_destroy("KILL");
     my $time = time();
     my $killed = 0;
-    my $exitcode;
+    my $exitcode=-1;
+    my $parsed_exit_code =-1;
     while ( $proc->poll() ) {
         DEBUG "Wait for sync app finish";
         sleep 1;
@@ -273,28 +352,41 @@ sub _sshSyncExecS {
             $self->killed(time);
             ###
             $killed=time;
-            $exitcode = $self->sync_timeout_exit_code;
+            $exitcode         = $self->sync_timeout_exit_code;
+            $parsed_exit_code = $self->sync_timeout_exit_code;
             WARN "SSH sync execution killed by timeout !\n";
             $proc->kill();
             last;
         }
      }
+    my @outraw = read_file($stdout);
+    my $out = join( "\n", map {
+            #DEBUG "line:".$_;
+            if( $_ =~ s/Internal_exit_code:(\d+)// ){
+                DEBUG "Caught exit code $1";
+                $parsed_exit_code = $1;
+                # $_ =~ s/Internal_exit_code:(\d++)$//;
+            }
+            $_;
+        } @outraw );
+    my $err = read_file($stderr);
+    unlink $stdout;
+    unlink $stderr;
     if(not $killed){
-        DEBUG 'System exit code is :'.($proc->exit_status() >> 8);
+        DEBUG 'SSH exit code is :'.($proc->exit_status() >> 8);
         $exitcode = $proc->exit_status() >> 8;
         # legacy behavior support
         $self->syncexitcode( $proc->exit_status() >> 8 );
     }
-    my $out = read_file($stdout);
-    my $err = read_file($stderr);
-    unlink $stdout;
-    unlink $stderr;
-    return {stdout=>$out, stderr=>$err, exitcode=>$exitcode, killed => $killed};
+    $self->syncexitcode( $parsed_exit_code );
+    return {stdout=>$out, stderr=>$err,
+        exitcode=>$parsed_exit_code, sshexitcode=>$exitcode, killed => $killed};
 
 }
 
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
+    $self->_supportMasterProcess();
     my $asyncstarttimeout = 30;
     my $sc                = 1;
     my $nonbridgeparams =
@@ -323,9 +415,11 @@ sub _sshAsyncExec {
         $self->bprocess->start($cc);
         $self->bprocess->kill_on_destroy(1);
         my $time = 0;
-        while ( not defined $self->bprocess->exit_status() ) {
-            DEBUG 'sleep 1 ' . `/bin/sleep 1`;    #hack, looks like perl's sleep
-                                                  #doesn't work there
+        while (not defined $self->bprocess->exit_status()) {
+            #DEBUG 'sleep 1 ' . `/bin/sleep 1`;    #hack, looks like perl's sleep
+            #                                      #doesn't work there
+            DEBUG "Wait for sync app finish";
+            sleep 1;
             $sc = $self->bprocess->exit_status();
             $time++;
             if ( $time > $asyncstarttimeout ) {
@@ -350,9 +444,7 @@ sub initTemp {
     my $id   = Time::HiRes::gettimeofday();
     $self->pidfile("/tmp/xperior_pid_ssh_$id");
     $self->ecodefile("/tmp/remote_exit_code_$id");
-    #$self->syncecodefile("/tmp/remote_sync_exit_code_$id");
     $self->rscrfile("/tmp/remote_script_$id.sh");
-
 }
 
 =head3 init ($host, $user, $port)
@@ -382,7 +474,9 @@ sub init {
     }
     my $nocrash = shift;
 
-    $self->initTemp;
+    $self->controlmaster("/tmp/xperior_controlmaster_".
+            Time::HiRes::gettimeofday().".ssh");
+    $self->initTemp();
     $self->killed(0);
     $self->exitcode(0);
 
@@ -397,7 +491,7 @@ sub init {
     #DEBUG "-------------------------------";
     #DEBUG $self->exitcode;
     #DEBUG $self->killed;
-    if (( not defined $unameres ) 
+    if (( not defined $unameres )
                or ( $unameres->{exitcode} != 0 )
                or ( $unameres->{killed} != 0 ) )
     {
@@ -438,6 +532,7 @@ sub _findPid {
             return $pid;
         }
     }
+    return 0;
 }
 
 
@@ -448,19 +543,31 @@ node same as system. If timemout is exceeded process will
 be killed. Stdout, stderr gathered to scalar vars, this mean
 that output shoudl be comparabe small.
 
-Command could be multiline shell script.
+Command could be multiline shell script. 5 attempts will be done
+if ssh exit code 255.
+
+From ssh help
+    ssh exits with the exit status of the remote command or with 255
+    if an error occurred.
 
 Parameters:
 
   * command to run
-  * timeout
+  * timeout 9sec)
+  * opt => value
+
+  Supported options
+  timeout  - number 5 sec
+  need_tty - 1 if ssh tty is needed. use carefully.
 
 Return value is hash ref of:
 
-  * stdout    - stdout from remote process
-  * stderr    - stderr from remote process
-  * exitcode  - exit code from remote process
-  * killled   - if not 0 mean process was killed by timeout
+  * stdout      - stdout from remote process
+  * stderr      - stderr from remote process
+  * exitcode    - exit code from remote process
+  * sshexitcode - ssh exit code
+  * killled     - if not 0 mean process was killed by timeout
+  * attempts    - how much conenction attempts were done
 
 or
 
@@ -468,6 +575,7 @@ Parameters:
 
   * array of command to run
   * common timeout for all commands
+  and previously defined opts
 
 In this set of parameters, all commands  merged to one
 script via separator and stdout/stderr split after
@@ -476,19 +584,23 @@ be error-free but for small text output it should be ok.
 
 Return value is hash ref of:
 
-  * array of stdouts   - stdout from remote process
-  * stdoutraw          - merged stdouts with delimiters
-  * stderrraw          - merged stderrs with delimiters
-  * array of stderr    - stderr from remote process
-  * exitcode  - common exit code from remotep rocess
-  * killled   - if not 0 mean common process was killed by timeout
+  * array of stdouts - stdout from remote process
+  * stdoutraw        - merged stdouts with delimiters
+  * stderrraw        - merged stderrs with delimiters
+  * array of stderr  - stderr from remote process
+  * exitcode         - target app exit code
+  * sshexitcode      - ssh exit code
+  * killled          - if not 0 mean common process was killed by timeout
+  * attempts         - how much conenction attempts were done
 
 obj->syncexitcode is set by function but please don't use it!
 
 =cut
 
 sub run{
-    my ( $self, $app, $timeout ) = @_;
+    my ( $self, $app, %opts ) = @_;
+    my $timeout = $opts{timeout};
+    my $need_tty = $opts{need_tty} or 0;
     my $cmdarray=0;
     DEBUG "Xperior::SshProcess->run on host ". $self->host . "]";
     my $tef = $self->rscrfile;
@@ -507,7 +619,7 @@ sub run{
     write_file($t, $app);
     $self->putFile($t, $tef);
     unlink $t;
-    my $execres =  $self->_sshSyncExec( "sh $tef", $timeout );
+    my $execres =  $self->_sshSyncExec( "sh $tef", $timeout , $need_tty);
     if($cmdarray){
         $execres->{stdoutraw} = $execres->{stdout};
         $execres->{stderrraw} = $execres->{stderr};
@@ -640,12 +752,20 @@ SCRIPT
         return -2;
     }
     DEBUG "Remote async app started";
-    sleep 3;
+    sleep 1;
     $self->exitcode(undef);
 
     #cycle workaround for long remote part start
-    # wait 6*5 sec for pid file on remote side
-    unless ($self->_findPid()) {
+    # wait 5*1 sec for pid file on remote side
+    my $i   = 0;
+    my $pid = 0;
+    while((not $pid) and ( $i < 5)){
+        $pid = $self->_findPid();
+        sleep 1 if not $pid;
+        $i++;
+    }
+
+    unless ($pid) {
         #confess
         WARN "Remote process doesn't start or isn't found in pid file";
         return -1;
@@ -782,17 +902,15 @@ sub putFile {
 
     my $targethost  = $self->user.'@'.$self->host;
     my $destination = $targethost.':'.$remote_file;
-
+    $self->_supportMasterProcess();
     if( $self->bridge() ){
         DEBUG "Copying $local_file to $destination via bridge";
-
+        $self->_supportMasterProcess();
         my $bridgetmpdir = $self->bridgetmpdir();
         my $bridgeuser   = $self->bridgeuser();
         my $bridgehost   = $self->bridge();
         my $bridgecmd    = $self->_getBridgeCmd();
-
         my $script = <<"PSCRIPT";
-
         $bridgecmd mkdir -p $bridgetmpdir
         scp -rp -o 'UserKnownHostsFile=$UserKnownHostsFile' \\
             -o 'StrictHostKeyChecking=no'                   \\
@@ -813,7 +931,7 @@ PSCRIPT
         my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
         write_file($t, $script);
         #my $res = shell("sh -e $t");
-		my $res = runEx("sh -e $t");
+        my $res = runEx("sh -e $t");
         unlink $t;
         return $res;
 
@@ -832,7 +950,8 @@ PSCRIPT
             " -o 'UserKnownHostsFile=$UserKnownHostsFile'".
             " -o 'StrictHostKeyChecking=no'".
             " -o 'ConnectionAttempts=3'".
-            " -o 'ConnectTimeout=25'".
+            " -o 'ConnectTimeout=25' ".
+            $self->_getMasterCmd().
             " $local_file $destination" );
 
         return $e;
@@ -852,7 +971,7 @@ sub getFile {
     my($filename, $dirs, $suffix) = fileparse("$remote_file");
     my $tmp_file = $self->bridgetmpdir().'/'.$filename;
     my $source  = $self->user . '@' . $self->host . ':' . $remote_file;
-
+    $self->_supportMasterProcess();
     if( $self->bridge() ){
         DEBUG "Copying [$source] to [$local_file] via bridge";
 
@@ -883,7 +1002,7 @@ PSCRIPT
         my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
         write_file($t, $script);
         #my $res = shell("sh -e $t");
-		my $res = runEx("sh -e $t");
+        my $res = runEx("sh -e $t");
         unlink $t;
         return $res;
 
@@ -897,10 +1016,11 @@ PSCRIPT
 #                 $source, $local_file ]);
         my $e = runEx(
             "scp -rp".
-			" -o 'UserKnownHostsFile=$UserKnownHostsFile'".
+            " -o 'UserKnownHostsFile=$UserKnownHostsFile'".
             " -o 'StrictHostKeyChecking=no'".
             " -o 'ConnectionAttempts=3'".
-            " -o 'ConnectTimeout=25'".
+            " -o 'ConnectTimeout=25' ".
+            $self->_getMasterCmd().
             " $source $local_file" );
         return $e;
     }

@@ -112,7 +112,7 @@ test plan => 2 * @test_cases, cCheckLustreSingleTests => sub {
 
 test
   plan             => 2,
-  aaadCheckLogParsing => sub {
+  dCheckLogParsing => sub {
     my $exe  = Xperior::Executor::LustreSingleTests->new();
     my $test = Xperior::Test->new;
     my %test_config = (

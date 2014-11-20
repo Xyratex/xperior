@@ -41,16 +41,31 @@ use Xperior::Utils;
 use Xperior::Node;
 $|=1;
 my $sp;
-my $node;
+my ($node, $badhostnode, $badhostnobridgenode);
 startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
     $node = Xperior::Node->new;
-    $node->id('test node');
+    $node->id('test node 1');
     $node->ip('localhost');
     $node->ctrlproto('ssh');
     $node->user('tomcat');
     $node->bridge('localhost');
     $node->bridgeuser('tomcat');
+
+    $badhostnode = Xperior::Node->new;
+    $badhostnode->id('test node 2');
+    $badhostnode->ip('bad_host_name');
+    $badhostnode->ctrlproto('ssh');
+    $badhostnode->user('tomcat');
+    $badhostnode->bridge('localhost');
+    $badhostnode->bridgeuser('tomcat');
+
+    $badhostnobridgenode = Xperior::Node->new;
+    $badhostnobridgenode->id('test node 3');
+    $badhostnobridgenode->ip('bad_host_name');
+    $badhostnobridgenode->ctrlproto('ssh');
+    $badhostnobridgenode->user('tomcat');
+
 };
 
 setup           _setup    => sub {
@@ -63,16 +78,16 @@ teardown        _teardown => sub {
 shutdown        _shutdown => sub { };
 #########################################
 
-test plan => 3, bCreateExitCodes     => sub{
+test plan => 3,abCreateExitCodes     => sub{
 
     my $res = $sp->create('sleep','/bin/sleep 30');
     is($res, 0,'Correct exit code');
-    sleep 10;
-
+    $sp->kill();
+#exit 1;
     $res = $sp->create('sleep','ls /etc/passwd');
     is($res, 0,'Check result for too smal application');
 
-    $sp->host('bad_host');
+    $sp->init($badhostnobridgenode);
     $res = $sp->create('sleep','/bin/sleep 30');
     is($res,-2,'Check result for bad host');
 
@@ -80,16 +95,16 @@ test plan => 3, bCreateExitCodes     => sub{
 #exit 1;
 };
 
-test plan => 3, abCreateExitCodesBridge     => sub{
+test plan => 3, bCreateExitCodesBridge     => sub{
     $sp->init($node);
     my $res = $sp->create('sleepbr','/bin/sleep 30');
     is($res, 0,'Correct exit code for bridge case');
-    sleep 10;;
+    $sp->kill();
 
     $res = $sp->create('sleepbr','ls /etc/passwd');
     is($res, 0,'Check result for too smal application for bridge case');
 
-    $sp->host('bad_host');
+    $sp->init($badhostnode);
     $res = $sp->create('sleep','/bin/sleep 30');
     is($res,-1,'Check result for bad host for bridge case');
 
@@ -109,6 +124,7 @@ test plan => 7, kCreateAliveKill    => sub {
     isnt($sp->killed,0, 'Check status after kill');
     isnt($sp->exitcode,undef, 'Check 1 exit code after kill');
     isnt($sp->exitcode,0, 'Check 2 exit code after kill');
+    #exit 1;
 };
 
 test plan => 6, lCreateAliveExit    => sub {
@@ -128,17 +144,22 @@ test plan => 6, lCreateAliveExit    => sub {
 };
 
 
-test plan => 8, fRunExecution => sub {
+test plan => 16, fRunExecution => sub {
   my $stime = time;
   my $r = $sp->run('/bin/sleep 10');
   my $etime = time;
   is($r->{exitcode},0,"Check exit code for correct run");
+  is($r->{sshexitcode},0,"Check ssh exit code for correct run");
   ok($etime-$stime< 15, "Check execution time");
   $r = $sp->run('ls -la /folder/which/nobody/never/creates/');
   is($r->{exitcode},2,"Check exit code for failed run");
-
+  $r = $sp->run('exit 255');
+  is($r->{exitcode},255,"Check exit code for failed run ec 255");
+  is($r->{attempts},1,"Check attempts for failed run ec 255");
+  is($r->{sshexitcode},0,"Check sshexitcode for failed run ec 255");
+  #exit 2;
   $stime = time;
-  $r = $sp->run('/bin/sleep 60',5);
+  $r = $sp->run('/bin/sleep 60',timeout=>5);
   $etime=time;
   isnt($r->{exitcode},0,"Check exit code for timeouted run");
   isnt($sp->syncexitcode,0,"Check exit code for timeouted run #2");
@@ -148,8 +169,42 @@ test plan => 8, fRunExecution => sub {
   $r = $sp->run('/bin/sleep 10');
   is($r->{exitcode},0,"Check exit code for restored run");
   is($sp->syncexitcode,0,"Check exit code for restored run#2");
+
+  my $ttycheckcmd =
+  'if [ -t 1 ] ; then echo tty; else echo notty;  fi';
+  $r = $sp->run($ttycheckcmd);
+  is($r->{exitcode},0,"Check exit code for no tty");
+  is(trim($r->{stdout}),'notty',"Check message for no tty");
+
+  $r = $sp->run($ttycheckcmd,need_tty=>1);
+  is($r->{exitcode},0,"Check exit code for tty");
+  is(trim($r->{stdout}),'tty',"Check message for tty");
+  #exit 1;
 };
 
+test plan => 3, fRunExecutionNegative => sub {
+  $sp->init($badhostnobridgenode);
+  my $r = $sp->run('echo test');
+  is($r->{exitcode},-1,"Check exit code for failed run ec 255");
+  is($r->{attempts},5,"Check attempts for failed run ec 255");
+  is($r->{sshexitcode},255,"Check sshexitcode for failed run ec 255");
+#  exit 0;
+};
+
+test plan =>4 , fRunBridgeExecution => sub {
+  $sp->init($node);
+
+  my $ttycheckcmd =
+  'if [ -t 1 ] ; then echo tty; else echo notty;  fi';
+  my $r = $sp->run($ttycheckcmd);
+  is($r->{exitcode},0,"Check exit code for no tty");
+  is(trim($r->{stdout}),'notty',"Check message for no tty");
+
+  $r = $sp->run($ttycheckcmd,need_tty=>1);
+  is($r->{exitcode},0,"Check exit code for tty");
+  is(trim($r->{stdout}),'tty',"Check message for tty");
+
+};
 
 test plan => 12, gRunMultiCommandExecution => sub {
   my $stime = time;
@@ -164,9 +219,9 @@ test plan => 12, gRunMultiCommandExecution => sub {
   is(scalar(@{$r->{stdout}}),3,'test run array 5');
   is(scalar(@{$r->{stderr}}),3,'test run array 6');
 
-  my @cmds = ('echo 54321','echo qwerty; sleep 30; echo ytrewq',
+  @cmds = ('echo 54321','echo qwerty; sleep 30; echo ytrewq',
                 'echo qazwsx');
-  my $r = $sp->run(\@cmds,5);
+  $r = $sp->run(\@cmds,timeout=>5);
   is($r->{exitcode},$sp->sync_timeout_exit_code,
     "Check exit code for timeouted run array");
   isnt($r->{killed},0,"Check exit code for timeouted run array");
@@ -233,8 +288,7 @@ test plan => 10, cInit    => sub {
     #eval{ $sp->init('localhost','ryg_on_mars');};
     #isnt($@,''," Connection failed as expected 3");
     $res = $sp->init('localhost','tomcat_om_mars');
-    isnt($res,0,'Connection failed as expected 4');    
-    
+    isnt($res,0,'Connection failed as expected 4');
 };
 
 
@@ -306,6 +360,7 @@ test plan => 4, vaGetFile => sub {
     isnt($res,0,'Check not exist file copy');
     ok ( (! -e $nof), "Check no new file for bad source" );
     DEBUG `rm -f $if $of`;
+    #exit 1;
 };
 
 test plan => 4, vbGetFileBridge => sub {
@@ -328,7 +383,7 @@ test plan => 4, vbGetFileBridge => sub {
     isnt($res,0,'Check not exist file copy for bridge case');
     ok ( (! -e $nof), "Check no new file for bad source  for bridge case" );
     DEBUG `rm -f $if $of`;
-
+    #exit 0;
 };
 
 

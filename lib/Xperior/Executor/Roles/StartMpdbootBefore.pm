@@ -60,28 +60,37 @@ before 'execute' => sub {
     return if $master->ismpdready();
 
     # shutdown mpdboot on each client;
-    # this guarantees us that mpdboot is started
+    # this guarantees that mpdboot is started
     # properly (i.e. only on master client)
     my @nodes = map { $_->{'node'} } @{ $self->env->getLustreClients() };
     foreach my $id ( @nodes ) {
-        my $c = $self->env->getNodeById( $id )->getExclusiveRC();
-        DEBUG $c->createSync( "su mpiuser sh -c \\\"mpdallexit\\\"", 300 );
+        my $c = $self->env->getNodeById( $id )->getRemoteConnector();
+        my $res = $c->run( "sudo -u  mpiuser mpdallexit", 
+            timeout => 300 );
+        DEBUG 'mpdallexit out:'.$res->{stdout};
+        DEBUG 'mpdallexit err:'.$res->{stderr};
     }
-
     # produce machinefile
     my $machinefile = "/tmp/machinefile";
-    (my $fh, my $tmp_file) = mkstemp( "/tmp/machinefile_XXXX" );
+    my($fh, $tmp_file) = mkstemp( "/tmp/machinefile_XXXX" );
+    close $fh;
     write_file ($tmp_file, join ( "\n", @nodes ));
     chmod 0644, $tmp_file;
-    $master->getExclusiveRC()->putFile( $tmp_file, $machinefile );
+    my $not_copied = $master->getRemoteConnector()->putFile(
+                                    $tmp_file, $machinefile );
     unlink $tmp_file;
-
-    # start mpdboot with new machinefile on master client
-    my $nclients = @nodes;
-    DEBUG $master->getExclusiveRC()->createSync
-        ( "su mpiuser sh -c \\\"mpdboot -n $nclients -f $machinefile \\\"", 300 );
-
-    $master->ismpdready(1);
+    if(not $not_copied){
+        # start mpdboot with new machinefile on master client
+        my $nclients = @nodes;
+        my $bootres = $master->getRemoteConnector()->run(
+            "sudo -u mpiuser mpdboot -n $nclients -f $machinefile ",
+            timeout=>300 );
+        DEBUG "mpdboot out:".$bootres->{stdout};
+        DEBUG "mpdboot err:".$bootres->{stderr};
+        $master->ismpdready(1);
+    }else{
+        ERROR 'Cannot copy machinefile to '.$master->hostname();
+    }
 };
 
 1;

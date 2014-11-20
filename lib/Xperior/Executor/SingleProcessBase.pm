@@ -143,7 +143,7 @@ sub execute {
         }
         DEBUG "Test alive, next wait cycle";
     }
-    $testproc->createSync( 'sync', 30 );
+    #$testproc->createSync( 'sync', 30 );
 
     $self->addYE( 'endtime',         time );
     $self->addYE( 'endtime_planned', $endtime );
