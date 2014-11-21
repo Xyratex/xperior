@@ -99,7 +99,7 @@ sub _iterate_hash {
             }
         }
     }
-    return;
+    return $hash;
 }
 
 sub _validate_doc_data {
@@ -113,8 +113,8 @@ sub _validate_doc_data {
     $data->{srv_branch_name} = $data->{extoptions}->{srv_branch};
 
     # replacing . to _pnt_ in keys
-    _iterate_hash($data);
-    return;
+    my $return_data = _iterate_hash($data);
+    return $return_data;
 }
 
 sub _post_yaml_doc {
@@ -137,9 +137,9 @@ sub _post_yaml_doc {
         push @ids, $id;
     }
     $yaml_data->{attachments_ids}=\@ids;
-    _validate_doc_data($yaml_data);
+    my $validated_yaml = _validate_doc_data($yaml_data);
 
-    $db->get_collection($collection)->insert($yaml_data);    #,safe=>1);
+    $db->get_collection($collection)->insert($validated_yaml);    #,safe=>1);
 
     my $err = $db->last_error();
 }
