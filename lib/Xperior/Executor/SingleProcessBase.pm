@@ -101,12 +101,15 @@ sub execute {
     ##remove and recreate directory for logs
     #TODO cleanup should be done out of sub execute
     #$testp->createSync ('rm -rf /var/log/xperior/');
-    $testproc->createSync('mkdir -p /var/log/xperior/');
+    
 
     my $mountpoint = $self->env->cfg->{'client_mount_point'}
       or cluck("Undefined 'client_mount_point'");
+    my @cmds = (
+        'mkdir -p /var/log/xperior/',
+        "mkdir -p ${mountpoint}",);
 
-    $testproc->createSync("mkdir -p ${mountpoint}");
+    $testproc->run(\@cmds);
 
     #TODO add exit value check there. Now it doesn't have value until
     #own lustre mount manager
@@ -151,10 +154,10 @@ sub execute {
     my $killed     = 0;
     my $isnodedown = 0;
     my $killtime   = 0;
-    my $ping       = $mclientobj->ping;
+    my $ping       = $mclientobj->ping();
     if ( $ping and ( $testproc->isAlive == 0 ) ) {
         WARN "Test is alive after end of test execution, kill it";
-        my $ts = $mclientobj->getExclusiveRC;
+        my $ts = $mclientobj->getRemoteConnector();
         DEBUG $ts->createSync('ps afx');
         DEBUG "Owned pid is:" . $testproc->pid;
         $testproc->kill;
@@ -178,7 +181,7 @@ sub execute {
 
     #cleanup tempdir after execution
     #TODO make this removing safe!!!
-    $testproc->createSync( 'rm -rf ' . "$mountpoint/*" )
+    $testproc->run( 'rm -rf ' . "$mountpoint/*" )
 	if ($mountpoint and $mountpoint ne "");
 
     ### get logs

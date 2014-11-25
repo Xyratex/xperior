@@ -908,4 +908,5 @@ reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
 roles: StoreStat StoreConsole GetDiagnostics StacktraceGenerator
 schema: data/schemas/testds.yaml
 tags: functional
+polltime: 1
 timeout: 300

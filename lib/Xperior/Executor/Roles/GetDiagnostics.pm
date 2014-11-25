@@ -59,15 +59,15 @@ after 'execute' => sub {
     my $self = shift;
   if ( ( $self->yaml->{status_code} ) == 1 ) {    #test failed
    foreach my $n (@{$self->env->nodes}){
-        my $c = $n->getExclusiveRC;
+        my $c = $n->getRemoteConnector();
         my $td = '/tmp/xpdiagnostic.'
                     .Time::HiRes::gettimeofday().'.xml';
 
-        $c->createSync("/usr/sbin/lustre-diagnostics -x $td",300);
+        $c->run("/usr/sbin/lustre-diagnostics -x $td",300);
 
         my $res = $c->getFile( $td,
             $self->getNormalizedLogName('diagnostic.xml.'.$n->id));
-        $c->createSync("rm -f $td");
+        $c->run("rm -f $td");
             if ($res == 0){
                 $self->registerLogFile('diagnostic.xml.'.$n->id,
                      $self->getNormalizedLogName
@@ -75,10 +75,7 @@ after 'execute' => sub {
             }else{
                 $self->addMessage(
                     "Cannot copy log file [$td]: $res");
-
             }
-
-
         }
    }
 

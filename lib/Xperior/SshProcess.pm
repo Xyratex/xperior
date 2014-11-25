@@ -140,7 +140,6 @@ has bridgeuser     => ( is => 'rw', default => 'root');
 has pidfile        => ( is => 'rw' );
 has ecodefile      => ( is => 'rw' );
 has controlmaster  => ( is => 'rw' );
-has stopmaster     => ( is => 'rw', default => 0 );
 has rscrfile       => ( is => 'rw' );
 has pid            => ( is => 'rw' );
 has appname        => ( is => 'rw' );
@@ -170,11 +169,6 @@ has stderr_delimiter => (
 
 =cut
 
-sub DEMOLISH {
-    my $self = shift;
-    DEBUG "Clear master processes\n";
-    #$self->masterprocess()->kill();
-}
 
 
 =head3 _sshMasterProcess{
@@ -194,12 +188,13 @@ sub _supportMasterProcess{
         WARN ('Master is not supported for bridge');
         return -1;
     }
-    DEBUG 'Starting master process';
+    DEBUG 'Starting master process for ['.
+    $self->controlmaster()."]";
 
     $self->masterprocess( Proc::Simple->new() );
-
+    unlink $self->controlmaster();
     my $mc =
-       "ssh -n "
+       "ssh -n -N "
       . "-o  'BatchMode=yes' "
       . "-o 'AddressFamily=inet' "
       . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
@@ -208,13 +203,12 @@ sub _supportMasterProcess{
       . " -o 'ControlMaster=yes' "
       . " -o 'ControlPath=".$self->controlmaster()."' "
       . $self->user . "@"
-      . $self->host
-      . " 'for i in \`seq 1 3600\`; do  sleep 1 ; echo -n ;  done'  ";
-
+      . $self->host;
+    DEBUG "Master cmd is [$mc]";
     $self->masterprocess->start($mc);
     $self->masterprocess->kill_on_destroy(1);
     $self->masterprocess->signal_on_destroy("KILL");
-    DEBUG 'Master started!';
+    DEBUG 'Master started for ['.$self->controlmaster().']';
 
 }
 
@@ -312,7 +306,7 @@ sub _sshSyncExecS {
     $nonbridgeparams= '' if($bridgecmd);
     my $cc =
       $bridgecmd
-      . "ssh "
+      . "ssh  "
       . $ttyopt
       . $nonbridgeparams
       . " ". $self->_getMasterCmd()
@@ -386,7 +380,6 @@ sub _sshSyncExecS {
 
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
-    $self->_supportMasterProcess();
     my $asyncstarttimeout = 30;
     my $sc                = 1;
     my $nonbridgeparams =
@@ -411,6 +404,7 @@ sub _sshAsyncExec {
     #this cycle is workaround for connection problem,
     #which observed too rare.
     while ( ( $sc != 0 ) and ( $step < $AT ) ) {
+        $self->_supportMasterProcess();
         $self->bprocess( Proc::Simple->new() );
         $self->bprocess->start($cc);
         $self->bprocess->kill_on_destroy(1);
@@ -445,6 +439,11 @@ sub initTemp {
     $self->pidfile("/tmp/xperior_pid_ssh_$id");
     $self->ecodefile("/tmp/remote_exit_code_$id");
     $self->rscrfile("/tmp/remote_script_$id.sh");
+    $self->controlmaster("/tmp/xperior_controlmaster"
+            ."_".$self->host()
+            ."_".Time::HiRes::gettimeofday()
+            .".sshmaster");
+    $self->masterprocess(undef);
 }
 
 =head3 init ($host, $user, $port)
@@ -474,8 +473,6 @@ sub init {
     }
     my $nocrash = shift;
 
-    $self->controlmaster("/tmp/xperior_controlmaster_".
-            Time::HiRes::gettimeofday().".ssh");
     $self->initTemp();
     $self->killed(0);
     $self->exitcode(0);
@@ -905,7 +902,6 @@ sub putFile {
     $self->_supportMasterProcess();
     if( $self->bridge() ){
         DEBUG "Copying $local_file to $destination via bridge";
-        $self->_supportMasterProcess();
         my $bridgetmpdir = $self->bridgetmpdir();
         my $bridgeuser   = $self->bridgeuser();
         my $bridgehost   = $self->bridge();

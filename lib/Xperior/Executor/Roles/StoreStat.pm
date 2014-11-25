@@ -51,15 +51,22 @@ requires 'env';
 
 sub collectStat {
     my ($self, $node) = @_;
-    my $c     = $node->getExclusiveRC;
-    my $lfs_i = $c->createSync('lfs df -i');
-    my $lctl_dl = $c->createSync('lctl dl');
-    my $lfs   = $c->createSync('lfs df');
-    my $mount = $c->createSync('mount | grep lustre');
-    my $lustre_rpm = $c->createSync('rpm -qi lustre');
-    my $client_rpm = $c->createSync('rpm -qi lustre-client');
-    my $free  = $c->createSync('free');
-    my $df    = $c->createSync('df');
+    my $c     = $node->getRemoteConnector();
+    my @cmds = (
+                'lfs df -i',
+                'lctl dl',
+                'lfs df',
+                'mount | grep lustre',
+                'rpm -qi lustre',
+                'rpm -qi lustre-client',
+                'free',
+                'df'
+            );
+
+    my $res = $c->run(\@cmds);
+
+    my ($lfs_i, $lctl_dl, $lfs, $mount, $lustre_rpm ,
+        $client_rpm , $free, $df) = @{$res->{stdout}};
     my $node_ip  = $node->{'ip'};
     my $ldata = <<DATA
 ----------------- $node_ip -----------------

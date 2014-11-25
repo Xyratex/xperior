@@ -68,7 +68,7 @@ after 'execute' => sub {
     $self->beforeAfterExecute($title);
     if (($self->yaml->{status_code}) == 1) {
         foreach my $n (@{ $self->env->nodes }) {
-            my $c = $n->getExclusiveRC();
+            my $c = $n->getRemoteConnector();
             DEBUG("Call 'lctl dk' on node [" . $n->ip() . "]");
             my $remotelogfile = "/tmp/lctl_dk.out." . time ();
             $c->createSync($self->lctldkcmd . " > $remotelogfile", 120);

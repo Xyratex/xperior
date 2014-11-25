@@ -258,6 +258,7 @@ sub _parseLogFile{
             $self->addMessage("Cannot list lctl logs files[$dumplog]");
         }else {
             foreach my $file ( split( /\n/, $files ) ) {
+                next if( ($file eq '') or ($file =~ m/^\s+/));
                 INFO "Attaching log file [$file]";
                 my $sname = $file;
                 $sname =~ s/^.*\///;
@@ -279,7 +280,7 @@ sub _prepareEnvOpts {
     if($self->env->cfg->{'nettype'}){
         $nettype=$self->env->cfg->{'nettype'};
     }
-    
+
     if($self->env->cfg->{'mgsnid'}){
         push @opt, 'MGSNID='.$self->env->cfg->{'mgsnid'};
     }else{

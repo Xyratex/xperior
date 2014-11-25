@@ -65,7 +65,7 @@ before 'execute' => sub {
     my @nodes = map { $_->{'node'} } @{ $self->env->getLustreClients() };
     foreach my $id ( @nodes ) {
         my $c = $self->env->getNodeById( $id )->getRemoteConnector();
-        my $res = $c->run( "sudo -u  mpiuser mpdallexit", 
+        my $res = $c->run( "sudo -u  mpiuser mpdallexit",
             timeout => 300 );
         DEBUG 'mpdallexit out:'.$res->{stdout};
         DEBUG 'mpdallexit err:'.$res->{stderr};

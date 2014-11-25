@@ -150,16 +150,11 @@ liveness (Lustre is up and files can be created).
 sub isReachable{
     my $self = shift;
     #TODO only ssh now is supported
-    my $initcode;
+    my $c;
     eval{
-        my $sc = Xperior::SshProcess->new();
-        $initcode = $sc->init($self);
+        $c = $self->getRemoteConnector();
     };
-    if( $@){
-         WARN "Cannot connect to host".$@;
-         return 0;
-    }
-    unless ( defined ($initcode)){
+    unless ( defined ($c)){
         WARN "Cannot ssh host [".$self->id."]";
         return 0;
     }else{
