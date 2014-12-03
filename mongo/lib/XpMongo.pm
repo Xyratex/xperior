@@ -142,7 +142,7 @@ sub _post_yaml_doc {
     $db->get_collection($collection)->insert($validated_yaml);    #,safe=>1);
 
     my $err = $db->last_error();
-    return defined $validated_yaml->{srv_branch_name};
+    return defined ($validated_yaml->{srv_branch_name});
 }
 
 
