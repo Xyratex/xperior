@@ -29,7 +29,7 @@
 Tests:
   -
     id: compilebench
-    timeout: 1500
+    timeout: 1600
   -
     id: iozone
     timeout: 1800
