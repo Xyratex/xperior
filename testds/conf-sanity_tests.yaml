@@ -37,6 +37,9 @@ Tests:
     id: 32b
     timeout: 600
   -
+    id: 32c
+    timeout: 720
+  -
     id: 32d
     timeout: 600
   -
