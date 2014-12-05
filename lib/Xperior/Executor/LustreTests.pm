@@ -78,10 +78,20 @@ after 'cleanup' => sub {
     $testproc->createSync('rm -rf /tmp/test_logs')
 };
 
+=head3 _getTestName
+
+Return testname name for LustreTests
+
+=cut
+
+sub _getTestName{
+    my $self = shift;
+    return  $self->test->testcfg->{testname};
+}
 
 =over 12
 
-=item * B<_prepareCommands> - generate command line for Lustre test based on 
+=item * B<_prepareCommands> - generate command line for Lustre test based on
 L<configuration|XperiorUserGuide/"System descriptor"> and test descriptor.
 
 =back
@@ -99,13 +109,10 @@ sub _prepareCommands {
 
     #TODO add test on it
 
-    my $tid;
     # Workaround: tid should not be provided for 'lustre single' kind test
     # because ONLY is used to select, or we shouldn't provide an id
     # in test description for those scripts (that can harm logging)
-    if( $self->test->getParam('groupname') ne 'lustre-single' ){
-        $tid = $self->test->testcfg->{testname};
-    }
+    my $tid = $self->_getTestName();
 
     my $script = $self->test->getParam('script');
     unless ( $script ) {
@@ -127,7 +134,7 @@ sub _prepareCommands {
                 "PDSH=\"/usr/bin/pdsh -R ssh -S -w \"",
     );
     # Test id can be 0, that is why checking for defined
-    push @opt, "ONLY=$tid" if (defined $tid);
+    push @opt, "ONLY=$tid" if ((defined $tid) and $tid ne '');
 
     if ($device_type eq 'block') {
         push @opt,
@@ -287,7 +294,7 @@ sub _prepareEnvOpts {
         DEBUG "No MSGNID defined, could be an reason for test failures";
     }
 
-    if(defined($self->env->cfg->{'clientonly'}) 
+    if(defined($self->env->cfg->{'clientonly'})
         && $self->env->cfg->{'clientonly'} == 1){
         DEBUG "CLIENT ONLY mode selected";
         if(not $self->env->cfg->{'mgsnid'}){

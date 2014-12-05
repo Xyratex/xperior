@@ -39,6 +39,7 @@ Tests:
   -
     id: metadata-updates
     script: metadata-updates.sh
+    executor: Xperior::Executor::LustreSingleTests
   -
     id: runtests
     script: runtests

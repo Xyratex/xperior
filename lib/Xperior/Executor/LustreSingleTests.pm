@@ -60,17 +60,27 @@ after 'init' => sub {
     $self->reason('');
 };
 
+=head3 _getTestName
 
-=head3 processLogs 
+Return empty name for LustreSingleTests because
+this type of tests doesn't use ONLY parameter of t-f
 
-This executor for lustre tests which don't needed log 
+=cut
+
+sub _getTestName{
+    my $self = shift;
+    return  '';
+}
+
+
+=head3 processLogs
+
+This executor for lustre tests which don't needed log
 parsing, just replace it to pretty simple function
 with static result.
 
 Return values:
     Xperior::Executor::SingleProcessBase::PASSED   - passed
-
-=back
 
 =cut
 
