@@ -49,6 +49,9 @@ Tests:
     id: 61
     timeout: 600
   -
+    id: 69
+    timeout: 1500
+  -
     id: 85
     timeout: 720
 cleanup_max_time: -1
