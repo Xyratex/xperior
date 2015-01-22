@@ -98,6 +98,47 @@ test
         'Check Clients options' );
   };
 
+
+test
+  plan  => 4,
+  fSeparateMGS => sub {
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/testsystemmgscfg.yaml');
+
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $exe = Xperior::Executor::LustreTests->new();
+    $exe->init( $test, \%options, $cfg );
+    $exe->_prepareEnvOpts;
+    DEBUG "MGS OPT: " . $exe->mgsopt;
+    is ( $exe->mgsopt,
+        'mgs_HOST=192.168.200.1 MGSDEV=/dev/vdb mgsfailover_HOST=192.168.200.2 MGSNID=192.168.200.1@tcp:192.168.200.2@tcp',
+        'Check MGS options');
+
+    DEBUG "MDS OPT:" . $exe->mdsopt;
+    is( $exe->mdsopt,
+        'NETTYPE=tcp mds1_HOST=192.168.200.3 MDSDEV1=/dev/vdb mds_HOST=192.168.200.3 MDSDEV=/dev/vdb ' .
+        'mds1failover_HOST=192.168.200.4 mdsfailover_HOST=192.168.200.4 mds2_HOST=192.168.200.4 MDSDEV2=/dev/vdc ' .
+        'mds2failover_HOST=192.168.200.3 mds3_HOST=192.168.200.2 MDSDEV3=/dev/vdc mds3failover_HOST=192.168.200.1 MDSCOUNT=3',
+        'Check MDS OPT' );
+
+    DEBUG "OSS OPT:" . $exe->ossopt;
+    is(
+        $exe->ossopt,
+        'ost1_HOST=192.168.200.6 OSTDEV1=/dev/vdb ost1failover_HOST=192.168.200.5 ost2_HOST=192.168.200.6 OSTDEV2=/dev/vdc ' .
+        'ost2failover_HOST=192.168.200.5 ost3_HOST=192.168.200.5 OSTDEV3=/dev/vdd ost3failover_HOST=192.168.200.6 ' .
+        'ost4_HOST=192.168.200.5 OSTDEV4=/dev/vde ost4failover_HOST=192.168.200.6 OSTCOUNT=4',
+        'Check OSS OPT'
+    );
+
+    DEBUG "CLNT OPT:" . $exe->clntopt;
+    is( $exe->clntopt,
+        'CLIENTS=192.168.200.7 RCLIENTS="192.168.200.8"',
+        'Check Clients options' );
+  };
+
+
 test
   plan         => 1,
   aeCheckIB => sub {

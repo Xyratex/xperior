@@ -1,0 +1,125 @@
+---
+Nodes:
+
+  - console: /tmp/serial_fre1101_out
+    ctrlproto: ssh
+    id: fre1101
+    ip: 192.168.200.1
+    pass: Xyratex
+    user: root
+
+  - console: /tmp/serial_fre1102_out
+    ctrlproto: ssh
+    id: fre1102
+    ip: 192.168.200.2
+    pass: Xyratex
+    user: root
+
+  - console: /tmp/serial_fre1103_out
+    ctrlproto: ssh
+    id: fre1103
+    ip: 192.168.200.3
+    pass: Xyratex
+    user: root
+
+  - console: /tmp/serial_fre1104_out
+    ctrlproto: ssh
+    id: fre1104
+    ip: 192.168.200.4
+    pass: Xyratex
+    user: root
+
+  - console: /tmp/serial_fre1105_out
+    ctrlproto: ssh
+    id: fre1105
+    ip: 192.168.200.5
+    pass: Xyratex
+    user: root
+
+  - console: /tmp/serial_fre1106_out
+    ctrlproto: ssh
+    id: fre1106
+    ip: 192.168.200.6
+    pass: Xyratex
+    user: root
+
+  - console: /tmp/serial_fre1107_out
+    ctrlproto: ssh
+    id: fre1107
+    ip: 192.168.200.7
+    pass: Xyratex
+    user: root
+
+  - console: /tmp/serial_fre1108_out
+    ctrlproto: ssh
+    id: fre1108
+    ip: 192.168.200.8
+    pass: Xyratex
+    user: root
+
+
+LustreObjects:
+
+  - device: /dev/vdb
+    failover: fre1105
+    id: ost1
+    node: fre1106
+    type: oss
+
+  - device: /dev/vdc
+    failover: fre1105
+    id: ost2
+    node: fre1106
+    type: oss
+
+  - device: /dev/vdb
+    failover: fre1104
+    id: mdt1
+    node: fre1103
+    type: mds
+
+  - device: /dev/vdb
+    failover: fre1102
+    id: mgt1
+    node: fre1101
+    type: mgs
+
+  - device: /dev/vdc
+    failover: fre1103
+    id: mdt2
+    node: fre1104
+    type: mds
+
+  - device: /dev/vdd
+    failover: fre1106
+    id: ost3
+    node: fre1105
+    type: oss
+
+  - device: /dev/vde
+    failover: fre1106
+    id: ost4
+    node: fre1105
+    type: oss
+
+  - device: /dev/vdc
+    failover: fre1101
+    id: mdt3
+    node: fre1102
+    type: mds
+
+  - id: client1
+    master: yes
+    node: fre1107
+    type: client
+
+  - id: client2
+    master: no
+    node: fre1108
+    type: client
+
+benchmark_tests_file: testfile
+client_mount_point: /mnt/lustre
+ltp_root_dir: /test-tools/ltp
+lustre_device_type: block
+tempdir: ''

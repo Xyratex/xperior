@@ -56,6 +56,7 @@ extends 'Xperior::Executor::SingleProcessBase';
 
 our $VERSION = "0.0.2";
 
+has 'mgsopt'        => ( is => 'rw' );
 has 'mdsopt'        => ( is => 'rw' );
 has 'ossopt'        => ( is => 'rw' );
 has 'clntopt'       => ( is => 'rw' );
@@ -126,6 +127,7 @@ sub _prepareCommands {
     my @opt = (
                 "SLOW=YES",
                 "NAME=ncli",
+                $self->mgsopt(),
                 $self->mdsopt(),
                 $self->ossopt(),
                 $self->clntopt(),
@@ -281,6 +283,7 @@ sub _prepareEnvOpts {
     my @mdss    = $self->env->getMDSs;
     my @osss    = $self->env->getOSSs;
     my $clients = $self->env->getLustreClients;
+    my $mgsnid;
     my $c;
     my @opt = ();
     my $nettype='tcp';
@@ -321,8 +324,8 @@ sub _prepareEnvOpts {
             if ($m->{'failover'}) {
                 my $failover = $self->env->getNodeAddress($m->{'failover'});
                 if((not $self->env->cfg->{'mgsnid'}) && ($c eq 1)){
-                    DEBUG "Construct MGSNID";
-                    push @opt, "MGSNID=$host\@$nettype:$failover\@$nettype"
+                    $mgsnid = "MGSNID=$host\@$nettype:$failover\@$nettype";
+                    DEBUG "Construct MGSNID $mgsnid";
                 }
                 push @opt, "mds${c}failover_HOST=$failover";
                 # lustre 1.8 legacy
@@ -348,6 +351,23 @@ sub _prepareEnvOpts {
         }
         push @opt, "OSTCOUNT=" . scalar @osss;
         $self->ossopt( join( ' ', @opt ) );
+
+        @opt = ();
+        my @mgs =  $self->env->getMGS;
+        foreach my $m (@mgs) {
+            my $host = $self->env->getNodeAddress( $m->{'node'} );
+            push @opt, "mgs_HOST=$host";
+            push @opt, "MGSDEV=" . $m->{'device'}
+              if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+            if ($m->{'failover'}) {
+                my $failover = $self->env->getNodeAddress($m->{'failover'});
+                push @opt, "mgsfailover_HOST=$failover";
+                $mgsnid = "MGSNID=$host\@$nettype:$failover\@$nettype";
+                DEBUG "Construct MGSNID $mgsnid";
+            }
+        }
+        push @opt, $mgsnid;
+        $self->mgsopt( join( ' ', @opt ) );
     }
 
     #include only master client for sanity suite
