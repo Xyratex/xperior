@@ -41,7 +41,14 @@ L<Xperior::Executor::SingleProcessBase> and provide functionality for
 generating command line  for Lustre B<test-framework.sh> based tests
 and parse these tests output.
 
-Sample test descriptor there C<testds/sanity_tests.yaml>.
+
+Test results calculation logic:
+ * exitcode != 0 test failed
+ * ^PASS found - passed
+ * ^\s*SKIP found - skipped
+ * ^FAIL found - failed
+
+Sample test descriptor there C<testds/sanity_tests.yaml>
 
 =cut
 
@@ -240,7 +247,7 @@ sub processLogs {
                 $reason = $1 if defined $1;
                 $is_completed = 1;
             }
-            if ( $s =~ /^SKIP(.*)/ ) {
+            if ( $s =~ /^\s*SKIP(.*)/ ) {
                 $result = $self->SKIPPED;
                 $reason = $1 if $1;
                 $is_completed = 1;

@@ -42,6 +42,11 @@ L<Xperior::Executor::SingleProcessBase> and provide functionality for
 generating command line  for Lustre B<test-framework.sh> based tests
 and parse these tests output.
 
+Test results calculation logic:
+ * exitcode != 0 test failed
+
+
+
 Sample test descriptor there C<testds/sanity_tests.yaml>.
 
 =cut
