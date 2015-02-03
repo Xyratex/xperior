@@ -21,9 +21,12 @@
 #
 # GPL HEADER END
 #
-# Copyright 2012 Xyratex Technology Limited
-#
-# Author: Elena Gryaznova<Elena_Gryaznova@xyratex.com>
+# Copyright
+#       2012 Xyratex Technology Limited
+#       2014 Seagate Technology
+# Author:
+#   Elena Gryaznova<Elena_Gryaznova@xyratex.com>
+#   Roman Grigoryev<roman.grigoryev@seagate.com>
 #
 
 =pod
@@ -50,10 +53,13 @@ use File::Slurp;
 use File::Temp qw(:mktemp);
 
 requires 'env';
+has mpdpath         => ( is => 'rw', default => '');
+has machinefile     => ( is => 'rw',
+                            default => '/tmp/machinefile');
 
 before 'execute' => sub {
     my $self = shift;
-
+    my $mpdpath = $self->mpdpath();
     # nothing to do if mpdboot is properly started already
     my $master = $self->env->getNodeById
         ( $self->_getMasterNode->{'node'} );
@@ -62,32 +68,41 @@ before 'execute' => sub {
     # shutdown mpdboot on each client;
     # this guarantees that mpdboot is started
     # properly (i.e. only on master client)
-    my @nodes = map { $_->{'node'} } @{ $self->env->getLustreClients() };
+    my @nodes = map { $_->{'node'} } @{ $self->env->getLustreClients()};
+    my @ips;
     foreach my $id ( @nodes ) {
         my $c = $self->env->getNodeById( $id )->getRemoteConnector();
-        my $res = $c->run( "sudo -u  mpiuser mpdallexit",
+        my $res = $c->run(
+            "sudo -u  mpiuser ${mpdpath}mpdallexit",
             timeout => 300 );
         DEBUG 'mpdallexit out:'.$res->{stdout};
         DEBUG 'mpdallexit err:'.$res->{stderr};
+        push @ips, $self->env->getNodeById( $id )->ip();
     }
     # produce machinefile
-    my $machinefile = "/tmp/machinefile";
+    # my $machinefile = "/tmp/machinefile";
     my($fh, $tmp_file) = mkstemp( "/tmp/machinefile_XXXX" );
     close $fh;
-    write_file ($tmp_file, join ( "\n", @nodes ));
+    write_file ($tmp_file, join ( "\n", @ips ));
     chmod 0644, $tmp_file;
     my $not_copied = $master->getRemoteConnector()->putFile(
-                                    $tmp_file, $machinefile );
+                                    $tmp_file, $self->machinefile());
     unlink $tmp_file;
     if(not $not_copied){
         # start mpdboot with new machinefile on master client
-        my $nclients = @nodes;
         my $bootres = $master->getRemoteConnector()->run(
-            "sudo -u mpiuser mpdboot -n $nclients -f $machinefile ",
+            "sudo -u mpiuser ${mpdpath}mpdboot -n "
+            ." ".scalar(@ips)
+            ." -f ".$self->machinefile(),
             timeout=>300 );
         DEBUG "mpdboot out:".$bootres->{stdout};
         DEBUG "mpdboot err:".$bootres->{stderr};
-        $master->ismpdready(1);
+       if(defined ($bootres->{exitcode})
+                and ($bootres->{exitcode} == 0)){
+            $master->ismpdready(1);
+        }else{
+            ERROR "mpdboot start failed";
+        }
     }else{
         ERROR 'Cannot copy machinefile to '.$master->hostname();
     }
@@ -113,10 +128,12 @@ version 2 along with this program; If not, see http://www.gnu.org/licenses
 
 
 Copyright 2012 Xyratex Technology Limited
+Copyright 2014 Seagate Technology
 
 =head1 AUTHOR
 
 Elena Gryaznova<Elena_Gryaznova@xyratex.com>
+Roman Grigoryev<roman.grigoryev@seagate.com>
 
 =cut
 

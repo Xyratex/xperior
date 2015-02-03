@@ -30,7 +30,8 @@
 
 =head1 NAME
 
-Xperior::Executor::LustreTests - Module which contains Lustre execution specific functionality
+Xperior::Executor::LustreTests - Module which contains Lustre execution
+specific functionality
 
 =head1 DESCRIPTION
 
@@ -41,6 +42,10 @@ L<Xperior::Executor::SingleProcessBase> and provide functionality for
 generating command line  for Lustre B<test-framework.sh> based tests
 and parse these tests output.
 
+
+The executor uses merge parameters for B<env> array from test descriptor. It
+allows to have hash items inheritace and overriding for test. See details in
+L<Xperior::Test.pm>
 
 Test results calculation logic:
  * exitcode != 0 test failed
@@ -150,7 +155,7 @@ sub _prepareCommands {
             "MDS_MOUNT_OPTS=\"-o rw,user_xattr\"",
             "OST_MOUNT_OPTS=\"-o user_xattr\"";
     }
-    my $env = $self->test->getParam("env");
+    my $env = $self->test->getMergedHashParam("env");
     if (ref($env) eq 'HASH') {
         for my $k (keys %$env) {
             push @opt,

@@ -45,9 +45,9 @@ package Xperior::Test;
 use Moose;
 use Data::Dumper;
 
-use Log::Log4perl;
+use Log::Log4perl qw(:easy);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 with qw(MooseX::Clone);
 
@@ -91,7 +91,10 @@ Test id is returned if I<name> is not defined.
 
 sub getTestName {
     my $self = shift;
-    return $self->testcfg->{'testname'} if ( defined( $self->testcfg->{'testname'} ) );
+    return $self->testcfg->{'testname'}
+        if ( defined( $self->testcfg->{'testname'} ) );
+    ERROR 'No testname defined!';
+    return '';
 }
 
 =head2 getParamNames
@@ -119,7 +122,7 @@ sub getParamNames {
 
 =head2 getParam
 
-Returns parameter value by given L<name>. If L<compare> argument is defined, 
+Returns parameter value by given L<name>. If L<compare> argument is defined,
 returns result of comparison of its value and parameter.
 
 =back
@@ -143,6 +146,61 @@ sub getParam {
     }
 
     return $value;
+}
+
+=head2 getMergedHashParam($name)
+
+Returns merged hash for parameter L<name>.
+L<Name> should be hash and could be different on
+group or/and test level.
+
+Result is hash which merged by rules:
+
+- uniq items from group and test hashes are added to results
+- test level items override group level items when key is same
+
+Examples
+for B<testds>
+
+ - id: 99
+   env:
+      mdtest_THREADS: 50
+      mdtest_iteration: 10
+ env:
+    mdtest_THREADS: 8
+	mdtest_iteration: 10
+
+result hash env for test 99 will be
+  mdtest_THREADS   => 50
+  mdtest_iteration => 10
+
+
+=back
+
+=cut
+
+sub getMergedHashParam {
+    my ( $self, $name ) = @_;
+
+    my %test;
+    my %grp;
+
+    if ( defined( $self->testcfg->{$name} ) ) {
+        %test = %{$self->testcfg->{$name}};
+    }
+
+    if ( defined( $self->groupcfg->{$name} ) ) {
+        %grp = %{$self->groupcfg->{$name}};
+    }
+
+    my %merged = ();
+    while (my ($k, $v) = each %grp) {
+        $merged{$k} = $v;
+    }
+    while (my ($k, $v) = each %test) {
+        $merged{$k} = $v;
+    }
+    return \%merged;
 }
 
 =head2 getTags
@@ -198,7 +256,7 @@ sub getDescription {
       . $td . "\n"
       . "Test group        : "
       . $self->getParam('groupname') . "\n"
-      . "Test Id           : ". $self->getId() . "\n"     
+      . "Test Id           : ". $self->getId() . "\n"
       . "Test name         : ". $self->getTestName() . "\n"
       . "Test testname     : ". $testname. "\n"
       . "Test tags         : "
@@ -216,7 +274,7 @@ Option 'multirun' defines number of test in returned array. In
 generated tests will be added fields 'testname', 'copy_id'
 and 'numberofcopies'.
 
-If parameter 'multirun' set to '0' or undefined then test option 
+If parameter 'multirun' set to '0' or undefined then test option
 'multirun' is used. If test option 'multirun' is not set also then test
 will not change.
 
