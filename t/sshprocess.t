@@ -34,6 +34,7 @@ use Xperior::SshProcess;
 use Log::Log4perl qw(:easy);
 use Data::Dumper;
 use Carp;
+use IO::Socket;
 
 use Xperior::Test;
 use Xperior::SshProcess;
@@ -41,7 +42,7 @@ use Xperior::Utils;
 use Xperior::Node;
 $|=1;
 my $sp;
-my ($node, $badhostnode, $badhostnobridgenode);
+my ($node, $badhostnode, $badhostnobridgenode, $stucknobridgenode);
 startup         _startup  => sub {
     Log::Log4perl->easy_init($DEBUG);
     $node = Xperior::Node->new;
@@ -66,6 +67,19 @@ startup         _startup  => sub {
     $badhostnobridgenode->ctrlproto('ssh');
     $badhostnobridgenode->user('tomcat');
 
+    $stucknobridgenode = Xperior::Node->new;
+    $stucknobridgenode->id('stuck node');
+    $stucknobridgenode->ip('127.0.0.1');
+    $stucknobridgenode->port('7070');
+    $stucknobridgenode->ctrlproto('ssh');
+    $stucknobridgenode->user('tomcat');
+
+    $node = Xperior::Node->new;
+    $node->id('stuck node');
+    $node->ip('127.0.0.1');
+    $node->ctrlproto('ssh');
+    $node->user('tomcat');
+
 };
 
 setup           _setup    => sub {
@@ -89,7 +103,7 @@ test plan => 3,abCreateExitCodes     => sub{
 
     $sp->init($badhostnobridgenode);
     $res = $sp->create('sleep','/bin/sleep 30');
-    is($res,-2,'Check result for bad host');
+    is($res,-3,'Check result for bad host');
 
 
 #exit 1;
@@ -106,7 +120,7 @@ test plan => 3, bCreateExitCodesBridge     => sub{
 
     $sp->init($badhostnode);
     $res = $sp->create('sleep','/bin/sleep 30');
-    is($res,-1,'Check result for bad host for bridge case');
+    is($res,-3,'Check result for bad host for bridge case');
 
 };
 
@@ -124,8 +138,45 @@ test plan => 7, kCreateAliveKill    => sub {
     isnt($sp->killed,0, 'Check status after kill');
     isnt($sp->exitcode,undef, 'Check 1 exit code after kill');
     isnt($sp->exitcode,0, 'Check 2 exit code after kill');
-    #exit 1;
+
 };
+
+
+test plan => 4, kCreateAliveKillTimeout    => sub {
+
+    #start only server socket accept for
+    #emulating stuck node
+    #
+    my $sock = IO::Socket::INET->new (
+        LocalHost => '127.0.0.1',
+        LocalPort => '7070',
+        Proto => 'tcp',
+        Listen => 1,
+        Reuse => 1,);
+    confess "Could not create socket: $!\n"
+        unless $sock;
+    #test core
+    $sp->defaulttimeout(5);
+    my $initres  = $sp->init($stucknobridgenode);
+    is($initres,-99,'Check init failure');
+
+    $initres  = $sp->init($node);
+    is($initres,0,'Check init pass');
+    $sp->masterprocess->kill('SIGKILL');
+
+    #switch to accepted port
+    $sp->port(7070);
+    my $res = $sp->create('sleep','/bin/sleep 30');
+    #scp connect timeout, set in scp options
+    is($res,-3,'Check result for stuck host, scp failed');
+
+    my $st = $sp->_sshAsyncExec('sleep','/bin/sleep 30');
+    isnt($st,0,'Check result for stuck host, _sshAsyncExec');
+
+    #close testing server socket
+    close($sock);
+};
+
 
 test plan => 6, lCreateAliveExit    => sub {
     #highlevel functional test

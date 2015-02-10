@@ -137,6 +137,7 @@ has pass           => ( is => 'rw' );
 has bridge         => ( is => 'rw' );
 has bridgeuser     => ( is => 'rw', default => 'root');
 
+has defaulttimeout => ( is => 'rw', default => 30);
 has pidfile        => ( is => 'rw' );
 has ecodefile      => ( is => 'rw' );
 has controlmaster  => ( is => 'rw' );
@@ -169,9 +170,34 @@ has stderr_delimiter => (
 
 =cut
 
+=head3 _kill
+
+Function implement 2-level kill, first attempt is SIGTERM,
+second is SIGKILL.
+
+Parameters:
+ $proc - Proc::Simple object
+
+No result returned
+
+=cut
+
+sub _kill{
+    my ($self, $proc) = @_;
+    DEBUG "Send SIGTERM";
+    my $k0 = $proc->kill();
+    if($proc->exit_status()){
+        DEBUG "SIGTERM was successful";
+    }else{
+        DEBUG "Send SIGKILL, SIGTERM results is $k0";
+        my $k1 = $proc->kill("SIGKILL");
+        DEBUG "SIGKILL result is $k1";
+    }
+}
 
 
-=head3 _sshMasterProcess{
+
+=head3 _supportMasterProcess
 
 Function start and support ssh master chanell
 
@@ -202,6 +228,7 @@ sub _supportMasterProcess{
       . "-o 'ConnectTimeout=25' "
       . " -o 'ControlMaster=yes' "
       . " -o 'ControlPath=".$self->controlmaster()."' "
+      . $self->_getPortSshCmd()
       . $self->user . "@"
       . $self->host;
     DEBUG "Master cmd is [$mc]";
@@ -209,7 +236,35 @@ sub _supportMasterProcess{
     $self->masterprocess->kill_on_destroy(1);
     $self->masterprocess->signal_on_destroy("KILL");
     DEBUG 'Master started for ['.$self->controlmaster().']';
+}
 
+=head3 _getPortSshCmd
+
+Return ssh cmd part for port parameter
+
+=cut
+
+sub _getPortSshCmd{
+    my ($self) = @_;
+    if($self->port() and $self->port() != 22){
+        return ' -p '.$self->port().' ';
+    }
+    return ' ';
+}
+
+
+=head3 _getPortScpCmd
+
+Return scp cmd part for port parameter
+
+=cut
+
+sub _getPortScpCmd{
+    my ($self) = @_;
+    if($self->port() and $self->port() != 22){
+        return ' -P '.$self->port().' ';
+    }
+    return ' ';
 }
 
 =head3 _getMasterCmd
@@ -220,7 +275,7 @@ with socket multiplexing.
 =cut
 
 sub _getMasterCmd{
-    my ($self, $master)  = @_;
+    my ($self) = @_;
     my $socket = $self->controlmaster();
     if($self->bridge()){
         $socket = $socket.'_on_bridge';
@@ -272,7 +327,8 @@ sub _getBridgeCmd{
 #do pool check status to prevent false deatch report
 sub _sshSyncExec {
     my ( $self, $cmd, $timeout, $need_tty ) = @_;
-    $timeout = 30 unless defined $timeout;
+    $timeout = $self->defaulttimeout()
+                    unless defined $timeout;
     my $step = 0;
     my $AT   = 5;
     my $r    = undef;
@@ -316,6 +372,7 @@ sub _sshSyncExecS {
       . "-o 'ConnectionAttempts=3' "
       . "-o 'ServerAliveInterval=600' "
       . "-o 'ServerAliveCountMax=15' " #. " -f "
+      . $self->_getPortSshCmd()
       . $self->user . "@"
       . $self->host
       . " \"$cmd; ec=\\\$? ;echo -n 'Internal_exit_code:'; echo -n \\\$ec; exit 0 \"";
@@ -349,7 +406,7 @@ sub _sshSyncExecS {
             $exitcode         = $self->sync_timeout_exit_code;
             $parsed_exit_code = $self->sync_timeout_exit_code;
             WARN "SSH sync execution killed by timeout !\n";
-            $proc->kill();
+            $self->_kill($proc);
             last;
         }
      }
@@ -380,7 +437,7 @@ sub _sshSyncExecS {
 
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
-    my $asyncstarttimeout = 30;
+    my $asyncstarttimeout = $self->defaulttimeout();
     my $sc                = 1;
     my $nonbridgeparams =
          "-o  'BatchMode=yes' "
@@ -394,6 +451,7 @@ sub _sshAsyncExec {
       . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
       . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectTimeout=25' "
+      . $self->_getPortSshCmd()
       . $self->user . "@"
       . $self->host
       . " \"$cmd\"  ";
@@ -418,7 +476,9 @@ sub _sshAsyncExec {
             $time++;
             if ( $time > $asyncstarttimeout ) {
                 ERROR "App alive more then $asyncstarttimeout seconds, kill it";
-                $self->bprocess->kill();
+                #$self->bprocess->kill();
+                $self->_kill($self->bprocess);
+                last;
             }
         }
         $sc = $self->bprocess->exit_status();
@@ -478,7 +538,9 @@ sub init {
     $self->exitcode(0);
 
     my ($ver, $unameres);
-    $unameres = $self->_sshSyncExec( "uname -a", 30 );
+    $unameres = $self->_sshSyncExec(
+                "uname -a",
+                $self->defaulttimeout());
     if(defined($unameres)){
         $ver = trim($unameres->{stdout});
     }else{
@@ -492,11 +554,13 @@ sub init {
                or ( $unameres->{exitcode} != 0 )
                or ( $unameres->{killed} != 0 ) )
     {
-        WARN "SshProcess cannot be initialized(version)";
+        WARN "SshProcess cannot be initialized(uname)";
         return -99;
     }
 
-    my $h = $self->_sshSyncExec( "hostname", 15 );
+    my $h = $self->_sshSyncExec(
+                    "hostname",
+                    $self->defaulttimeout());
     if(defined($h)){
         $h = $h->{stdout};
         $h = trim $h;
@@ -518,7 +582,10 @@ sub init {
 sub _findPid {
     my $self = shift;
     $self->pid(undef);
-    my $res = $self->_sshSyncExec( "cat " . $self->pidfile, 30 ) || return;
+    my $res = $self->_sshSyncExec(
+                        "cat " . $self->pidfile,
+                        $self->defaulttimeout() )
+                            || return;
 
     foreach my $s ( split( /\n/, $res->{stdout} ) ) {
         DEBUG "Check line for PID [$s]\n";
@@ -710,6 +777,10 @@ Cannot find remote process
 
 Cannot start application
 
+=item -3
+
+Cannot send cmd file to target node
+
 =back
 
 
@@ -742,7 +813,11 @@ SCRIPT
     DEBUG "Uploading script:\n$script";
     my ($f, $t) = mkstemp("/tmp/ssh_remote_script_XXXX");
     write_file($t, $script);
-    $self->putFile($t, $shell_file);
+    if( $self->putFile($t, $shell_file) !=0 ){
+        ERROR 'Cannot send cmd file to ['.
+            $self->host.':'.$self->_getPortScpCmd().']';
+        return -3;
+    }
 
     if ( $self->_sshAsyncExec("sh $shell_file") ) {
         WARN "Cannot create remote process";
@@ -948,6 +1023,7 @@ PSCRIPT
             " -o 'ConnectionAttempts=3'".
             " -o 'ConnectTimeout=25' ".
             $self->_getMasterCmd().
+            $self->_getPortScpCmd('yes').
             " $local_file $destination" );
 
         return $e;
@@ -1017,6 +1093,7 @@ PSCRIPT
             " -o 'ConnectionAttempts=3'".
             " -o 'ConnectTimeout=25' ".
             $self->_getMasterCmd().
+            $self->_getPortScpCmd('yes').
             " $source $local_file" );
         return $e;
     }
