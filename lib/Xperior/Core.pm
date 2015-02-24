@@ -282,7 +282,7 @@ sub run {
         # in multiplication case test names will be
         # replay-dual/9__2
         # replay-vbr/1a__0
-        INFO "Preprocessing [$testFullName]";
+        DEBUG "Preprocessing [$testFullName]";
         if (@includeonly) {
             DEBUG 'Include only defined, excluding check skipped';
             $skip = 1 unless first {$testFullName =~ m/^$_(\_\_\d+)*$/} @includeonly;
@@ -310,7 +310,7 @@ sub run {
         }
 
         if ($skip) {
-            INFO "Test [$testFullName] will be skipped";
+            DEBUG "Test [$testFullName] will be skipped";
             $test->skipped(1);
         }
     }
