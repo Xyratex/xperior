@@ -57,6 +57,7 @@ use YAML;
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
+use File::Slurp;
 use Carp;
 
 our $YVERSION = 'Xperior1'; #yaml output version. other modules also can add fields.
@@ -148,6 +149,7 @@ sub addMessage{
     my ($self,$data) = @_;
     $self->yaml->{'messages'} = $self->yaml->{'messages'}
                                     . $data."\n";
+    $self->_write;
 }
 
 =head2 pass
@@ -167,6 +169,7 @@ sub pass{
     $self->{'result_code'} = 0;
     $self->yaml->{'status'} = 'passed';
     $self->yaml->{'status_code'} = 0;
+    $self->_write;
 }
 
 =head2 fail
@@ -188,6 +191,7 @@ sub fail{
     $self->yaml->{'status'} = 'failed';
     $self->yaml->{'status_code'} = 1;
     $self->yaml->{'fail_reason'} = $pmsg;
+    $self->_write;
 }
 
 =head2 skip
@@ -210,6 +214,7 @@ sub skip{
     $self->yaml->{'status'} = 'skipped';
     $self->yaml->{'status_code'} = 2;
     $self->yaml->{'fail_reason'} = $msg;
+    $self->_write;
 }
 
 =head2 setExtOpt(KEY, VALUE)
@@ -255,6 +260,20 @@ sub createLogFile{
     $self->registerLogFile($key,$file);
     return $fd;
 }
+
+sub writeLogFile{
+    my ($self,$key, $data)  = @_;
+    my $file = $self->_resourceFilePrefix."$key.log";
+    $self->_createDir;
+    my $res = write_file ($file,$data);
+    if($res != 1){
+        ERROR "Cannot log  file[$file]";
+        return 0;
+    }
+    $self->registerLogFile($key,$file);
+    return $res;
+}
+
 
 =head2 tap
 

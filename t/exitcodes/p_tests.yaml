@@ -14,5 +14,8 @@ Tests:
 
    - id : pass
 
+   - id : format_fail
+     format_fail : yes
+     forced_teststatus : fail
 
 

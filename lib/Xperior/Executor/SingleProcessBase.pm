@@ -182,7 +182,7 @@ sub execute {
     #cleanup tempdir after execution
     #TODO make this removing safe!!!
     $testproc->run( 'rm -rf ' . "$mountpoint/*" )
-	if ($mountpoint and $mountpoint ne "");
+    if ($mountpoint and $mountpoint ne "");
 
     ### get logs
 

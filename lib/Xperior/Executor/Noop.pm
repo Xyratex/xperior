@@ -32,6 +32,15 @@
 
 Xperior::Executor::Noop - basic executor
 
+It't mostly used for test.
+
+b<teststatus> class field could be used for runtime result
+control ('fail'/'skip', default - pass).
+
+Test could has option b<forced_teststatus> in test descriptor
+with same values, it overrides b<teststatus> class field.
+
+
 =cut
 
 package Xperior::Executor::Noop;
@@ -61,12 +70,22 @@ ML
     $self->addYE('completed','yes');
     $self->addYE('endtime_planned',time);
     $self->addYE('endtime',time);
-    if($self->teststatus() eq 'fail'){
-        $self->fail();
-    }elsif($self->teststatus() eq 'skip'){
-        $self->skip();
+    if(defined($self->yaml->{'forced_teststatus'} )){
+        if($self->yaml->{'forced_teststatus'} eq 'fail'){
+            $self->fail();
+        }elsif($self->yaml->{'forced_teststatus'} eq 'skip'){
+            $self->skip();
+        }else{
+            $self->pass();
+        }
     }else{
-        $self->pass();
+        if($self->teststatus() eq 'fail'){
+            $self->fail();
+        }elsif($self->teststatus() eq 'skip'){
+            $self->skip();
+        }else{
+            $self->pass();
+        }
     }
     $self->test->results ($self->yaml);
 }

@@ -194,8 +194,8 @@ test
 
 #########################################
 test
-  plan       => 2,
-  jExitCodes => sub {
+  plan       => 3,
+  ajExitCodes => sub {
 
     DEBUG
 `bin/runtest.pl  --action=run --workdir=/tmp/lwd1  --config=t/exitcodes/cfg.yaml  --testdir=t/exitcodes/ --debug --includeonly='lustre-single/pass'`;
@@ -209,6 +209,13 @@ test
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is( $resa, 0xc00, "exitafter exit code" );
 
-  };
+    DEBUG
+`bin/runtest.pl  --action=run --workdir=/tmp/lwd1  --config=t/exitcodes/cfg.yaml  --testdir=t/exitcodes/ --debug --includeonly='lustre-single/format.*'`;
+    my $resf = ${^CHILD_ERROR_NATIVE};
+    DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
+    is( $resf, 0xd00, "format_fail exit code" );
+
+};
+
 
 launcher->run_tests;

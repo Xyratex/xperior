@@ -79,6 +79,10 @@ package CannotConnectException;
 use base qw(Xperior::Xception);
 1;
 
+package RemoteCallException;
+use base qw(Xperior::Xception);
+1;
+
 package MethodNotImplementedException;
 use base qw(Xperior::Xception);
 1;

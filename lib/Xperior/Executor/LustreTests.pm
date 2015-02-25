@@ -112,7 +112,8 @@ L<configuration|XperiorUserGuide/"System descriptor"> and test descriptor.
 =cut
 
 sub _prepareCommands {
-    my $self = shift;
+    my ($self, $nontestscript, $moreParams) = @_;
+    $moreParams = '' unless $moreParams;
     $self->_prepareEnvOpts;
 
     my $device_type = $self->env->cfg->{'lustre_device_type'} || 'loop';
@@ -133,6 +134,11 @@ sub _prepareCommands {
         my $groupname  = $self->test->getParam('groupname') ||
             confess "Group name is undefined";
         $script = "$groupname.sh";
+    }
+    if($nontestscript){
+        DEBUG "Use external script [$nontestscript],".
+                            "for mount or debug purposes";
+        $script = $nontestscript;
     }
 
     my $lustre_script = "$self->{lustretestdir}/${script}";
@@ -165,7 +171,7 @@ sub _prepareCommands {
     elsif ($device_type eq 'loop') {
         DEBUG "No additional options required for 'loop' devices";
     }
-    $self->cmd( join( ' ', @opt, $lustre_script) );
+    $self->cmd( join(' ', @opt, $moreParams, $lustre_script));
 }
 
 =over 12

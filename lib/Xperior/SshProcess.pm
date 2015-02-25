@@ -652,7 +652,7 @@ Return value is hash ref of:
   * stdoutraw        - merged stdouts with delimiters
   * stderrraw        - merged stderrs with delimiters
   * array of stderr  - stderr from remote process
-  * exitcode         - target app exit code
+  * exitcode         - target app exit code, -1 if ssh failed
   * sshexitcode      - ssh exit code
   * killled          - if not 0 mean common process was killed by timeout
   * attempts         - how much conenction attempts were done

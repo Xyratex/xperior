@@ -90,8 +90,9 @@ use constant ERROR_CONFIG_FAILURE         => 19;
 use constant ERROR_CONFIG_FAILURE2        => 10;
 use constant ERROR_DANGEROUS_TEST_FAILURE => 11;
 use constant ERROR_TEST_BREAK_REQUIRED    => 12;
+use constant ERROR_FORMAT_FAILED          => 13;
 
-our $VERSION = "0.0.2";
+our $VERSION = "0.0.3";
 
 has 'options'          => (is => 'rw');
 has 'tests'            => (is => 'rw');    # isa => 'ArrayRef[]', );
@@ -348,7 +349,11 @@ sub run {
                     $error = ERROR_CONFIG_FAILURE2;
                     last;
                 }
-                if (($res == 1) and $test->getParam('dangerous', 'yes')){
+                if(($res == 1) and $test->getParam('format_fail', 'yes')){
+                    WARN "Test failure detected on formating, exiting";
+                    $error = ERROR_FORMAT_FAILED;
+                    last;
+                }elsif (($res == 1) and $test->getParam('dangerous', 'yes')){
                     WARN "Dangerous test failure detected, exiting";
                     $error = ERROR_DANGEROUS_TEST_FAILURE;
                     last;
