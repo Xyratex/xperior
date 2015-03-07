@@ -252,23 +252,8 @@ sub getReason {
 }
 
 sub processSystemLog{
-	my ( $self, $connector, $filename ) = @_;
-	WARN 'processSystemLog is not implemented';
-}
-
-sub _getLog {
-    my ( $self, $connector, $logfile, $logname ) = @_;
-
-    my $res =
-      $connector->getFile( $logfile, $self->getNormalizedLogName($logname) );
-    if ( $res == 0 ) {
-        $self->registerLogFile( $logname,
-            $self->getNormalizedLogName($logname) );
-    }
-    else {
-        $self->addMessage( "Cannot copy log file [$logfile]: $res" );
-    }
-    return $res;
+    my ( $self, $connector, $filename ) = @_;
+    WARN 'processSystemLog is not implemented';
 }
 
 sub _getMasterNode {

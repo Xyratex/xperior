@@ -486,6 +486,22 @@ sub _tapFile{
            $self->test->getId().$TEXT;
 }
 
+sub _getLog {
+    my ( $self, $connector, $logfile, $logname ) = @_;
+
+    my $res =
+      $connector->getFile( $logfile, $self->getNormalizedLogName($logname) );
+    if ( $res == 0 ) {
+        $self->registerLogFile( $logname,
+            $self->getNormalizedLogName($logname) );
+    }
+    else {
+        $self->addMessage( "Cannot copy log file [$logfile]: $res" );
+    }
+    return $res;
+}
+
+
 
 #TODO add test
 sub _resourceFilePrefix{
@@ -494,6 +510,7 @@ sub _resourceFilePrefix{
            $self->test->getId().'.';
 
 }
+
 __PACKAGE__->meta->make_immutable;
 
 1;
