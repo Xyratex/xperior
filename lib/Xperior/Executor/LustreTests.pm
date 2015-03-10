@@ -159,7 +159,9 @@ sub _prepareCommands {
     if ($device_type eq 'block') {
         push @opt,
             "MDS_MOUNT_OPTS=\"-o rw,user_xattr\"",
-            "OST_MOUNT_OPTS=\"-o user_xattr\"";
+            "OST_MOUNT_OPTS=\"-o user_xattr\"",
+            "MDSSIZE=0",
+            "OSTSIZE=0";
     }
     my $env = $self->test->getMergedHashParam("env");
     if (ref($env) eq 'HASH') {
