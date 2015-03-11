@@ -387,7 +387,7 @@ sub _prepareEnvOpts {
             }
         }
         push @opt, $mgsnid;
-        $self->mgsopt( join( ' ', @opt ) );
+        $self->mgsopt( join( ' ', @opt ) ) if @opt;
     }
 
     #include only master client for sanity suite
