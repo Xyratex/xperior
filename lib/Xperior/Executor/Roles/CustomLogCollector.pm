@@ -55,7 +55,8 @@ use Time::HiRes;
 use Xperior::Utils;
 use Data::Dumper;
 use Log::Log4perl qw(:easy);
-
+use File::Basename;
+use Xperior::RemoteHelper; 
 our $VERSION = "0.0.1";
 
 has logname   => ( is => 'rw', default => 'messages');
@@ -72,23 +73,7 @@ after   'execute' => sub{
     foreach my $node (@{$self->env->nodes}) {
         my $id = $node->id;
         my $logs = $self->test->getParam('collect_logs');
-        foreach my $log (@{$logs}){
-            DEBUG "Collect [$log] on [$id]";
-            my $c = $node->getRemoteConnector();
-            my $cmd = "ls  -Aw1 $log";
-            DEBUG $cmd;
-            my $resc = $c->run($cmd,timeout => 30);
-            my $lsout = trim ($resc->{stdout});
-            DEBUG 'list out:'.$lsout;
-            foreach my $file(split(/\n/,$lsout)){
-                next if( ($file eq '') or ($file =~ m/^\s+/));
-                INFO "Attaching log file [$file]";
-                my $sname = "$file.$id";
-                $sname =~ s/^.*\///;
-                $sname =~ s/\.log$//;
-                $self->_getLog( $c, $file, "$sname" );
-            }
-        }
+        collect_remote_files_by_mask($node,$self,$logs);
     }
     $self->afterAfterExecute($title);
 };

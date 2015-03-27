@@ -54,12 +54,6 @@ use File::Copy;
 use Xperior::SshProcess;
 extends 'Xperior::Executor::Base';
 
-has DEFAULT_POLL => ( is => 'ro', default => 5 );
-has PASSED       => ( is => 'ro', default => 0 );
-has SKIPPED      => ( is => 'ro', default => 1 );
-has FAILED       => ( is => 'ro', default => 10 );
-has NOTSET       => ( is => 'ro', default => 100 );    #also failed
-
 has 'reason' => ( is => 'rw' );
 
 =head3  execute
@@ -101,7 +95,6 @@ sub execute {
     ##remove and recreate directory for logs
     #TODO cleanup should be done out of sub execute
     #$testp->createSync ('rm -rf /var/log/xperior/');
-    
 
     my $mountpoint = $self->env->cfg->{'client_mount_point'}
       or cluck("Undefined 'client_mount_point'");
@@ -256,9 +249,24 @@ sub processSystemLog{
     WARN 'processSystemLog is not implemented';
 }
 
-sub _getMasterNode {
+=item * _getMasterNode - retruns master node where test process will be executed
+
+It's important to use this call for getting master node in childs. Current implementation
+is Lustre-oriented but child could override it
+
+=cut
+
+sub _getMasterNode{
     my $self = shift;
     return $self->env->getMasterLustreClient();
+}
+
+sub _getMasterConnector{
+    my $self = shift;
+    my $mclient    = $self->_getMasterNode();
+    my $mclientobj = $self->env->getNodeById($mclient->{'node'});
+    my $connector  = $mclientobj->getRemoteConnector();
+    return $connector;
 }
 
 sub _addCmdLogFiles {

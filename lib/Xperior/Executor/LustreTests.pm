@@ -162,16 +162,16 @@ sub _prepareCommands {
             "OST_MOUNT_OPTS=\"-o user_xattr\"",
             "MDSSIZE=0",
             "OSTSIZE=0";
+    }elsif ($device_type eq 'loop') {
+        DEBUG "No additional options required for 'loop' devices";
     }
+
     my $env = $self->test->getMergedHashParam("env");
     if (ref($env) eq 'HASH') {
         for my $k (keys %$env) {
             push @opt,
                 "$k=\"" . $env->{$k} . "\"";
         }
-    }
-    elsif ($device_type eq 'loop') {
-        DEBUG "No additional options required for 'loop' devices";
     }
     $self->cmd( join(' ', @opt, $moreParams, $lustre_script));
 }

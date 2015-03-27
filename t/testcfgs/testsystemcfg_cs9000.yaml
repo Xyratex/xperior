@@ -1,0 +1,95 @@
+---
+Nodes:
+   - id           : oem
+     ip           : oem-kvm1n1c0
+     ctrlproto    : ssh
+     user         : root
+#     console      : /tmp/oem-kvmclust01-console-out
+
+#   - id           : mgmt0
+#     ip           : kvm1n1c000
+#     ctrlproto    : ssh
+#     user         : root
+#     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+   - id           : mgmt1
+     ip           : kvm1n1c001
+     ctrlproto    : ssh
+     user         : root
+     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+   - id           : mds0
+     ip           : kvm1n1c002
+     ctrlproto    : ssh
+     user         : root
+     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+   - id           : mds1
+     ip           : kvm1n1c003
+     ctrlproto    : ssh
+     user         : root
+     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+   - id           : oss0
+     ip           : kvm1n1c004
+     ctrlproto    : ssh
+     user         : root
+     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+   - id           : oss1
+     ip           : kvm1n1c005
+     ctrlproto    : ssh
+     user         : root
+     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+   - id           : client0
+     ip           : kvm1n1c006
+     ctrlproto    : ssh
+     user         : root
+     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+   - id           : client1
+     ip           : kvm1n1c007
+     ctrlproto    : ssh
+     user         : root
+     bridge       : oem-kvm1n1c0.xyus.xyratex.com
+
+LustreObjects:
+#   - id          : mds0
+#     device      : /dev/md65
+#     node        : mds0
+#     type        : mds
+
+#   - id          : mds1
+#     device      : /dev/md66
+#     node        : mds1
+#     type        : mds
+
+   - id          : oss0
+     device      : /dev/md0
+     node        : oss0
+     type        : oss
+
+   - id          : oss1
+     device      : /dev/md1
+     node        : oss1
+     type        : oss
+
+#   - id          : client0
+#     node        : client0
+#     type        : client
+#
+#   - id          : client1
+#     node        : client1
+#     type        : client
+
+   - id          : client2
+     node        : oem
+     type        : client
+     master      : yes
+
+#Variables
+tempdir                 : /
+client_mount_point      : /mnt/testfs
+lustretestdir           : /usr/lib64/lustre/tests
+

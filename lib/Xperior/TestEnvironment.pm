@@ -157,6 +157,7 @@ sub getMasterLustreClient{
     my $self = shift;
     foreach my $lo (@{$self->cfg->{'LustreObjects'}}){
         if(( $lo->{'type'} eq 'client')
+                &&(defined( $lo->{'master'}))
                 &&( $lo->{'master'} eq 'yes')){
            return $lo;
         }

@@ -40,15 +40,18 @@ use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 use File::Slurp;
 
 use Xperior::Test;
+use Xperior::Executor::Noop;
 use Xperior::Executor::Roles::CustomLogCollector;
 use ReformatTestExecutor;
 
 my $test;
 my $exe;
 my $cfg;
+
 my $tmpfile ='/tmp/xperior_test_file_log_collected';
 my $tmptfile ='/tmp/xperior_test_tmpl_file_log_collected';
 my $nofile  = '/__not_exists_file__';
+
 my $teststr='TESTFILE';
 my %options = (
     testdir => 't/testcfgs/lustre',
@@ -82,9 +85,6 @@ setup           _setup    => sub {
     $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
     $test = Xperior::Test->new;
     $test->init(\%tests,\%group_config);
-    $exe = ReformatTestExecutor->new();
-    Xperior::Executor::Roles::CustomLogCollector->meta->apply($exe);
-    $exe->init($test, \%options, $cfg);
 
 };
 teardown        _teardown => sub { };
@@ -94,6 +94,13 @@ shutdown        _shutdown => sub {
 #########################################
 
 test plan => 4, cCheckPass => sub {
+    $tests{collect_logs} = [$tmpfile,$nofile, '/tmp/xperior_test_tmpl_*'];
+    $test->init(\%tests,\%group_config);
+    $exe = ReformatTestExecutor->new();
+    Xperior::Executor::Roles::CustomLogCollector->meta->apply($exe);
+    $exe->init($test, \%options, $cfg);
+
+
     $exe->lustretestdir($CWD.'/t/reformatbefore/pass/');
     $exe->execute();
     ok( -e '/tmp/test_wd/single/1.xperior_test_file_log_collected.client1.log',
@@ -104,6 +111,33 @@ test plan => 4, cCheckPass => sub {
         'check masked file collection #1');
     ok( -e '/tmp/test_wd/single/1.xperior_test_tmpl_file_log_collected.oss2.log',
         'check masked file collection #2');
+};
+
+my $testdir = '/tmp/xp_cstm_test_logs';
+test plan => 4, fCheckSubDir => sub{
+    $tests{collect_logs} = [ "$testdir/*"];
+    $test->init(\%tests,\%group_config);
+
+    $exe = Xperior::Executor::Noop->new();
+    Xperior::Executor::Roles::CustomLogCollector->meta->apply($exe);
+    $exe->init($test, \%options, $cfg);
+    remove_tree($testdir);
+    mkdir $testdir;
+    mkdir "$testdir/subdir";
+    write_file( "$testdir/subdir/a.file", "test_subdir");
+    write_file( "$testdir/a.file", "test_topdir");
+    $exe->execute();
+    ok( -e '/tmp/test_wd/single/1.a.file.client1.log',
+        'check topdir a.file');
+    is(read_file('/tmp/test_wd/single/1.a.file.client1.log'),
+        'test_topdir',
+            'check topdir a.file content');
+    ok( -e '/tmp/test_wd/single/1.subdir_a.file.client1.log',
+        'check subdir a.file');
+    is(read_file('/tmp/test_wd/single/1.subdir_a.file.client1.log'),
+        'test_subdir',
+            'check subdir a.file content');
+
 
 };
 

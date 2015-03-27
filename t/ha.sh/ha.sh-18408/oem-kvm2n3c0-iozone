@@ -1,0 +1,31 @@
+oem-kvm2n3c0: 	Iozone: Performance Test of File I/O
+oem-kvm2n3c0: 	        Version $Revision: 3.394 $
+oem-kvm2n3c0: 		Compiled for 64 bit mode.
+oem-kvm2n3c0: 		Build: linux 
+oem-kvm2n3c0: 
+oem-kvm2n3c0: 	Contributors:William Norcott, Don Capps, Isom Crawford, Kirby Collins
+oem-kvm2n3c0: 	             Al Slater, Scott Rhine, Mike Wisner, Ken Goss
+oem-kvm2n3c0: 	             Steve Landherr, Brad Smith, Mark Kelly, Dr. Alain CYR,
+oem-kvm2n3c0: 	             Randy Dunlap, Mark Montague, Dan Million, Gavin Brebner,
+oem-kvm2n3c0: 	             Jean-Marc Zucconi, Jeff Blomberg, Benny Halevy, Dave Boone,
+oem-kvm2n3c0: 	             Erik Habbinga, Kris Strecker, Walter Wong, Joshua Root,
+oem-kvm2n3c0: 	             Fabrice Bacchella, Zhenghua Xue, Qin Li, Darren Sawyer.
+oem-kvm2n3c0: 	             Ben England.
+oem-kvm2n3c0: 
+oem-kvm2n3c0: 	Run began: Mon Mar 23 07:17:13 2015
+oem-kvm2n3c0: 
+oem-kvm2n3c0: 	Auto Mode
+oem-kvm2n3c0: 	Include fsync in write timing
+oem-kvm2n3c0: 	>>> I/O Diagnostic mode enabled. <<<
+oem-kvm2n3c0: 	Performance measurements are invalid in this mode.
+oem-kvm2n3c0: 	File size set to 262144 KB
+oem-kvm2n3c0: 	Command line used: iozone -a -e -+d -s 262144 /mnt/testfs//ha.sh-18408/oem-kvm2n3c0-iozone/f.iozone
+oem-kvm2n3c0: 	Output is in Kbytes/sec
+oem-kvm2n3c0: 	Time Resolution = 0.000001 seconds.
+oem-kvm2n3c0: 	Processor cache size set to 1024 Kbytes.
+oem-kvm2n3c0: 	Processor cache line size set to 32 bytes.
+oem-kvm2n3c0: 	File stride size set to 17 * record size.
+oem-kvm2n3c0:                                                             random  random    bkwd   record   stride                                   
+oem-kvm2n3c0:               KB  reclen   write rewrite    read    reread    read   write    read  rewrite     read   fwrite frewrite   fread  freread
+oem-kvm2n3c0:           262144       4  185947   63632   936857   661829 1262267  246822  926198   857758   566420   203544   162985 1156163  1309698
+oem-kvm2n3c0:           262144       8  216902  140535   377766  1302844 1007300  118809  103960   793253   938235   138494   155749 2004557  1927615

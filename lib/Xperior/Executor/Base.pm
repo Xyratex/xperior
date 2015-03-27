@@ -64,6 +64,13 @@ our $YVERSION = 'Xperior1'; #yaml output version. other modules also can add fie
 our $EXT  = '.yaml';
 our $TEXT = '.tap';
 
+has DEFAULT_POLL => ( is => 'ro', default => 5 );
+has PASSED       => ( is => 'ro', default => 0 );
+has SKIPPED      => ( is => 'ro', default => 1 );
+has FAILED       => ( is => 'ro', default => 10 );
+has NOTSET       => ( is => 'ro', default => 100 );    #also failed
+
+
 has 'test'              => ( is => 'rw');
 has 'options'           => ( is => 'rw');
 has 'env'               => ( is => 'rw');

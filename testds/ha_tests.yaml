@@ -1,0 +1,15 @@
+---
+Tests:
+  - script: ha.sh
+    id: ha.sh.short
+    options: -u 900  -p 30
+    victims: kvm1n1c006
+    timeout: 3000
+description: ha.sh for failover testing
+executor: Xperior::Executor::LustreHATests
+groupname: ha
+reference: https://github.com/Xyratex/lustre-stable/blob/b_neo_stable_2.0/lustre/tests/ha.sh
+roles:
+#StoreStat StoreSyslog StoreConsole GetDiagnostics CustomLogCollector
+tags: availability
+

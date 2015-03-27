@@ -1,0 +1,18 @@
+oem-kvm2n3c0: IOR-2.10.3: MPI Coordinated Test of Parallel I/O
+oem-kvm2n3c0: 
+oem-kvm2n3c0: Run began: Mon Mar 23 07:17:13 2015
+oem-kvm2n3c0: Command line used: /test-tools/mpich2/ior-2.10.3/src/C/IOR -b 6g -o /mnt/testfs//ha.sh-18408/ior/f.ior -t 2m -w -W -T 1
+oem-kvm2n3c0: Machine: Linux oem-kvm2n3c0.xyus.xyratex.com
+oem-kvm2n3c0: 
+oem-kvm2n3c0: Summary:
+oem-kvm2n3c0: 	api                = POSIX
+oem-kvm2n3c0: 	test filename      = /mnt/testfs//ha.sh-18408/ior/f.ior
+oem-kvm2n3c0: 	access             = single-shared-file
+oem-kvm2n3c0: 	ordering in a file = sequential offsets
+oem-kvm2n3c0: 	ordering inter file= no tasks offsets
+oem-kvm2n3c0: 	clients            = 2 (2 per node)
+oem-kvm2n3c0: 	repetitions        = 1
+oem-kvm2n3c0: 	xfersize           = 2 MiB
+oem-kvm2n3c0: 	blocksize          = 6 GiB
+oem-kvm2n3c0: 	aggregate filesize = 12 GiB
+oem-kvm2n3c0: 

@@ -44,7 +44,7 @@ use YAML qw "Bless LoadFile Load";
 use Data::Dumper;
 use Moose;
 use Carp qw( confess cluck );
-use File::Path;
+use File::Path qw(make_path remove_tree);
 use File::chdir;
 use File::Copy;
 use File::Find;
@@ -467,6 +467,7 @@ sub saveTestPlan{
     my $self = shift;
     my @tests = @{$self->tests()};
     my $wd   = $self->{options}->{workdir};
+    make_path($wd);
     my @plan;
     if( @tests and (scalar(@tests) > 0)){
         @plan = map{$_->getParam('groupname').'/'.$_->getId()."\n"} @tests;
