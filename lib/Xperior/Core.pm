@@ -330,8 +330,8 @@ sub run {
             my $testName     = $test->getId();
             my $testGroup    = $test->getGroupName();
             my $exe    = $self->_runtest($test, $test->{excluded});
-            my $res    = $exe->result_code;
-            my $status = $test->results->{'status'};
+            my $res    = $exe->result_code();
+            my $status = $exe->yaml()->{'status'};
             write_file("$wd/".$self->testexecutionlog(),
                         {err_mode => 'croak', append => 1},
                         time()."\t${testGroup}//${testName}\n");
@@ -341,7 +341,6 @@ sub run {
 
             #ignore passed and skipped results
             if ($res != 0 and $res != 2) {
-
                 #test failed, do env check
                 if ($self->{'env'}->checkEnv < 0) {
                     WARN

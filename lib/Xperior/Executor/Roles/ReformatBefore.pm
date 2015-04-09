@@ -110,9 +110,8 @@ around 'execute' => sub {
                             "ReformatBefore: llmount failed");
         }
         $self->addMessage('ReformatBefore: llmount passed');
-        $orig->($self);
+        $orig->($self); #continue main execute
     }catch RemoteCallException Error::subs::with{
-        #pass ("Exception cought");
         ERROR "Exception caught, faling test";
         $self->addYE('format_fail', 'yes');
         $self->fail("Failed on ReformatBefore");

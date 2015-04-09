@@ -119,7 +119,7 @@ test plan => 4, dCheckLlmountcleanupFail => sub {
     is($exe->yaml->{'format_fail'}, 'yes', 'fail1:test exit property');
 };
 
-test plan => 6, eCheckLlmountFail => sub {
+test plan => 7, eCheckLlmountFail => sub {
     $exe->lustretestdir($CWD.'/t/reformatbefore/llmountfail/');
     $exe->execute();
     is($exe->yaml->{ReformatBefore_llmountcleanup_exitcode},0,
@@ -135,6 +135,7 @@ test plan => 6, eCheckLlmountFail => sub {
     read_file(
         '/tmp/test_wd/single/1.ReformatBefore_llmountcleanup.stdout.log');
     is($llclines[0],"Passed\n",'fail2:llmount log');
+    is($exe->yaml()->{'status'},'failed','RTP-2532');
 };
 
 

@@ -101,9 +101,10 @@ sub init{
 
     $self->steptimeout(5);
 
-    $self->{'test'} = $test;
-    $self->{'options'} = $opt;
-    $self->{'env'}     = $env;
+    $self->test($test);
+    $self->options($opt);
+    $self->env($env);
+    
     foreach my $k ( @{$test->getParamNames}){
         $self->addYE($k,$test->getParam($k));
     }
