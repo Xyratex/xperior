@@ -109,6 +109,8 @@ test plan => 3,abCreateExitCodes     => sub{
 #exit 1;
 };
 
+
+
 test plan => 3, bCreateExitCodesBridge     => sub{
     $sp->init($node);
     my $res = $sp->create('sleepbr','/bin/sleep 30');
@@ -122,6 +124,15 @@ test plan => 3, bCreateExitCodesBridge     => sub{
     $res = $sp->create('sleep','/bin/sleep 30');
     is($res,-3,'Check result for bad host for bridge case');
 
+};
+
+
+test plan => 1,bdMasterSocketCleanup     => sub{
+    my $mastersocket;
+    my $res = $sp->create('sleep','/bin/sleep 30');
+    $mastersocket = $sp->controlmaster();
+    $sp=undef;
+    ok(not(-e $mastersocket), 'Check master socket cleanup');
 };
 
 
@@ -192,6 +203,7 @@ test plan => 6, lCreateAliveExit    => sub {
     $ec  = $sp->exitcode;
     is($res, -1,  'Check alive for exited app');
     is($ec,  0, 'Check exit code for alive app');
+    #exit 0;
 };
 
 

@@ -193,6 +193,7 @@ sub _kill{
         my $k1 = $proc->kill("SIGKILL");
         DEBUG "SIGKILL result is $k1";
     }
+    return;
 }
 
 
@@ -413,12 +414,13 @@ sub _sshSyncExecS {
     my @outraw = read_file($stdout);
     my $out = join( "\n", map {
             #DEBUG "line:".$_;
-            if( $_ =~ s/Internal_exit_code:(\d+)// ){
+            my $str = $_;
+            if( $str =~ s/Internal_exit_code:(\d+)// ){
                 DEBUG "Caught exit code $1";
                 $parsed_exit_code = $1;
                 # $_ =~ s/Internal_exit_code:(\d++)$//;
             }
-            $_;
+            $str;
         } @outraw );
     my $err = read_file($stderr);
     unlink $stdout;
@@ -487,6 +489,21 @@ sub _sshAsyncExec {
     return $sc;
 }
 
+=head3 DEMOLISH
+
+Desctructor. Cleanup master socket files.
+
+=cut
+
+sub DEMOLISH{
+    my $self = shift;
+    if(defined $self->controlmaster()){
+        unlink
+        $self->controlmaster();
+    }
+    return;
+}
+
 =head3 initTemp ()
 
 Initialize temporary variables.
@@ -504,6 +521,7 @@ sub initTemp {
             ."_".Time::HiRes::gettimeofday()
             .".sshmaster");
     $self->masterprocess(undef);
+    return;
 }
 
 =head3 init ($host, $user, $port)
@@ -589,7 +607,7 @@ sub _findPid {
 
     foreach my $s ( split( /\n/, $res->{stdout} ) ) {
         DEBUG "Check line for PID [$s]\n";
-        my ($pid) = ($s =~ m/^(\d+)/);
+        my ($pid) = ($s =~ m/^(\d+)/x);
         if ($pid) {
             $self->pid($pid);
             DEBUG "PID found: [$pid]\n";
@@ -812,13 +830,15 @@ SCRIPT
 
     DEBUG "Uploading script:\n$script";
     my ($f, $t) = mkstemp("/tmp/ssh_remote_script_XXXX");
+    close $f;
     write_file($t, $script);
     if( $self->putFile($t, $shell_file) !=0 ){
         ERROR 'Cannot send cmd file to ['.
             $self->host.':'.$self->_getPortScpCmd().']';
+        unlink $t;
         return -3;
     }
-
+    unlink $t;
     if ( $self->_sshAsyncExec("sh $shell_file") ) {
         WARN "Cannot create remote process";
         return -2;
@@ -918,14 +938,14 @@ sub isAlive {
         if ( defined($execres) ) {
             $o = trim $execres->{stdout};
         }
-        if ( ( defined($o) ) and ( $o =~ m/^\s*$pid\s*/ ) ) {
+        if ( ( defined($o) ) and ( $o =~ m/^\s*$pid\s*/x ) ) {
             last;
         }
         my $ecoderes =  $self->_sshSyncExec( "cat " . $self->ecodefile );
         $exitcode = trim( $ecoderes->{stdout} );
 
         DEBUG "Exitcode = [$exitcode]";
-        if ( ( defined($o) ) and ( $exitcode =~ m/^\d+$/ ) ) {
+        if ( ( defined($o) ) and ( $exitcode =~ m/^\d+$/x ) ) {
             last;
         }
         sleep $step;
@@ -940,7 +960,7 @@ sub isAlive {
         return -99;
     }
 
-    if ( $o =~ m/^\s*$pid\s*/ ) {
+    if ( $o =~ m/^\s*$pid\s*/x ) {
         DEBUG "Remote process is alive! ";
         return 0;
     }
@@ -967,7 +987,7 @@ sub putFile {
     my($filename, $dirs, $suffix) = fileparse("$remote_file");
     my $tmp_file = $self->bridgetmpdir().'/'.$filename;
 
-    if( (not $remote_file) or ($remote_file  =~ m/^\/\s*$/)){
+    if( (not $remote_file) or ($remote_file  =~ m/^\/\s*$/x)){
         ERROR "Remote target is incorrect or not set:[$remote_file]";
         return 110;
     }
@@ -1000,6 +1020,7 @@ sub putFile {
 PSCRIPT
         DEBUG "Save put script:\n$script";
         my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
+        close $f;
         write_file($t, $script);
         #my $res = shell("sh -e $t");
         my $res = runEx("sh -e $t");
@@ -1072,6 +1093,7 @@ sub getFile {
 PSCRIPT
         DEBUG "Save put script:\n$script";
         my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
+        close $f;
         write_file($t, $script);
         #my $res = shell("sh -e $t");
         my $res = runEx("sh -e $t");
