@@ -188,6 +188,23 @@ sub getLustreNodeAddress{
     return undef;
 }
 
+# generic config fucntions
+sub get_target_generic_clients{
+    my $self = shift;
+    my @res;
+    foreach my $lo (@{$self->cfg->{'GenericObjects'}}){
+        if(( $lo->{'type'} eq 'client')
+                &&(defined( $lo->{'target'}))
+                &&( $lo->{'target'} eq 'yes')){
+           push @res, $lo;
+        }
+    }
+    return \@res;
+}
+
+
+
+
 =over 12
 
 =item * B<getNodeAddress> - return common ip address which must be defined for node.
@@ -215,8 +232,9 @@ sub getNodeUser{
 sub getNodeById{
     my ($self, $id) = @_;
     foreach my $n (@{$self->nodes}){
-        return $n    if( $n->id eq $id);
+        return $n if( $n->{id} eq $id);
     }
+    DEBUG "Cannot find node [$id]";
     return undef;
 
 }

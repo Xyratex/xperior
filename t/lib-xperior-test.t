@@ -47,6 +47,48 @@ shutdown        _shutdown => sub {};
 
 #########################################
 
+test plan =>5, afGetSubTest => sub{
+    my $testcfg = {
+        id  => '999',
+        field1 => 1,
+        test_only => 5,
+        subtests  => {
+                    generator => {
+                        cmd      => 'sleep 60',
+                        timeout  => '50',
+                        field1 => 2
+                    },
+                    payload => {
+                        cmd      => 'hostname',
+                        timeout  => '50',
+                        field1 => 3
+                    },
+        }
+    };
+    my $groupcfg = {
+        groupname => 'testgrp',
+        group_only => 6,
+    };
+    $test = Xperior::Test->new;
+    $test->init($testcfg, $groupcfg);
+
+    my $p1 = $test->getSubTestParam('payload', 'cmd');
+    is($p1, 'hostname', 'Second subtest unique field');
+
+    my $p2 = $test->getSubTestParam('generator', 'field1');
+    is($p2, 2, 'First subtest field overwriting');
+
+    my $p3 = $test->getSubTestParam('payload', 'field1');
+    is($p3, 3, 'Second subtest field overwriting');
+
+    my $p4 = $test->getSubTestParam('payload', 'test_only');
+    is($p4, 5, 'Second subtest field inheritance from test');
+
+    my $p5 = $test->getSubTestParam('payload', 'group_only');
+    is($p5, 6, 'Second subtest field inheritance from group');
+
+};
+
 test plan => 2, eGetTestName    => sub {
     my $testcfg = {
         id  => '999',

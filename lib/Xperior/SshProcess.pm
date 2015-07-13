@@ -208,7 +208,7 @@ sub _supportMasterProcess{
     my $self = shift;
     if( ( defined $self->masterprocess() ) and
         ( $self->masterprocess->poll())){
-        DEBUG "Already  started, ignoring";
+        DEBUG "Ssh-master already  started, ignoring";
         return;
     }
     if($self->bridge){

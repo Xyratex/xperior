@@ -110,7 +110,28 @@ Unit test actively use package
 
 B<Note: current description doesn't include mongo uploader information.>
 
-=head3 Steps for install packages from CPAN
+=head3 Steps for perl brew usage
+
+Perl brew  L<http://perlbrew.pl/> - utility for build own perl, useful for avodid
+distro perl usage and deploy simplifaction.
+
+Steps for building own perl and libraries setup
+
+    export PERLBREW_ROOT=/opt/perlbrew
+    curl -L http://install.perlbrew.pl | bash
+    perlbrew init
+    source /opt/perlbrew/etc/bashrc
+
+
+    perlbrew install perl-5.22.0
+    perlbrew use perl-5.22.0
+    perlbrew install-cpanm
+    cpanm Log::Log4perl File::Slurp Moose Data::Dumper Carp Test::Able File::Path File::chdir File::Temp Proc::Simple Cwd Module-Load YAML::Syck YAML URI Template TAP::Formatter::HTML MooseX::Clone Error XML::Simple XML::Simple File::Copy::Recursive
+    cpanm  MongoDB MongoDB::OID MongoDB::GridFS JSON DateTime
+
+
+
+=head3 Steps for install packages from CPAN (should be updated)
 
 =over 12
 

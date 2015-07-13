@@ -120,6 +120,8 @@ sub getParamNames {
     return \@names;
 }
 
+
+
 =head2 getParam
 
 Returns parameter value by given L<name>. If L<compare> argument is defined,
@@ -147,6 +149,37 @@ sub getParam {
 
     return $value;
 }
+
+=head2 getSubTestParam
+
+Returns parameter value by given L<name> and L<subtest_name>.
+If L<compare> argument is defined,
+returns result of comparison of its value and parameter.
+
+=back
+
+=cut
+
+sub getSubTestParam {
+    my ( $self, $subtestname, $name, $compare ) = @_;
+
+    my $value;
+    if ( defined( $self->testcfg->{'subtests'}->{$subtestname}->{$name} )) {
+        $value = $self->testcfg->{'subtests'}->{$subtestname}->{$name};
+    }elsif ( defined( $self->testcfg->{$name} ) ) {
+        $value = $self->testcfg->{$name};
+    }elsif ( defined( $self->groupcfg->{$name} ) ) {
+        $value = $self->groupcfg->{$name};
+    }
+
+    if ( defined($compare) ) {
+        $value = defined($value) ? $value eq $compare : 0;
+    }
+
+    return $value;
+}
+
+
 
 =head2 getMergedHashParam($name)
 

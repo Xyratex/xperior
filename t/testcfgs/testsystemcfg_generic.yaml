@@ -1,0 +1,22 @@
+---
+Nodes:
+   - id          : local1
+     ip          : localhost
+     ctrlproto   : ssh
+     user        : tomcat
+
+
+GenericObjects:
+   - id          : client1
+     node        : local1
+     type        : client
+     target      : yes
+
+   - id          : client2
+     node        : local1
+     type        : client
+     target      : yes
+
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile
+tempdir                 : /tmp/

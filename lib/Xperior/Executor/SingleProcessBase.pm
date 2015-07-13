@@ -54,19 +54,45 @@ use File::Copy;
 use Xperior::SshProcess;
 extends 'Xperior::Executor::Base';
 
-has 'reason' => ( is => 'rw' );
 
 =head3  execute
 
-Function execute process on remote client and control remote execution via ssh. Only one process could be executed by one object instance. Process is executed  on first found client which marked as master.
+Function executes process on remote client and control remote execution
+via ssh. Only one process could be executed by one object instance.
+Process is executed  on first found client which marked as master.
 
-Command line for executing  should be prepared in inheritor by defining B<_prepareCommands> function.
+Sample of master client definition from system configuration
 
-Before execution directory 'tempdir' from system configuration will be cleaned up.
+    LustreObjects:
+      - id: client1
+        master: yes
+        node: fre1107
+        type: client
 
-Process executing via asynchronous call from L<Xperior::SshProcess> and use its object for regular monitoring remote process status.
+If more them one client is defined as master first found client
+will be used.
 
-When remote process not found observation stopped and execution status calculated. Status calculated by results from B<processLogs>  function, 'killed' and connection issue status, worse status selected. Also it stderr and stdout saving as test logs.
+
+Command line for executing  should be prepared in inheritor by
+defining B<_prepareCommands> function.
+
+Process is executed via asynchronous call from L<Xperior::SshProcess>.
+
+When remote process is not found observation stops and execution
+status is calculating. Status set by results from B<processLogs>
+function, 'killed' and connection issue status, worse status
+is selected. Also process stderr and stdout is saved as test logs.
+
+Options of test object which are used
+
+    cmd      - ready command line
+    id       - test id
+    timeout  - common timeout for test(process)
+
+Options of environment which are used
+
+    client_mount_point - mount point on client
+
 
 =cut
 
@@ -82,7 +108,6 @@ sub execute {
     $self->_addCmdLogFiles;
     $self->addYE( 'cmd', $self->cmd );
 
-    #$self->_saveStageInfoBeforeTest;
 
     #get remote processor
     my $mclientobj = $self->env->getNodeById( $mnodecfg->{'node'} );
@@ -112,132 +137,31 @@ sub execute {
 
     my $cr = $testproc->create( $self->appname, $self->cmd );
     if ( $cr < 0 ) {
-        $self->fail(
-'Cannot start or find just started remote test process on master client'
-        );
-        $self->addMessage(
-            'Cannot start remote process, network or remote host problem.');
-        $self->test->results( $self->yaml );
-        $self->addYE( 'masterhostdown', 'yes' );
-        $self->addYE( 'killed',         'no' );
-        $self->_getLog( $testproc, $self->remote_err, 'stderr' );
-        $self->_getLog( $testproc, $self->remote_out, 'stdout' );
+        $self->fail_on_cannot_execute($testproc, "master client",'');
+
         return;
     }
 
-    my $endtime = $starttime + $self->test->getParam('timeout');
+    $self->wait_cycle($self, $starttime, $testproc);
 
-    my $polltime = $self->test->getParam('polltime') || $self->DEFAULT_POLL;
-    DEBUG "Poll time is [$polltime]";
-    while ( $endtime > time ) {
-
-        #monitoring timeout
-        sleep $polltime;
-        if ( $testproc->isAlive != 0 ) {
-            DEBUG "Remote app is not alive, exiting";
-            last;
-        }
-        DEBUG "Test alive, next wait cycle";
-    }
-    #$testproc->createSync( 'sync', 30 );
-
-    $self->addYE( 'endtime',         time );
-    $self->addYE( 'endtime_planned', $endtime );
-    ### post processing and cleanup
-    my $killed     = 0;
-    my $isnodedown = 0;
-    my $killtime   = 0;
-    my $ping       = $mclientobj->ping();
-    if ( $ping and ( $testproc->isAlive == 0 ) ) {
-        WARN "Test is alive after end of test execution, kill it";
-        my $ts = $mclientobj->getRemoteConnector();
-        DEBUG $ts->createSync('ps afx');
-        DEBUG "Owned pid is:" . $testproc->pid;
-        $testproc->kill;
-        $killed   = 1;
-        $killtime = $testproc->killed;
-    }
-    elsif ( not defined($ping) ) {
-        $isnodedown = 1;
-        $self->addMessage(
-            'Incorrect master host ip or cannot resolve dns name');
-    }
-    elsif ( $ping == 0 ) {
-        $isnodedown = 1;
-        $self->addMessage('Master host is down');
-    }
-
-    $self->addYE( 'completed', 'yes' );
-    DEBUG "*****After crash check:" . $testproc->exitcode;
-
-    #$self->_saveStageInfoAfterTest;
-
+    $self->execution_result_calculation($self, $testproc, $mclientobj, $starttime);
     #cleanup tempdir after execution
     #TODO make this removing safe!!!
     $testproc->run( 'rm -rf ' . "$mountpoint/*" )
-    if ($mountpoint and $mountpoint ne "");
+            if ($mountpoint and $mountpoint ne "");
 
-    ### get logs
 
-    my $getlogres = $self->_getLog( $testproc, $self->remote_err, 'stderr' );
-    $getlogres = $self->_getLog( $testproc, $self->remote_out, 'stdout' );
-
-    # processLogs return values
-    my $pr = $self->NOTSET;
-    if ( $getlogres == 0 ) {
-        $pr = $self->processLogs( $self->getNormalizedLogName('stdout') );
-    }
-    else {
-        $self->reason(
-            "Cannot get log file [" . $self->remote_out . "]: $getlogres" );
-    }
-
-    #calculate results status
-    if ( $killed > 0 ) {
-        $self->addYE( 'killed',         'yes' );
-        $self->addYE( 'masterhostdown', 'no' );
-        my $lifetime = $killtime - $starttime;
-        $self->fail("Killed by timeout after [$lifetime] sec of execution");
-    }
-    elsif ( $isnodedown > 0 ) {
-        $self->addYE( 'masterhostdown', 'yes' );
-        $self->addYE( 'killed',         'no' );
-        $self->fail('Master host became down just after or while testing');
-    }
-    else {
-        $self->addYE( 'killed',         'no' );
-        $self->addYE( 'masterhostdown', 'no' );
-        $self->addYE( 'exitcode',       $testproc->exitcode );
-        if ( ( $testproc->exitcode == 0 ) && ( $pr == $self->PASSED ) ) {
-            $self->pass;
-        }
-        elsif ( ( $testproc->exitcode == 0 ) && ( $pr == $self->SKIPPED ) ) {
-            $self->skip( 1, $self->getReason );
-        }
-        elsif ( ( $testproc->exitcode != 0 ) && ( $pr == $self->PASSED ) ) {
-            $self->fail(
-                "Test return non-zero exit code :" . $testproc->exitcode );
-        }
-        else {
-            $self->fail( $self->getReason );
-        }
-    }
-
-    ### cleanup logs
-    ### end
-    #no idea what is good result there, so no return
     #$self->test->tap     ( $self->tap);
     $self->test->results( $self->yaml );
-
-    #$self->write();
-    #return $self->tap();
     $self->cleanup();
+    #no idea what is good result there, so no return
     return;
 }
 
 sub cleanup {
     my $self = shift;
 }
+
 
 sub getReason {
     my $self = shift;
@@ -269,24 +193,6 @@ sub _getMasterConnector{
     return $connector;
 }
 
-sub _addCmdLogFiles {
-    my $self = shift;
-    my $r    = int rand 1000000;
-    my $tee  = " | tee ";
-
-    $self->options->{'cmdout'} = 0
-      unless defined $self->options->{'cmdout'};
-
-    $tee = " 1>  " if $self->options->{'cmdout'} == 0;
-    $self->remote_err("/var/log/xperior/test_stderr.$r.log");
-    $self->remote_out("/var/log/xperior/test_stdout.$r.log");
-    $self->cmd( $self->cmd
-          . " 2>     "
-          . $self->remote_err
-          . $tee
-          . $self->remote_out );
-    return;
-}
 
 __PACKAGE__->meta->make_immutable;
 1;

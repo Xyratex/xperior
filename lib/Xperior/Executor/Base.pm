@@ -23,7 +23,7 @@
 #
 # Copyright 2012 Xyratex Technology Limited
 #
-# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+# Author: Roman Grigoryev<Roman_Grigoryev@seagate.com>
 #
 
 =pod
@@ -34,12 +34,17 @@ Xperior::Executor::Base - Base executor class
 
 =head1 DESCRIPTION
 
-Base class for test. Keep all test parametes to field B<yaml> which
-saved to Xprerior result files by b<report> call. Also could be stored
-TAP report which have less information but more compatible with other tools.
+Base class for test executor, include all information about test result
+via inheritance and provide methods for test result reporting.
 
-Method B<execute> is extension poit for
+Keep all test results to field B<yaml> which saved to Xprerior result
+files by b<report> call. Also could be stored TAP report which have
+less information but more compatible with other tools.
+
+Method B<execute> and other are extension poit for
 L<Xperior::Executor::SingleProcessBase> and its inheritors.
+
+Class is inhertor of L<Xperior::TestResultBase>.
 
 It is possible to use http://instanttap.appspot.com/ for check tap outputs.
 
@@ -60,35 +65,26 @@ use File::Copy;
 use File::Slurp;
 use Carp;
 
+extends 'Xperior::TestResultBase';
+our $VERSION = '0.02';
 our $YVERSION = 'Xperior1'; #yaml output version. other modules also can add fields.
 our $EXT  = '.yaml';
 our $TEXT = '.tap';
 
-has DEFAULT_POLL => ( is => 'ro', default => 5 );
-has PASSED       => ( is => 'ro', default => 0 );
-has SKIPPED      => ( is => 'ro', default => 1 );
-has FAILED       => ( is => 'ro', default => 10 );
-has NOTSET       => ( is => 'ro', default => 100 );    #also failed
 
 
 has 'test'              => ( is => 'rw');
-has 'options'           => ( is => 'rw');
 has 'env'               => ( is => 'rw');
-has 'result_code'       => ( is => 'rw');
-has 'result'            => ( is => 'rw');
-has 'yaml'              => ( is => 'rw');
-
 has 'steptimeout'       => ( is => 'rw');#sec
 
 #TODO probably needs to move to one class with execute implementation
 has cmd                 => (is=>'rw');
 has appname             => (is=>'rw');
-has remote_out          => (is=>'rw');
-has remote_err          => (is=>'rw');
 
 has before_start_time => (is=>'rw', isa => 'HashRef[Int]');
-has after_start_time => (is=>'rw', isa => 'HashRef[Int]');
+has after_start_time  => (is=>'rw', isa => 'HashRef[Int]');
 
+has xp_log_dir        =>( is => 'rw', default =>'/var/log/xperior/');
 sub init{
     my ($self, $test, $opt, $env) = @_;
     my %th;
@@ -104,7 +100,7 @@ sub init{
     $self->test($test);
     $self->options($opt);
     $self->env($env);
-    
+
     foreach my $k ( @{$test->getParamNames}){
         $self->addYE($k,$test->getParam($k));
     }
@@ -113,124 +109,6 @@ sub init{
     $self->after_start_time  ({});
 }
 
-=head2 addYE(KEY, VALUE)
-
-Adds Yaml Element.
-
-Returns 1 if the value has been overridden, otherwise returns 0.
-
-=cut
-
-sub addYE{
-    my ($self, $key, $value) = @_;
-    my $overridden = defined $self->yaml->{$key};
-    $self->yaml->{$key} = $value ;
-    $self->_write;
-    return $overridden;
-}
-
-=head2 addYEE(KEY1, KEY2, VALUE)
-
-Adds Yaml Element in Element. Means adding second level hash element.
-
-Returns 1 if the value has been overridden, otherwise returns 0.
-
-=cut
-
-sub addYEE{
-    my ($self, $key1, $key2, $value) = @_;
-    my $overridden = (defined $self->yaml->{$key1} and
-                      defined $self->yaml->{$key1}->{$key2});
-    $self->yaml->{$key1}->{$key2} = $value ;
-    $self->_write;
-    return $overridden;
-}
-
-=head2 addMessage
-
-Save message to tests. User for message frpm Xperior, e.g.
-"Master client down". Saved in result yaml.
-
-=cut
-
-sub addMessage{
-    my ($self,$data) = @_;
-    $self->yaml->{'messages'} = $self->yaml->{'messages'}
-                                    . $data."\n";
-    $self->_write;
-}
-
-=head2 pass
-
-Set test passed.
-
-=cut
-
-sub pass{
-    my ($self,$msg)  = @_;
-    if( defined $msg){
-        $msg = " #".$msg
-    }else{
-        $msg='';
-    }
-    $self->{'result'} ="ok 1 $msg";
-    $self->{'result_code'} = 0;
-    $self->yaml->{'status'} = 'passed';
-    $self->yaml->{'status_code'} = 0;
-    $self->_write;
-}
-
-=head2 fail
-
-Set test failed.
-
-=cut
-
-sub fail{
-    my ($self,$msg)  = @_;
-    my $pmsg = $msg;
-    if((defined $msg) and ($msg ne '')){
-        $msg = " #".$msg
-    }else{
-        $msg='';
-    }
-    $self->{'result'} ="not ok 1 $msg" ;
-    $self->{'result_code'} = 1;
-    $self->yaml->{'status'} = 'failed';
-    $self->yaml->{'status_code'} = 1;
-    $self->yaml->{'fail_reason'} = $pmsg;
-    $self->_write;
-}
-
-=head2 skip
-
-Set test skipped
-
-=cut
-
-sub skip{
-    #mode means type of skip - skip may
-    # be acc-sm induced or exclude list induced
-    my ($self,$mode,$msg)  = @_;
-    if( defined $msg){
-        $msg = " #".$msg
-    }else{
-        $msg='';
-    }
-    $self->{'result'} ="ok 1# SKIP $msg" ;
-    $self->{'result_code'} = 2;
-    $self->yaml->{'status'} = 'skipped';
-    $self->yaml->{'status_code'} = 2;
-    $self->yaml->{'fail_reason'} = $msg;
-    $self->_write;
-}
-
-=head2 setExtOpt(KEY, VALUE)
-
-Set additional fied to yaml in special section B<extoptions>. Use it
-for adding meta-information to test result.
-
-=cut
 
 sub setExtOpt{
     my ($self,$key,$value) = @_;
@@ -238,56 +116,6 @@ sub setExtOpt{
         and DEBUG "Overridden YAML key [extoptions/$key] with value [$value]";
 }
 
-sub registerLogFile{
-    my ($self,$key,$path)  = @_;
-    my $rd=$self->_reportDir.'/';
-    $path =~ s/$rd//;
-    $self->addYEE('log',$key,$path);
-}
-
-#TODO add tests!
-sub normalizeLogPlace{
-    my ($self,$lfile,$key)  = @_;
-    move "$lfile",
-            $self->_resourceFilePrefix."$key.log";
-}
-
-sub getNormalizedLogName{
-    my ($self,$key)  = @_;
-    $self->_createDir;
-    return $self->_resourceFilePrefix."$key.log";
-}
-
-sub createLogFile{
-    my ($self,$key)  = @_;
-    my $file = $self->_resourceFilePrefix."$key.log";
-
-    $self->_createDir;
-    my $fd;
-    open $fd, "> $file"  or confess "Cannot log  file[$file]:" . $!;
-    $self->registerLogFile($key,$file);
-    return $fd;
-}
-
-sub writeLogFile{
-    my ($self,$key, $data)  = @_;
-    my $file = $self->_resourceFilePrefix."$key.log";
-    $self->_createDir;
-    my $res = write_file ($file,$data);
-    if($res != 1){
-        ERROR "Cannot log  file[$file]";
-        return 0;
-    }
-    $self->registerLogFile($key,$file);
-    return $res;
-}
-
-
-=head2 tap
-
-Write TAP report for B<$self-E<gt>yaml>
-
-=cut
 
 sub tap{
     my $self = shift;
@@ -469,12 +297,7 @@ sub _write{
 }
 
 
-sub _createDir{
-    my $self = shift;
-    if ( ! -d $self->_reportDir){
-        mkpath ($self->_reportDir);
-    }
-}
+
 
 sub _reportDir{
     my $self = shift;
@@ -540,11 +363,12 @@ version 2 along with this program; If not, see http://www.gnu.org/licenses
 
 
 
-Copyright 2012 Xyratex Technology Limited
+Copyright 2012 Xyratex
 
 =head1 AUTHOR
 
-Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+Roman Grigoryev<Roman.Grigoryev@seagate.com>
 
 =cut
+
 
