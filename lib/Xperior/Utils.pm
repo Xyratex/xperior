@@ -54,7 +54,7 @@ use POSIX ":sys_wait_h";
 use Symbol 'gensym';
 
 our @ISA = ("Exporter");
-our @EXPORT = qw(&shell &trim &runEx &parseFilterFile &findCompleteTests);
+our @EXPORT = qw(&shell &trim &runEx &parseFilterFile &findCompleteTests &is_path_unsafe &get_fs_root);
 
 sub trim{
    my $string = shift;
@@ -310,6 +310,67 @@ sub findCompleteTests{
     #DEBUG Dumper \@testlist;
     @testlist = sort @testlist;
     return \@testlist;
+}
+
+=head2 is_path_unsafe
+
+Check the list of roots (mount) and incoming parameter (path).
+
+Return safe or not to avoid removing from root.
+
+Returns exit codes as:
+
+0 - patch is safe
+1 - patch is unsafe
+2 - patch is possible unsafe
+3 - root list or path is empty
+
+SYNOPSIS
+
+    is_path_unsafe ( $fslist, $path )
+    is_path_unsafe ( get_fs_root(), $path )
+
+=cut
+sub is_path_unsafe{
+    my ($reflist, $path) = @_;
+
+    #Checking if fslist reference exists
+    if (!defined($reflist) || (ref($reflist) ne 'ARRAY') || !(@{$reflist})) {
+        DEBUG "Subroutine parameter missing for filesystem list\n";
+        #Return root list is empty
+        return 3;
+    }
+    #Checking if path exists
+    if (!$path) {
+        DEBUG "Please cite the directory path which needs to be checked for safety\n";
+        return 3;
+    }
+    if (grep{ $_ eq $path } @{$reflist}){
+        #Return unsafe
+        return 1;
+    }
+    return 0;
+}
+
+=head2 get_fs_root
+
+Generates a list of filesystem roots using mount command on the local node.
+
+Returns array reference.
+
+SYNOPSIS
+
+    get_fs_root ()
+
+=cut
+sub get_fs_root{
+    my (@output, @all_words);
+    @output = split(/\n/,`mount`);
+    foreach my $line (@output){
+        my @tmp_arr = split(' ', $line);
+        push(@all_words,@tmp_arr);
+    }
+    return [grep(/^\//, @all_words)];
 }
 
 1;

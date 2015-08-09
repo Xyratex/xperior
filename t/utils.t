@@ -71,4 +71,44 @@ test plan => 1, aFindCompleteTests => sub{
     is_deeply($res,\@exp,'Check loaded test list');
 };
 
+test plan => 5, aSafePath => sub{
+    my ($res, @testlist, $path, $out, $err);
+    $res = is_path_unsafe(\@testlist, "/home");
+    DEBUG Dumper $res;
+    is($res,3,'Check path safety against empty fs list');
+
+    $res = is_path_unsafe(" ", "/home");
+    DEBUG Dumper $res;
+    is($res,3,'Check path safety against undefined fs list');
+
+    @testlist = shell("mount | cut -f 3 -d ' '", err => \$err);
+    $path = "/tmp/test_wd";
+    $res = is_path_unsafe(\@testlist, $path);
+    DEBUG Dumper $res;
+    is($res,0,'Check path with safe path');
+
+    undef $path;
+    $out = shell("mount | cut -f 3 -d ' '", out => \@testlist);
+    $res = is_path_unsafe(\@testlist, $path);
+    DEBUG Dumper $res;
+    is($res,3,'Check path safety against undefined path');
+
+    $out = shell("mount | cut -f 3 -d ' '", out => \@testlist);
+    $path = "/proc";
+    $res = is_path_unsafe(\@testlist, $path);
+    DEBUG Dumper $res;
+    is($res,1,'Check path with unsafe path');
+};
+
+test plan => 1, aGetFsRoot => sub{
+    my ($res, @result);
+    $res = get_fs_root();
+    @result = @{$res};
+    if (grep{$_ eq '/'}@result){
+        ok('Check passed list generated. Root exists in the list');
+    } else {
+        fail('GetFsRoot failed: Did not find /');
+    }
+};
+
 utils->run_tests;
