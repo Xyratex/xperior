@@ -590,7 +590,8 @@ sub _reportHtml {
 
     #read executed test group list from workdir dir
     # filter report dir if report was previous generated
-    @suites = grep {!/testexecution.log/}
+    @suites = grep {!/xperior.log/}
+              grep {!/testexecution.log/}
               grep {!/testorderplan.lst/}
                 grep {!/report/}
                 grep {!/^\.\.?$/}

@@ -287,15 +287,17 @@ See Xperior harness User Guide for detail of system configuration.
 
 use strict;
 use warnings;
-
 use English;
-use File::Basename;
 use Getopt::Long;
-use Log::Log4perl qw(:easy);
 use Carp;
 use Pod::Usage;
 use Cwd qw(abs_path);
 use File::Path qw(make_path);
+use File::Basename;
+use File::Path qw/make_path/;
+use Log::Log4perl qw(:easy);
+
+
 my $XPERIORBASEDIR;
 BEGIN {
 
@@ -323,7 +325,7 @@ my $excludelist ='';
 my $task       = "";
 my $flist      = "";
 my $workdir    = '';
-my $testdir    ='testds';
+my $testdir    = 'testds';
 my $debug      = 0;
 my $info       = 0;
 my $error      = 0;
@@ -335,9 +337,10 @@ my $continue;
 my $tap;
 my $html;
 my $jjunit  = '';
-my $logfile	= undef;
+my $logfile = 'xperior.log';
 my $multirun;
 my $random;
+my $logname = '';
 
 GetOptions(
     "config:s"       => \$configfile,
@@ -372,17 +375,6 @@ GetOptions(
 pod2usage(-verbose => 1) if ( ($helpflag) || ($nopts) );
 
 pod2usage(-verbose => 2) if ($manflag);
-
-if( $debug){
-    Log::Log4perl->easy_init({level => $DEBUG, file => defined $logfile ? ">$logfile" : "STDOUT"});
-}
-elsif ( $info ) {
-    Log::Log4perl->easy_init({level => $INFO, file => defined $logfile ? ">$logfile" : "STDOUT"});
-}
-else {
-    Log::Log4perl->easy_init({level => $ERROR, file => defined $logfile ? ">$logfile" : "STDOUT"});
-}
-
 #check test description configuration existence
 if((defined $action) &&($action ne '') ){
     unless (($action eq 'run')
@@ -395,6 +387,24 @@ if((defined $action) &&($action ne '') ){
 }else{
     $action = 'run';
 }
+
+if($workdir){
+   if (! -d $workdir) {
+       make_path( $workdir );
+   }
+       $logname = "$workdir/$logfile";
+}
+else{
+    print "No workdir specified, please set --workdir  \n";
+    exit 1;
+}
+
+Log::Log4perl->easy_init({ level=>$DEBUG,
+               file     => ">$logname" },
+               { level    => $DEBUG,
+               file     => "STDOUT",
+               filter => '' },
+               );
 
 if (-e $configfile) {
     INFO "Configuration file is [$configfile]";
@@ -412,11 +422,25 @@ if (-d $testdir) {
     confess "Cannot find test directory [$testdir]" ;
 }
 
+if ( !$debug ){
+    my %abn = %Log::Log4perl::Logger::APPENDER_BY_NAME;
+    my $appender = $abn{'app002'};
 
-unless($workdir){
-    print "No workdir specified, please set --workdir  \n";
-    exit 1;
+    my $type = 'Log::Log4perl::Filter::LevelMatch';
+    eval "require $type" or confess "Require of $type failed ($!)";
+    my $level='ERROR';
+    if ($info){
+    $level='INFO';
+    }
+    my $filter = $type->new(name => 'filter',
+         LevelToMatch  => $level,
+         AcceptOnMatch => 'true',
+       );
+    $filter->register();
+    $appender->filter($filter);
+    ERROR  'Default debug mode is on , full log in '.$logname;
 }
+
 
 if( $action eq 'run'){
     if (-d $workdir) {
@@ -432,7 +456,7 @@ if( $action eq 'run'){
     }
 }
 
- my %options = (
+my %options = (
     xperiorbasedir => "$XPERIORBASEDIR/../lib",
     testdir  => $testdir,
     workdir  => $workdir,
@@ -453,7 +477,6 @@ if( $action eq 'run'){
 );
 
 $options{'multirun'}=$multirun if($multirun);
-
 my $testcore =  Xperior::Core->new();
 $testcore->run(\%options);
 

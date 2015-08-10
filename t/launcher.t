@@ -35,6 +35,7 @@ use warnings;
 use Log::Log4perl qw(:easy);
 use Test::Able;
 use Test::More;
+use File::Slurp;
 use Data::Dumper;
 use File::Path qw(make_path remove_tree);
 use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
@@ -50,7 +51,7 @@ shutdown _shutdown => sub { };
 test
   plan           => 8,
   tGenerateJJUnit => sub {
-    my $wd  = '--workdir=/tmp/test_wd/';
+    my $wd  = '--workdir=/tmp/test_wd';
     my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
     remove_tree('/tmp/test_wd');
     remove_tree('/tmp/test_jjunit');
@@ -65,9 +66,9 @@ test
         'Check incorrect cmd for jjunit generation (no wd)' );
 
     eval {
-        $out =
-        `bin/xper --action=generate-jjunit $wd $cfg --debug`;
-        };
+       $out =
+      `bin/xper --action=generate-jjunit $wd $cfg --debug`;
+    };
     $fail = ${^CHILD_ERROR_NATIVE};
     isnt( 0, $fail,
         'Check correct cmd for jjunit generation (no junit path)' );
@@ -82,9 +83,9 @@ test
     ok (-e '/tmp/test_jjunit/sanity.junit','Check jjunit report N1' );
     ok (-e '/tmp/test_jjunit/ost-pools.junit','Check jjunit report N2' );
     ok (-e '/tmp/test_jjunit/ost-pools.1/1.stdout.log',
-            'Check jjunit report N3' );
+           'Check jjunit report N3' );
     ok (-e '/tmp/test_jjunit/sanity.100/100.console.server-oss.log',
-            'Check jjunit report N4' );
+           'Check jjunit report N4' );
     remove_tree('/tmp/test_wd');
     remove_tree('/tmp/test_jjunit');
   };
@@ -94,7 +95,7 @@ test
 test
   plan           => 3,
   kGenerateHTML => sub {
-    my $wd  = '--workdir=/tmp/test_wd/';
+    my $wd  = '--workdir=/tmp/test_wd';
     my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
     remove_tree('/tmp/test_wd');
     dircopy( 't/checkhtmldata', '/tmp/test_wd/' );
@@ -112,11 +113,11 @@ test
     if ( -e '/tmp/test_wd/report/report.html' ) {
         pass('check html report existence');
     }
-    else {
-        fail('check html report existence');
+   else {
+      fail('check html report existence');
     }
-    remove_tree('/tmp/test_wd');
-  };
+   remove_tree('/tmp/test_wd');
+ };
 
 #########################################
 test
@@ -127,15 +128,15 @@ test
 `bin/xper --workdir=/tmp/wd --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug`;
     my @ids;
     foreach my $str ( split( /\n/, $out ) ) {
-        DEBUG ">$str";
+    DEBUG ">$str";
         if ( $str =~ m/Test\s+full\s+name\s+:\s+\[(.*)\]$/ ) {
             push @ids, $1;
-        }
-    }
+       }
+  }
     is( scalar(@ids), 10,             'Number of tests' );
     is( $ids[1],      'sanity/1a__1', 'Value check' );
     is( $ids[9],      'sanity/2b__4', 'Value check 1' );
-  };
+ };
 #########################################
 test
   plan      => 3,
@@ -144,12 +145,12 @@ test
     my $out =
 `bin/xper --workdir=/tmp/wd --testdir=t/testcfgs/simple  --action=list  --config=t/testcfgs/localtestsystemcfg.yaml --multirun 5 --debug --includeonly='sanity/2b.*'`;
     my @ids;
-    foreach my $str ( split( /\n/, $out ) ) {
-        DEBUG ">$str";
+   foreach my $str ( split( /\n/, $out ) ) {
+   DEBUG ">$str";
         if ( $str =~ m/Test\s+full\s+name\s+:\s+\[(.*)\]$/ ) {
             push @ids, $1;
         }
-    }
+   }
     DEBUG "\n".Dumper @ids;
     is( scalar(@ids), 5,              'Number of tests with multirun and  include only' );
     is( $ids[1],      'sanity/2b__1', 'Value check 2' );
@@ -168,10 +169,10 @@ test
     my @ids;
     foreach my $str ( split( /\n/, $out ) ) {
 
-        #DEBUG ">$str";
-        if ( $str =~ m/TEST\s+(.*)\s+STATUS\:\s+passed$/ ) {
+       #DEBUG ">$str"; 
+       if ( $str =~ m/TEST\s+(.*)\s+STATUS\:\s+passed$/ ) {
             push @ids, $1;
-        }
+       }
     }
     is( scalar(@ids), 5,       'Number of tests' );
     is( $ids[1],      'sanity->2b__1', 'Value check 2' );
@@ -216,6 +217,38 @@ test
     is( $resf, 0xd00, "format_fail exit code" );
 
 };
+##############################################
+test
+  plan      => 6,
+  bMultirun => sub {
+    if( -e '/tmp/test-wd'){
+    remove_tree('/tmp/test_wd');
+    }
+    my $wd   = '--workdir=/tmp/test_wd';
+    my $conf  = '--config=t/testcfgs/localtestsystemcfg.yaml';
+    my $td   = '--testdir=t/testcfgs/simple';
+
+    my $out = `bin/runtest.pl  --action=list  $conf $wd $td --info`;
+    like( $out, qr/Load\s+test\s+file/,'check if the output to STDOUT for Info is correct');
+
+    my $file = read_file( '/tmp/test_wd/xperior.log');
+    like( $file, qr/Load\s+test\s+file/,'check if Logfile contents for Info are correct');
+
+    remove_tree('/tmp/test_wd');
+    $out = `bin/runtest.pl  --action=list  $conf $wd $td --debug`;
+    like( $out, qr/Load\s+test\s+file/, 'check if the output to STDOUT for Debug is correct');
+    $file = read_file( '/tmp/test_wd/xperior.log');
+    like( $file, qr/Load\s+test\s+file/, 'check if the Logfile contents for Info are correct');
+
+    remove_tree('/tmp/test_wd');
+    $out = `bin/runtest.pl  --action=list $conf $wd $td --error`;
+    like( $out, qr/Default\s+debug\s+mode/,'check if the output to STDOUT for Error');
+    $file = read_file( '/tmp/test_wd/xperior.log');
+    like( $file, qr/Load\s+test\s+file/,'Xperior.log file exists and contains data');
+
+    remove_tree('/tmp/test_wd');
+};
+
 
 
 launcher->run_tests;
