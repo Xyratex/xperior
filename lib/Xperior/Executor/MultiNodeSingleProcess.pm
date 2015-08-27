@@ -65,6 +65,10 @@ use Xperior::SshProcess;
 use Xperior::SubTestResult;
 
 extends 'Xperior::Executor::Base';
+our $VERSION = '0.02';
+
+has need_verification   => ( is => 'rw', default => 1);
+
 
 =head3  execute
 
@@ -109,15 +113,12 @@ sub execute{
     my $self = shift;
     my @targets = @{$self->_get_targets()};
 
-    #saving env data
-    ##TODO
-    ##DEBUG "Master Node:" . Dumper $mnodecfg;
-
     $self->addYE( 'cmd', $self->cmd );
 
     #get remote processors
     #connectors array have same index as targets
     my @test_conenctors;
+    my @clnt_nodes;
     foreach my $t (@targets){
         print Dumper $t;
         my $clientobj = $self->env->getNodeById( $t->{'node'} );
@@ -129,68 +130,105 @@ sub execute{
         $t->{connector} =  $testproc;
         $t->{nodeobj}   = $clientobj;
         push @test_conenctors, $testproc;
+        push @clnt_nodes, $clientobj;
      }
     my $mountpoint = $self->env->cfg->{'client_mount_point'}
       or cluck("Undefined 'client_mount_point'");
 
-    #node preparation
-    my @threads = ();
-    foreach my $connector ( @test_conenctors ) {
-      push @threads, threads->create(\&_prepare_node, $self, $connector,$mountpoint);
-    }
-    threads->yield;
-    foreach my $t (@threads){
-        my $res = $t->join();
-        if($res->{exitcode} != 0){
-            confess("Cannot prepare node, exitingt".
-                    "\nstdout=".$res->{'stdoutraw'}.
-                    "\nstderr=".$res->{'stderrraw'}
-            );
-        }
-    }
-    DEBUG 'Preparation completed';
-
-    # main execution block
-    my $starttime = time;
-    my $endtime = $starttime + $self->test->getParam('timeout');
-    $self->addYE( 'starttime', $starttime );
-
-    @threads = ();
-    foreach my $t ( @targets ) {
-      push @threads, threads->create(\&_run_test, $self, $t);
-    }
-    threads->yield;
-    my @results;
-    foreach my $t (@threads){
-        my $res = $t->join();
-        DEBUG Dumper ($res);
-        $self->addYEE( 'subtests','subtest_'.$res->yaml()->{id}, $res->yaml());
-        push @results, $res;
-    }
-
-    $self->addYE( 'endtime',         time );
-    $self->addYE( 'endtime_planned', $endtime);
-    DEBUG 'Execution completed';
-
-    #TODO cleanup tempdir after execution
-    # it should be testing safe, remove only own data
-    # maybe it's good idea implement in child
-    #make this removing safe!!!
-    #$testproc->run( 'rm -rf ' . "$mountpoint/*" )
-    #        if ($mountpoint and $mountpoint ne "");
+    #preparation status check
+    my $results_prepare_nodes =
+            $self->prepare_nodes(\@test_conenctors, \@targets, );
     my $pr = $self->NOTSET;
-    foreach my $res (@results){
+    foreach my $res (@{$results_prepare_nodes}){
         $self->accumulate_resolution(
                 $res->internal_result_code(),
                 $res->reason()
                 );
     }
+    if($self->internal_result_code != $self->PASSED){
+        return;
+    }
+
+    # main execution block
+    my $starttime = time;
+    my $endtime = $starttime + $self->test->getParam('timeout');
+    $self->addYE( 'starttime', $starttime );
+    my $results = $self->run(\@targets);
 
 
+    $self->addYE( 'endtime',         time );
+    $self->addYE( 'endtime_planned', $endtime);
+    DEBUG 'Execution completed';
+    foreach my $res (@{$results}){
+        $self->accumulate_resolution(
+                $res->internal_result_code(),
+                $res->reason()
+                );
+    }
+    if($self->internal_result_code != $self->PASSED){
+        return;
+    }
+
+    #verifying
+    if($self->need_verification()){
+        my $results_verify = $self->verify(\@targets);
+        foreach my $res (@{$results_verify}){
+            $self->accumulate_resolution(
+                    $res->internal_result_code(),
+                    $res->reason()
+                    );
+        }
+        if($self->internal_result_code != $self->PASSED){
+            return;
+        }
+    }
+
+    #FIXME cleanup tempdir after execution
+    # it should be testing safe, remove only own data
+    # maybe it's good idea implement in child
+    #make this removing safe!!!
+    #$testproc->run( 'rm -rf ' . "$mountpoint/*" )
+    #        if ($mountpoint and $mountpoint ne "");
 }
 
+sub run{
+    my ($self, $targets)= @_;
+    my @threads = ();
+    foreach my $t ( @{$targets} ) {
+        DEBUG "Run test core on $t";
+        push @threads, threads->create(\&run_test, $self, $t);
+    }
+    #return \@threads;
+    threads->yield;
+    my @results;
+    foreach my $t (@threads){
+        my $res = $t->join();
+        $self->addYEE( 'subtests','subtest_'.$res->yaml()->{id}, $res->yaml());
+        push @results, $res;
+    }
+    return \@results;
+}
 
-sub _run_test{
+sub verify{
+    my ($self, $targets)= @_;
+    DEBUG 'Start verifying';
+    my @threads = ();
+    foreach my $t ( @{$targets} ) {
+      push @threads, threads->create(sub {
+                    $self->verify_node($t)});
+    }
+    threads->yield;
+    my @results;
+    foreach my $t (@threads){
+        my $res = $t->join();
+        $self->addYEE( 'subtests_verify','subtest_'.$res->yaml()->{id}, $res->yaml());
+        push @results, $res;
+        #FIXME exit codes shoudl be checked!
+    }
+    return \@results;
+}
+
+sub run_test{
     my ($self, $target) = @_;
     my $result = Xperior::SubTestResult->new();
     my %y = ();#(node => $target);
@@ -198,8 +236,13 @@ sub _run_test{
     $result->owner($self);
     $result->options($self->options());
     #customizing there
-    $self->_prepareCommands();
+    $self->_prepareCommands($target);
     $result->cmd($self->cmd);
+    #FIX<E it workaround!!!!
+    $result->addYE('datafile',$self->yaml->{'datafile'})
+                    if(defined($self->yaml->{'datafile'}));
+    $result->addYE('outfile',$self->yaml->{'outfile'});
+
     #$result->cmd($self->test->getSubTestParam('cmd'));
     my $starttime = time;
     my $id = $target->{id};
@@ -221,12 +264,67 @@ sub _run_test{
     return $result;
 }
 
-sub _prepare_node{
-    my ($self, $connector, $mountpoint) = @_;
+#parallel nodes preparation
+sub prepare_nodes{
+    my ($self, $test_conenctors, $targets) = @_;
+    #FIXME in future it could be different
+    my $mountpoint = $self->env->cfg->{'client_mount_point'}
+                      or cluck("Undefined 'client_mount_point'");
+    my @threads = ();
+    my $i=0;
+    foreach my $connector ( @{$test_conenctors} ) {
+        #my $clnt = $clnt_nodes[$i];
+        my $t = @{$targets}[$i];
+        push @threads, threads->create(sub {
+                    $self->prepare_node(
+                                $t,
+                                $connector,
+                                $mountpoint)});
+        $i++;
+    }
+    threads->yield;
+    my @results;
+    foreach my $t (@threads){
+        my $res = $t->join();
+        $self->addYEE(
+            'subtests_prepare',
+                'subtest_'.$res->yaml()->{id},
+                    $res->yaml());
+        #FIXME exit codes shoudl be checked!
+        push @results, $res;
+#        if($res != 0){
+#            confess("Cannot prepare node, exitingt".
+#                    "\nstdout=".$res->{'stdoutraw'}.
+#                    "\nstderr=".$res->{'stderrraw'}
+#            );
+#        }
+    }
+    #TODO add preparation status check
+    #DEBUG 'Preparation completed';
+    #return $self->PASSED;
+    return \@results;
+}
+
+sub prepare_node{
+    my ($self, $t, $connector, $mountpoint) = @_;
+    my $result = Xperior::SubTestResult->new();
+    my %y = ();
+    $result->yaml(\%y);
+    $result->owner($self);
+    $result->addYE( "id", $t->{id} );
+
     my @cmds = (
         'mkdir -p '.$self->xp_log_dir(),
         "mkdir -p ${mountpoint}",);
-    return $connector->run(\@cmds);
+    $result->addYE("cmd",join(';',@cmds));
+    my $res = $connector->run(\@cmds);#->{exitcode};
+    $result->addYE("exitcode",$res->{exitcode});
+    if($res->{exitcode} ==0 ){
+        $result->pass();
+    }else{
+        $result->fail('Cannot prepared node');
+    }
+    return $result;
 }
 
 sub _get_targets{

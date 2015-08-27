@@ -75,10 +75,12 @@ our $VERSION = '0.01';
 sub _prepareCommands{
     my $self    = shift;
     my $mp = $self->env->cfg->{'client_mount_point'};
-    my $c  = $self->test->getParam('iozonecmd');
-    $c =~ s/\@client_mount_point\@/$mp/g;
-    $c =~ s/\@genfilename\@/"".$self->get_file_name()/ge;
+    my $c  = $self->test->getParam('cmd');
+    my $filename = $self->get_file_name();
+    $c =~ s/\@client_mount_point\@/$mp/xg;
+    $c =~ s/\@genfilename\@/"".$filename/xge;
     $self->cmd($c);
+    $self->addYE("outfile", "$mp/$filename");
 }
 
 sub get_file_name{

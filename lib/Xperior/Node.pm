@@ -56,6 +56,7 @@ use Xperior::Nodes::KVMNode;
 use Xperior::Nodes::BasicNode;
 use Xperior::Nodes::IPMINode;
 
+with qw(MooseX::Clone);
 
 use constant DEFAULT_PROTO     => 'ssh';
 use constant DEFAULT_NODE      => 'BasicNode';

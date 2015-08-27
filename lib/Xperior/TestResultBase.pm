@@ -123,8 +123,10 @@ Save message to tests. User for message frpm Xperior, e.g.
 
 sub addMessage{
     my ($self,$data) = @_;
-    $self->yaml->{'messages'} = $self->yaml->{'messages'}
-                                    . $data."\n";
+    $self->yaml->{'messages'}='' unless defined $self->yaml->{'messages'};
+    $self->yaml->{'messages'} =
+                $self->yaml->{'messages'} . $data."\n"
+                    if defined $data;
     $self->_write;
 }
 
@@ -169,6 +171,7 @@ sub fail{
     $self->yaml->{'status'} = 'failed';
     $self->yaml->{'status_code'} = 1;
     $self->yaml->{'fail_reason'} = $pmsg;
+    $self->reason($pmsg);
     $self->_write;
 }
 
@@ -193,10 +196,11 @@ sub skip{
     $self->yaml->{'status'} = 'skipped';
     $self->yaml->{'status_code'} = 2;
     $self->yaml->{'fail_reason'} = $msg;
+    $self->reason($msg);
     $self->_write;
 }
 
-=head2 get
+=head2 accumulate_resolution
 
 Calculate new status based on previous status.
 It's used for accumulating status for multistep tests
@@ -240,7 +244,7 @@ sub wait_cycle{
     $id_prefix='' unless defined $id_prefix;
     my $endtime = $starttime + $self->test->getParam('timeout');
     my $polltime = $self->test->getParam('polltime') || $self->DEFAULT_POLL;
-    DEBUG "Poll time is [$polltime]";
+    DEBUG "${id_prefix}Poll time is [$polltime]";
     while ( $endtime > time ) {
         #monitoring timeout
         sleep $polltime;
@@ -313,6 +317,7 @@ sub execution_result_calculation{
         $result->addYE( 'killed',         'no' );
         $result->addYE( 'masterhostdown', 'no' );
         $result->addYE( 'exitcode',       $testproc->exitcode );
+        DEBUG "testproc->exitcode=[".$testproc->exitcode. "]  &&  pr = [$pr]";
         if ( ( $testproc->exitcode == 0 ) && ( $pr == $self->PASSED ) ) {
             $result->pass;
         }

@@ -32,6 +32,11 @@ extends 'Xperior::Executor::MultiNodeSingleProcess';
 
 our $VERSION = '0.01';
 
+#TODO test verification also!
+sub BUILD {
+    my $self = shift;
+    $self->need_verification (0);
+}
 
 sub _prepareCommands{
     my $self    = shift;
