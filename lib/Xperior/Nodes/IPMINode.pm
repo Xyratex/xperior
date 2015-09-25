@@ -55,7 +55,10 @@ use Moose::Role;
 
 with qw( Xperior::Nodes::NodeManager );
 
-has 'ipmi' => ( is => 'rw', isa => 'Str' );
+has 'ipmi'     => ( is => 'rw', isa => 'Str' );
+has 'ipmiuser' => ( is =>'rw', default => 'admin');
+has 'ipmipass' => ( is =>'rw', default => 'admin');
+has 'ipmidrv'  => ( is =>'rw', default => 'lanplus'); #lan
 
 use constant IPMITERATIONS  => 5;
 use constant SLEEPAFTEROFF => 30;    #sec
@@ -92,6 +95,9 @@ sub restoreSystem {
 
 sub _powermanDo {
     my ( $self, $action ) = @_;
+    my $user = $self->ipmiuser;
+    my $pass = $self->ipmipass;
+    my $drv  = $self->ipmidrv;
     my $i = 0;
     while ( $i < IPMITERATIONS ) {
         $i++;
@@ -99,8 +105,8 @@ sub _powermanDo {
             my $oncmd =
                 "/usr/sbin/ipmipower -h "
               . $self->ipmi . " "
-              . "--username=admin --password=admin "
-              . "--driver-type=lanplus --on ";
+              . "--username=${user} --password=${pass} "
+              . "--driver-type=${drv} --on ";
             my $onr = ` $oncmd `;
             chomp $onr;
             DEBUG "Exec result is [$onr]";
@@ -122,8 +128,8 @@ sub _powermanDo {
             my $statcmd =
                 "/usr/sbin/ipmipower -h "
               . $self->ipmi
-              . " --username=admin --password=admin "
-              . " --driver-type=lanplus --stat ";
+              . " --username=${user} --password=${pass} "
+              . " --driver-type=${drv} --stat ";
             my $statr = ` $statcmd `;
             chomp $statr;
             DEBUG "Exec result is [$statr]";
@@ -149,8 +155,8 @@ sub _powermanDo {
             my $offcmd =
                 "/usr/sbin/ipmipower -h "
               . $self->ipmi
-              . " --username=admin --password=admin "
-              . " --driver-type=lanplus --off ";
+              . " --username=${user} --password=${pass} "
+              . " --driver-type=${drv} --off ";
             my $offr = ` $offcmd `;
             chomp $offr;
             DEBUG "Exec result is [$offr]";

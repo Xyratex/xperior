@@ -535,7 +535,7 @@ sub init {
     DEBUG "Xperior::SshUnixProcess->init";
     my $self = shift;
     my $param1 = shift;
-    if($param1->isa( 'Xperior::Node' )){
+    if( ref($param1) and $param1->isa( 'Xperior::Node' )){
         my $node=$param1;
         DEBUG "Xperior::SshUnixProcess->init, new initialization";
         $self->host($node->ip());

@@ -134,6 +134,12 @@ sub BUILD {
     }elsif($self->nodetype eq 'IPMINode'){
         Xperior::Nodes::IPMINode->meta->apply($self);
         $self->ipmi($params->{'ipmi'});
+        $self->ipmidrv($params->{'ipmidrv'})
+                if defined $params->{'ipmidrv'};
+        $self->ipmiuser($params->{'ipmiuser'})
+                if defined $params->{'ipmiuser'};
+        $self->ipmipass($params->{'ipmipass'})
+                if defined $params->{'ipmipass'};
     }else{
         confess "Cannot find nodetype [".$self->nodetype."]";
     }
