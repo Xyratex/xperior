@@ -12,4 +12,6 @@ reference: https://github.com/Xyratex/lustre-stable/blob/b_neo_stable_2.0/lustre
 roles:
 #StoreStat StoreSyslog StoreConsole GetDiagnostics CustomLogCollector
 tags: availability
+collect_logs :
+       - '/var/log/conman/*\.log'
 
