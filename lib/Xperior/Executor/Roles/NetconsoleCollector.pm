@@ -62,8 +62,10 @@ use threads (
 use Moose::Role;
 use Data::Dumper;
 use IO::Socket;
+use Socket;
 use Log::Log4perl qw(:easy);
 
+use Xperior::Utils;
 
 my $ENDMSG = "__NETCONSOLE_COLLECTION_END__";
 my $title ='NetconsoleCollector';
@@ -72,8 +74,69 @@ has udpserverthr => ( is => 'rw' );
 has udpserver    => ( is => 'rw' );
 has logs         => ( is => 'rw' );
 has namecache    => ( is => 'rw' );
-has port   => ( is => 'rw', default => 5555 );
+has netconsole_nodes => ( is => 'rw');
 has maxlen => ( is => 'rw', default => 1024 );
+=head2 Fields
+
+Fields naming keep netconsole configfs options convetions.
+Be aware, it is contradic to xperior point of view, because
+in netconsole logic remote is log receiver (xperior) and local
+is log sender (where netconsole is executed)
+
+=head3  _autoconfigure::netconsole_local_ip
+
+B< _autoconfigure::netconsole_local_ip> should be set to remote
+node IP which is used for sending data
+
+=cut
+
+=head3 _autoconfigure::netconsole_local_interface>
+
+B<_autoconfigure::netconsole_local_interface> should be set
+to interface (e.g. eth1) which is used for sending data.
+Important only for multi-interface setups.
+
+=cut
+
+=head3 netconsole_remote_ip
+
+B<netconsole_remote_ip> should be set to IP which is used for
+receiving data (where xperior is executed)
+
+=cut
+
+has netconsole_remote_ip  => ( is => 'rw', default => '' );
+
+=head3 netconsole_remote_port
+
+B<netconsole_remote_port> which is used for accepting data from
+remote netconsole, one port per one xperior instance, every xperior
+on one node should use unique port, default is 5555
+
+=cut
+
+has netconsole_remote_port => ( is => 'rw', default => '' );
+has netconsole_remote_port_default => ( is => 'ro', default => 5555 );
+
+=head3 netconsole_remote_mac
+
+B<netconsole_remote_mac> which is used for accepting data from
+remote netconsole. I<Since netconsole needs to work in as many
+situations as possible (think of kernel bugs), it does not do
+DNS or even ARP resolution, so we need to hardcode the IP and
+MAC addresses we want to use. Note that if you are logging to a
+server which is not in the same subnet as yours, you’ll need to
+specify the MAC address of the gateway. You can get the MAC
+address of your gateway using these commands:>
+
+    GATEWAY=$(ip -4 -o route get 203.0.113.2 | cut -f 3 -d ' ')
+    MAC=$(ip -4 neigh show $GATEWAY | cut -f 5 -d ' ')
+
+
+=cut
+
+has netconsole_remote_mac  => ( is => 'rw', default => '' );
+
 
 requires 'env', 'addMessage', 'getNormalizedLogName';
 
@@ -99,7 +162,8 @@ sub _appendLog {
 sub _listen {
     my ( $self, $udpserver ) = @_;
     my $message = '';
-    DEBUG "Awaiting UDP messages on port " . $self->port . "\n";
+    DEBUG "Awaiting UDP messages on port " .
+            $self->netconsole_remote_port() . "\n";
     while ( $udpserver->recv( $message, $self->maxlen ) ) {
         chomp $message;
         my ( $rport, $ipaddr ) = sockaddr_in( $udpserver->peername );
@@ -131,18 +195,136 @@ sub _listen {
     return 1;
 }
 
+sub _autoconfigure{
+    my ($self, $n) = @_;
+    my  $ssh = $n->getRemoteConnector();
+
+    my $netconsole_local_ip   = $n->{_node}->{netconsole_local_ip} || '';
+    my $netconsole_local_interface =
+            $n->{_node}->{netconsole_local_interface} || '';
+
+    if( !$self->netconsole_remote_port()){
+        my $port = $n->{_node}->{netconsole_remote_port} ||
+                $self->netconsole_remote_port_default;
+        $self->netconsole_remote_port($port);
+    }
+
+    my $lsmod = $ssh->run ('lsmod',10);
+    #DEBUG Dumper $lsmod;
+    if(!grep{/^netconsole.*/} split(/\n/,$lsmod->{stdout})){
+        DEBUG 'Module is not loaded, loading it';
+
+        if(!$netconsole_local_ip){
+            $netconsole_local_ip = inet_ntoa(inet_aton($n->ip()));
+        }
+
+        if(!$self->netconsole_remote_ip()){
+            if($n->{_node}->{netconsole_remote_ip}){
+                $self->netconsole_remote_ip(
+                    $n->{_node}->{netconsole_remote_ip});
+            }else{
+                my $cmd = "ip -o route get ${netconsole_local_ip}";
+                DEBUG "Executing '$cmd'";
+                my $route = `$cmd`;
+                #shell('ip -o route get '.
+                #        $netconsole_local_ip);
+                if($route =~ m/src\s+([\d\.]+)\s+\\/){
+                    $self->netconsole_remote_ip($1);
+                }else{
+                    ERROR 'Cannot parse output:'. $route;
+                    confess 'Cannot autodetect netconsole '.
+                    'receiver ip';
+                }
+            }
+        }
+
+        if(!$self->netconsole_remote_mac()){
+            if($n->{_node}->{netconsole_remote_mac}){
+                $self->netconsole_remote_mac(
+                    $n->{_node}->{netconsole_remote_mac});
+            }else{
+                my $target_ip =$self->netconsole_remote_ip();
+                my $route = $ssh->run('ip -o route get '.
+                        $self->netconsole_remote_ip())->{stdout};
+                if($route =~ m/via\s+([\d\.]+)\s+dev/){
+                    DEBUG "Found gatevay:". $1;
+                    $target_ip = $1;
+                }else{
+                    DEBUG 'No route found, use remote_ip';
+                }
+                my @arp = split('\n', $ssh->run('arp -n '.$target_ip)->{stdout});
+                if($arp[2] =~ m/ether\s+([\da-f\:]+)\s+C/){
+                    $self->netconsole_remote_mac($1)
+                }else{
+                    ERROR 'No mac parsed, ignore it.'.
+                    ' Netconsole possibile is not working';
+                }
+            }
+        }
+
+        my $cmd = 'modprobe netconsole netconsole="@'.
+             $netconsole_local_ip.'/'.
+             $netconsole_local_interface.','.
+             $self->netconsole_remote_port().'@'.
+             $self->netconsole_remote_ip().'/'.
+             $self->netconsole_remote_mac().'"';
+        DEBUG $cmd;
+        my $out;
+        my $lm = $ssh->run($cmd);
+        if( $lm->{exitcode} != 0 ){
+            ERROR 'Cannot load netconsole module:'.
+                $lm->{stderr};
+            ERROR 'We do not exit there but netconsole it not workig.';
+            $self->addMessage("Netconsole initialization failed on ".
+                              "[$n->{id}] via command [$cmd]");
+            $self->addMessage("Netconsole error[".$lm->{stderr}."]");
+        }else{
+            DEBUG 'Netconsole initialized';
+            $self->addMessage("Netconsole is initialized on node ".
+                              "[$n->{id}] via command [$cmd]");
+            return $cmd;
+        }
+    }else{
+        INFO 'Netconsole alredy loaded,'.
+                ' suppose it is alredy configured';
+        $self->addMessage("Netconsole is alredy configured, don't touch it");
+    }
+    return ;
+}
+
 before 'execute' => sub {
     my $self = shift;
+    my @netconsole_nodes;
     $self->beforeBeforeExecute($title);
-    #TODO in future add dynamic netcosole configuration
+    #TODO check remote port aviability there
+    #dynamic netcosole configuration
+    foreach my $n ( @{ $self->env->nodes } ) {
+        DEBUG Dumper  $n->ip();
+        #TODO $n->_node->{netconsole} should autoset field of node
+        if( $n->_node->{netconsole}){
+            if($n->_node->{netconsole_autoconfig} &&
+                $n->_node->{netconsole_autoconfig} eq 'yes'){
+                DEBUG "Autoconfiguring node ". $n->ip();
+                $self->_autoconfigure($n);
+            }
+            push @netconsole_nodes, $n;
+        }else{
+            DEBUG "No netconsole defined for node  ${n}->id() ";
+        }
+    }
+#exit 0;
+
     my $udpserver = IO::Socket::INET->new(
-        LocalPort => $self->port,
+        LocalPort => $self->netconsole_remote_port(),
         Proto     => "udp"
-    ) or confess "Couldn't bind to port " . $self->port . " : $@\n";
+    ) or confess "Couldn't bind to port " .
+            $self->netconsole_remote_port() . " : $@\n";
     $self->namecache({});
     $self->udpserver($udpserver);
-    DEBUG "Netconsole collector bound on port " . $self->port . " \n";
-    $self->addMessage( "Netconsole collector bind on port " . $self->port );
+    DEBUG "Netconsole collector bound on port [" .
+            $self->netconsole_remote_port() . "] \n";
+    $self->addMessage( "Netconsole collector bind on port " .
+            $self->netconsole_remote_port() );
     $self->logs( {} );
 
     #initialise loggers
@@ -155,7 +337,7 @@ before 'execute' => sub {
 
     $self->udpserverthr( threads->create( '_listen', ( $self, $udpserver ) ) );
     DEBUG "Thread started:" . $self->udpserverthr;
-    sleep 1;    #to be sure that we bind before test started 
+    sleep 1;    #to be sure that we bind before test started
                 #and may be get messages before test
     $self->afterBeforeExecute($title);
 };
@@ -164,12 +346,12 @@ after 'execute' => sub {
     my $self = shift;
     $self->beforeAfterExecute($title);
     my $udpclient = IO::Socket::INET->new(
-        PeerPort => $self->port,
+        PeerPort => $self->netconsole_remote_port(),
         PeerAddr => '127.0.0.1',
         Proto    => "udp"
       )
       or confess "Couldn't connect to remote port [127.0.0.1]["
-      . $self->port
+      . $self->netconsole_remote_port()
       . "] : $@\n";
     $udpclient->send($ENDMSG);
     sleep 1; #give a chance for correct closing receiving thread

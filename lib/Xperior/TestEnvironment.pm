@@ -76,6 +76,7 @@ sub initNodes {
     my $nodeArrayRef = shift;
     foreach my $n (@{$nodeArrayRef}) {
         my $node = Xperior::Node->new;
+        $node->_node($n);
         $node->id($n->{'id'});
         $node->ip($n->{'ip'});
         $node->ctrlproto( $n->{'ctrlproto'});

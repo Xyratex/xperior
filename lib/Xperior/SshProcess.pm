@@ -655,7 +655,7 @@ or
 
 Parameters:
 
-  * array of command to run
+  * B<array> of command to run
   * common timeout for all commands
   and previously defined opts
 

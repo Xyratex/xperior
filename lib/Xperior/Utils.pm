@@ -253,8 +253,34 @@ sub shell {
     return $exit_code;
 }
 
-# Depricated, please use 'shell' instead
+# Please use 'shell' instead if you don't see real reasons to use runEx
 sub runEx{
+    my ($cmd, $dieOnFail,$failMess ) = @_;
+    DEBUG "Cmd is [$cmd]";
+    DEBUG "WD  is [$CWD]";
+
+    $dieOnFail = 0 if ( !( defined $dieOnFail ) );
+
+    my $st = time;
+    my $proc = Proc::Simple->new();
+    $proc->kill_on_destroy(1);
+    #$proc->redirect_output ("/tmp/someapp.stdout", "/tmp/someapp.stderr");
+    $proc->start($cmd);
+    my $error_code = $proc->wait();
+    $proc->kill();
+
+    my $time = time - $st;
+    DEBUG "Execution time = $time sec";
+    if ( ( $error_code != 0 ) and ( $dieOnFail == 1 ) ) {
+        confess "Child process failed with error status $error_code";
+    }
+
+    DEBUG "Return code is: [" . $error_code . "]";
+    return $error_code;
+}
+
+# old stable code
+sub runExOld{
     my ($cmd, $dieOnFail,$failMess ) = @_;
     DEBUG "Cmd is [$cmd]";
     DEBUG "WD  is [$CWD]";

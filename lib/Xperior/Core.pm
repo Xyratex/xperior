@@ -39,7 +39,7 @@ The module implements main execution cycle, test object creation, include/exclud
 =cut
 
 package Xperior::Core;
-use Log::Log4perl qw(:easy);
+    use Log::Log4perl qw(:easy);
 use YAML qw "Bless LoadFile Load";
 use Data::Dumper;
 use Moose;
@@ -137,13 +137,21 @@ sub _multiplyTests {
 }
 
 sub _createExecutor {
-    my ($self, $es, @roles) = @_;
-    DEBUG "Loading module [$es]";
-    load $es;
-    my $exe = $es->new;
-    if(@roles){
+    my ($self, $test) = @_; # $es, @roles) = @_;
+
+    my $executorname = $test->getParam('executor');
+    my $roles        = $test->getParam('roles') || '';
+    if ($test->{excluded}) {
+        $executorname = 'Xperior::Executor::Skip';
+        $roles        = '';
+    }
+
+    DEBUG "Loading module [$executorname]";
+    load $executorname;
+    my $exe = $executorname->new;
+    if( $roles ){ # and @{$roles}){
         my $loader = Xperior::Executor::Roles::RoleLoader->new();
-        $loader->applyRoles($exe,@roles);
+        $loader->applyRoles($exe,$test,split(/\s+/, trim($roles)));
     }
     return $exe;
 }
@@ -153,13 +161,8 @@ sub _runtest {
     DEBUG "Starting test " . $test->getParam('id');
 
     #DEBUG "Test is:". Dumper $test;
-    my $executorname = $test->getParam('executor');
-    my $roles        = $test->getParam('roles') || '';
-    if ($test->{excluded}) {
-        $executorname = 'Xperior::Executor::Skip';
-        $roles        = '';
-    }
-    my $executor = $self->_createExecutor($executorname, split(/\s+/, trim($roles)));
+
+    my $executor = $self->_createExecutor($test);#$executorname, split(/\s+/, trim($roles)));
 
     $executor->init($test, $self->options, $self->env);
 

@@ -29,13 +29,17 @@ package ExecutorNetconsoleTest;
 
 use strict;
 use warnings;
+use Log::Log4perl qw(:easy);
 use Xperior::SshProcess;
 use Moose;
 extends 'Xperior::Executor::SingleProcessBase';
-my $serverhost='192.168.200.1 ';
-my $serverport='5555';
+#my $serverhost='192.168.200.1 ';
+#my $serverhost='172.16.30.18 ';
+#my $serverport='5555';
 sub execute {
-    my $self = shift;
+    my $self= shift;
+    my $serverhost = $self->netconsole_remote_ip();#'172.16.30.18 ';
+    my $serverport = $self->netconsole_remote_port(); ##'5555';
     my $id   = $self->test->getParam('id');
     $self->fail;
     $self->addYE( 'testid',  $id );
@@ -44,16 +48,21 @@ sub execute {
     $self->test->results( $self->yaml );
 
     my $sp = Xperior::SshProcess->new();
+    DEBUG '===Test1===';
     $sp->init( 'mds', 'root' );
     $sp->createSync(
     "echo \"===Test1===\" | /usr/bin/nc -u $serverhost $serverport -w 5", 10 );
     my $sp1 = Xperior::SshProcess->new();
+    DEBUG '===Test2===';
     $sp1->init( 'lclient', 'root' );
     $sp1->createSync(
     "echo \"===Test2===\" | /usr/bin/nc -u $serverhost $serverport -w 5", 10 );
 
     $sp->createSync(
     "echo \"===Test3===\" | /usr/bin/nc -u $serverhost $serverport -w 5", 10);
+    $sp1->createSync(
+    "echo \"===Test4===\"  > /dev/kmsg"
+    );
     sleep 5;
 }
 

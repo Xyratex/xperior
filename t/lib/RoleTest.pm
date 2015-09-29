@@ -33,6 +33,10 @@ use Xperior::SshProcess;
 use Moose::Role;
 use Log::Log4perl qw(:easy);
 
+#set of testing values
+has 'rt_testvar'  => ( is => 'rw', default => 101);
+has 'rt_groupvar' => ( is => 'rw', default => 103);
+has 'commonvar'   => ( is => 'rw', default => 106);
 
 my $title = 'RoleTest';
 our $test_sleep_time_before = 1;
@@ -55,6 +59,28 @@ after 'execute' => sub {
     sleep($test_sleep_time_after);
     $self->afterAfterExecute($title);
 };
+
+sub rt_printvars{
+    my $self = shift;
+    print "rt_testvar=[".$self->rt_testvar ."]\n";
+    print "rt_testvar=[".$self->rt_groupvar ."]\n";
+    print "commonvar=[".$self->commonvar ."]\n";
+}
+
+sub rt_get_testvar{
+    my $self = shift;
+    return $self->rt_testvar();
+}
+
+sub rt_get_groupvar{
+    my $self = shift;
+    return $self->rt_groupvar();
+}
+
+sub rt_get_commonvar{
+    my $self = shift;
+    return $self->commonvar();
+}
 
 
 1;

@@ -1,0 +1,30 @@
+---
+Nodes:
+   - id          : mds1
+     ip          : mds
+     ctrlproto   : ssh
+     user        : root
+
+   - id           : client1
+     ip           : lclient
+     ctrlproto    : ssh
+     user         : root
+     netconsole   : yes
+     netconsole_autoconfig : yes
+
+LustreObjects:
+   - id          : mds1
+     device      : /dev/loop0
+     node        : mds1
+     type        : mds
+
+   - id          : client1
+     node        : client1
+     type        : client
+     master      : yes
+
+#Variables
+client_mount_point      : /mnt/lustre/
+benchmark_tests_file    : testfile
+tempdir                 : /tmp/
+

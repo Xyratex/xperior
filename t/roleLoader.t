@@ -48,13 +48,19 @@ my %options = (
 );
 
 my %th = (
-      id  => 1,
-      inf => 'more info',
+      id          => 1,
+      inf         => 'more info',
+      rt_testvar  => '1',
+      rt1_testvar => '2',
+      commonvar   => '5',
+
 );
 
 my %gh = (
-      executor  => 'Xperior::Executor::Noop',
-      groupname => 'sanity',
+      executor     => 'Xperior::Executor::Noop',
+      groupname    => 'sanity',
+      rt_groupvar  => '3',
+      rt1_groupvar => '4',
 );
 
 my $test;
@@ -97,10 +103,35 @@ test plan =>3, cgetWeightCheck => sub{
     is($rl->getWeight('StoreConsole'),98,'check upper value');
 };
 
+
+test plan =>1, aaadFieldInitCheck => sub{
+    my @roles = qw(RoleTest RoleTest1);
+    $test = Xperior::Test->new;
+    $test->init(\%th,\%gh);
+
+    $rl->weights({'RoleTest' => 1, 'RoleTest1'=>99});
+    $rl->applyRoles($exe, $test, @roles);
+    $exe->init($test, \%options, $cfg);
+
+    #debug
+    $exe->rt_printvars();
+    $exe->rt1_printvars();
+
+    is($exe->rt_get_testvar(),    1, "Check unique test var, TestRole");
+    is($exe->rt1_get_testvar(),   2, "Check unique test var, TestRole1");
+    is($exe->rt_get_groupvar(),   3, "Check unique group var, TestRole");
+    is($exe->rt1_get_groupvar(),  4, "Check unique group var, TestRole1");
+    is($exe->rt_get_commonvar(),  5, "Check unique common var, TestRole");
+    is($exe->rt1_get_commonvar(), 5, "Check unique common var, TestRole1");
+
+exit 1;
+};
+
+
 test plan =>4, fModuleLoadingOrder1 => sub{
     my @roles = qw(RoleTest RoleTest1);
     $rl->weights({'RoleTest' => 1, 'RoleTest1'=>99});
-    $rl->applyRoles($exe,@roles);
+    $rl->applyRoles($exe, $test, @roles);
     $exe->init($test, \%options, $cfg);
     $exe->execute();
     #checks
@@ -124,7 +155,7 @@ test plan =>4, fModuleLoadingOrder1 => sub{
 test plan =>4, fModuleLoadingOrder2 => sub{
     my @roles = qw(RoleTest RoleTest1);
     $rl->weights({'RoleTest' => 99, 'RoleTest1'=>1});
-    $rl->applyRoles($exe,@roles);
+    $rl->applyRoles($exe, $test, @roles);
     $exe->init($test, \%options, $cfg);
     $exe->execute();
     #checks
@@ -160,7 +191,7 @@ test plan =>1, kXperiorModuleLoading => sub{
     }
     $exe = Xperior::Executor::Noop->new();
     my $rl = Xperior::Executor::Roles::RoleLoader ->new();
-    $rl->applyRoles($exe,@roles);
+    $rl->applyRoles($exe, $test, @roles);
     pass('Xperior internal roles applying is not failed');
 };
 

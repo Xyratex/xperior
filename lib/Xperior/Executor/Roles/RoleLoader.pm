@@ -30,7 +30,7 @@
 
 =head1 NAME
 
-Xperior::Executor::Roles::RoleWeighs - define activation order for roles.
+Xperior::Executor::Roles::RoleLoader - define activation order for roles.
 TODO add more description
 
 =head1 DESCRIPTION
@@ -66,11 +66,21 @@ sub getWeight{
     return   $self->default_weight();
 }
 
+sub initRole{
+    my ($self, $exe, $test) = @_;
+    DEBUG Dumper $test;
+    foreach my $pname (@{$test->getParamNames()}){
+        DEBUG $pname;
+        $exe->{$pname} = $test->getParam($pname);
+    }
+    DEBUG Dumper $exe;
+}
+
 sub applyRoles{
-    my ($self,$exe,@roles) = @_;
+    my ($self,$exe,$test,@roles) = @_;
     my @sorted_roles = sort
                         {$self->getWeight($a) cmp $self->getWeight($b)}
-                        @roles;
+                            @roles;
     foreach my $role (@sorted_roles) {
         INFO "Applying role [$role]";
         my $module = "Xperior::Executor::Roles::$role";
@@ -83,7 +93,7 @@ sub applyRoles{
                 $module = "$role";
                 eval "require $module";
                 if($@){
-                    confess "Cannot load [$module], cannot continue";
+                    confess "Cannot load [$module], cannot continue, $@";
                 }
             }else{
                 confess "Cannot continue, possile ".
@@ -91,6 +101,7 @@ sub applyRoles{
             }
         }
         $module->meta->apply($exe);
+        $self->initRole($exe, $test);
         INFO "Role [$module] applied successfully";
     }
 }

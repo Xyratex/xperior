@@ -261,7 +261,9 @@ Function throws execption if ssh problem detected
 
 =cut
 
-#TODO add test on it
+#FIXME must be re-written to ShhProcess::run
+#don't use it until re-writing
+
 sub run
 {
     my ( $self, $cmd, $timeout ) = @_;

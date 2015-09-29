@@ -178,7 +178,20 @@ test  plan => 8, dCheckTests           => sub {
 ##################################################
 test plan => 1, dCheckCreateExecutor    => sub {
 
-    my $exe = $testcore->_createExecutor('Xperior::Executor::Noop');
+    my %th = (
+      id  => 1,
+      inf => 'more info',
+     );
+
+    my %gh = (
+      executor  => 'Xperior::Executor::Noop',
+      groupname => 'noop',
+    );     
+
+    my $test = Xperior::Test->new;
+    $test->init(\%th,\%gh);
+
+    my $exe = $testcore->_createExecutor($test);
     diag("Class reference:$exe");
     isa_ok( $exe, 'Xperior::Executor::Noop', 'Check module loading' );
 };
