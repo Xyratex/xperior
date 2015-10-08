@@ -151,7 +151,7 @@ sub _createExecutor {
     my $exe = $executorname->new;
     if( $roles ){ # and @{$roles}){
         my $loader = Xperior::Executor::Roles::RoleLoader->new();
-        $loader->applyRoles($exe,$test,split(/\s+/, trim($roles)));
+        $loader->applyRoles($exe,$test,split(/\s+/x, trim($roles)));
     }
     return $exe;
 }
@@ -199,7 +199,7 @@ sub getExtOptions {
     {
         INFO "Apply external options";
         foreach my $param (@{$options->{'extopt'}}) {
-            if ($param =~ m/^([\w\d]+)\s*\:(.+)$/) {
+            if ($param =~ m/^([\w\d]+)\s*\:(.+)$/x) {
                 $extoptions{$1} = $2;
             }
             else {

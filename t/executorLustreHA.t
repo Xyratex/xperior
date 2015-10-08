@@ -89,7 +89,7 @@ teardown        _teardown => sub { };
 shutdown        _shutdown => sub { };
 #########################################
 
-test plan => 3, cCheckHaOptions => sub {
+test plan => 4, cCheckHaOptions => sub {
     $exe = Xperior::Executor::LustreHATests->new();
     my $cfg = $testcore->loadEnv('t/testcfgs/testsystemcfg_cs9000.yaml');
     $exe->init($test, \%options, $cfg);
@@ -100,11 +100,12 @@ test plan => 3, cCheckHaOptions => sub {
     qr/mkdir -p \/mnt\/testfs\/ && rm -rf \/mnt\/testfs\/\/\*/,
     'Simple ha.sh cmd check #1');
     like($cmd,
-    qr/xxx="yyy" qqq="zzz" \/usr\/lib64\/lustre\/tests\/ha/,
+    qr/usr\/lib64\/lustre\/tests\/ha/,
     'Simple ha.sh cmd check #2');
+    ok( $cmd =~ m/xxx=\"yyy\"\s+qqq=\"zzz\"/, 'Simple ha.sh cmd check #3');
     like($cmd,
     qr/-u 600  -p 10 -c oem-kvm1n1c0 -s kvm1n1c004,kvm1n1c005 -d \/mnt\/testfs\/  -v oss0, oss1/,
-    'Simple ha.sh cmd check #3');
+    'Simple ha.sh cmd check #4');
 };
 
 

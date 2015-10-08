@@ -185,7 +185,9 @@ sub _listen {
             $self->_appendLog( 'Log collecting done', '*' );
 
             #close all logs files
-            map { close $_ } ( values %{ $self->logs } );
+            foreach my $f (values %{ $self->logs }){
+                close $f;
+            }
             last;
         }
         else {
@@ -211,7 +213,7 @@ sub _autoconfigure{
 
     my $lsmod = $ssh->run ('lsmod',10);
     #DEBUG Dumper $lsmod;
-    if(!grep{/^netconsole.*/} split(/\n/,$lsmod->{stdout})){
+    if(!grep{/^netconsole.*/} split(/\n/x,$lsmod->{stdout})){
         DEBUG 'Module is not loaded, loading it';
 
         if(!$netconsole_local_ip){
@@ -226,12 +228,11 @@ sub _autoconfigure{
                 my $cmd = "ip -o route get ${netconsole_local_ip}";
                 DEBUG "Executing '$cmd'";
                 my $route = `$cmd`;
-                #shell('ip -o route get '.
-                #        $netconsole_local_ip);
-                if($route =~ m/src\s+([\d\.]+)\s+\\/){
+                if($route =~ m/src\s+([\d\.]+)\s+\\/x){
                     $self->netconsole_remote_ip($1);
                 }else{
-                    ERROR 'Cannot parse output:'. $route;
+                    ERROR 'Cannot parse output ['. $route.
+                        "]from cmd [$cmd]";
                     confess 'Cannot autodetect netconsole '.
                     'receiver ip';
                 }
@@ -246,14 +247,14 @@ sub _autoconfigure{
                 my $target_ip =$self->netconsole_remote_ip();
                 my $route = $ssh->run('ip -o route get '.
                         $self->netconsole_remote_ip())->{stdout};
-                if($route =~ m/via\s+([\d\.]+)\s+dev/){
+                if($route =~ m/via\s+([\d\.]+)\s+dev/x){
                     DEBUG "Found gatevay:". $1;
                     $target_ip = $1;
                 }else{
                     DEBUG 'No route found, use remote_ip';
                 }
                 my @arp = split('\n', $ssh->run('arp -n '.$target_ip)->{stdout});
-                if($arp[2] =~ m/ether\s+([\da-f\:]+)\s+C/){
+                if($arp[2] =~ m/ether\s+([\da-f\:]+)\s+C/x){
                     $self->netconsole_remote_mac($1)
                 }else{
                     ERROR 'No mac parsed, ignore it.'.
@@ -268,8 +269,7 @@ sub _autoconfigure{
              $self->netconsole_remote_port().'@'.
              $self->netconsole_remote_ip().'/'.
              $self->netconsole_remote_mac().'"';
-        DEBUG $cmd;
-        my $out;
+        DEBUG "modprobe cmd is [$cmd]";
         my $lm = $ssh->run($cmd);
         if( $lm->{exitcode} != 0 ){
             ERROR 'Cannot load netconsole module:'.
