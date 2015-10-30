@@ -194,9 +194,11 @@ sub execute{
 sub run{
     my ($self, $targets)= @_;
     my @threads = ();
+    my $i=0;
     foreach my $t ( @{$targets} ) {
         DEBUG "Run test core on $t";
-        push @threads, threads->create(\&run_test, $self, $t);
+        push @threads, threads->create(\&run_test, $self, $t, $i);
+        $i++;
     }
     #return \@threads;
     threads->yield;
@@ -229,16 +231,16 @@ sub verify{
 }
 
 sub run_test{
-    my ($self, $target) = @_;
+    my ($self, $target, $thr_num) = @_;
     my $result = Xperior::SubTestResult->new();
     my %y = ();#(node => $target);
     $result->yaml(\%y);
     $result->owner($self);
     $result->options($self->options());
     #customizing there
-    $self->_prepareCommands($target);
+    $self->_prepareCommands($target, $thr_num);
     $result->cmd($self->cmd);
-    #FIX<E it workaround!!!!
+    #FIXME it's workaround!!!!
     $result->addYE('datafile',$self->yaml->{'datafile'})
                     if(defined($self->yaml->{'datafile'}));
     $result->addYE('outfile',$self->yaml->{'outfile'});
@@ -325,11 +327,6 @@ sub prepare_node{
         $result->fail('Cannot prepared node');
     }
     return $result;
-}
-
-sub _get_targets{
-    my $self = shift;
-    return $self->env->get_target_generic_clients();
 }
 
 

@@ -76,6 +76,7 @@ setup           _setup    => sub {
     $test->init(\%tests,\%group_config);
     $exe = ReformatTestExecutor->new();
     Xperior::Executor::Roles::ReformatBefore->meta->apply($exe);
+    # _prepareTest and execute inherited from LustreTest now
     $exe->init($test, \%options, $cfg);
 
 };

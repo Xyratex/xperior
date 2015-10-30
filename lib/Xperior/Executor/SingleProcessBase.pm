@@ -99,23 +99,24 @@ Options of environment which are used
 
 sub execute {
     my $self    = shift;
-    my $mnodecfg = $self->_getMasterNode();
-
-    #saving env data
-    $self->addYE( 'masterclient', $mnodecfg);
-    DEBUG "Master Node:" . Dumper $mnodecfg;
-    $self->_prepareCommands;
-    $self->_addCmdLogFiles;
-    $self->addYE( 'cmd', $self->cmd );
-
-
     #get remote processor
+    my $mnodecfg = $self->_getMasterNode();
     my $mclientobj = $self->env->getNodeById( $mnodecfg->{'node'} );
     my $testproc   = $mclientobj->getRemoteConnector();
     unless ( defined($testproc) ) {
         ERROR 'Master client obj is:' . Dumper $mclientobj;
         confess "SSH to master client is undef";
     }
+
+    #saving env data
+    $self->addYE( 'masterclient', $mnodecfg);
+    DEBUG "Master Node:" . Dumper $mnodecfg;
+    $self->_prepareCommands($testproc);
+    $self->_addCmdLogFiles;
+    $self->addYE( 'cmd', $self->cmd );
+
+    $self->prepare_node();
+
 
     ##remove and recreate directory for logs
     #TODO cleanup should be done out of sub execute
@@ -153,7 +154,8 @@ sub execute {
 
     #$self->test->tap     ( $self->tap);
     $self->test->results( $self->yaml );
-    $self->cleanup();
+    $self->cleanup($testproc);
+    $self->clean_nodes();
     #no idea what is good result there, so no return
     return;
 }
@@ -161,7 +163,9 @@ sub execute {
 sub cleanup {
     my $self = shift;
 }
-
+sub clean_nodes{
+    my $self = shift;
+}
 
 sub getReason {
     my $self = shift;
@@ -171,6 +175,10 @@ sub getReason {
 sub processSystemLog{
     my ( $self, $connector, $filename ) = @_;
     WARN 'processSystemLog is not implemented';
+}
+
+sub prepare_node{
+    my $self = shift;
 }
 
 =item * _getMasterNode - retruns master node where test process will be executed

@@ -102,7 +102,7 @@ test plan => 4, cCheckHaOptions => sub {
     like($cmd,
     qr/usr\/lib64\/lustre\/tests\/ha/,
     'Simple ha.sh cmd check #2');
-    ok( $cmd =~ m/xxx=\"yyy\"\s+qqq=\"zzz\"/, 'Simple ha.sh cmd check #3');
+    ok( $cmd =~ m/qqq=\"zzz\"/, 'Simple ha.sh cmd check #3');
     like($cmd,
     qr/-u 600  -p 10 -c oem-kvm1n1c0 -s kvm1n1c004,kvm1n1c005 -d \/mnt\/testfs\/  -v oss0, oss1/,
     'Simple ha.sh cmd check #4');

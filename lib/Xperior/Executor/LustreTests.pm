@@ -72,14 +72,11 @@ has 'mgsopt'        => ( is => 'rw' );
 has 'mdsopt'        => ( is => 'rw' );
 has 'ossopt'        => ( is => 'rw' );
 has 'clntopt'       => ( is => 'rw' );
-has 'lustretestdir' => ( is => 'rw' );
+has 'lustretestdir' => ( is => 'rw', default => '/usr/lib64/lustre/tests');
 
 after 'init' => sub {
     my $self = shift;
     $self->appname('sanity');
-    $self->lustretestdir('/usr/lib64/lustre/tests');
-
-    #$self->reset;
     $self->reason('');
 };
 
@@ -112,7 +109,7 @@ L<configuration|XperiorUserGuide/"System descriptor"> and test descriptor.
 =cut
 
 sub _prepareCommands {
-    my ($self, $nontestscript, $moreParams) = @_;
+    my ($self, $ssh, $nontestscript, $moreParams) = @_;
     $moreParams = '' unless $moreParams;
     $self->_prepareEnvOpts;
 
@@ -129,10 +126,10 @@ sub _prepareCommands {
     my $tid = $self->_getTestName();
 
     my $script = $self->test->getParam('script');
-    unless ( $script ) {
+    if ( not $script ) {
         # build script name from 'groupname'
         my $groupname  = $self->test->getParam('groupname') ||
-            confess "Group name is undefined";
+                                confess "Group name is undefined";
         $script = "$groupname.sh";
     }
     if($nontestscript){

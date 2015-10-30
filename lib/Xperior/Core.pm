@@ -149,7 +149,18 @@ sub _createExecutor {
     DEBUG "Loading module [$executorname]";
     load $executorname;
     my $exe = $executorname->new;
-    if( $roles ){ # and @{$roles}){
+
+    DEBUG Dumper $test;
+    #TODO should be tested
+    foreach my $pname (@{$test->getParamNames()}){
+        DEBUG $pname;
+        if($exe->meta->find_attribute_by_name($pname)){
+            DEBUG "[$pname] found";
+            $exe->$pname($test->getParam($pname));
+        }
+    }
+
+    if( $roles){
         my $loader = Xperior::Executor::Roles::RoleLoader->new();
         $loader->applyRoles($exe,$test,split(/\s+/x, trim($roles)));
     }

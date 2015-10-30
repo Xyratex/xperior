@@ -203,7 +203,17 @@ sub get_target_generic_clients{
     return \@res;
 }
 
-
+sub get_master_generic_clients{
+    my $self = shift;
+    foreach my $go (@{$self->cfg->{'GenericObjects'}}){
+        if(( $go->{'type'} eq 'client')
+                &&(defined( $go->{'master'}))
+                &&( $go->{'master'} eq 'yes')){
+           return $go;
+        }
+    }
+    return undef;
+}
 
 
 =over 12

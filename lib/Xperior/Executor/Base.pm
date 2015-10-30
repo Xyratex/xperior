@@ -296,9 +296,6 @@ sub _write{
      close REP;
 }
 
-
-
-
 sub _reportDir{
     my $self = shift;
     return $self->options->{'workdir'}.'/'.
@@ -332,6 +329,10 @@ sub _getLog {
     return $res;
 }
 
+sub _get_targets{
+    my $self = shift;
+    return $self->env->get_target_generic_clients();
+}
 
 
 #TODO add test

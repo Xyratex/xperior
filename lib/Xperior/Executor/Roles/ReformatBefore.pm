@@ -63,8 +63,8 @@ requires 'env';
 around 'execute' => sub {
     my $orig = shift;
     my $self = shift;
-    my $llmountcmd = $self->_prepareCommands('llmount.sh','FORMAT=yes');
-    my $llcleanupcmd = $self->_prepareCommands('llmountcleanup.sh');
+    my $llmountcmd = $self->_prepareCommands(undef,'llmount.sh','FORMAT=yes');
+    my $llcleanupcmd = $self->_prepareCommands(undef,'llmountcleanup.sh');
     try{
     #cleanup
         my $mo = $self->env->getNodeById(
