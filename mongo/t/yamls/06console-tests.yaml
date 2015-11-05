@@ -1,0 +1,53 @@
+---
+cmd: /root/dev_workdir/workdir/src/console/st//console-st.sh 2>     /var/log/xperior/test_stderr.752090.log 1>  /var/log/xperior/test_stdout.752090.log
+completed: yes
+dangerous: yes
+description: Set of Mero  tests
+dir: src/console/st/
+endtime: 1446797448
+endtime_planned: 1446797537
+executor: Xperior::Executor::MeroTest
+exitcode: 0
+expected_time: 300
+extoptions:
+  arch: x86_64
+  branch: not_set
+  buildurl: http://jenkins-fre.xyus.xyratex.com:8080/job/mero-test-devbranch/125/
+  cli_hash_id: not_set
+  configuration: hw_single
+  distr: SLX6x
+  executiontype: IT
+  recipients: roman.grigoryev@seagate.com  dmitriy.chumak@seagate.com  max.medved@seagate.com
+  sessionstarttime: 1446794211
+  srv_hash_id: not_set
+fail_reason: ''
+groupname: mero-single-node
+id: 06console-tests
+killed: no
+log:
+  /storage/fsroots/mero-remote-controller/workspace/mero-test-devbranch/workdir/mero-single-node/06console-tests.messages.mero.log: 06console-tests.messages.mero.log
+  netconsole.mero: 06console-tests.netconsole.mero.log
+  stderr: 06console-tests.stderr.log
+  stdout: 06console-tests.stdout.log
+masterclient:
+  id: allinonenode
+  master: yes
+  node: mero
+  type: client
+masterhostdown: no
+messages: |
+  Netconsole is alredy configured, don't touch it
+  Netconsole collector bind on port 10600
+polltime: 30
+reference: none
+result: 'ok 1 '
+result_code: 0
+roles: StoreSyslog StacktraceGenerator NetconsoleCollector
+schema: data/schemas/testds.yaml
+script: console-st.sh
+starttime: 1446797417
+status: passed
+status_code: 0
+tags: mero
+testname: 06console-tests
+timeout: 120

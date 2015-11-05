@@ -83,23 +83,26 @@ sub opendb {
 
 sub _iterate_hash {
     my $hash = shift;
-    while ( my ( $key, $value ) = each %$hash ) {
+    my %newhash;
+    while ( my ( $key, $value ) = each %$hash ){
         if ( 'HASH' eq ref $value ) {
-            _iterate_hash($value);
+             $newhash{$key}  =  _iterate_hash($value);
         }
         else {
 
             #convert
             if ( $key =~ m/\./ ) {
-                delete( $hash->{$key} );
+                #delete( $hash->{$key} );
                 $key =~ s/\./_pnt_/g;
-                $hash->{$key} = $value;
+                $newhash{$key} = $value;
 
                 #DEBUG "new value: [".$hash->{$key}."]";
+            }else{
+                $newhash{$key} = $value;
             }
         }
     }
-    return $hash;
+    return \%newhash;
 }
 
 sub _validate_doc_data {
