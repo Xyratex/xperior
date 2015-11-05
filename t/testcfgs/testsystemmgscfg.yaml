@@ -65,48 +65,59 @@ LustreObjects:
     id: ost1
     node: fre1106
     type: oss
+    mount_point: "/data/dvtrack304:md1"
 
   - device: /dev/vdc
     failover: fre1105
     id: ost2
     node: fre1106
     type: oss
+    mount_point: "/data/dvtrack304:md2"
 
   - device: /dev/vdb
     failover: fre1104
     id: mdt1
     node: fre1103
     type: mds
+    mount_point: "/data/dvtrack303:md1"
 
   - device: /dev/vdb
     failover: fre1102
     id: mgt1
     node: fre1101
     type: mgs
+    mount_point: "/data/dvtrack302:mgmt1"
 
   - device: /dev/vdc
     failover: fre1103
     id: mdt2
     node: fre1104
     type: mds
+    mount_point: "/data/dvtrack303:md2"
+
 
   - device: /dev/vdd
     failover: fre1106
     id: ost3
     node: fre1105
     type: oss
+    mount_point: "/data/dvtrack304:md3"
+
 
   - device: /dev/vde
     failover: fre1106
     id: ost4
     node: fre1105
     type: oss
+    mount_point: "/data/dvtrack304:md4"
+
 
   - device: /dev/vdc
     failover: fre1101
     id: mdt3
     node: fre1102
     type: mds
+    mount_point: "/data/dvtrack303:md3"
 
   - id: client1
     master: yes

@@ -332,7 +332,9 @@ sub _prepareEnvOpts {
             my $host = $self->env->getNodeAddress( $m->{'node'} );
             push @opt, "mds${c}_HOST=$host";
             push @opt, "MDSDEV$c=$m->{device}"
-                if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+                if ( $m->{'device'} );
+            push @opt, "mds${c}_MOUNT=\"$m->{mount_point}\""
+                if  ( $m->{'mount_point'} );
             if ($c eq 1) { # lustre 1.8 legacy support
                 push @opt, "mds_HOST=$host";
                 push @opt, "MDSDEV=$m->{device}"
@@ -359,7 +361,9 @@ sub _prepareEnvOpts {
             my $host = $self->env->getNodeAddress( $m->{'node'} );
             push @opt, "ost${c}_HOST=$host";
             push @opt, "OSTDEV$c=" . $m->{'device'}
-              if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+              if ( $m->{'device'} );
+            push @opt, "ost${c}_MOUNT=\"$m->{'mount_point'}\""
+              if ( $m->{'mount_point'} );
             if ($m->{'failover'}) {
                 my $failover = $self->env->getNodeAddress($m->{'failover'});
                 push @opt, "ost${c}failover_HOST=$failover";
@@ -375,7 +379,9 @@ sub _prepareEnvOpts {
             my $host = $self->env->getNodeAddress( $m->{'node'} );
             push @opt, "mgs_HOST=$host";
             push @opt, "MGSDEV=" . $m->{'device'}
-              if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
+              if ( $m->{'device'} );
+            push @opt, "mgs_MOUNT=\"$m->{'mount_point'}\""
+              if ( $m->{'mount_point'} );
             if ($m->{'failover'}) {
                 my $failover = $self->env->getNodeAddress($m->{'failover'});
                 push @opt, "mgsfailover_HOST=$failover";

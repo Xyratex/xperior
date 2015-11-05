@@ -112,23 +112,37 @@ test
     $exe->init( $test, \%options, $cfg );
     $exe->_prepareEnvOpts;
     DEBUG "MGS OPT: " . $exe->mgsopt;
+#    is ( $exe->mgsopt,
+#        'mgs_HOST=192.168.200.1 MGSDEV=/dev/vdb mgsfailover_HOST=192.168.200.2 MGSNID=192.168.200.1@tcp:192.168.200.2@tcp',
+#        'Check MGS options');
     is ( $exe->mgsopt,
-        'mgs_HOST=192.168.200.1 MGSDEV=/dev/vdb mgsfailover_HOST=192.168.200.2 MGSNID=192.168.200.1@tcp:192.168.200.2@tcp',
+    'mgs_HOST=192.168.200.1 MGSDEV=/dev/vdb mgs_MOUNT="/data/dvtrack302:mgmt1" mgsfailover_HOST=192.168.200.2 MGSNID=192.168.200.1@tcp:192.168.200.2@tcp',
         'Check MGS options');
-
     DEBUG "MDS OPT:" . $exe->mdsopt;
     is( $exe->mdsopt,
-        'NETTYPE=tcp mds1_HOST=192.168.200.3 MDSDEV1=/dev/vdb mds_HOST=192.168.200.3 MDSDEV=/dev/vdb ' .
-        'mds1failover_HOST=192.168.200.4 mdsfailover_HOST=192.168.200.4 mds2_HOST=192.168.200.4 MDSDEV2=/dev/vdc ' .
-        'mds2failover_HOST=192.168.200.3 mds3_HOST=192.168.200.2 MDSDEV3=/dev/vdc mds3failover_HOST=192.168.200.1 MDSCOUNT=3',
+#        'NETTYPE=tcp mds1_HOST=192.168.200.3 MDSDEV1=/dev/vdb mds_HOST=192.168.200.3 MDSDEV=/dev/vdb ' .
+#        'mds1failover_HOST=192.168.200.4 mdsfailover_HOST=192.168.200.4 mds2_HOST=192.168.200.4 MDSDEV2=/dev/vdc ' .
+#        'mds2failover_HOST=192.168.200.3 mds3_HOST=192.168.200.2 MDSDEV3=/dev/vdc mds3failover_HOST=192.168.200.1 MDSCOUNT=3',
+        'NETTYPE=tcp mds1_HOST=192.168.200.3 MDSDEV1=/dev/vdb mds1_MOUNT="/data/dvtrack303:md1" '
+        .'mds_HOST=192.168.200.3 MDSDEV=/dev/vdb mds1failover_HOST=192.168.200.4 '
+        .'mdsfailover_HOST=192.168.200.4 mds2_HOST=192.168.200.4 MDSDEV2=/dev/vdc '
+        .'mds2_MOUNT="/data/dvtrack303:md2" mds2failover_HOST=192.168.200.3 '
+        .'mds3_HOST=192.168.200.2 MDSDEV3=/dev/vdc mds3_MOUNT="/data/dvtrack303:md3" '
+        .'mds3failover_HOST=192.168.200.1 MDSCOUNT=3',
         'Check MDS OPT' );
 
     DEBUG "OSS OPT:" . $exe->ossopt;
     is(
         $exe->ossopt,
-        'ost1_HOST=192.168.200.6 OSTDEV1=/dev/vdb ost1failover_HOST=192.168.200.5 ost2_HOST=192.168.200.6 OSTDEV2=/dev/vdc ' .
-        'ost2failover_HOST=192.168.200.5 ost3_HOST=192.168.200.5 OSTDEV3=/dev/vdd ost3failover_HOST=192.168.200.6 ' .
-        'ost4_HOST=192.168.200.5 OSTDEV4=/dev/vde ost4failover_HOST=192.168.200.6 OSTCOUNT=4',
+#        'ost1_HOST=192.168.200.6 OSTDEV1=/dev/vdb ost1failover_HOST=192.168.200.5 ost2_HOST=192.168.200.6 OSTDEV2=/dev/vdc ' .
+#        'ost2failover_HOST=192.168.200.5 ost3_HOST=192.168.200.5 OSTDEV3=/dev/vdd ost3failover_HOST=192.168.200.6 ' .
+#        'ost4_HOST=192.168.200.5 OSTDEV4=/dev/vde ost4failover_HOST=192.168.200.6 OSTCOUNT=4',
+         'ost1_HOST=192.168.200.6 OSTDEV1=/dev/vdb ost1_MOUNT="/data/dvtrack304:md1"'
+         .' ost1failover_HOST=192.168.200.5 ost2_HOST=192.168.200.6 OSTDEV2=/dev/vdc'
+         .' ost2_MOUNT="/data/dvtrack304:md2" ost2failover_HOST=192.168.200.5 ost3_HOST=192.168.200.5'
+         .' OSTDEV3=/dev/vdd ost3_MOUNT="/data/dvtrack304:md3" ost3failover_HOST=192.168.200.6'
+         .' ost4_HOST=192.168.200.5 OSTDEV4=/dev/vde ost4_MOUNT="/data/dvtrack304:md4"'
+         .' ost4failover_HOST=192.168.200.6 OSTCOUNT=4',
         'Check OSS OPT'
     );
 
