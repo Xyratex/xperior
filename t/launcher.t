@@ -169,7 +169,7 @@ test
     my @ids;
     foreach my $str ( split( /\n/, $out ) ) {
 
-       #DEBUG ">$str"; 
+       #DEBUG ">$str";
        if ( $str =~ m/TEST\s+(.*)\s+STATUS\:\s+passed$/ ) {
             push @ids, $1;
        }
@@ -219,8 +219,8 @@ test
 };
 ##############################################
 test
-  plan      => 6,
-  bMultirun => sub {
+  plan      => 7,
+  bLogs => sub {
     if( -e '/tmp/test-wd'){
     remove_tree('/tmp/test_wd');
     }
@@ -246,6 +246,16 @@ test
     $file = read_file( '/tmp/test_wd/xperior.log');
     like( $file, qr/Load\s+test\s+file/,'Xperior.log file exists and contains data');
 
+    #second run for append check
+    $out = `bin/runtest.pl  --action=list $conf $wd $td --error`;
+    my @file = read_file( '/tmp/test_wd/xperior.log');
+    my $count = 0;
+    foreach my $str (@file){
+        if( $str =~ m/Load\s+test\s+file/x){
+            $count++;
+        }
+    }
+    is($count, 2,"Number of runs detected");
     remove_tree('/tmp/test_wd');
 };
 

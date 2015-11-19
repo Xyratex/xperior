@@ -400,7 +400,7 @@ else{
 }
 
 Log::Log4perl->easy_init({ level=>$DEBUG,
-               file     => ">$logname" },
+               file     => ">>$logname" },
                { level    => $DEBUG,
                file     => "STDOUT",
                filter => '' },
