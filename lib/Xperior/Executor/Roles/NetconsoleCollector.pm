@@ -210,7 +210,8 @@ sub _autoconfigure{
                 $self->netconsole_remote_port_default;
         $self->netconsole_remote_port($port);
     }
-
+    #Set the level at which printing of messages is done to the console.
+    $ssh->run('dmesg -n 8');
     my $lsmod = $ssh->run ('lsmod',10);
     #DEBUG Dumper $lsmod;
     if(!grep{/^netconsole.*/} split(/\n/x,$lsmod->{stdout})){
