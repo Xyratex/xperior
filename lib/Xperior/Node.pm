@@ -46,7 +46,7 @@ use Moose;
 #use namespace::autoclean;
 use Error  qw(try finally except otherwise);
 use Moose::Util::TypeConstraints;
-use POSIX;
+use POSIX 'isdigit';
 use Net::Ping;
 use Log::Log4perl qw(:easy);
 
@@ -451,9 +451,9 @@ reachable and 0 if it is not.
 sub ping {
     my $self = shift;
     confess "Incorrect port set for node ".$self->id()
-                                unless(isdigit $self->pingport());
+                unless($self->pingport() =~ m/^[[:digit:]]+$/x);
 
-    if((isdigit $self->pingport())
+    if(($self->pingport() =~ m/^[[:digit:]]+$/)
                 and ($self->pingport() == 0)){
         return 1;
     }

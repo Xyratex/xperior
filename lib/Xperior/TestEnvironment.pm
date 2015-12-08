@@ -189,7 +189,26 @@ sub getLustreNodeAddress{
     return undef;
 }
 
-# generic config fucntions
+#hsm functions
+#HsmObjects:
+#   - id          : client1
+#     node        : mover
+#     type        : mover
+#     target      : yes
+#
+sub get_hsm_mover_target{
+    my $self = shift;
+    my @res;
+    foreach my $lo (@{$self->cfg->{'HsmObjects'}}){
+        if(( $lo->{'type'} eq 'mover')
+                &&(defined( $lo->{'target'}))
+                &&( $lo->{'target'} eq 'yes')){
+           return $lo;
+        }
+    }
+}
+
+# generic config functions
 sub get_target_generic_clients{
     my $self = shift;
     my @res;

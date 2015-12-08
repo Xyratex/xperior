@@ -635,7 +635,6 @@ From ssh help
 Parameters:
 
   * command to run
-  * timeout 9sec)
   * opt => value
 
   Supported options
