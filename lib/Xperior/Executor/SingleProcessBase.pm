@@ -109,7 +109,7 @@ sub execute {
     }
 
     #saving env data
-    $self->addYE( 'masterclient', $mnodecfg);
+    $self->addYE( 'masterclient', $mnodecfg->{id});
     DEBUG "Master Node:" . Dumper $mnodecfg;
     $self->_prepareCommands($testproc);
     $self->_addCmdLogFiles;

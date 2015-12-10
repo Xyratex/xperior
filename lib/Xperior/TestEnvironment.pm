@@ -89,8 +89,8 @@ sub initNodes {
         if($n->{'bridge'}){
             $node->bridge($n->{'bridge'});
             #switch off ping for case when ssh
-            #bridge is used for access to node 
-            #and node cannot be simple reached 
+            #bridge is used for access to node
+            #and node cannot be simple reached
             $node->pingport(0)
                 unless $n->{'pingport'} ;
         }
@@ -168,7 +168,7 @@ sub getMasterLustreClient{
 
 =over 12
 
-=item * B<getLustreNodeAddress> 
+=item * B<getLustreNodeAddress>
 
 retrun lustre ip address if defined or single ip.  See also B<getNodeAddress>.
 Could be used for setups when node have management interfaces(ssh) and lustre
@@ -212,6 +212,7 @@ sub get_master_generic_clients{
            return $go;
         }
     }
+    ERROR "Master client is not found in GenericObjects";
     return undef;
 }
 

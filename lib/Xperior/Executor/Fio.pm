@@ -130,6 +130,7 @@ sub _prepareCommands{
             'fio',
             $self->test->getParam('cmd'),
             @cmd, '"';
+    #DEBUG 'cmd='. Dumper @fullcmd;
     $self->cmd(join(' ', @fullcmd));
     $self->testfilelist(\@touchfilelist);
     DEBUG $self->cmd();
@@ -161,11 +162,11 @@ sub prepare_node{
         }
         sleep 1;#time for failing while initializing
         if ($testproc->isAlive() != 0){
-            confess 'Fio server process alredy ended';
+            confess 'Fio server process already ended';
             #TODO collect sever logs there!
         }
         $self->addMessage("fio server started on ".$t->{'node'});
-        exit 0;
+        #exit 0;
      }
      $self->targetconnectors(\@targetconnectors);
 }
