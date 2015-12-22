@@ -133,5 +133,23 @@ test plan => 4, kEnvMerge    => sub {
 
 };
 
+
+test plan => 3, sSystemEnvMerge    => sub {
+    my %options = (
+        testdir => 't/testcfgs/env/',
+        workdir => '/tmp/test_wd/',
+    );
+    use Xperior::Core;
+    my $testcore =  Xperior::Core->new();
+    $testcore->options(\%options);
+    my @tests = @{$testcore->loadTests()};
+    my $test = $tests[4];
+    DEBUG Dumper $test;
+    my $env = $test->getMergedHashParam("env");
+    is($env->{ior_THREADS}, 32, 'Check ior_THREADS');
+    is($env->{ior_iteration}, 20, 'Check ior_iteration');
+    is($env->{mbench_NFILES}, 50000, 'Check mbench_NFILES');
+};
+
 lib_xperior_test->run_tests;
 

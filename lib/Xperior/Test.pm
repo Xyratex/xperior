@@ -199,7 +199,7 @@ for B<testds>
    env:
       mdtest_THREADS: 50
       mdtest_iteration: 10
- env:
+   env:
     mdtest_THREADS: 8
 	mdtest_iteration: 10
 
@@ -225,7 +225,6 @@ sub getMergedHashParam {
     if ( defined( $self->groupcfg->{$name} ) ) {
         %grp = %{$self->groupcfg->{$name}};
     }
-
     my %merged = ();
     while (my ($k, $v) = each %grp) {
         $merged{$k} = $v;
