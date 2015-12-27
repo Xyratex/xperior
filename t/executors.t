@@ -1,12 +1,12 @@
 #
 # GPL HEADER START
-# 
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 only,
 # as published by the Free Software Foundation.
-# 
+#
 # This program is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -15,14 +15,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # version 2 along with this program; If not, see http://www.gnu.org/licenses
-# 
+#
 # Please  visit http://www.xyratex.com/contact if you need additional information or
 # have any questions.
-# 
+#
 # GPL HEADER END
-# 
+#
 # Copyright 2012 Xyratex Technology Limited
-# 
+#
 # Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
 #
 
@@ -33,6 +33,7 @@ use Test::Able;
 use Test::More;
 use Xperior::Core;
 use Log::Log4perl qw(:easy);
+use File::Slurp;
 use Data::Dumper;
 use Carp;
 
@@ -167,14 +168,62 @@ OUT
 };
 
 #########################################
-test plan => 3, cCheckCreateLog    => sub {
+test plan => 10, cCheckLogNormalization    => sub {
+    my $testfile1 = '/tmp/test_wd/sanity/1.test1.log';
+    my $testfile2 = '/tmp/test_wd/sanity/1.test2.zip';
+    my $testfile3 = '/tmp/test_wd/sanity/1.test3.log';
+    my $testfile4 = '/tmp/test_wd/sanity/1.test4.zip';
+    my $testfile5 = '/tmp/test_wd/sanity/1.test5.log';
 
-    my $fh    = $exe->createLogFile('test1');
-    print $fh 'Test report';
+    my $logname1 = $exe->getNormalizedLogName('test1');
+    is($logname1, $testfile1 , 'Check getNormalizedLogName #1');
+    my $logname2 = $exe->getNormalizedLogName('test2','zip');
+    is($logname2, $testfile2 , 'Check getNormalizedLogName #2');
+
+    my $testsrcfile3 = '/tmp/test3.log';
+    my $testsrcfile4 = '/tmp/test4.zip';
+    my $testsrcfile5 = '/tmp/test5.log';
+    my $data = 'Test report';
+
+    write_file($testsrcfile3, $data);
+    write_file($testsrcfile4, $data);
+    my $res1 = $exe->normalizeLogPlace(
+            $testsrcfile3,'test3');
+    is ($res1,1,'Check exit code for normalizeLogPlace#1');
+    ok(-r $testfile3);
+    my $text = read_file($testfile3);
+    is($text, $data, 'Check file content normalizeLogPlace#1');
+
+    my $res2 = $exe->normalizeLogPlace(
+            $testsrcfile4,'test4', 'zip');
+    is ($res2,1,'Check exit code for normalizeLogPlace#2');
+    ok(-r $testfile4);
+    $text = read_file($testfile4);
+    is($text, $data, 'Check file content normalizeLogPlace#2');
+
+    my $res3 = $exe->normalizeLogPlace($testsrcfile5,'test5');    
+    is ($res3, 0,'Check faield exit code for normalizeLogPlace#3');
+    ok( not( -r $testfile5), 'No file check');
+
+};
+#########################################
+test plan => 4, cCheckCreateLog    => sub {
+    my $testfile1 = '/tmp/test_wd/sanity/1.test1.log';
+    my $testfile2 = '/tmp/test_wd/sanity/1.test2.zip';
+    my $data = 'Test report';
+    my $fh = $exe->createLogFile('test1');
+    print $fh $data;
     close $fh;
-    pass("Checked that no any file io crash observed");
-    ok(-r '/tmp/test_wd/sanity/1.test1.log');
-    SKIP:{ pass ('TODO:check log data') };
+    ok(-r $testfile1);
+    my $text = read_file($testfile1);
+    is($text, $data, 'Check file content');
+
+    $fh = $exe->createLogFile('test2','zip');
+    print $fh $data;
+    close $fh;
+    ok(-r $testfile2);
+    $text = read_file($testfile2);
+    is($text, $data, 'Check file content');
 
 };
 
@@ -182,9 +231,9 @@ test plan => 3, cCheckCreateLog    => sub {
 
 test plan => 4, cCheckReportWriting    => sub {
 
-    my $dir  = $exe->_reportDir;
+    my $dir  = $exe->_reportDir();
     is($dir,'/tmp/test_wd/sanity');
-    my $file = $exe->_reportFile;
+    my $file = $exe->_reportFile();
     is($file,'/tmp/test_wd/sanity/1.yaml');
 
     unlink $file;

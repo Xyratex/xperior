@@ -337,45 +337,48 @@ sub execution_result_calculation{
 
 sub registerLogFile{
     my ($self,$key,$path)  = @_;
-    my $rd=$self->_reportDir.'/';
+    my $rd=$self->_reportDir().'/';
     $path =~ s/$rd//;
     $self->addYEE('log',$key,$path);
 }
 
-#TODO add tests!
 sub normalizeLogPlace{
-    my ($self,$lfile,$key)  = @_;
-    move "$lfile",
-            $self->_resourceFilePrefix."$key.log";
+    my ($self,$lfile,$key,$ext)  = @_;
+    $ext = 'log' unless ( $ext );
+    return move ("$lfile",
+            $self->_resourceFilePrefix()."$key.$ext");
 }
 
 sub getNormalizedLogName{
-    my ($self,$key)  = @_;
-    $self->_createDir;
-    return $self->_resourceFilePrefix."$key.log";
+    my ($self,$key, $ext)  = @_;
+    $ext = 'log' unless ( $ext );
+    $self->_createDir();
+    return $self->_resourceFilePrefix()."$key.$ext";
 }
 
 sub createLogFile{
-    my ($self,$key)  = @_;
-    my $file = $self->_resourceFilePrefix."$key.log";
-
-    $self->_createDir;
+    my ($self,$key, $ext)  = @_;
+    $ext = 'log' unless ( $ext );
+    my $file = $self->_resourceFilePrefix()."$key.$ext";
+    $self->_createDir();
     my $fd;
-    open $fd, "> $file"  or confess "Cannot log  file[$file]:" . $!;
-    $self->registerLogFile($key,$file);
+    open $fd, "> $file" or
+        confess "Cannot create log file[$file]:".$!;
+    $self->registerLogFile($key,$file, $ext);
     return $fd;
 }
 
 sub writeLogFile{
-    my ($self,$key, $data)  = @_;
-    my $file = $self->_resourceFilePrefix."$key.log";
-    $self->_createDir;
+    my ($self,$key, $data, $ext)  = @_;
+    $ext = 'log' unless ( $ext );
+    my $file = $self->_resourceFilePrefix()."$key.$ext";
+    $self->_createDir();
     my $res = write_file ($file,$data);
     if($res != 1){
-        ERROR "Cannot log  file[$file]";
+        ERROR "Cannot write log file[$file] with error code [$res]";
         return 0;
     }
-    $self->registerLogFile($key,$file);
+    $self->registerLogFile($key,$file, $ext);
     return $res;
 }
 
