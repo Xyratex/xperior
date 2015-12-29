@@ -68,6 +68,9 @@ sub trim{
 
 Execute shell command with arguments, similar to system.
 
+Warning! This call could locks internally in multithreading env.
+Use it with cation!
+
 Returns exit code or stdout as array.
 
 Allows to capture stdout and stderr as string or array.
@@ -253,28 +256,65 @@ sub shell {
     return $exit_code;
 }
 
-# Please use 'shell' instead if you don't see real reasons to use runEx
+=head2 runEx
+
+Execute shell command with arguments, similar to system.
+In practice, this solution is thereading safe and suggested for
+usage as primary call for execution.
+
+Parameters:
+
+  * cmd          - command for execution
+  * die_on_fail  - fail(confess) if executions failed
+  * fail_message - optional message for 'confess' call
+
+
+=cut
+#TODO make this call useful-parametrized, add timeout
+#TODO return result should be context-dependet, in hash context
+#return same as in shell call
 sub runEx{
-    my ($cmd, $dieOnFail,$failMess ) = @_;
+    my ($cmd, $die_on_fail,$fail_message ) = @_;
+    my $timeout = 900; #set default timeout, magic!
+    my $sleeptime = 1;
     DEBUG "Cmd is [$cmd]";
     DEBUG "WD  is [$CWD]";
 
-    $dieOnFail = 0 if ( !( defined $dieOnFail ) );
+    $die_on_fail  = 0 if ( !( defined $die_on_fail ) );
+    $fail_message = '' if ( !( defined $fail_message ) );
 
-    my $st = time;
     my $proc = Proc::Simple->new();
     $proc->kill_on_destroy(1);
     #$proc->redirect_output ("/tmp/someapp.stdout", "/tmp/someapp.stderr");
+    my $st = time();
     $proc->start($cmd);
-    my $error_code = $proc->wait();
-    $proc->kill();
-
+    while(
+        (($st+$timeout) > time())
+        and
+        $proc->poll()){
+        sleep $sleeptime;
+    }
+    if($proc->poll()){
+        INFO "[$cmd] is working more then [$timeout] sec, killing";
+        $proc->kill();
+        sleep $sleeptime;
+        ERROR "Sending SIGTERM";
+        if ($proc->poll()){
+            ERROR "Sending SIGKILL";
+            $proc->kill("KILL");
+        }
+    }
+    my $error_code = $proc->exit_status();
+    if(not defined($error_code)){
+        DEBUG "error_code is undefined";
+        $error_code=254;#magic, haven't seen anybody who use it
+    }
     my $time = time - $st;
     DEBUG "Execution time = $time sec";
-    if ( ( $error_code != 0 ) and ( $dieOnFail == 1 ) ) {
-        confess "Child process failed with error status $error_code";
+    if ( ( $error_code != 0 ) and ( $die_on_fail == 1 ) ) {
+        confess "Child process failed with error status $error_code."
+                .$fail_message;
     }
-
     DEBUG "Return code is: [" . $error_code . "]";
     return $error_code;
 }

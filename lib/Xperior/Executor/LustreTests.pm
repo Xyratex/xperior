@@ -389,8 +389,12 @@ sub _prepareEnvOpts {
                 DEBUG "Construct MGSNID $mgsnid";
             }
         }
-        push @opt, $mgsnid;
-        $self->mgsopt( join( ' ', @opt ) ) if @opt;
+        push @opt, $mgsnid if $mgsnid;
+        if(@opt and (ref(\@opt) eq "ARRAY")){
+            $self->mgsopt( join( ' ', @opt ) );
+        }else{
+            DEBUG "MGS options array is empty";
+        }
     }
 
     #include only master client for sanity suite
