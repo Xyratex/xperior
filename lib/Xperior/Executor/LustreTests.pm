@@ -115,8 +115,9 @@ sub _prepareCommands {
 
     my $device_type = $self->env->cfg->{'lustre_device_type'} || 'loop';
     my $tempdir = $self->env->cfg->{'tempdir'} || '';
-    my $dir     = $self->env->cfg->{'client_mount_point'} . $tempdir;
-    my $eopts   = $self->env->cfg->{extoptions} || '';
+    my $test_directory = $self->env->cfg->{'test_directory'} || '';
+    my $mount_point = $self->env->cfg->{'client_mount_point'} . $tempdir;
+    my $eopts = $self->env->cfg->{extoptions} || '';
 
     #TODO add test on it
 
@@ -138,6 +139,12 @@ sub _prepareCommands {
         $script = $nontestscript;
     }
 
+    my $diropts = "";
+    # Prepare the DIR envirnment variable only if $test_directory is specified.
+    if ( $test_directory ) {
+        $diropts = "DIR=${mount_point}/${test_directory}";
+    }
+
     my $lustre_script = "$self->{lustretestdir}/${script}";
     my @opt = (
                 "SLOW=YES",
@@ -147,7 +154,7 @@ sub _prepareCommands {
                 $self->ossopt(),
                 $self->clntopt(),
                 $eopts,
-                "DIR=${dir}",
+                $diropts,
                 "PDSH=\"/usr/bin/pdsh -R ssh -S -w \"",
     );
     # Test id can be 0, that is why checking for defined

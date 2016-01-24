@@ -157,6 +157,7 @@ on the same host above.
  client_mount_point      : /mnt/lustre
  benchmark_tests_file    : testfile
  tempdir                 : /tmp
+ testdir                 : relative/path/to/test/directory/where/tests/execute/
 
 =item 2. Failover configuration example
 
@@ -228,6 +229,7 @@ This configuration targeted to IB network
  client_mount_point      : /mnt/lustre
  benchmark_tests_file    : testfile
  tempdir                 : /tmp
+ testdir                 : relative/path/to/test/directory/where/tests/execute/
 
 =item 3. Clientonly configuration example
 
@@ -277,12 +279,13 @@ LustreObjects:
 
 
 
-#Variables
-mgsnid        : 192.168.3.12@tcp:192.168.3.13@tcp:/testfs
-clientonly              : 1
-client_mount_point      : /mnt/testfs
-benchmark_tests_file    : testfile
-tempdir                 : /
+ #Variables
+ mgsnid                  : 192.168.3.12@tcp:192.168.3.13@tcp:/testfs
+ clientonly              : 1
+ client_mount_point      : /mnt/testfs
+ benchmark_tests_file    : testfile
+ tempdir                 : /
+ testdir                 : relative/path/to/test/directory/where/tests/execute/
 #/tmp/
 
 

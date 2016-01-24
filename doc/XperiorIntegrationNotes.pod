@@ -127,6 +127,7 @@ from Xperior libraries.
     client_mount_point      : /mnt/lustre
     benchmark_tests_file    : testfile
     tempdir                 :
+    testdir                 : relative/path/where/tests/execute/
 
     CFG
     open CFG, " > $xtestconfig ";
