@@ -40,6 +40,7 @@ package Xperior::Executor::Roles::StoreSyslog ;
 use Moose::Role;
 use Time::HiRes;
 use Xperior::Utils;
+use Data::Dumper;
 has tlog      => ( is =>'rw', isa => 'HashRef');
 has ison      => ( is =>'rw', isa => 'HashRef');
 has storedir  => ( is =>'rw', default => '/var/log/xperior/syslog');

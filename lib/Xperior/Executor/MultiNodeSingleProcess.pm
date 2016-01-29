@@ -329,6 +329,10 @@ sub prepare_node{
     return $result;
 }
 
+sub processSystemLog{
+    #default empty implemnetation
+    #should be ovewritten where real code defined
+}
 
 __PACKAGE__->meta->make_immutable;
 1;
