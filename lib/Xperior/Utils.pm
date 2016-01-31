@@ -275,7 +275,7 @@ Parameters:
 #return same as in shell call
 sub runEx{
     my ($cmd, $die_on_fail,$fail_message ) = @_;
-    my $timeout = 900; #set default timeout, magic!
+    my $timeout = 60*60*24; #set default timeout to 24h, magic!
     my $sleeptime = 1;
     DEBUG "Cmd is [$cmd]";
     DEBUG "WD  is [$CWD]";
