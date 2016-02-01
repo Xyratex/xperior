@@ -146,7 +146,7 @@ sub prepare_node{
             $self->_replace_vars($self->test->getParam('createdata'), $t)
         );
         $result->addYEE("ddcmd","thr$i",$cmd);
-        my $rr = $connector->run($cmd);
+        my $rr = $connector->run($cmd, timeout=>1200);
         $result->addYEE("ddexitcode","thr$i",$rr->{exitcode});
         $result->writeLogFile("$t->{id}.prepare.dd.stdout",$rr->{stdout});
         $result->writeLogFile("$t->{id}.prepare.dd.stderr",$rr->{stderr});

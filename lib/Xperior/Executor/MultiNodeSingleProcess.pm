@@ -319,7 +319,7 @@ sub prepare_node{
         'mkdir -p '.$self->xp_log_dir(),
         "mkdir -p ${mountpoint}",);
     $result->addYE("cmd",join(';',@cmds));
-    my $res = $connector->run(\@cmds);#->{exitcode};
+    my $res = $connector->run(\@cmds, timeout=>600);#->{exitcode};
     $result->addYE("exitcode",$res->{exitcode});
     if($res->{exitcode} ==0 ){
         $result->pass();
