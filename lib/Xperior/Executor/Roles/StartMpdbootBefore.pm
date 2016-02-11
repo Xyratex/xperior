@@ -45,7 +45,8 @@ Role define starting mbdboot on master client before each suite.
 package Xperior::Executor::Roles::StartMpdbootBefore;
 
 use Moose::Role;
-use MooseX::CoverableModifiers;
+#it is needed for coverage calculation
+#use MooseX::CoverableModifiers;
 use Time::HiRes;
 use Xperior::Utils;
 use Log::Log4perl qw(:easy);
