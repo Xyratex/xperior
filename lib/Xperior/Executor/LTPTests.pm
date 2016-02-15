@@ -182,18 +182,14 @@ sub _parseLogFile{
     if (( $str =~ m/LOG File\:\s+(.*)$/ ) or
         ( $str =~ m/OUTPUT File\:\s+(.*)$/ ) or
         ( $str =~ m/FAILED COMMAND File\:\s+(.*)$/ )) {
-        my $ltplog = $1;
+        my $ltplog = $1;        
         DEBUG "Log file [$ltplog] found in log";
-        if ( ( $connector->syncexitcode != 0 ) or ( $ltplog eq '' ) ) {
-            $self->addMessage("Cannot attach logs file[$ltplog]");
-        }else {
-            INFO "Attaching log file [$ltplog]";
-            my $sname = $ltplog;
-            $sname =~ s/^.*\///;
-            $sname =~ s/log$//;
-            $sname = '.'.$sname if ($sname ne '');
-            $self->_getLog( $connector, $ltplog, "ltp$sname" );
-        }
+        INFO "Attaching log file [$ltplog]";
+        my $sname = $ltplog;
+        $sname =~ s/^.*\///;
+        $sname =~ s/log$//;
+        $sname = '.'.$sname if ($sname ne '');
+        $self->_getLog( $connector, $ltplog, "ltp$sname" );
     }
 }
 
