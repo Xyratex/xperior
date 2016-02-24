@@ -95,14 +95,17 @@ sub contains{
     my $data          = $opts{value}
         || throw TestFailed("No value set for [$message]: FAILED");
     my $exp           = $opts{expected} || '';
+    my $source        = $opts{source}   || '';
 #    my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
 #                                                localtime(time);
 #    $mon++;
 #    my $time = "[".time."] $year/$mon/$mday $hour:$min:$sec";
     my $time = $self->htime();
-    my ($package, $filename, $line) = caller;
-    my $source = "$package::$filename at $line";
-    if( $data =~ m/$exp/m){
+    if( not $source ){
+       my ($package, $filename, $line) = caller;
+       $source = "$package::$filename at $line";
+    }
+    if( $data =~ m/$exp/m ){
         INFO "[$data] contains [$exp], $message : PASSED";
         $self->append(
              $time." Contains check at $source\n"
@@ -191,9 +194,10 @@ sub run_check{
             ."==============================================\n"
             ."Exit code is [$run_res->{exitcode}]\n"
             ."$message : PASSED\n");
-        $self->contains(value=>$run_res->{stdout},
-                        expected=>$contains,
-                        message=>$message)
+        $self->contains( value    => $run_res->{stdout},
+                         expected => $contains,
+                         message  => $message,
+                         source   => $source)
                                     if $contains;
         return $run_res;
     }else{
@@ -202,7 +206,17 @@ sub run_check{
             $time." Check at $source\n"
             ."==============================================\n"
             ."Exit code is [$run_res->{exitcode}]\n"
-            ." $message :FAILED");
+            ." $message :FAILED"
+            ." cms is [$cmd]"
+            ." stdout is \n"
+            ."-------------cut------------\n"
+            . $run_res->{stdout}
+            ."\n-------------cut------------\n"
+            ." stderr is \n"
+            ."-------------cut------------\n"
+            . $run_res->{stderr}
+            ."\n-------------cut------------\n"
+            );
         $self->failcount($self->failcount()+1);
         $self->reason("$message :FAILED")
             unless $self->reason();
