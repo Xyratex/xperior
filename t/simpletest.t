@@ -147,7 +147,6 @@ test plan => 4, run_checkCheck   => sub {
                     cmd     => "sleep 3",
                     timeout => 10,
                     message => 'run_check #1');
-
     is($res->{exitcode},0,'run_check ok');
     $res = $stest->run_check(
                     node     => $node,

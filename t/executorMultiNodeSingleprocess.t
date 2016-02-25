@@ -155,9 +155,8 @@ test plan => 6, dBasicFailedMultiTest => sub {
         'failed',
             'Check failed multi test result structure #3');
     my $text = read_file( "$wd/multi/1.client1.stderr.log");
-    like($text,qr/line 1: command_which_is_not_exists: command not found/,
+    like($text,qr/line 3: command_which_is_not_exists: command not found/,
     'Check stdout');
-    #exit(1);
 };
 
 test plan => 5, fBasicTimeoutedTest => sub {
@@ -177,8 +176,8 @@ test plan => 5, fBasicTimeoutedTest => sub {
         'yes',
             'Check timeouted multi test result structure #3');
 
-    ok((($exe->yaml()->{subtests}->{subtest_client2}->{endtime_client2} -
-     $exe->yaml()->{subtests}->{subtest_client2}->{starttime_client2})
+    ok((($exe->yaml()->{subtests}->{subtest_client2}->{endtime} -
+     $exe->yaml()->{subtests}->{subtest_client2}->{starttime})
         < 20), #15 - clear timeout, 20 with some reserve
         'Check kill timeout');
 };

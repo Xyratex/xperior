@@ -383,7 +383,6 @@ sub _sshSyncExecS {
     close $f;
     ($f, $stderr)   = mkstemp("/tmp/ssh_sync_stderr_XXXXXXX");
     close $f;
-
     my $proc = Proc::Simple->new();
     $proc->redirect_output ($stdout, $stderr);
     $proc->start($cc);
@@ -696,6 +695,8 @@ sub run{
         $app = join($delimiters,@$app);
 
     }
+    $app = "#!/usr/bin/env bash \n".
+           "set -x\n".$app;
     DEBUG "Uploading script:\n$app";
     write_file($t, $app);
     $self->putFile($t, $tef);
@@ -820,6 +821,8 @@ sub create {
     my $rd = $self->_sshSyncExec( "rm -rf " . $pid_file );
 
     my $script = <<"SCRIPT";
+#!/usr/bin/env bash
+set -x
 $cmd &
 pid=\$!
 echo \$pid > $pid_file
@@ -875,7 +878,7 @@ sub kill {
     my ( $self, $mode ) = @_;
     DEBUG "Xperior::SshProcess->kill";
     my $pid  = $self->pid;
-    my $name = $self->appname;
+    my $name = $self->appname || '';
     $mode = 0 unless defined $mode;
 
     if ( ( !defined($pid) ) or ( $pid eq '' ) ) {

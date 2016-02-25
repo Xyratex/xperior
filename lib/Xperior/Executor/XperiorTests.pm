@@ -91,7 +91,10 @@ sub execute {
     return;
 }
 
-
+sub processSystemLog{
+    my ( $self, $connector, $filename ) = @_;
+    #processSystemLog is not implemented
+}
 
 
 

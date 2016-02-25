@@ -241,7 +241,7 @@ test plan => 16, fRunExecution => sub {
 
   $r = $sp->run($ttycheckcmd,need_tty=>1);
   is($r->{exitcode},0,"Check exit code for tty");
-  is(trim($r->{stdout}),'tty',"Check message for tty");
+  like(trim($r->{stdout}),qr/\ntty/,"Check message for tty");
   #exit 1;
 };
 
@@ -265,23 +265,21 @@ test plan =>4 , fRunBridgeExecution => sub {
 
   $r = $sp->run($ttycheckcmd,need_tty=>1);
   is($r->{exitcode},0,"Check exit code for tty");
-  is(trim($r->{stdout}),'tty',"Check message for tty");
-
+  like(trim($r->{stdout}), qr/\ntty/,"Check message for tty");
 };
 
 test plan => 12, gRunMultiCommandExecution => sub {
   my $stime = time;
   my @cmds = ('echo 12345 1>&2; echo 54321','echo qwerty','echo qazwsx');
   my $r = $sp->run(\@cmds);
-  print Dumper $r;
+  DEBUG "\n--------\n".Dumper $r;
   is($r->{exitcode}, 0, 'test run array exit code ok');
-  is($r->{stderr}[0],'12345','test run array 1');
+  like($r->{stderr}[0],qr/\n12345/,'test run array 1');
   is($r->{stderr}[1],'','test run array 2');
   is($r->{stdout}[0],'54321','test run array 3');
   is($r->{stdout}[2],'qazwsx','test run array 4');
   is(scalar(@{$r->{stdout}}),3,'test run array 5');
-  is(scalar(@{$r->{stderr}}),3,'test run array 6');
-
+  is(scalar(@{$r->{stderr}}),5,'test run array 6');
   @cmds = ('echo 54321','echo qwerty; sleep 30; echo ytrewq',
                 'echo qazwsx');
   $r = $sp->run(\@cmds,timeout=>5);
