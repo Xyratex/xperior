@@ -279,7 +279,7 @@ sub afterAfterExecute{
     my $time = time();
     DEBUG "AFTER[afterExecute]:"
         .$title."[$time], elapsed [".
-        ($time-$self->after_start_time->{'title'})."]";
+        ($time - $self->after_start_time->{'title'})."]";
     $self->after_start_time->{'title'}=0;
 };
 

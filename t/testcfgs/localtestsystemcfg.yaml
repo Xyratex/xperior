@@ -1,14 +1,30 @@
 ---
 Nodes:
-   - id          : mds1 
-     ip          : 127.0.0.1    
+   - id          : mds1
+     ip          : 127.0.0.1
      ctrlproto   : ssh
      user        : tomcat
 
    - id           : oss1
-     ip           : 127.0.0.1    
+     ip           : 127.0.0.1
      ctrlproto    : ssh
      user         : tomcat
+     collect:
+        - name : syslog
+          node : 127.0.0.1
+          user : tomcat
+          file : /tmp/xperior_test_file_syslog_log
+        - name : conman
+          file : /tmp/xperior_test_file_conman_log
+          full_on_fail : 1
+          node : 127.0.0.1
+          user : tomcat
+        - name : conman1
+          file : /tmp/xperior_test_file_conman1_log
+        - name : conman2
+          node : 127.0.0.1
+          file : /tmp/xperior_test_file_conman2_log
+          user : tomcat
 
    - id          : oss2
      ip          : 127.0.0.1
@@ -28,18 +44,18 @@ Nodes:
 
 
 LustreObjects:
-   - id          : mds1 
-     device      : /dev/loop0 
+   - id          : mds1
+     device      : /dev/loop0
      node        : mds1
      type        : mds
-   
-   - id          : oos1 
-     device      : /dev/loop1 
+
+   - id          : oos1
+     device      : /dev/loop1
      node        : oss1
      type        : oss
 
-   - id          : oos2 
-     device      : /dev/loop2 
+   - id          : oos2
+     device      : /dev/loop2
      node        : oss2
      type        : oss
 

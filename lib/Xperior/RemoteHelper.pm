@@ -60,9 +60,12 @@ Parameters:
 
   * $executor - Xperior::Executor::Base or child, which used for
                 attaching files
-  * @files     - array of string likes this
+  * @files    - array of string likes this
                     [ '/var/logs/mero-.*\.log',
                       '/qqq/www/.*']
+  * @names    - optional, array of strings, contains file names which
+                will be used for corrrespodning  files for attaching to
+                test result. Names should be in same order as @files.
 
 Return : number of attached logs
 
@@ -71,14 +74,12 @@ Testing via t/roleCustomLogCollector.t
 =cut
 
 sub collect_remote_files_by_mask {
-    my ( $node, $executor, $files ) = @_;
+    my ( $node, $executor, $files, $names ) = @_;
     my $id   = $node->id;
     my $count = 0;
     foreach my $log ( @{$files} ) {
         DEBUG "Collect [$log] on [$id]";
         my $c = $node->getRemoteConnector();
-
-        #my $cmd = "ls  -Aw1 $log";
         my $cmd = "find $log -type f -print";
 
         #DEBUG $cmd;
@@ -99,25 +100,28 @@ sub collect_remote_files_by_mask {
         }
         if ( !$minpath ) {
             DEBUG "No dirs found on non-empty out";
-
-            #return;
             next;
         }
 
         #DEBUG "Minimal path is [$minpath]";
+        my $i=0;
         foreach my $file ( split( /\n/, $lsout ) ) {
             DEBUG "Check line [$file]";
             next if ( ( $file eq '' ) or ( $file =~ m/^\s+/ ) );
             INFO "Attaching log file [$file]";
             my ( $filename, $dirs, $suffix ) = fileparse("$file.$id");
-            if ( $dirs ne $minpath ) {
-                $dirs =~ m/$minpath(.*)\//;
-                my $subpath = $1;
-
-                #DEBUG "Subpass is [$subpath]";
-                $subpath =~ s/\//_/g;
-                $filename = "${subpath}_${filename}";
+            if( $names and $names->[$i] ){
+                $filename = $names->[$i];
+            }else{
+                if ( $dirs ne $minpath ) {
+                    $dirs =~ m/$minpath(.*)\//;
+                    my $subpath = $1;
+                    #DEBUG "Subpass is [$subpath]";
+                    $subpath =~ s/\//_/g;
+                    $filename = "${subpath}_${filename}";
+                }
             }
+
             $executor->_getLog( $c, $file, $filename );
             $count++;
         }

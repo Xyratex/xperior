@@ -56,7 +56,7 @@ use Xperior::Utils;
 use Data::Dumper;
 use Log::Log4perl qw(:easy);
 use File::Basename;
-use Xperior::RemoteHelper; 
+use Xperior::RemoteHelper;
 our $VERSION = "0.0.1";
 
 has logname   => ( is => 'rw', default => 'messages');
@@ -71,7 +71,6 @@ after   'execute' => sub{
     }
     $self->beforeAfterExecute($title);
     foreach my $node (@{$self->env->nodes}) {
-        my $id = $node->id;
         my $logs = $self->test->getParam('collect_logs');
         collect_remote_files_by_mask($node,$self,$logs);
     }
