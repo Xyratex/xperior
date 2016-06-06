@@ -49,6 +49,7 @@ has fio_binary             => (is => 'rw', default => 'fio');
 has file_lid               => (is => 'rw', default => '13');
 has testfilelist           => (is => 'rw');
 has targetconnectors       => (is => 'rw');
+has touchfilelist          => (is => 'rw');
 
 sub _get_fio_config_file{
     my ($self, $thr_num) = @_;
@@ -122,11 +123,12 @@ sub _prepareCommands{
         push @cmd, '--client='.$nodeobj->ip(),
                     "${tmpdir}/${config_file_name}";
     }
+    $self->touchfilelist(\@touchfilelist);
     my @fullcmd;
     push @fullcmd,
             ' sh -c " rm -f', @touchfilelist, '&&',
             'touch', @touchfilelist, '&&',
-            "setfattr -n lid -v",$self->file_lid(),@touchfilelist,'&&',
+            $self->get_fs_specific_steps(),
             'fio',
             $self->test->getParam('cmd'),
             @cmd, '"';
@@ -134,6 +136,17 @@ sub _prepareCommands{
     $self->cmd(join(' ', @fullcmd));
     $self->testfilelist(\@touchfilelist);
     DEBUG $self->cmd();
+}
+
+=head2 get_fs_specific_steps
+
+Return fs specific shell commads which should be done before fio called,
+empty by default. If command list are not empty should be ended by ' &&'.
+
+=cut
+
+sub get_fs_specific_steps {
+    return "";
 }
 
 sub _getMasterNode{
