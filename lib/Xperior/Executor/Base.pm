@@ -112,6 +112,15 @@ sub init{
 
 sub setExtOpt{
     my ($self,$key,$value) = @_;
+
+    while ( $value =~ /(\${\w+})/ ) {
+        my $var = quotemeta $1;
+        my $yaml_field = $1;
+        $yaml_field =~ s/\${(.*)}/$1/;
+        my $content = $self->test->getParam($yaml_field);
+        $value =~ s/$var/$content/g;
+    }
+
     $self->addYEE('extoptions',$key,$value)
         and DEBUG "Overridden YAML key [extoptions/$key] with value [$value]";
 }
