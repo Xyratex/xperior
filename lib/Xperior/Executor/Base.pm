@@ -109,16 +109,21 @@ sub init{
     $self->after_start_time  ({});
 }
 
+=head2 setExtOpt()
+
+Write key:value pair to the 'extoptions' part of the result yaml.
+'${varname}' variables in the value body should be replased with
+variable values from the test parameters.
+
+=cut
 
 sub setExtOpt{
     my ($self,$key,$value) = @_;
 
-    while ( $value =~ /(\${\w+})/ ) {
-        my $var = quotemeta $1;
-        my $yaml_field = $1;
-        $yaml_field =~ s/\${(.*)}/$1/;
-        my $content = $self->test->getParam($yaml_field);
-        $value =~ s/$var/$content/g;
+    while ( $value =~ /\${(\w+)}/ ) {
+        my $var = $1;
+        my $content = $self->test->getParam($var);
+        $value =~ s/\${$var}/$content/g;
     }
 
     $self->addYEE('extoptions',$key,$value)
