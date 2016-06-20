@@ -318,6 +318,7 @@ Sample test descriptor 1:
  tags             : benchmark ior
  Tests:
     - id               : test1
+      weight           : 1
 
 
 Sample test descriptor 2
@@ -342,6 +343,7 @@ Sample test descriptor 2
  Tests:
     - id               : 0b
     - id               : 0c
+      weight           : 100
     - id               : 1a
     - id               : 1b
 
@@ -405,6 +407,12 @@ C<Tests:>           - array of single tests
 
 C<id>               - test id. Obligatory tests attribute which cannot be
 inherit.
+
+=item *
+
+C<weight>            - defines order of execution. By defaul - 50. Lighter
+tests is executed earlier. Suggest values: 0 - for sanity/smock, 50 - common functional,
+100 - system-wide load tests
 
 =back
 

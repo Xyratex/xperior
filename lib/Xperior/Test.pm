@@ -58,12 +58,18 @@ has 'tap'      => ( is => 'rw' ,traits => [qw(Clone)]);
 has 'results'  => ( is => 'rw' ,traits => [qw(Clone)]);
 has 'excluded' => ( is => 'rw' ,traits => [qw(Clone)]);
 has 'skipped'  => ( is => 'rw' ,traits => [qw(Clone)]);
+has 'weight'   => ( is => 'rw' ,traits => [qw(Clone)], default => 50);
 
 sub init {
     my $self = shift;
     $self->{'testcfg'}  = shift;
     $self->{'testcfg'}->{'testname'} = $self->{'testcfg'}->{'id'};
     $self->{'groupcfg'} = shift;
+    if($self->{'testcfg'}->{'weight'}){
+        $self->weight($self->{'testcfg'}->{'weight'});
+    }else{
+        $self->{'testcfg'}->{'weight'} = $self->weight();
+    }
 }
 
 =head getId

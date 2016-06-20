@@ -103,6 +103,7 @@ ok 1
      status: passed
      status_code: 0
      testname: 1
+     weight: 50
    message: ''
    source: sanity1
 ...
@@ -133,6 +134,7 @@ not ok 1  #reason
      status: failed
      status_code: 1
      testname: 1
+     weight: 50
    message: ''
    source: sanity1
 ...

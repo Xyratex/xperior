@@ -102,6 +102,7 @@ has 'env'              => (is => 'rw');
 has 'extoptions'       => (is => 'rw');
 has 'testplanfile'     => (is => 'rw', default=>'testorderplan.lst');
 has 'testexecutionlog' => (is => 'rw', default=>'testexecution.log');
+has 'testexecutionplan' => (is => 'rw', default=>'testexecutionplan.log');
 
 
 =head2 _randomizeTests
@@ -117,6 +118,12 @@ sub _randomizeTests {
     return \@newtests;
 }
 
+sub _sortTests {
+    my ($self) = shift;
+    DEBUG "Sort tests";
+    my @newtests = sort {$a->weight() <=> $b->weight()} @{$self->{'tests'}};
+    return \@newtests;
+}
 
 =head2 _multiplyTests
 
@@ -232,6 +239,7 @@ sub run {
     my $self    = shift;
     my $options = shift;
     $self->{'options'} = $options;
+    my $wd   = $self->{options}->{workdir};
 
     my $action = $self->options->{'action'};
     if ($action eq 'generate-html') {
@@ -262,6 +270,7 @@ sub run {
         $isTestOrderReady = $self->replanningTests();
     }
     if(not $isTestOrderReady){
+        #$self->tests($self->_sortTests());
         $self->tests($self->_randomizeTests())
                 if ($self->options->{'random'});
         $self->saveTestPlan();
@@ -288,6 +297,22 @@ sub run {
 
     $completelist = findCompleteTests($self->options->{'workdir'})
         if ($self->options->{'continue'});
+
+    #write actual run plan
+    write_file( "$wd/".$self->testexecutionplan(),
+        { err_mode => 'croak', append => 1 },
+        time()."\tCurrent plan prepared\n" );
+    foreach my $test (@{$self->{'tests'}}) {
+        my $testName  = $test->getId();
+        my $testGroup = $test->getGroupName();
+        write_file( "$wd/".$self->testexecutionplan(),
+            { err_mode => 'croak', append => 1 },
+            "${testGroup}//${testName}\n" );
+    }
+    write_file( "$wd/".$self->testexecutionplan(),
+        { err_mode => 'croak', append => 1 },
+        "------------------------------\n" );
+
 
     foreach my $test (@{$self->{'tests'}}) {
         my $testName     = $test->getId();
@@ -335,7 +360,6 @@ sub run {
         my $execCounter = 0;
         my $skipCounter = 0;
         my $error;
-        my $wd   = $self->{options}->{workdir};
         foreach my $test (@{$self->{'tests'}}) {
             if ($test->skipped()) {
                 $skipCounter++;
@@ -343,12 +367,15 @@ sub run {
             }
             my $testName     = $test->getId();
             my $testGroup    = $test->getGroupName();
+            write_file("$wd/".$self->testexecutionlog(),
+                {err_mode => 'croak', append => 1},
+                time()."\t${testGroup}//${testName}\tstarted\n");
             my $exe    = $self->_runtest($test, $test->{excluded});
             my $res    = $exe->result_code();
             my $status = $exe->yaml()->{'status'};
             write_file("$wd/".$self->testexecutionlog(),
                         {err_mode => 'croak', append => 1},
-                        time()."\t${testGroup}//${testName}\n");
+                        time()."\t${testGroup}//${testName}\t$status\n");
             INFO "TEST ${testGroup}->${testName} STATUS: $status";
 
             $execCounter++;
