@@ -52,6 +52,7 @@ use IO::Select;
 use IPC::Open3;
 use POSIX ":sys_wait_h";
 use Symbol 'gensym';
+use Proc::Simple;
 
 our @ISA = ("Exporter");
 our @EXPORT = qw(&shell &trim &runEx &parseFilterFile &findCompleteTests &is_path_unsafe &get_fs_root);

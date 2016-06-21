@@ -1,0 +1,63 @@
+---
+cleanup_max_time: -1
+cmd: iozone -c -e -+d -i 0 -s 5 -t2 -F @client_mount_point@/@genfilename@ @client_mount_point@/@genfilename@
+description: Castor Mero datapath tests
+endtime: 1466177336
+endtime_planned: 1466177309
+executor: Xperior::Executor::CastorIOzoneTest
+expected_time: 60
+extoptions:
+  arch: x86_64
+  branch: C-OSAINT:B2698
+  buildurl: http://es-jenkins-int.xyus.xyratex.com:8080/job/osaint-execute-tests-lco/147/
+  configuration: hw_minicluster
+  distr: OSAINT
+  executiontype: RE_Nightly
+  recipients: roman.grigoryev@seagate.com
+  release: CASTOR_1.0
+  sessionstarttime: 1466176979
+fail_reason: 'Killed by timeout after [319] sec of execution'
+groupname: xdatapath
+id: 2iozone-small
+log:
+  /local/build/jenkins-int-lco-mero4/workspace/osaint-execute-tests-lco/wd/xdatapath/2iozone-small.memory-info.log: 2iozone-small.memory-info.log
+  /local/build/jenkins-int-lco-mero4/workspace/osaint-execute-tests-lco/wd/xdatapath/2iozone-small.messages.client.log: 2iozone-small.messages.client.log
+  /local/build/jenkins-int-lco-mero4/workspace/osaint-execute-tests-lco/wd/xdatapath/2iozone-small.mount-info.log: 2iozone-small.mount-info.log
+  client.m0reportbug-data: 2iozone-small.client.m0reportbug-data.tar.gz
+  console.client: 2iozone-small.console.client.log
+  lctl_dk.172.16.2.21: 2iozone-small.lctl_dk.172.16.2.21.log
+messages: "MeroReportBug started\n"
+reference: http://www.iozone.org/
+roles: MeroStoreStat StoreSyslog StoreConsole MeroReportBug StacktraceGenerator
+sandbox: /var/mero/
+schema: data/schemas/testds.yaml
+starttime: 1466177009
+status: failed
+status_code: 1
+subtests:
+  subtest_client1:
+    cmd: iozone -c -e -+d -i 0 -s 5 -t2 -F /mnt/m0t1fs/9289637725:7233959507 /mnt/m0t1fs/9289637725:7233959507 2>     /var/log/xperior/test_stderr.180652.log 1>  /var/log/xperior/test_stdout.180652.log
+    completed: yes
+    endtime: 1466177310
+    endtime_planned: 1466177309
+    fail_reason: 'Killed by timeout after [319] sec of execution'
+    id: client1
+    killed: yes
+    log:
+      stderr: 2iozone-small.client1.stderr.log
+      stdout: 2iozone-small.client1.stdout.log
+    masterhostdown: no
+    outfile: /mnt/m0t1fs/9289637725:7233959507
+    starttime: 1466177009
+    status: failed
+    status_code: 1
+subtests_prepare:
+  subtest_client1:
+    cmd: mkdir -p /var/log/xperior/;mkdir -p /mnt/m0t1fs
+    exitcode: 0
+    id: client1
+    status: passed
+    status_code: 0
+tags: smalio
+testname: 2iozone-small
+timeout: 300

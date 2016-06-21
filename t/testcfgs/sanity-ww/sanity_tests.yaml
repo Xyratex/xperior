@@ -1,0 +1,899 @@
+#
+# GPL HEADER START
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 only,
+# as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License version 2 for more details (a copy is included
+# in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU General Public License
+# version 2 along with this program; If not, see http://www.gnu.org/licenses
+#
+# Please  visit http://www.xyratex.com/contact if you need additional information or
+# have any questions.
+#
+# GPL HEADER END
+#
+# Copyright 2012 Xyratex Technology Limited
+#
+# Author: Roman Grigoryev<Roman_Grigoryev@xyratex.com>
+#
+---
+Tests:
+  -
+    id: 0b
+    weight: 100
+  -
+    id: 0c
+    weight: 1
+  -
+    id: 1a
+  -
+    id: 1b
+  -
+    id: 2a
+  -
+    id: 2b
+  -
+    id: 3a
+  -
+    id: 3b
+  -
+    id: 3c
+  -
+    id: 4a
+  -
+    id: 4b
+  -
+    id: 5
+  -
+    id: 6a
+  -
+    id: 6b
+  -
+    id: 6c
+  -
+    id: 6d
+  -
+    id: 6e
+  -
+    id: 6f
+  -
+    id: 6g
+  -
+    id: 6h
+  -
+    id: 7a
+  -
+    id: 7b
+  -
+    id: 8
+  -
+    id: 9
+  -
+    id: 10
+  -
+    id: 11
+  -
+    id: 12
+  -
+    id: 13
+  -
+    id: 14
+  -
+    id: 15
+  -
+    id: 16
+  -
+    id: 17a
+  -
+    id: 17b
+  -
+    id: 17c
+  -
+    id: 17d
+  -
+    id: 17e
+  -
+    id: 17f
+  -
+    id: 17g
+  -
+    id: 17h
+  -
+    id: 17i
+  -
+    id: 17k
+  -
+    id: 18
+  -
+    id: 19a
+  -
+    id: 19b
+  -
+    id: 19c
+  -
+    id: 19d
+  -
+    id: 20
+  -
+    id: 21
+  -
+    id: 22
+  -
+    id: 23a
+  -
+    id: 23b
+  -
+    id: 24a
+  -
+    id: 24b
+  -
+    id: 24c
+  -
+    id: 24d
+  -
+    id: 24e
+  -
+    id: 24f
+  -
+    id: 24g
+  -
+    id: 24h
+  -
+    id: 24i
+  -
+    id: 24j
+  -
+    id: 24k
+  -
+    id: 24l
+  -
+    id: 24m
+  -
+    id: 24n
+  -
+    id: 24o
+  -
+    id: 24p
+  -
+    id: 24q
+  -
+    id: 24r
+  -
+    id: 24s
+  -
+    id: 24t
+  -
+    id: 24u
+  -
+    id: 24v
+    timeout: 600
+  -
+    id: 24w
+  -
+    id: 25a
+  -
+    id: 25b
+  -
+    id: 26a
+  -
+    id: 26b
+  -
+    id: 26c
+  -
+    id: 26d
+  -
+    id: 26e
+  -
+    id: 26f
+  -
+    dangerous: 'yes'
+    id: 27a
+  -
+    dangerous: 'yes'
+    id: 27c
+  -
+    dangerous: 'yes'
+    id: 27d
+  -
+    dangerous: 'yes'
+    id: 27e
+  -
+    dangerous: 'yes'
+    id: 27f
+  -
+    dangerous: 'yes'
+    id: 27g
+  -
+    dangerous: 'yes'
+    id: 27j
+  -
+    dangerous: 'yes'
+    id: 27k
+  -
+    dangerous: 'yes'
+    id: 27l
+  -
+    dangerous: 'yes'
+    id: 27m
+  -
+    dangerous: 'yes'
+    id: 27n
+  -
+    dangerous: 'yes'
+    id: 27o
+  -
+    dangerous: 'yes'
+    id: 27p
+  -
+    id: 27q
+  -
+    id: 27r
+  -
+    id: 27s
+  -
+    id: 27t
+  -
+    id: 27u
+  -
+    id: 27v
+  -
+    id: 27w
+  -
+    id: 27x
+  -
+    id: 27y
+  -
+    dangerous: 'yes'
+    id: 27z
+  -
+    dangerous: 'yes'
+    id: 27A
+  -
+    id: 28
+  -
+    id: 29
+  -
+    id: 30a
+  -
+    id: 30b
+  -
+    id: 30c
+  -
+    id: 31a
+  -
+    id: 31b
+  -
+    id: 31c
+  -
+    id: 31d
+  -
+    id: 31e
+  -
+    id: 31f
+  -
+    id: 31g
+  -
+    id: 31h
+  -
+    id: 31i
+  -
+    id: 31j
+  -
+    id: 31k
+  -
+    id: 31m
+  -
+    id: 32a
+  -
+    id: 32b
+  -
+    id: 32c
+  -
+    id: 32d
+  -
+    id: 32e
+  -
+    id: 32f
+  -
+    id: 32g
+  -
+    id: 32h
+  -
+    id: 32i
+  -
+    id: 32j
+  -
+    id: 32k
+  -
+    id: 32l
+  -
+    id: 32m
+  -
+    id: 32n
+  -
+    id: 32o
+  -
+    id: 32p
+  -
+    id: 32q
+  -
+    id: 32r
+  -
+    id: 33a
+  -
+    id: 33b
+  -
+    id: 33c
+  -
+    id: 34a
+  -
+    id: 34b
+  -
+    id: 34c
+  -
+    id: 34d
+  -
+    id: 34e
+  -
+    id: 34f
+  -
+    id: 34g
+  -
+    id: 35a
+  -
+    id: 36a
+  -
+    id: 36b
+  -
+    id: 36c
+  -
+    id: 36d
+  -
+    id: 36e
+  -
+    id: 36f
+  -
+    id: 36g
+  -
+    id: 36h
+  -
+    id: 37
+  -
+    id: 38
+  -
+    id: 39b
+  -
+    id: 39c
+  -
+    id: 39d
+  -
+    id: 39e
+  -
+    id: 39f
+  -
+    id: 39g
+  -
+    id: 39h
+  -
+    id: 39i
+  -
+    id: 39j
+  -
+    id: 39k
+  -
+    id: 39l
+  -
+    id: 39m
+  -
+    id: 40
+  -
+    id: 41
+  -
+    id: 42a
+  -
+    id: 42b
+  -
+    id: 42c
+  -
+    id: 42d
+  -
+    id: 42e
+  -
+    id: 43a
+  -
+    id: 43b
+  -
+    id: 43c
+  -
+    id: 44a
+  -
+    id: 45
+  -
+    id: 46
+  -
+    id: 48a
+  -
+    id: 48b
+  -
+    id: 48c
+  -
+    id: 48d
+  -
+    id: 48e
+  -
+    id: 50
+  -
+    id: 51a
+  -
+    id: 51b
+  -
+    id: 51bb
+  -
+    id: 51c
+  -
+    id: 51d
+  -
+    id: 52a
+  -
+    id: 52b
+  -
+    id: 53
+  -
+    id: 54a
+  -
+    id: 54b
+  -
+    id: 54c
+  -
+    id: 54d
+  -
+    id: 54e
+  -
+    id: 56a
+  -
+    id: 56g
+  -
+    id: 56h
+  -
+    id: 56i
+  -
+    id: 56j
+  -
+    id: 56k
+  -
+    id: 56l
+  -
+    id: 56m
+  -
+    id: 56n
+  -
+    id: 56o
+  -
+    id: 56p
+  -
+    id: 56q
+  -
+    id: 56r
+  -
+    id: 57a
+  -
+    id: 57b
+  -
+    id: 58
+  -
+    id: 59
+  -
+    id: 60a
+  -
+    id: 60b
+  -
+    id: 60c
+  -
+    id: 60d
+  -
+    id: 61
+  -
+    id: 62
+  -
+    id: 63a
+  -
+    id: 63b
+  -
+    id: 64a
+  -
+    id: 64b
+  -
+    id: 65a
+  -
+    id: 65b
+  -
+    id: 65c
+  -
+    id: 65d
+  -
+    id: 65e
+  -
+    id: 65f
+  -
+    id: 65g
+  -
+    id: 65h
+  -
+    id: 65i
+  -
+    id: 65ia
+  -
+    id: 65ib
+  -
+    id: 65ic
+  -
+    id: 65j
+  -
+    id: 65k
+  -
+    id: 65l
+  -
+    id: 66
+  -
+    id: 68a
+  -
+    id: 68b
+  -
+    id: 69
+  -
+    id: 71
+    timeout: 900
+  -
+    id: 72a
+  -
+    id: 72b
+  -
+    id: 73
+  -
+    id: 74a
+  -
+    id: 74b
+  -
+    id: 74c
+  -
+    id: 76
+  -
+    id: 77a
+  -
+    id: 77b
+  -
+    id: 77c
+  -
+    id: 77d
+  -
+    id: 77e
+  -
+    id: 77f
+  -
+    id: 77g
+  -
+    id: 77h
+  -
+    id: 77i
+  -
+    id: 77j
+  -
+    id: 78
+  -
+    id: 79
+  -
+    id: 80
+  -
+    id: 81a
+  -
+    id: 81b
+  -
+    id: 99a
+  -
+    id: 99b
+  -
+    id: 99c
+  -
+    id: 99d
+  -
+    id: 99e
+  -
+    id: 99f
+  -
+    id: 100
+  -
+    id: 101b
+  -
+    id: 101d
+    timeout: 610
+  -
+    dangerous: 'yes'
+    id: 102a
+  -
+    dangerous: 'yes'
+    id: 102b
+  -
+    dangerous: 'yes'
+    id: 102c
+  -
+    dangerous: 'yes'
+    id: 102d
+  -
+    dangerous: 'yes'
+    id: 102f
+  -
+    dangerous: 'yes'
+    id: 102h
+  -
+    dangerous: 'yes'
+    id: 102i
+  -
+    dangerous: 'yes'
+    id: 102j
+  -
+    dangerous: 'yes'
+    id: 102k
+  -
+    id: 103
+  -
+    id: 104a
+  -
+    id: 104b
+  -
+    id: 105a
+  -
+    id: 105b
+  -
+    id: 105c
+  -
+    id: 105d
+  -
+    id: 105e
+  -
+    id: 106
+  -
+    id: 107
+  -
+    id: 110
+  -
+    id: 115
+  -
+    id: 116
+  -
+    id: 117
+  -
+    id: 118a
+  -
+    id: 118b
+  -
+    id: 118c
+  -
+    id: 118d
+  -
+    id: 118f
+  -
+    id: 118g
+  -
+    id: 118h
+  -
+    id: 118i
+  -
+    id: 118j
+  -
+    id: 118k
+  -
+    dangerous: 'yes'
+    id: 119a
+  -
+    id: 119b
+  -
+    id: 119c
+  -
+    id: 119d
+  -
+    id: 120a
+  -
+    id: 120b
+  -
+    id: 120c
+  -
+    id: 120d
+  -
+    id: 120e
+  -
+    id: 120f
+  -
+    id: 120g
+  -
+    id: 121
+  -
+    id: 123a
+  -
+    id: 123b
+  -
+    id: 124a
+  -
+    id: 124b
+  -
+    id: 125
+  -
+    id: 126
+  -
+    id: 127
+  -
+    id: 128
+  -
+    id: 129
+    roles: StoreSyslog StoreConsole GetDiagnostics LustreClientStatus
+  -
+    id: 130a
+  -
+    id: 130b
+  -
+    id: 130c
+  -
+    id: 130d
+  -
+    id: 130e
+  -
+    id: 131a
+  -
+    id: 131b
+  -
+    id: 131c
+  -
+    id: 131d
+  -
+    id: 131e
+  -
+    id: 132
+  -
+    id: 140
+  -
+    id: 150
+  -
+    id: 151
+  -
+    id: 152
+  -
+    id: 153
+  -
+    id: 154
+  -
+    id: 155
+  -
+    id: 155a
+  -
+    id: 155b
+  -
+    id: 155c
+  -
+    id: 155d
+  -
+    id: 155e
+  -
+    id: 155f
+  -
+    id: 155g
+  -
+    id: 155h
+  -
+    id: 156
+  -
+    id: 160
+  -
+    id: 161
+  -
+    dangerous: 'no'
+    id: 162
+  -
+    id: 163
+  -
+    id: 169
+  -
+    id: 170
+  -
+    id: 171
+  -
+    id: 180a
+  -
+    id: 180b
+  -
+    id: 181
+  -
+    dangerous: 'no'
+    id: 200a
+  -
+    dangerous: 'no'
+    id: 200b
+  -
+    dangerous: 'no'
+    id: 200c
+  -
+    dangerous: 'no'
+    id: 200d
+  -
+    dangerous: 'no'
+    id: 200e
+  -
+    dangerous: 'no'
+    id: 200f
+  -
+    dangerous: 'no'
+    id: 200g
+  -
+    dangerous: 'no'
+    id: 200h
+  -
+    dangerous: 'no'
+    id: 201a
+  -
+    dangerous: 'no'
+    id: 201b
+  -
+    dangerous: 'no'
+    id: 201c
+  -
+    dangerous: 'no'
+    id: 204a
+  -
+    dangerous: 'no'
+    id: 204b
+  -
+    dangerous: 'no'
+    id: 204c
+  -
+    dangerous: 'no'
+    id: 204d
+  -
+    dangerous: 'no'
+    id: 204e
+  -
+    dangerous: 'no'
+    id: 204f
+  -
+    dangerous: 'no'
+    id: 204g
+  -
+    id: 204h
+  -
+    id: 212
+  -
+    id: 213
+  -
+    id: 214
+  -
+    id: 215
+  -
+    id: 216
+  -
+    id: 217
+  -
+    id: 218
+  -
+    id: 219
+  -
+    id: 220
+    timeout: 360
+  -
+    id: 900
+cleanup_max_time: -1
+dangerous: 'yes'
+description: Lustre sanity tests
+executor: Xperior::Executor::LustreTests
+expected_time: 10
+groupname: sanity
+reference: http://wiki.lustre.org/index.php/Testing_Lustre_Code
+roles: StoreSyslog StoreConsole GetDiagnostics
+schema: data/schemas/testds.yaml
+tags: functional
+timeout: 300

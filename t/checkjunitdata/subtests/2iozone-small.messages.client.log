@@ -1,0 +1,794 @@
+==> /var/log/messages <==
+Jun 17 15:23:16 castor4-ssu-2-21 sshd[90665]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:16 castor4-ssu-2-21 sshd[90665]: Accepted publickey for root from 172.16.0.41 port 37958 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:16 castor4-ssu-2-21 systemd[1]: Starting Session 319 of user root.
+Jun 17 15:23:16 castor4-ssu-2-21 systemd-logind[26553]: New session 319 of user root.
+Jun 17 15:23:16 castor4-ssu-2-21 systemd[1]: Started Session 319 of user root.
+Jun 17 15:23:16 castor4-ssu-2-21 sshd[90665]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:16 castor4-ssu-2-21 sshd[90665]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:16 castor4-ssu-2-21 sshd[90665]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:16 castor4-ssu-2-21 systemd-logind[26553]: Removed session 319.
+Jun 17 15:23:19 castor4-ssu-2-21 sshd[90669]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:19 castor4-ssu-2-21 sshd[90669]: Accepted publickey for root from 172.16.0.41 port 37960 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:19 castor4-ssu-2-21 systemd[1]: Starting Session 320 of user root.
+Jun 17 15:23:19 castor4-ssu-2-21 systemd-logind[26553]: New session 320 of user root.
+Jun 17 15:23:19 castor4-ssu-2-21 systemd[1]: Started Session 320 of user root.
+Jun 17 15:23:19 castor4-ssu-2-21 sshd[90669]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:19 castor4-ssu-2-21 sshd[90669]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:19 castor4-ssu-2-21 sshd[90669]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:19 castor4-ssu-2-21 systemd-logind[26553]: Removed session 320.
+Jun 17 15:23:19 castor4-ssu-2-21 sudo:   zabbix : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/opt/xyratex/zabbix/base-config/scripts/../bin/ipmi_sensor.sh
+Jun 17 15:23:20 castor4-ssu-2-21 sudo:   zabbix : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/opt/xyratex/zabbix/base-config/scripts/../bin/ipmi_fru.sh
+Jun 17 15:23:20 castor4-ssu-2-21 sshd[90699]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:20 castor4-ssu-2-21 sshd[90699]: Accepted publickey for root from 172.16.0.41 port 37981 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:20 castor4-ssu-2-21 systemd[1]: Starting Session 321 of user root.
+Jun 17 15:23:20 castor4-ssu-2-21 systemd-logind[26553]: New session 321 of user root.
+Jun 17 15:23:20 castor4-ssu-2-21 systemd[1]: Started Session 321 of user root.
+Jun 17 15:23:20 castor4-ssu-2-21 sshd[90699]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:23 castor4-ssu-2-21 sshd[90699]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:23 castor4-ssu-2-21 sshd[90699]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:23 castor4-ssu-2-21 systemd-logind[26553]: Removed session 321.
+Jun 17 15:23:26 castor4-ssu-2-21 sshd[90709]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:27 castor4-ssu-2-21 sshd[90709]: Accepted publickey for root from 172.16.0.41 port 38019 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:27 castor4-ssu-2-21 systemd[1]: Starting Session 322 of user root.
+Jun 17 15:23:27 castor4-ssu-2-21 systemd-logind[26553]: New session 322 of user root.
+Jun 17 15:23:27 castor4-ssu-2-21 systemd[1]: Started Session 322 of user root.
+Jun 17 15:23:27 castor4-ssu-2-21 sshd[90709]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:27 castor4-ssu-2-21 sshd[90709]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:27 castor4-ssu-2-21 sshd[90709]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:27 castor4-ssu-2-21 systemd-logind[26553]: Removed session 322.
+Jun 17 15:23:28 castor4-ssu-2-21 sshd[90713]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:28 castor4-ssu-2-21 sshd[90713]: Accepted publickey for root from 172.16.0.41 port 38047 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:28 castor4-ssu-2-21 systemd[1]: Starting Session 323 of user root.
+Jun 17 15:23:28 castor4-ssu-2-21 systemd-logind[26553]: New session 323 of user root.
+Jun 17 15:23:28 castor4-ssu-2-21 systemd[1]: Started Session 323 of user root.
+Jun 17 15:23:28 castor4-ssu-2-21 sshd[90713]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:28 castor4-ssu-2-21 sshd[90713]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:28 castor4-ssu-2-21 sshd[90713]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:28 castor4-ssu-2-21 systemd-logind[26553]: Removed session 323.
+Jun 17 15:23:30 castor4-ssu-2-21 sshd[90722]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:30 castor4-ssu-2-21 sshd[90722]: Accepted publickey for root from 172.16.0.41 port 38071 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:30 castor4-ssu-2-21 systemd[1]: Starting Session 324 of user root.
+Jun 17 15:23:30 castor4-ssu-2-21 systemd-logind[26553]: New session 324 of user root.
+Jun 17 15:23:30 castor4-ssu-2-21 systemd[1]: Started Session 324 of user root.
+Jun 17 15:23:30 castor4-ssu-2-21 sshd[90722]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:30 castor4-ssu-2-21 sshd[90722]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:30 castor4-ssu-2-21 sshd[90722]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:30 castor4-ssu-2-21 systemd-logind[26553]: Removed session 324.
+Jun 17 15:23:33 castor4-ssu-2-21 sshd[90728]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:33 castor4-ssu-2-21 sshd[90728]: Accepted publickey for root from 172.16.0.41 port 38079 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:33 castor4-ssu-2-21 systemd[1]: Starting Session 325 of user root.
+Jun 17 15:23:33 castor4-ssu-2-21 systemd-logind[26553]: New session 325 of user root.
+Jun 17 15:23:33 castor4-ssu-2-21 systemd[1]: Started Session 325 of user root.
+Jun 17 15:23:33 castor4-ssu-2-21 sshd[90728]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:33 castor4-ssu-2-21 sshd[90728]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:33 castor4-ssu-2-21 sshd[90728]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:33 castor4-ssu-2-21 systemd-logind[26553]: Removed session 325.
+Jun 17 15:23:34 castor4-ssu-2-21 sshd[90732]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:34 castor4-ssu-2-21 sshd[90732]: Accepted publickey for root from 172.16.0.41 port 38081 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:34 castor4-ssu-2-21 systemd[1]: Starting Session 326 of user root.
+Jun 17 15:23:34 castor4-ssu-2-21 systemd-logind[26553]: New session 326 of user root.
+Jun 17 15:23:34 castor4-ssu-2-21 systemd[1]: Started Session 326 of user root.
+Jun 17 15:23:34 castor4-ssu-2-21 sshd[90732]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:36 castor4-ssu-2-21 sshd[90738]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:36 castor4-ssu-2-21 sshd[90738]: Accepted publickey for root from 172.16.0.41 port 38104 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:36 castor4-ssu-2-21 systemd[1]: Starting Session 327 of user root.
+Jun 17 15:23:36 castor4-ssu-2-21 systemd-logind[26553]: New session 327 of user root.
+Jun 17 15:23:36 castor4-ssu-2-21 systemd[1]: Started Session 327 of user root.
+Jun 17 15:23:36 castor4-ssu-2-21 sshd[90738]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:36 castor4-ssu-2-21 sshd[90738]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:36 castor4-ssu-2-21 sshd[90738]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:36 castor4-ssu-2-21 systemd-logind[26553]: Removed session 327.
+Jun 17 15:23:42 castor4-ssu-2-21 sshd[90746]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:42 castor4-ssu-2-21 sshd[90746]: Accepted publickey for root from 172.16.0.41 port 38141 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:42 castor4-ssu-2-21 systemd[1]: Starting Session 328 of user root.
+Jun 17 15:23:42 castor4-ssu-2-21 systemd-logind[26553]: New session 328 of user root.
+Jun 17 15:23:42 castor4-ssu-2-21 systemd[1]: Started Session 328 of user root.
+Jun 17 15:23:42 castor4-ssu-2-21 sshd[90746]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:42 castor4-ssu-2-21 sshd[90746]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:42 castor4-ssu-2-21 sshd[90746]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:42 castor4-ssu-2-21 systemd-logind[26553]: Removed session 328.
+Jun 17 15:23:48 castor4-ssu-2-21 sshd[90750]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:48 castor4-ssu-2-21 sshd[90750]: Accepted publickey for root from 172.16.0.41 port 38199 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:48 castor4-ssu-2-21 systemd[1]: Starting Session 329 of user root.
+Jun 17 15:23:48 castor4-ssu-2-21 systemd-logind[26553]: New session 329 of user root.
+Jun 17 15:23:48 castor4-ssu-2-21 systemd[1]: Started Session 329 of user root.
+Jun 17 15:23:48 castor4-ssu-2-21 sshd[90750]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:48 castor4-ssu-2-21 sshd[90750]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:48 castor4-ssu-2-21 sshd[90750]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:48 castor4-ssu-2-21 systemd-logind[26553]: Removed session 329.
+Jun 17 15:23:54 castor4-ssu-2-21 sshd[90756]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:23:54 castor4-ssu-2-21 sshd[90756]: Accepted publickey for root from 172.16.0.41 port 38257 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:23:54 castor4-ssu-2-21 systemd[1]: Starting Session 330 of user root.
+Jun 17 15:23:54 castor4-ssu-2-21 systemd-logind[26553]: New session 330 of user root.
+Jun 17 15:23:54 castor4-ssu-2-21 systemd[1]: Started Session 330 of user root.
+Jun 17 15:23:54 castor4-ssu-2-21 sshd[90756]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:23:54 castor4-ssu-2-21 sshd[90756]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:23:54 castor4-ssu-2-21 sshd[90756]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:23:54 castor4-ssu-2-21 systemd-logind[26553]: Removed session 330.
+Jun 17 15:24:00 castor4-ssu-2-21 sshd[90762]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:00 castor4-ssu-2-21 sshd[90762]: Accepted publickey for root from 172.16.0.41 port 38286 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:00 castor4-ssu-2-21 systemd[1]: Starting Session 331 of user root.
+Jun 17 15:24:00 castor4-ssu-2-21 systemd-logind[26553]: New session 331 of user root.
+Jun 17 15:24:00 castor4-ssu-2-21 systemd[1]: Started Session 331 of user root.
+Jun 17 15:24:00 castor4-ssu-2-21 sshd[90762]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:00 castor4-ssu-2-21 sshd[90762]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:00 castor4-ssu-2-21 sshd[90762]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:00 castor4-ssu-2-21 systemd-logind[26553]: Removed session 331.
+Jun 17 15:24:01 castor4-ssu-2-21 systemd[1]: Starting Session 332 of user root.
+Jun 17 15:24:01 castor4-ssu-2-21 systemd[1]: Started Session 332 of user root.
+Jun 17 15:24:01 castor4-ssu-2-21 CROND[90767]: (root) CMD (/bin/puppet agent --onetime --no-daemonize --logdest /var/log/messages)
+Jun 17 15:24:06 castor4-ssu-2-21 sshd[91110]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:06 castor4-ssu-2-21 sshd[91110]: Accepted publickey for root from 172.16.0.41 port 38335 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:06 castor4-ssu-2-21 systemd[1]: Starting Session 333 of user root.
+Jun 17 15:24:06 castor4-ssu-2-21 systemd-logind[26553]: New session 333 of user root.
+Jun 17 15:24:06 castor4-ssu-2-21 systemd[1]: Started Session 333 of user root.
+Jun 17 15:24:06 castor4-ssu-2-21 sshd[91110]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:06 castor4-ssu-2-21 sshd[91110]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:06 castor4-ssu-2-21 sshd[91110]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:06 castor4-ssu-2-21 systemd-logind[26553]: Removed session 333.
+Jun 17 15:24:12 castor4-ssu-2-21 sshd[91293]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:12 castor4-ssu-2-21 sshd[91293]: Accepted publickey for root from 172.16.0.41 port 38460 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:12 castor4-ssu-2-21 systemd[1]: Starting Session 334 of user root.
+Jun 17 15:24:12 castor4-ssu-2-21 systemd-logind[26553]: New session 334 of user root.
+Jun 17 15:24:12 castor4-ssu-2-21 systemd[1]: Started Session 334 of user root.
+Jun 17 15:24:12 castor4-ssu-2-21 sshd[91293]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:12 castor4-ssu-2-21 sshd[91293]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:12 castor4-ssu-2-21 sshd[91293]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:12 castor4-ssu-2-21 systemd-logind[26553]: Removed session 334.
+2016-06-17 15:24:16 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-lo]
+2016-06-17 15:24:16 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-p2p1]
+2016-06-17 15:24:16 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond1]
+2016-06-17 15:24:16 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond0]
+2016-06-17 15:24:16 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-enp12s0d1]
+2016-06-17 15:24:16 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-enp12s0]
+Jun 17 15:24:16 castor4-ssu-2-21 crontab[91307]: (root) LIST (root)
+2016-06-17 15:24:16 +0000 Puppet (notice): mellanox nic detected!!!!
+2016-06-17 15:24:16 +0000 /Stage[main]/Stx_network/Notify[mellanox nic detected!!!!]/message (notice): defined 'message' as 'mellanox nic detected!!!!'
+Jun 17 15:24:16 castor4-ssu-2-21 su: (to rabbitmq) root on none
+Jun 17 15:24:16 castor4-ssu-2-21 su: pam_unix(su:session): session opened for user rabbitmq by (uid=0)
+Jun 17 15:24:16 castor4-ssu-2-21 su: pam_unix(su:session): session closed for user rabbitmq
+Jun 17 15:24:18 castor4-ssu-2-21 sshd[91591]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+2016-06-17 15:24:18 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:1]/end (notice): end changed '2000GB' to '50%'
+2016-06-17 15:24:18 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:2]/start (notice): start changed '2040GB' to '51%'
+2016-06-17 15:24:18 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:2]/end (notice): end changed '4001GB' to '100%'
+Jun 17 15:24:18 castor4-ssu-2-21 sshd[91591]: Accepted publickey for root from 172.16.0.41 port 38532 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:18 castor4-ssu-2-21 systemd[1]: Starting Session 335 of user root.
+Jun 17 15:24:18 castor4-ssu-2-21 systemd-logind[26553]: New session 335 of user root.
+Jun 17 15:24:18 castor4-ssu-2-21 systemd[1]: Started Session 335 of user root.
+Jun 17 15:24:18 castor4-ssu-2-21 sshd[91591]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:18 castor4-ssu-2-21 sshd[91591]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:18 castor4-ssu-2-21 sshd[91591]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:18 castor4-ssu-2-21 systemd-logind[26553]: Removed session 335.
+2016-06-17 15:24:21 +0000 Puppet (notice): Finished catalog run in 6.37 seconds
+Jun 17 15:24:24 castor4-ssu-2-21 sshd[91933]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:24 castor4-ssu-2-21 sshd[91933]: Accepted publickey for root from 172.16.0.41 port 38580 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:24 castor4-ssu-2-21 systemd[1]: Starting Session 336 of user root.
+Jun 17 15:24:24 castor4-ssu-2-21 systemd-logind[26553]: New session 336 of user root.
+Jun 17 15:24:24 castor4-ssu-2-21 systemd[1]: Started Session 336 of user root.
+Jun 17 15:24:24 castor4-ssu-2-21 sshd[91933]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:24 castor4-ssu-2-21 sshd[91933]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:24 castor4-ssu-2-21 sshd[91933]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:24 castor4-ssu-2-21 systemd-logind[26553]: Removed session 336.
+Jun 17 15:24:30 castor4-ssu-2-21 sshd[91942]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:30 castor4-ssu-2-21 sshd[91942]: Accepted publickey for root from 172.16.0.41 port 38622 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:30 castor4-ssu-2-21 systemd[1]: Starting Session 337 of user root.
+Jun 17 15:24:30 castor4-ssu-2-21 systemd-logind[26553]: New session 337 of user root.
+Jun 17 15:24:30 castor4-ssu-2-21 systemd[1]: Started Session 337 of user root.
+Jun 17 15:24:30 castor4-ssu-2-21 sshd[91942]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:30 castor4-ssu-2-21 sshd[91942]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:30 castor4-ssu-2-21 sshd[91942]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:30 castor4-ssu-2-21 systemd-logind[26553]: Removed session 337.
+Jun 17 15:24:36 castor4-ssu-2-21 sshd[91946]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:36 castor4-ssu-2-21 sshd[91946]: Accepted publickey for root from 172.16.0.41 port 38684 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:36 castor4-ssu-2-21 systemd[1]: Starting Session 338 of user root.
+Jun 17 15:24:36 castor4-ssu-2-21 systemd-logind[26553]: New session 338 of user root.
+Jun 17 15:24:36 castor4-ssu-2-21 systemd[1]: Started Session 338 of user root.
+Jun 17 15:24:36 castor4-ssu-2-21 sshd[91946]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:36 castor4-ssu-2-21 sshd[91946]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:36 castor4-ssu-2-21 sshd[91946]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:36 castor4-ssu-2-21 systemd-logind[26553]: Removed session 338.
+Jun 17 15:24:42 castor4-ssu-2-21 sshd[91954]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:42 castor4-ssu-2-21 sshd[91954]: Accepted publickey for root from 172.16.0.41 port 38745 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:42 castor4-ssu-2-21 systemd[1]: Starting Session 339 of user root.
+Jun 17 15:24:42 castor4-ssu-2-21 systemd-logind[26553]: New session 339 of user root.
+Jun 17 15:24:42 castor4-ssu-2-21 systemd[1]: Started Session 339 of user root.
+Jun 17 15:24:42 castor4-ssu-2-21 sshd[91954]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:42 castor4-ssu-2-21 sshd[91954]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:42 castor4-ssu-2-21 sshd[91954]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:42 castor4-ssu-2-21 systemd-logind[26553]: Removed session 339.
+Jun 17 15:24:48 castor4-ssu-2-21 sshd[91958]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:48 castor4-ssu-2-21 sshd[91958]: Accepted publickey for root from 172.16.0.41 port 38790 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:48 castor4-ssu-2-21 systemd[1]: Starting Session 340 of user root.
+Jun 17 15:24:48 castor4-ssu-2-21 systemd-logind[26553]: New session 340 of user root.
+Jun 17 15:24:48 castor4-ssu-2-21 systemd[1]: Started Session 340 of user root.
+Jun 17 15:24:48 castor4-ssu-2-21 sshd[91958]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:48 castor4-ssu-2-21 sshd[91958]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:48 castor4-ssu-2-21 sshd[91958]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:48 castor4-ssu-2-21 systemd-logind[26553]: Removed session 340.
+Jun 17 15:24:54 castor4-ssu-2-21 sshd[91964]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:24:54 castor4-ssu-2-21 sshd[91964]: Accepted publickey for root from 172.16.0.41 port 38869 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:24:54 castor4-ssu-2-21 systemd[1]: Starting Session 341 of user root.
+Jun 17 15:24:54 castor4-ssu-2-21 systemd-logind[26553]: New session 341 of user root.
+Jun 17 15:24:54 castor4-ssu-2-21 systemd[1]: Started Session 341 of user root.
+Jun 17 15:24:54 castor4-ssu-2-21 sshd[91964]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:24:54 castor4-ssu-2-21 sshd[91964]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:24:54 castor4-ssu-2-21 sshd[91964]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:24:54 castor4-ssu-2-21 systemd-logind[26553]: Removed session 341.
+Jun 17 15:25:00 castor4-ssu-2-21 sshd[91968]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:00 castor4-ssu-2-21 sshd[91968]: Accepted publickey for root from 172.16.0.41 port 38922 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:00 castor4-ssu-2-21 systemd[1]: Starting Session 342 of user root.
+Jun 17 15:25:00 castor4-ssu-2-21 systemd-logind[26553]: New session 342 of user root.
+Jun 17 15:25:00 castor4-ssu-2-21 systemd[1]: Started Session 342 of user root.
+Jun 17 15:25:00 castor4-ssu-2-21 sshd[91968]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:00 castor4-ssu-2-21 sshd[91968]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:00 castor4-ssu-2-21 sshd[91968]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:00 castor4-ssu-2-21 systemd-logind[26553]: Removed session 342.
+Jun 17 15:25:06 castor4-ssu-2-21 sshd[91974]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:06 castor4-ssu-2-21 sshd[91974]: Accepted publickey for root from 172.16.0.41 port 38981 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:06 castor4-ssu-2-21 systemd[1]: Starting Session 343 of user root.
+Jun 17 15:25:06 castor4-ssu-2-21 systemd-logind[26553]: New session 343 of user root.
+Jun 17 15:25:06 castor4-ssu-2-21 systemd[1]: Started Session 343 of user root.
+Jun 17 15:25:06 castor4-ssu-2-21 sshd[91974]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:06 castor4-ssu-2-21 sshd[91974]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:06 castor4-ssu-2-21 sshd[91974]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:06 castor4-ssu-2-21 systemd-logind[26553]: Removed session 343.
+Jun 17 15:25:12 castor4-ssu-2-21 sshd[91980]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:12 castor4-ssu-2-21 sshd[91980]: Accepted publickey for root from 172.16.0.41 port 39032 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:12 castor4-ssu-2-21 systemd[1]: Starting Session 344 of user root.
+Jun 17 15:25:12 castor4-ssu-2-21 systemd-logind[26553]: New session 344 of user root.
+Jun 17 15:25:12 castor4-ssu-2-21 systemd[1]: Started Session 344 of user root.
+Jun 17 15:25:12 castor4-ssu-2-21 sshd[91980]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:12 castor4-ssu-2-21 sshd[91980]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:12 castor4-ssu-2-21 sshd[91980]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:12 castor4-ssu-2-21 systemd-logind[26553]: Removed session 344.
+Jun 17 15:25:18 castor4-ssu-2-21 sshd[91984]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:18 castor4-ssu-2-21 sshd[91984]: Accepted publickey for root from 172.16.0.41 port 39054 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:18 castor4-ssu-2-21 systemd[1]: Starting Session 345 of user root.
+Jun 17 15:25:18 castor4-ssu-2-21 systemd-logind[26553]: New session 345 of user root.
+Jun 17 15:25:18 castor4-ssu-2-21 systemd[1]: Started Session 345 of user root.
+Jun 17 15:25:18 castor4-ssu-2-21 sshd[91984]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:18 castor4-ssu-2-21 sshd[91984]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:18 castor4-ssu-2-21 sshd[91984]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:18 castor4-ssu-2-21 systemd-logind[26553]: Removed session 345.
+Jun 17 15:25:24 castor4-ssu-2-21 sshd[91998]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:24 castor4-ssu-2-21 sshd[91998]: Accepted publickey for root from 172.16.0.41 port 39099 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:24 castor4-ssu-2-21 systemd[1]: Starting Session 346 of user root.
+Jun 17 15:25:24 castor4-ssu-2-21 systemd-logind[26553]: New session 346 of user root.
+Jun 17 15:25:24 castor4-ssu-2-21 systemd[1]: Started Session 346 of user root.
+Jun 17 15:25:24 castor4-ssu-2-21 sshd[91998]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:24 castor4-ssu-2-21 sshd[91998]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:24 castor4-ssu-2-21 sshd[91998]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:24 castor4-ssu-2-21 systemd-logind[26553]: Removed session 346.
+Jun 17 15:25:30 castor4-ssu-2-21 sshd[92005]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:30 castor4-ssu-2-21 sshd[92005]: Accepted publickey for root from 172.16.0.41 port 39158 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:30 castor4-ssu-2-21 systemd[1]: Starting Session 347 of user root.
+Jun 17 15:25:30 castor4-ssu-2-21 systemd-logind[26553]: New session 347 of user root.
+Jun 17 15:25:30 castor4-ssu-2-21 systemd[1]: Started Session 347 of user root.
+Jun 17 15:25:30 castor4-ssu-2-21 sshd[92005]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:30 castor4-ssu-2-21 sshd[92005]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:30 castor4-ssu-2-21 sshd[92005]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:30 castor4-ssu-2-21 systemd-logind[26553]: Removed session 347.
+Jun 17 15:25:36 castor4-ssu-2-21 sshd[92011]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:36 castor4-ssu-2-21 sshd[92011]: Accepted publickey for root from 172.16.0.41 port 39217 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:36 castor4-ssu-2-21 systemd[1]: Starting Session 348 of user root.
+Jun 17 15:25:36 castor4-ssu-2-21 systemd-logind[26553]: New session 348 of user root.
+Jun 17 15:25:36 castor4-ssu-2-21 systemd[1]: Started Session 348 of user root.
+Jun 17 15:25:36 castor4-ssu-2-21 sshd[92011]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:36 castor4-ssu-2-21 sshd[92011]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:36 castor4-ssu-2-21 sshd[92011]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:36 castor4-ssu-2-21 systemd-logind[26553]: Removed session 348.
+Jun 17 15:25:41 castor4-ssu-2-21 syslog-ng[26289]: Log statistics; processed='src.internal(s_sys#1)=23', stamp='src.internal(s_sys#1)=1466176541', processed='center(received)=23', processed='destination(d_udp)=8744', processed='center(queued)=17488', processed='src.none()=0', stamp='src.none()=0', processed='global(payload_reallocs)=22', processed='global(sdata_updates)=0', dropped='dst.syslog(d_udp#0,udp,puppet:514)=0', processed='dst.syslog(d_udp#0,udp,puppet:514)=8744', stored='dst.syslog(d_udp#0,udp,puppet:514)=0', processed='destination(d_local)=8744', processed='global(msg_clones)=0', processed='source(s_sys)=23'
+Jun 17 15:25:42 castor4-ssu-2-21 sshd[92019]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:42 castor4-ssu-2-21 sshd[92019]: Accepted publickey for root from 172.16.0.41 port 39240 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:42 castor4-ssu-2-21 systemd[1]: Starting Session 349 of user root.
+Jun 17 15:25:42 castor4-ssu-2-21 systemd-logind[26553]: New session 349 of user root.
+Jun 17 15:25:42 castor4-ssu-2-21 systemd[1]: Started Session 349 of user root.
+Jun 17 15:25:42 castor4-ssu-2-21 sshd[92019]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:42 castor4-ssu-2-21 sshd[92019]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:42 castor4-ssu-2-21 sshd[92019]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:42 castor4-ssu-2-21 systemd-logind[26553]: Removed session 349.
+Jun 17 15:25:43 castor4-ssu-2-21 halond[26564]: Fri Jun 17 15:25:43 UTC 2016 pid://172.18.2.21:9000:0:30: [SSPL-Service] received SensorResponse.Raid
+Jun 17 15:25:48 castor4-ssu-2-21 sshd[92023]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:48 castor4-ssu-2-21 sshd[92023]: Accepted publickey for root from 172.16.0.41 port 39277 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:48 castor4-ssu-2-21 systemd[1]: Starting Session 350 of user root.
+Jun 17 15:25:48 castor4-ssu-2-21 systemd-logind[26553]: New session 350 of user root.
+Jun 17 15:25:48 castor4-ssu-2-21 systemd[1]: Started Session 350 of user root.
+Jun 17 15:25:48 castor4-ssu-2-21 sshd[92023]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:48 castor4-ssu-2-21 sshd[92023]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:48 castor4-ssu-2-21 sshd[92023]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:48 castor4-ssu-2-21 systemd-logind[26553]: Removed session 350.
+Jun 17 15:25:54 castor4-ssu-2-21 sshd[92029]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:25:54 castor4-ssu-2-21 sshd[92029]: Accepted publickey for root from 172.16.0.41 port 39335 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:25:54 castor4-ssu-2-21 systemd[1]: Starting Session 351 of user root.
+Jun 17 15:25:54 castor4-ssu-2-21 systemd-logind[26553]: New session 351 of user root.
+Jun 17 15:25:54 castor4-ssu-2-21 systemd[1]: Started Session 351 of user root.
+Jun 17 15:25:54 castor4-ssu-2-21 sshd[92029]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:25:54 castor4-ssu-2-21 sshd[92029]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:25:54 castor4-ssu-2-21 sshd[92029]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:25:54 castor4-ssu-2-21 systemd-logind[26553]: Removed session 351.
+Jun 17 15:26:00 castor4-ssu-2-21 sshd[92033]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:00 castor4-ssu-2-21 sshd[92033]: Accepted publickey for root from 172.16.0.41 port 39393 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:00 castor4-ssu-2-21 systemd[1]: Starting Session 352 of user root.
+Jun 17 15:26:00 castor4-ssu-2-21 systemd-logind[26553]: New session 352 of user root.
+Jun 17 15:26:00 castor4-ssu-2-21 systemd[1]: Started Session 352 of user root.
+Jun 17 15:26:00 castor4-ssu-2-21 sshd[92033]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:00 castor4-ssu-2-21 sshd[92033]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:00 castor4-ssu-2-21 sshd[92033]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:00 castor4-ssu-2-21 systemd-logind[26553]: Removed session 352.
+Jun 17 15:26:01 castor4-ssu-2-21 systemd[1]: Starting Session 353 of user root.
+Jun 17 15:26:01 castor4-ssu-2-21 systemd[1]: Started Session 353 of user root.
+Jun 17 15:26:01 castor4-ssu-2-21 CROND[92040]: (root) CMD (/bin/puppet agent --onetime --no-daemonize --logdest /var/log/messages)
+Jun 17 15:26:06 castor4-ssu-2-21 sshd[92544]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:06 castor4-ssu-2-21 sshd[92544]: Accepted publickey for root from 172.16.0.41 port 39431 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:06 castor4-ssu-2-21 systemd[1]: Starting Session 354 of user root.
+Jun 17 15:26:06 castor4-ssu-2-21 systemd-logind[26553]: New session 354 of user root.
+Jun 17 15:26:06 castor4-ssu-2-21 systemd[1]: Started Session 354 of user root.
+Jun 17 15:26:06 castor4-ssu-2-21 sshd[92544]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:06 castor4-ssu-2-21 sshd[92544]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:06 castor4-ssu-2-21 sshd[92544]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:06 castor4-ssu-2-21 systemd-logind[26553]: Removed session 354.
+Jun 17 15:26:12 castor4-ssu-2-21 sshd[92553]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:12 castor4-ssu-2-21 sshd[92553]: Accepted publickey for root from 172.16.0.41 port 39535 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:12 castor4-ssu-2-21 systemd[1]: Starting Session 355 of user root.
+Jun 17 15:26:12 castor4-ssu-2-21 systemd-logind[26553]: New session 355 of user root.
+Jun 17 15:26:12 castor4-ssu-2-21 systemd[1]: Started Session 355 of user root.
+Jun 17 15:26:12 castor4-ssu-2-21 sshd[92553]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:12 castor4-ssu-2-21 sshd[92553]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:12 castor4-ssu-2-21 sshd[92553]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:12 castor4-ssu-2-21 systemd-logind[26553]: Removed session 355.
+2016-06-17 15:26:14 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-lo]
+2016-06-17 15:26:14 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-p2p1]
+2016-06-17 15:26:14 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond1]
+2016-06-17 15:26:14 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond0]
+2016-06-17 15:26:14 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-enp12s0d1]
+2016-06-17 15:26:14 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-enp12s0]
+Jun 17 15:26:14 castor4-ssu-2-21 crontab[92567]: (root) LIST (root)
+2016-06-17 15:26:15 +0000 Puppet (notice): mellanox nic detected!!!!
+2016-06-17 15:26:15 +0000 /Stage[main]/Stx_network/Notify[mellanox nic detected!!!!]/message (notice): defined 'message' as 'mellanox nic detected!!!!'
+Jun 17 15:26:15 castor4-ssu-2-21 su: (to rabbitmq) root on none
+Jun 17 15:26:15 castor4-ssu-2-21 su: pam_unix(su:session): session opened for user rabbitmq by (uid=0)
+Jun 17 15:26:15 castor4-ssu-2-21 su: pam_unix(su:session): session closed for user rabbitmq
+2016-06-17 15:26:17 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:1]/end (notice): end changed '2000GB' to '50%'
+2016-06-17 15:26:17 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:2]/start (notice): start changed '2040GB' to '51%'
+2016-06-17 15:26:17 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:2]/end (notice): end changed '4001GB' to '100%'
+Jun 17 15:26:18 castor4-ssu-2-21 sshd[93010]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:18 castor4-ssu-2-21 sshd[93010]: Accepted publickey for root from 172.16.0.41 port 39610 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:18 castor4-ssu-2-21 systemd[1]: Starting Session 356 of user root.
+Jun 17 15:26:18 castor4-ssu-2-21 systemd-logind[26553]: New session 356 of user root.
+Jun 17 15:26:18 castor4-ssu-2-21 systemd[1]: Started Session 356 of user root.
+Jun 17 15:26:18 castor4-ssu-2-21 sshd[93010]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:18 castor4-ssu-2-21 sshd[93010]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:18 castor4-ssu-2-21 sshd[93010]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:18 castor4-ssu-2-21 systemd-logind[26553]: Removed session 356.
+2016-06-17 15:26:20 +0000 Puppet (notice): Finished catalog run in 6.21 seconds
+Jun 17 15:26:24 castor4-ssu-2-21 sshd[93194]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:24 castor4-ssu-2-21 sshd[93194]: Accepted publickey for root from 172.16.0.41 port 39674 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:24 castor4-ssu-2-21 systemd[1]: Starting Session 357 of user root.
+Jun 17 15:26:24 castor4-ssu-2-21 systemd-logind[26553]: New session 357 of user root.
+Jun 17 15:26:24 castor4-ssu-2-21 systemd[1]: Started Session 357 of user root.
+Jun 17 15:26:24 castor4-ssu-2-21 sshd[93194]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:24 castor4-ssu-2-21 sshd[93194]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:24 castor4-ssu-2-21 sshd[93194]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:24 castor4-ssu-2-21 systemd-logind[26553]: Removed session 357.
+Jun 17 15:26:30 castor4-ssu-2-21 sshd[93201]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:30 castor4-ssu-2-21 sshd[93201]: Accepted publickey for root from 172.16.0.41 port 39729 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:30 castor4-ssu-2-21 systemd[1]: Starting Session 358 of user root.
+Jun 17 15:26:30 castor4-ssu-2-21 systemd-logind[26553]: New session 358 of user root.
+Jun 17 15:26:30 castor4-ssu-2-21 systemd[1]: Started Session 358 of user root.
+Jun 17 15:26:30 castor4-ssu-2-21 sshd[93201]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:30 castor4-ssu-2-21 sshd[93201]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:30 castor4-ssu-2-21 sshd[93201]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:30 castor4-ssu-2-21 systemd-logind[26553]: Removed session 358.
+Jun 17 15:26:36 castor4-ssu-2-21 sshd[93209]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:36 castor4-ssu-2-21 sshd[93209]: Accepted publickey for root from 172.16.0.41 port 39765 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:36 castor4-ssu-2-21 systemd[1]: Starting Session 359 of user root.
+Jun 17 15:26:36 castor4-ssu-2-21 systemd-logind[26553]: New session 359 of user root.
+Jun 17 15:26:36 castor4-ssu-2-21 systemd[1]: Started Session 359 of user root.
+Jun 17 15:26:36 castor4-ssu-2-21 sshd[93209]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:36 castor4-ssu-2-21 sshd[93209]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:36 castor4-ssu-2-21 sshd[93209]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:36 castor4-ssu-2-21 systemd-logind[26553]: Removed session 359.
+Jun 17 15:26:42 castor4-ssu-2-21 sshd[93217]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:42 castor4-ssu-2-21 sshd[93217]: Accepted publickey for root from 172.16.0.41 port 39823 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:42 castor4-ssu-2-21 systemd[1]: Starting Session 360 of user root.
+Jun 17 15:26:42 castor4-ssu-2-21 systemd-logind[26553]: New session 360 of user root.
+Jun 17 15:26:42 castor4-ssu-2-21 systemd[1]: Started Session 360 of user root.
+Jun 17 15:26:42 castor4-ssu-2-21 sshd[93217]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:42 castor4-ssu-2-21 sshd[93217]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:42 castor4-ssu-2-21 sshd[93217]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:42 castor4-ssu-2-21 systemd-logind[26553]: Removed session 360.
+Jun 17 15:26:48 castor4-ssu-2-21 sshd[93221]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:48 castor4-ssu-2-21 sshd[93221]: Accepted publickey for root from 172.16.0.41 port 39881 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:48 castor4-ssu-2-21 systemd[1]: Starting Session 361 of user root.
+Jun 17 15:26:48 castor4-ssu-2-21 systemd-logind[26553]: New session 361 of user root.
+Jun 17 15:26:48 castor4-ssu-2-21 systemd[1]: Started Session 361 of user root.
+Jun 17 15:26:48 castor4-ssu-2-21 sshd[93221]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:48 castor4-ssu-2-21 sshd[93221]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:48 castor4-ssu-2-21 sshd[93221]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:48 castor4-ssu-2-21 systemd-logind[26553]: Removed session 361.
+Jun 17 15:26:51 castor4-ssu-2-21 sudo:   zabbix : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/opt/xyratex/zabbix/collector/hpi_collection_monitor/../bin/openhpid.sh status
+Jun 17 15:26:54 castor4-ssu-2-21 sshd[93239]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:26:54 castor4-ssu-2-21 sshd[93239]: Accepted publickey for root from 172.16.0.41 port 39930 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:26:54 castor4-ssu-2-21 systemd[1]: Starting Session 362 of user root.
+Jun 17 15:26:54 castor4-ssu-2-21 systemd-logind[26553]: New session 362 of user root.
+Jun 17 15:26:54 castor4-ssu-2-21 systemd[1]: Started Session 362 of user root.
+Jun 17 15:26:54 castor4-ssu-2-21 sshd[93239]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:26:54 castor4-ssu-2-21 sshd[93239]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:26:54 castor4-ssu-2-21 sshd[93239]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:26:54 castor4-ssu-2-21 systemd-logind[26553]: Removed session 362.
+Jun 17 15:27:00 castor4-ssu-2-21 sshd[93243]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:00 castor4-ssu-2-21 sshd[93243]: Accepted publickey for root from 172.16.0.41 port 39945 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:00 castor4-ssu-2-21 systemd[1]: Starting Session 363 of user root.
+Jun 17 15:27:00 castor4-ssu-2-21 systemd-logind[26553]: New session 363 of user root.
+Jun 17 15:27:00 castor4-ssu-2-21 systemd[1]: Started Session 363 of user root.
+Jun 17 15:27:00 castor4-ssu-2-21 sshd[93243]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:00 castor4-ssu-2-21 sshd[93243]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:00 castor4-ssu-2-21 sshd[93243]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:00 castor4-ssu-2-21 systemd-logind[26553]: Removed session 363.
+Jun 17 15:27:06 castor4-ssu-2-21 sshd[93249]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:06 castor4-ssu-2-21 sshd[93249]: Accepted publickey for root from 172.16.0.41 port 39999 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:06 castor4-ssu-2-21 systemd[1]: Starting Session 364 of user root.
+Jun 17 15:27:06 castor4-ssu-2-21 systemd-logind[26553]: New session 364 of user root.
+Jun 17 15:27:06 castor4-ssu-2-21 systemd[1]: Started Session 364 of user root.
+Jun 17 15:27:06 castor4-ssu-2-21 sshd[93249]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:06 castor4-ssu-2-21 sshd[93249]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:06 castor4-ssu-2-21 sshd[93249]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:06 castor4-ssu-2-21 systemd-logind[26553]: Removed session 364.
+Jun 17 15:27:12 castor4-ssu-2-21 sshd[93256]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:12 castor4-ssu-2-21 sshd[93256]: Accepted publickey for root from 172.16.0.41 port 40062 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:12 castor4-ssu-2-21 systemd[1]: Starting Session 365 of user root.
+Jun 17 15:27:12 castor4-ssu-2-21 systemd-logind[26553]: New session 365 of user root.
+Jun 17 15:27:12 castor4-ssu-2-21 systemd[1]: Started Session 365 of user root.
+Jun 17 15:27:12 castor4-ssu-2-21 sshd[93256]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:12 castor4-ssu-2-21 sshd[93256]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:12 castor4-ssu-2-21 sshd[93256]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:12 castor4-ssu-2-21 systemd-logind[26553]: Removed session 365.
+Jun 17 15:27:18 castor4-ssu-2-21 sshd[93260]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:18 castor4-ssu-2-21 sshd[93260]: Accepted publickey for root from 172.16.0.41 port 40106 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:18 castor4-ssu-2-21 systemd[1]: Starting Session 366 of user root.
+Jun 17 15:27:18 castor4-ssu-2-21 systemd-logind[26553]: New session 366 of user root.
+Jun 17 15:27:18 castor4-ssu-2-21 systemd[1]: Started Session 366 of user root.
+Jun 17 15:27:18 castor4-ssu-2-21 sshd[93260]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:18 castor4-ssu-2-21 sshd[93260]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:18 castor4-ssu-2-21 sshd[93260]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:18 castor4-ssu-2-21 systemd-logind[26553]: Removed session 366.
+Jun 17 15:27:19 castor4-ssu-2-21 halond[26564]: Fri Jun 17 15:27:19 UTC 2016 pid://172.18.2.21:9000:0:30: [SSPL-Service] received SensorResponse.Host
+Jun 17 15:27:19 castor4-ssu-2-21 halond[26564]: Fri Jun 17 15:27:19 UTC 2016 pid://172.18.2.21:9000:0:30: [Service:SSPL] SensorResponse.MountData is not used by RC, ignoring.
+Jun 17 15:27:19 castor4-ssu-2-21 halond[26564]: Fri Jun 17 15:27:19 UTC 2016 pid://172.18.2.21:9000:0:30: [SSPL-Service] received SensorResponse.CPU
+Jun 17 15:27:19 castor4-ssu-2-21 halond[26564]: Fri Jun 17 15:27:19 UTC 2016 pid://172.18.2.21:9000:0:30: [Service:SSPL] SensorResponse.IF is not used by RC, ignoring.
+Jun 17 15:27:24 castor4-ssu-2-21 sshd[93274]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:24 castor4-ssu-2-21 sshd[93274]: Accepted publickey for root from 172.16.0.41 port 40185 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:24 castor4-ssu-2-21 systemd[1]: Starting Session 367 of user root.
+Jun 17 15:27:24 castor4-ssu-2-21 systemd-logind[26553]: New session 367 of user root.
+Jun 17 15:27:24 castor4-ssu-2-21 systemd[1]: Started Session 367 of user root.
+Jun 17 15:27:24 castor4-ssu-2-21 sshd[93274]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:24 castor4-ssu-2-21 sshd[93274]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:24 castor4-ssu-2-21 sshd[93274]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:24 castor4-ssu-2-21 systemd-logind[26553]: Removed session 367.
+Jun 17 15:27:30 castor4-ssu-2-21 sshd[93281]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:30 castor4-ssu-2-21 sshd[93281]: Accepted publickey for root from 172.16.0.41 port 40239 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:30 castor4-ssu-2-21 systemd[1]: Starting Session 368 of user root.
+Jun 17 15:27:30 castor4-ssu-2-21 systemd-logind[26553]: New session 368 of user root.
+Jun 17 15:27:30 castor4-ssu-2-21 systemd[1]: Started Session 368 of user root.
+Jun 17 15:27:30 castor4-ssu-2-21 sshd[93281]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:30 castor4-ssu-2-21 sshd[93281]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:30 castor4-ssu-2-21 sshd[93281]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:30 castor4-ssu-2-21 systemd-logind[26553]: Removed session 368.
+Jun 17 15:27:36 castor4-ssu-2-21 sshd[93287]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:36 castor4-ssu-2-21 sshd[93287]: Accepted publickey for root from 172.16.0.41 port 40298 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:36 castor4-ssu-2-21 systemd[1]: Starting Session 369 of user root.
+Jun 17 15:27:36 castor4-ssu-2-21 systemd-logind[26553]: New session 369 of user root.
+Jun 17 15:27:36 castor4-ssu-2-21 systemd[1]: Started Session 369 of user root.
+Jun 17 15:27:36 castor4-ssu-2-21 sshd[93287]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:36 castor4-ssu-2-21 sshd[93287]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:36 castor4-ssu-2-21 sshd[93287]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:36 castor4-ssu-2-21 systemd-logind[26553]: Removed session 369.
+Jun 17 15:27:42 castor4-ssu-2-21 sshd[93295]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:42 castor4-ssu-2-21 sshd[93295]: Accepted publickey for root from 172.16.0.41 port 40350 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:42 castor4-ssu-2-21 systemd[1]: Starting Session 370 of user root.
+Jun 17 15:27:42 castor4-ssu-2-21 systemd-logind[26553]: New session 370 of user root.
+Jun 17 15:27:42 castor4-ssu-2-21 systemd[1]: Started Session 370 of user root.
+Jun 17 15:27:42 castor4-ssu-2-21 sshd[93295]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:42 castor4-ssu-2-21 sshd[93295]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:42 castor4-ssu-2-21 sshd[93295]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:42 castor4-ssu-2-21 systemd-logind[26553]: Removed session 370.
+Jun 17 15:27:48 castor4-ssu-2-21 sshd[93299]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:48 castor4-ssu-2-21 sshd[93299]: Accepted publickey for root from 172.16.0.41 port 40370 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:48 castor4-ssu-2-21 systemd[1]: Starting Session 371 of user root.
+Jun 17 15:27:48 castor4-ssu-2-21 systemd-logind[26553]: New session 371 of user root.
+Jun 17 15:27:48 castor4-ssu-2-21 systemd[1]: Started Session 371 of user root.
+Jun 17 15:27:48 castor4-ssu-2-21 sshd[93299]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:48 castor4-ssu-2-21 sshd[93299]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:48 castor4-ssu-2-21 sshd[93299]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:48 castor4-ssu-2-21 systemd-logind[26553]: Removed session 371.
+Jun 17 15:27:54 castor4-ssu-2-21 sshd[93305]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:27:54 castor4-ssu-2-21 sshd[93305]: Accepted publickey for root from 172.16.0.41 port 40416 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:27:54 castor4-ssu-2-21 systemd[1]: Starting Session 372 of user root.
+Jun 17 15:27:54 castor4-ssu-2-21 systemd-logind[26553]: New session 372 of user root.
+Jun 17 15:27:54 castor4-ssu-2-21 systemd[1]: Started Session 372 of user root.
+Jun 17 15:27:54 castor4-ssu-2-21 sshd[93305]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:27:54 castor4-ssu-2-21 sshd[93305]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:27:54 castor4-ssu-2-21 sshd[93305]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:27:54 castor4-ssu-2-21 systemd-logind[26553]: Removed session 372.
+Jun 17 15:28:00 castor4-ssu-2-21 sshd[93309]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:00 castor4-ssu-2-21 sshd[93309]: Accepted publickey for root from 172.16.0.41 port 40475 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:00 castor4-ssu-2-21 systemd[1]: Starting Session 373 of user root.
+Jun 17 15:28:00 castor4-ssu-2-21 systemd-logind[26553]: New session 373 of user root.
+Jun 17 15:28:00 castor4-ssu-2-21 systemd[1]: Started Session 373 of user root.
+Jun 17 15:28:00 castor4-ssu-2-21 sshd[93309]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:00 castor4-ssu-2-21 sshd[93309]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:00 castor4-ssu-2-21 sshd[93309]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:00 castor4-ssu-2-21 systemd-logind[26553]: Removed session 373.
+Jun 17 15:28:01 castor4-ssu-2-21 systemd[1]: Starting Session 374 of user root.
+Jun 17 15:28:01 castor4-ssu-2-21 systemd[1]: Started Session 374 of user root.
+Jun 17 15:28:01 castor4-ssu-2-21 CROND[93316]: (root) CMD (/bin/puppet agent --onetime --no-daemonize --logdest /var/log/messages)
+Jun 17 15:28:06 castor4-ssu-2-21 sshd[93729]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:06 castor4-ssu-2-21 sshd[93729]: Accepted publickey for root from 172.16.0.41 port 40545 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:06 castor4-ssu-2-21 systemd[1]: Starting Session 375 of user root.
+Jun 17 15:28:06 castor4-ssu-2-21 systemd-logind[26553]: New session 375 of user root.
+Jun 17 15:28:06 castor4-ssu-2-21 systemd[1]: Started Session 375 of user root.
+Jun 17 15:28:06 castor4-ssu-2-21 sshd[93729]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:06 castor4-ssu-2-21 sshd[93729]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:06 castor4-ssu-2-21 sshd[93729]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:06 castor4-ssu-2-21 systemd-logind[26553]: Removed session 375.
+Jun 17 15:28:12 castor4-ssu-2-21 sshd[93829]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:12 castor4-ssu-2-21 sshd[93829]: Accepted publickey for root from 172.16.0.41 port 40642 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:12 castor4-ssu-2-21 systemd[1]: Starting Session 376 of user root.
+Jun 17 15:28:12 castor4-ssu-2-21 systemd-logind[26553]: New session 376 of user root.
+Jun 17 15:28:12 castor4-ssu-2-21 systemd[1]: Started Session 376 of user root.
+Jun 17 15:28:12 castor4-ssu-2-21 sshd[93829]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:12 castor4-ssu-2-21 sshd[93829]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:12 castor4-ssu-2-21 sshd[93829]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:12 castor4-ssu-2-21 systemd-logind[26553]: Removed session 376.
+Jun 17 15:28:12 castor4-ssu-2-21 halond[26564]: Fri Jun 17 15:28:12 UTC 2016 pid://172.18.2.21:9000:0:30: [SSPL-Service] received SensorResponse.Raid
+2016-06-17 15:28:15 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-lo]
+2016-06-17 15:28:15 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-p2p1]
+2016-06-17 15:28:15 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond1]
+2016-06-17 15:28:15 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond0]
+2016-06-17 15:28:15 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-enp12s0d1]
+2016-06-17 15:28:15 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-enp12s0]
+Jun 17 15:28:15 castor4-ssu-2-21 crontab[93843]: (root) LIST (root)
+2016-06-17 15:28:15 +0000 Puppet (notice): mellanox nic detected!!!!
+2016-06-17 15:28:15 +0000 /Stage[main]/Stx_network/Notify[mellanox nic detected!!!!]/message (notice): defined 'message' as 'mellanox nic detected!!!!'
+Jun 17 15:28:15 castor4-ssu-2-21 su: (to rabbitmq) root on none
+Jun 17 15:28:15 castor4-ssu-2-21 su: pam_unix(su:session): session opened for user rabbitmq by (uid=0)
+Jun 17 15:28:15 castor4-ssu-2-21 su: pam_unix(su:session): session closed for user rabbitmq
+2016-06-17 15:28:17 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:1]/end (notice): end changed '2000GB' to '50%'
+2016-06-17 15:28:17 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:2]/start (notice): start changed '2040GB' to '51%'
+2016-06-17 15:28:17 +0000 /Stage[main]/Stx_mero::Var_mero/Partition[/dev/md0:2]/end (notice): end changed '4001GB' to '100%'
+Jun 17 15:28:18 castor4-ssu-2-21 sshd[94287]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:18 castor4-ssu-2-21 sshd[94287]: Accepted publickey for root from 172.16.0.41 port 40693 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:18 castor4-ssu-2-21 systemd[1]: Starting Session 377 of user root.
+Jun 17 15:28:18 castor4-ssu-2-21 systemd-logind[26553]: New session 377 of user root.
+Jun 17 15:28:18 castor4-ssu-2-21 systemd[1]: Started Session 377 of user root.
+Jun 17 15:28:18 castor4-ssu-2-21 sshd[94287]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:18 castor4-ssu-2-21 sshd[94287]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:18 castor4-ssu-2-21 sshd[94287]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:18 castor4-ssu-2-21 systemd-logind[26553]: Removed session 377.
+Jun 17 15:28:20 castor4-ssu-2-21 sudo:   zabbix : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/opt/xyratex/zabbix/base-config/scripts/../bin/ipmi_sensor.sh
+Jun 17 15:28:21 castor4-ssu-2-21 sudo:   zabbix : TTY=unknown ; PWD=/ ; USER=root ; COMMAND=/opt/xyratex/zabbix/base-config/scripts/../bin/ipmi_fru.sh
+2016-06-17 15:28:21 +0000 Puppet (notice): Finished catalog run in 7.04 seconds
+Jun 17 15:28:24 castor4-ssu-2-21 sshd[94495]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:24 castor4-ssu-2-21 sshd[94495]: Accepted publickey for root from 172.16.0.41 port 40758 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:24 castor4-ssu-2-21 systemd[1]: Starting Session 378 of user root.
+Jun 17 15:28:24 castor4-ssu-2-21 systemd-logind[26553]: New session 378 of user root.
+Jun 17 15:28:24 castor4-ssu-2-21 systemd[1]: Started Session 378 of user root.
+Jun 17 15:28:24 castor4-ssu-2-21 sshd[94495]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:24 castor4-ssu-2-21 sshd[94495]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:24 castor4-ssu-2-21 sshd[94495]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:24 castor4-ssu-2-21 systemd-logind[26553]: Removed session 378.
+Jun 17 15:28:30 castor4-ssu-2-21 sshd[94502]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:30 castor4-ssu-2-21 sshd[94502]: Accepted publickey for root from 172.16.0.41 port 40837 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:30 castor4-ssu-2-21 systemd[1]: Starting Session 379 of user root.
+Jun 17 15:28:30 castor4-ssu-2-21 systemd-logind[26553]: New session 379 of user root.
+Jun 17 15:28:30 castor4-ssu-2-21 systemd[1]: Started Session 379 of user root.
+Jun 17 15:28:30 castor4-ssu-2-21 sshd[94502]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:30 castor4-ssu-2-21 sshd[94502]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:30 castor4-ssu-2-21 sshd[94502]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:30 castor4-ssu-2-21 systemd-logind[26553]: Removed session 379.
+Jun 17 15:28:31 castor4-ssu-2-21 sshd[94508]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:31 castor4-ssu-2-21 sshd[94508]: Accepted publickey for root from 172.16.0.41 port 40838 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:31 castor4-ssu-2-21 systemd[1]: Starting Session 380 of user root.
+Jun 17 15:28:31 castor4-ssu-2-21 systemd-logind[26553]: New session 380 of user root.
+Jun 17 15:28:31 castor4-ssu-2-21 systemd[1]: Started Session 380 of user root.
+Jun 17 15:28:31 castor4-ssu-2-21 sshd[94508]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:31 castor4-ssu-2-21 sshd[94508]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:31 castor4-ssu-2-21 sshd[94508]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:31 castor4-ssu-2-21 systemd-logind[26553]: Removed session 380.
+Jun 17 15:28:34 castor4-ssu-2-21 sshd[94513]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:34 castor4-ssu-2-21 sshd[94513]: Accepted publickey for root from 172.16.0.41 port 40845 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:34 castor4-ssu-2-21 systemd[1]: Starting Session 381 of user root.
+Jun 17 15:28:34 castor4-ssu-2-21 systemd-logind[26553]: New session 381 of user root.
+Jun 17 15:28:34 castor4-ssu-2-21 systemd[1]: Started Session 381 of user root.
+Jun 17 15:28:34 castor4-ssu-2-21 sshd[94513]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:34 castor4-ssu-2-21 sshd[94513]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:34 castor4-ssu-2-21 sshd[94513]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:34 castor4-ssu-2-21 systemd-logind[26553]: Removed session 381.
+Jun 17 15:28:36 castor4-ssu-2-21 sshd[94517]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:36 castor4-ssu-2-21 sshd[94517]: Accepted publickey for root from 172.16.0.41 port 40880 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:36 castor4-ssu-2-21 systemd[1]: Starting Session 382 of user root.
+Jun 17 15:28:36 castor4-ssu-2-21 systemd-logind[26553]: New session 382 of user root.
+Jun 17 15:28:36 castor4-ssu-2-21 systemd[1]: Started Session 382 of user root.
+Jun 17 15:28:36 castor4-ssu-2-21 sshd[94517]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:36 castor4-ssu-2-21 sshd[94517]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:36 castor4-ssu-2-21 sshd[94517]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:36 castor4-ssu-2-21 systemd-logind[26553]: Removed session 382.
+Jun 17 15:28:37 castor4-ssu-2-21 sshd[94522]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:37 castor4-ssu-2-21 sshd[94522]: Accepted publickey for root from 172.16.0.41 port 40902 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:37 castor4-ssu-2-21 systemd[1]: Starting Session 383 of user root.
+Jun 17 15:28:37 castor4-ssu-2-21 systemd-logind[26553]: New session 383 of user root.
+Jun 17 15:28:37 castor4-ssu-2-21 systemd[1]: Started Session 383 of user root.
+Jun 17 15:28:37 castor4-ssu-2-21 sshd[94522]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:37 castor4-ssu-2-21 sshd[94522]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:37 castor4-ssu-2-21 sshd[94522]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:37 castor4-ssu-2-21 systemd-logind[26553]: Removed session 383.
+Jun 17 15:28:37 castor4-ssu-2-21 sshd[90732]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:37 castor4-ssu-2-21 sshd[90732]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:37 castor4-ssu-2-21 systemd-logind[26553]: Removed session 326.
+Jun 17 15:28:48 castor4-ssu-2-21 sshd[94531]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:48 castor4-ssu-2-21 sshd[94531]: Accepted publickey for root from 172.16.0.41 port 40965 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:48 castor4-ssu-2-21 systemd[1]: Starting Session 384 of user root.
+Jun 17 15:28:48 castor4-ssu-2-21 systemd-logind[26553]: New session 384 of user root.
+Jun 17 15:28:48 castor4-ssu-2-21 systemd[1]: Started Session 384 of user root.
+Jun 17 15:28:48 castor4-ssu-2-21 sshd[94531]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:48 castor4-ssu-2-21 sshd[94531]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:48 castor4-ssu-2-21 sshd[94531]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:48 castor4-ssu-2-21 systemd-logind[26553]: Removed session 384.
+Jun 17 15:28:50 castor4-ssu-2-21 sshd[94535]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:50 castor4-ssu-2-21 sshd[94535]: Accepted publickey for root from 172.16.0.41 port 40967 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:50 castor4-ssu-2-21 systemd[1]: Starting Session 385 of user root.
+Jun 17 15:28:50 castor4-ssu-2-21 systemd-logind[26553]: New session 385 of user root.
+Jun 17 15:28:50 castor4-ssu-2-21 systemd[1]: Started Session 385 of user root.
+Jun 17 15:28:50 castor4-ssu-2-21 sshd[94535]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:50 castor4-ssu-2-21 sshd[94535]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:50 castor4-ssu-2-21 sshd[94535]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:50 castor4-ssu-2-21 systemd-logind[26553]: Removed session 385.
+Jun 17 15:28:54 castor4-ssu-2-21 sshd[94541]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:54 castor4-ssu-2-21 sshd[94541]: Accepted publickey for root from 172.16.0.41 port 41025 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:54 castor4-ssu-2-21 systemd[1]: Starting Session 386 of user root.
+Jun 17 15:28:54 castor4-ssu-2-21 systemd-logind[26553]: New session 386 of user root.
+Jun 17 15:28:54 castor4-ssu-2-21 systemd[1]: Started Session 386 of user root.
+Jun 17 15:28:54 castor4-ssu-2-21 sshd[94541]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:54 castor4-ssu-2-21 sshd[94541]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:54 castor4-ssu-2-21 sshd[94541]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:54 castor4-ssu-2-21 systemd-logind[26553]: Removed session 386.
+Jun 17 15:28:59 castor4-ssu-2-21 sshd[94545]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:28:59 castor4-ssu-2-21 sshd[94545]: Accepted publickey for root from 172.16.0.41 port 41046 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:28:59 castor4-ssu-2-21 systemd[1]: Starting Session 387 of user root.
+Jun 17 15:28:59 castor4-ssu-2-21 systemd-logind[26553]: New session 387 of user root.
+Jun 17 15:28:59 castor4-ssu-2-21 systemd[1]: Started Session 387 of user root.
+Jun 17 15:28:59 castor4-ssu-2-21 sshd[94545]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:28:59 castor4-ssu-2-21 sshd[94545]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:28:59 castor4-ssu-2-21 sshd[94545]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:28:59 castor4-ssu-2-21 systemd-logind[26553]: Removed session 387.
+Jun 17 15:29:00 castor4-ssu-2-21 sshd[94551]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:01 castor4-ssu-2-21 sshd[94551]: Accepted publickey for root from 172.16.0.41 port 41084 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:01 castor4-ssu-2-21 systemd[1]: Starting Session 388 of user root.
+Jun 17 15:29:01 castor4-ssu-2-21 systemd-logind[26553]: New session 388 of user root.
+Jun 17 15:29:01 castor4-ssu-2-21 systemd[1]: Started Session 388 of user root.
+Jun 17 15:29:01 castor4-ssu-2-21 sshd[94551]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:15 castor4-ssu-2-21 sshd[94551]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:15 castor4-ssu-2-21 sshd[94551]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:15 castor4-ssu-2-21 systemd-logind[26553]: Removed session 388.
+Jun 17 15:29:17 castor4-ssu-2-21 sshd[95419]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:17 castor4-ssu-2-21 sshd[95419]: Accepted publickey for root from 172.16.0.41 port 41201 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:17 castor4-ssu-2-21 systemd[1]: Starting Session 389 of user root.
+Jun 17 15:29:17 castor4-ssu-2-21 systemd-logind[26553]: New session 389 of user root.
+Jun 17 15:29:17 castor4-ssu-2-21 systemd[1]: Started Session 389 of user root.
+Jun 17 15:29:17 castor4-ssu-2-21 sshd[95419]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:17 castor4-ssu-2-21 sshd[95419]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:17 castor4-ssu-2-21 sshd[95419]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:17 castor4-ssu-2-21 systemd-logind[26553]: Removed session 389.
+Jun 17 15:29:28 castor4-ssu-2-21 sshd[95436]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:28 castor4-ssu-2-21 sshd[95436]: Accepted publickey for root from 172.16.0.41 port 41259 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:28 castor4-ssu-2-21 systemd[1]: Starting Session 390 of user root.
+Jun 17 15:29:28 castor4-ssu-2-21 systemd-logind[26553]: New session 390 of user root.
+Jun 17 15:29:28 castor4-ssu-2-21 systemd[1]: Started Session 390 of user root.
+Jun 17 15:29:28 castor4-ssu-2-21 sshd[95436]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:28 castor4-ssu-2-21 sshd[95436]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:28 castor4-ssu-2-21 sshd[95436]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:28 castor4-ssu-2-21 systemd-logind[26553]: Removed session 390.
+Jun 17 15:29:30 castor4-ssu-2-21 sshd[95440]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:30 castor4-ssu-2-21 sshd[95440]: Accepted publickey for root from 172.16.0.41 port 41265 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:30 castor4-ssu-2-21 systemd[1]: Starting Session 391 of user root.
+Jun 17 15:29:30 castor4-ssu-2-21 systemd-logind[26553]: New session 391 of user root.
+Jun 17 15:29:30 castor4-ssu-2-21 systemd[1]: Started Session 391 of user root.
+Jun 17 15:29:30 castor4-ssu-2-21 sshd[95440]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:30 castor4-ssu-2-21 sshd[95440]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:30 castor4-ssu-2-21 sshd[95440]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:30 castor4-ssu-2-21 systemd-logind[26553]: Removed session 391.
+Jun 17 15:29:33 castor4-ssu-2-21 sshd[95447]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:33 castor4-ssu-2-21 sshd[95447]: Accepted publickey for root from 172.16.0.41 port 41318 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:33 castor4-ssu-2-21 systemd[1]: Starting Session 392 of user root.
+Jun 17 15:29:33 castor4-ssu-2-21 systemd-logind[26553]: New session 392 of user root.
+Jun 17 15:29:33 castor4-ssu-2-21 systemd[1]: Started Session 392 of user root.
+Jun 17 15:29:33 castor4-ssu-2-21 sshd[95447]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:33 castor4-ssu-2-21 sshd[95447]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:33 castor4-ssu-2-21 sshd[95447]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:33 castor4-ssu-2-21 systemd-logind[26553]: Removed session 392.
+Jun 17 15:29:35 castor4-ssu-2-21 sshd[95451]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:35 castor4-ssu-2-21 sshd[95451]: Accepted publickey for root from 172.16.0.41 port 41320 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:35 castor4-ssu-2-21 systemd[1]: Starting Session 393 of user root.
+Jun 17 15:29:35 castor4-ssu-2-21 systemd-logind[26553]: New session 393 of user root.
+Jun 17 15:29:35 castor4-ssu-2-21 systemd[1]: Started Session 393 of user root.
+Jun 17 15:29:35 castor4-ssu-2-21 sshd[95451]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:35 castor4-ssu-2-21 sshd[95451]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:35 castor4-ssu-2-21 sshd[95451]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:35 castor4-ssu-2-21 systemd-logind[26553]: Removed session 393.
+Jun 17 15:29:36 castor4-ssu-2-21 sshd[95456]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:37 castor4-ssu-2-21 sshd[95456]: Accepted publickey for root from 172.16.0.41 port 41321 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:37 castor4-ssu-2-21 systemd[1]: Starting Session 394 of user root.
+Jun 17 15:29:37 castor4-ssu-2-21 systemd-logind[26553]: New session 394 of user root.
+Jun 17 15:29:37 castor4-ssu-2-21 systemd[1]: Started Session 394 of user root.
+Jun 17 15:29:37 castor4-ssu-2-21 sshd[95456]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:37 castor4-ssu-2-21 sshd[95456]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:37 castor4-ssu-2-21 sshd[95456]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:37 castor4-ssu-2-21 systemd-logind[26553]: Removed session 394.
+Jun 17 15:29:42 castor4-ssu-2-21 sshd[95464]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:42 castor4-ssu-2-21 sshd[95464]: Accepted publickey for root from 172.16.0.41 port 41380 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:42 castor4-ssu-2-21 systemd[1]: Starting Session 395 of user root.
+Jun 17 15:29:42 castor4-ssu-2-21 systemd-logind[26553]: New session 395 of user root.
+Jun 17 15:29:42 castor4-ssu-2-21 systemd[1]: Started Session 395 of user root.
+Jun 17 15:29:42 castor4-ssu-2-21 sshd[95464]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:42 castor4-ssu-2-21 sshd[95464]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:42 castor4-ssu-2-21 sshd[95464]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:42 castor4-ssu-2-21 systemd-logind[26553]: Removed session 395.
+Jun 17 15:29:44 castor4-ssu-2-21 sshd[95468]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:44 castor4-ssu-2-21 sshd[95468]: Accepted publickey for root from 172.16.0.41 port 41381 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:44 castor4-ssu-2-21 systemd[1]: Starting Session 396 of user root.
+Jun 17 15:29:44 castor4-ssu-2-21 systemd-logind[26553]: New session 396 of user root.
+Jun 17 15:29:44 castor4-ssu-2-21 systemd[1]: Started Session 396 of user root.
+Jun 17 15:29:44 castor4-ssu-2-21 sshd[95468]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:44 castor4-ssu-2-21 sshd[95468]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:44 castor4-ssu-2-21 sshd[95468]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:44 castor4-ssu-2-21 systemd-logind[26553]: Removed session 396.
+Jun 17 15:29:47 castor4-ssu-2-21 sshd[95473]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:47 castor4-ssu-2-21 sshd[95473]: Accepted publickey for root from 172.16.0.41 port 41408 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:47 castor4-ssu-2-21 systemd[1]: Starting Session 397 of user root.
+Jun 17 15:29:47 castor4-ssu-2-21 systemd-logind[26553]: New session 397 of user root.
+Jun 17 15:29:47 castor4-ssu-2-21 systemd[1]: Started Session 397 of user root.
+Jun 17 15:29:47 castor4-ssu-2-21 sshd[95473]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:29:47 castor4-ssu-2-21 sshd[95473]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:29:47 castor4-ssu-2-21 sshd[95473]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:29:47 castor4-ssu-2-21 systemd-logind[26553]: Removed session 397.
+Jun 17 15:29:48 castor4-ssu-2-21 sshd[95477]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:29:49 castor4-ssu-2-21 sshd[95477]: Accepted publickey for root from 172.16.0.41 port 41440 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:29:49 castor4-ssu-2-21 systemd[1]: Starting Session 398 of user root.
+Jun 17 15:29:49 castor4-ssu-2-21 systemd-logind[26553]: New session 398 of user root.
+Jun 17 15:29:49 castor4-ssu-2-21 systemd[1]: Started Session 398 of user root.
+Jun 17 15:29:49 castor4-ssu-2-21 sshd[95477]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:30:01 castor4-ssu-2-21 systemd[1]: Starting Session 399 of user root.
+Jun 17 15:30:01 castor4-ssu-2-21 systemd[1]: Started Session 399 of user root.
+Jun 17 15:30:01 castor4-ssu-2-21 systemd[1]: Starting Session 400 of user root.
+Jun 17 15:30:01 castor4-ssu-2-21 systemd[1]: Started Session 400 of user root.
+Jun 17 15:30:01 castor4-ssu-2-21 CROND[95482]: (root) CMD (/usr/libexec/mcollective/refresh-mcollective-metadata)
+Jun 17 15:30:01 castor4-ssu-2-21 CROND[95483]: (root) CMD (/bin/puppet agent --onetime --no-daemonize --logdest /var/log/messages)
+Jun 17 15:30:43 castor4-ssu-2-21 halond[26564]: Fri Jun 17 15:30:43 UTC 2016 pid://172.18.2.21:9000:0:30: [SSPL-Service] received SensorResponse.Raid
+Jun 17 15:30:51 castor4-ssu-2-21 sshd[96306]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:30:52 castor4-ssu-2-21 sshd[96306]: Accepted publickey for root from 172.16.0.41 port 42066 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:30:52 castor4-ssu-2-21 systemd[1]: Starting Session 401 of user root.
+Jun 17 15:30:52 castor4-ssu-2-21 systemd-logind[26553]: New session 401 of user root.
+Jun 17 15:30:52 castor4-ssu-2-21 systemd[1]: Started Session 401 of user root.
+Jun 17 15:30:52 castor4-ssu-2-21 sshd[96306]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:30:52 castor4-ssu-2-21 sshd[96306]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:30:52 castor4-ssu-2-21 sshd[96306]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:30:52 castor4-ssu-2-21 systemd-logind[26553]: Removed session 401.
+Jun 17 15:30:53 castor4-ssu-2-21 sshd[96310]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:30:53 castor4-ssu-2-21 sshd[96310]: Accepted publickey for root from 172.16.0.41 port 42075 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:30:53 castor4-ssu-2-21 systemd[1]: Starting Session 402 of user root.
+Jun 17 15:30:53 castor4-ssu-2-21 systemd-logind[26553]: New session 402 of user root.
+Jun 17 15:30:53 castor4-ssu-2-21 systemd[1]: Started Session 402 of user root.
+Jun 17 15:30:53 castor4-ssu-2-21 sshd[96310]: pam_unix(sshd:session): session opened for user root by (uid=0)
+Jun 17 15:31:52 castor4-ssu-2-21 sshd[95477]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:31:52 castor4-ssu-2-21 sshd[95477]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:31:52 castor4-ssu-2-21 systemd-logind[26553]: Removed session 398.
+Jun 17 15:31:53 castor4-ssu-2-21 sshd[96310]: Received disconnect from 172.16.0.41: 11: disconnected by user
+Jun 17 15:31:53 castor4-ssu-2-21 sshd[96310]: pam_unix(sshd:session): session closed for user root
+Jun 17 15:31:53 castor4-ssu-2-21 systemd-logind[26553]: Removed session 402.
+Jun 17 15:31:54 castor4-ssu-2-21 sshd[96368]: error: Could not load host key: /etc/ssh/ssh_host_dsa_key
+Jun 17 15:31:54 castor4-ssu-2-21 sshd[96368]: Accepted publickey for root from 172.16.0.41 port 42510 ssh2: RSA fe:df:e0:be:66:e7:79:4e:9b:9f:d1:47:93:1a:ac:f5
+Jun 17 15:31:54 castor4-ssu-2-21 systemd[1]: Starting Session 403 of user root.
+Jun 17 15:31:54 castor4-ssu-2-21 systemd-logind[26553]: New session 403 of user root.
+Jun 17 15:31:54 castor4-ssu-2-21 systemd[1]: Started Session 403 of user root.
+Jun 17 15:31:54 castor4-ssu-2-21 sshd[96368]: pam_unix(sshd:session): session opened for user root by (uid=0)

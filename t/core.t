@@ -50,7 +50,7 @@ setup           some_setup    => sub {
 };
 
 
-test plan => 5, s_sortLegacyTests        => sub {
+test plan => 5, s_sortTests        => sub {
         my %options = (
             testdir => 't/testcfgs/sanity/',
             workdir => '/tmp/test_wd/',

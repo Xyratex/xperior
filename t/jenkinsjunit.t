@@ -164,5 +164,23 @@ test
          'Check xml no sdtout' );
 };
 
+test
+    plan      => 2,
+    m_subtests_Checks => sub {
+        my $wd  = '--workdir=$wd';
+        my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
+        for my $file (glob 't/checkjunitdata/subtests/*.*') {
+            print "$file\n";
+            fcopy ($file, $jwd) or confess $!;
+        }
+        my $junitReport = Xperior::Reports::JenkinsJunit->new();
+        $junitReport->generateJunit($options, 'junittest');
+        ok(-e "$resdir/junittest.junit",
+            "Check file [$resdir/junittest.junit] existence");
+        my $data = read_file("$resdir/junittest.junit", err_mode => 'carp' );
+        ok($data =~ m/2iozone-small\.client1\.stdout\.log/,
+            'Check subtest record' );
+
+    };
 
 jenkinsjunit->run_tests;

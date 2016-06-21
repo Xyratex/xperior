@@ -622,6 +622,7 @@ HTML report is generated via using customized TAP::Formatter::HTML
 
 =cut
 
+#TODO move to Xperior::Reports::HTMLSimple
 sub _reportHtml {
     my $self = shift;
     my $wd     = $self->{options}->{workdir};

@@ -91,6 +91,7 @@ sub generateJunit {
         my %obj;
         my $stdout = '';
         my $stderr = '';
+        # show stdout via junit stdout
         if ( defined( $yaml->{'log'}->{'stdout'} ) ) {
             my @lines = read_file( "$wd/$testclass/" . $yaml->{'log'}->{'stdout'},
                 err_mode => 'carp');
@@ -100,10 +101,14 @@ sub generateJunit {
                         $stdout = $stdout . $s;
                 }
             }else{
-                $stdout="No stdout data found"
+                if ( defined($yaml->{'subtests'})) {
+                    $stdout = "It is multitest, no single stdout"
+                } else {
+                    $stdout = "No stdout data found"
+                }
             }
         }
-
+        # show stderr via junit stderr
         if ( defined( $yaml->{'log'}->{'stderr'} ) ) {
             my @lines = read_file( "$wd/$testclass/" . $yaml->{'log'}->{'stderr'},
                 err_mode => 'carp');
@@ -113,7 +118,11 @@ sub generateJunit {
                     $stderr = $stderr . $s;
                 }
             }else{
-                $stdout="No stdout data found"
+                if ( defined($yaml->{'subtests'})) {
+                    $stdout = "It is multitest, no single stderr"
+                }else{
+                    $stdout = "No stdout data found"
+                }
             }
         }
 
@@ -131,6 +140,14 @@ sub generateJunit {
         #correct way is getting filenames from yaml file
         $stdout = $stdout."\n---jenkins metadata---\n";
 
+        $stdout = $stdout . $self->_attach_logs($yaml, $wd, $testclass, $adir);
+        foreach my $subtest (values %{$yaml->{'subtests'}})
+        {
+            $stdout = $stdout . $self->_attach_logs($subtest, $wd, $testclass, $adir);
+        }
+
+=item
+
         foreach my $lf ( values %{ $yaml->{'log'} } ) {
             #ignore coverage
             next if $lf =~ m/coverage/;
@@ -141,6 +158,7 @@ sub generateJunit {
             # JENKINS/JUnit+Attachments+Plugin
             $stdout = $stdout. '[[ATTACHMENT|'.$adir.'/'.$lf."]]\n";
         }
+=cut
 
         runEx( "cp $file    $adir", 1 );
         # see details
@@ -193,6 +211,22 @@ sub generateJunit {
         $xml->XMLout( \%ts, KeepRoot => 1, AttrIndent => 1,
              NumericEscape => 2 , keyattr => [])) ;
     return $xml;
+}
+
+sub _attach_logs {
+    my ( $self, $yaml, $wd, $testclass, $adir ) = @_;
+    my $stdout = '';
+    foreach my $lf ( values %{ $yaml->{'log'} } ) {
+        #ignore coverage
+        next if $lf =~ m/coverage/;
+        runEx( "cp $wd/$testclass/$lf $adir", 0 );
+        # see details in
+        # http://kohsuke.org/?s=junit+attachment
+        # https://wiki.jenkins-ci.org/display/
+        # JENKINS/JUnit+Attachments+Plugin
+        $stdout = $stdout.'[[ATTACHMENT|'.$adir.'/'.$lf."]]\n";
+    }
+    return $stdout;
 }
 
 sub _doTextSafe {

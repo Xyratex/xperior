@@ -1,0 +1,38 @@
+	Iozone: Performance Test of File I/O
+	        Version $Revision: 3.394 $
+		Compiled for 64 bit mode.
+		Build: linux 
+
+	Contributors:William Norcott, Don Capps, Isom Crawford, Kirby Collins
+	             Al Slater, Scott Rhine, Mike Wisner, Ken Goss
+	             Steve Landherr, Brad Smith, Mark Kelly, Dr. Alain CYR,
+	             Randy Dunlap, Mark Montague, Dan Million, Gavin Brebner,
+	             Jean-Marc Zucconi, Jeff Blomberg, Benny Halevy, Dave Boone,
+	             Erik Habbinga, Kris Strecker, Walter Wong, Joshua Root,
+	             Fabrice Bacchella, Zhenghua Xue, Qin Li, Darren Sawyer.
+	             Ben England.
+
+	Run began: Fri Jun 17 15:23:34 2016
+
+	Include close in write timing
+	Include fsync in write timing
+	>>> I/O Diagnostic mode enabled. <<<
+	Performance measurements are invalid in this mode.
+	File size set to 5 KB
+	Command line used: iozone -c -e -+d -i 0 -s 5 -t2 -F /mnt/m0t1fs/9289637725:7233959507 /mnt/m0t1fs/9289637725:7233959507
+	Output is in Kbytes/sec
+	Time Resolution = 0.000001 seconds.
+	Processor cache size set to 1024 Kbytes.
+	Processor cache line size set to 32 bytes.
+	File stride size set to 17 * record size.
+	Throughput test with 2 processes
+	Each process writes a 5 Kbyte file in 4 Kbyte records
+
+Can not open temp file: iozone.tmp
+
+Can not open temp file: iozone.tmp
+
+iozone: interrupted
+
+exiting iozone
+
