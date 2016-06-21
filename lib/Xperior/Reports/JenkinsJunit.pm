@@ -145,6 +145,10 @@ sub generateJunit {
         {
             $stdout = $stdout . $self->_attach_logs($subtest, $wd, $testclass, $adir);
         }
+        foreach my $subtest (values %{$yaml->{'subtests_prepare'}})
+        {
+            $stdout = $stdout . $self->_attach_logs($subtest, $wd, $testclass, $adir);
+        }
 
 =item
 
@@ -216,15 +220,17 @@ sub generateJunit {
 sub _attach_logs {
     my ( $self, $yaml, $wd, $testclass, $adir ) = @_;
     my $stdout = '';
-    foreach my $lf ( values %{ $yaml->{'log'} } ) {
-        #ignore coverage
-        next if $lf =~ m/coverage/;
-        runEx( "cp $wd/$testclass/$lf $adir", 0 );
-        # see details in
-        # http://kohsuke.org/?s=junit+attachment
-        # https://wiki.jenkins-ci.org/display/
-        # JENKINS/JUnit+Attachments+Plugin
-        $stdout = $stdout.'[[ATTACHMENT|'.$adir.'/'.$lf."]]\n";
+    if( defined ( $yaml->{'log'} ) ){
+        foreach my $lf ( values %{ $yaml->{'log'} } ) {
+            #ignore coverage
+            next if $lf =~ m/coverage/;
+            runEx( "cp $wd/$testclass/$lf $adir", 0 );
+            # see details in
+            # http://kohsuke.org/?s=junit+attachment
+            # https://wiki.jenkins-ci.org/display/
+            # JENKINS/JUnit+Attachments+Plugin
+            $stdout = $stdout.'[[ATTACHMENT|'.$adir.'/'.$lf."]]\n";
+        }
     }
     return $stdout;
 }

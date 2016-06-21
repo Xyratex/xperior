@@ -1,0 +1,21 @@
+==> /var/log/messages <==
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-lo]
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-p2p2]
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-em2]
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-em1]
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-p2p1]
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-em4]
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond1]
+2016-06-06 04:50:21 +0000 /Stage[main]/Stx_network/Tidy[purge unused nics] (notice): Tidying File[/etc/sysconfig/network-scripts/ifcfg-bond0]
+2016-06-06 04:50:22 +0000 Puppet (notice): mellanox nic NOT detected!!!
+2016-06-06 04:50:22 +0000 /Stage[main]/Stx_network/Notify[mellanox nic NOT detected!!!]/message (notice): defined 'message' as 'mellanox nic NOT detected!!!'
+2016-06-06 04:50:22 +0000 Puppet (notice): {"corp"=>{"vlan"=>1, "ipaddress"=>"134.6.31.214", "netmask"=>"255.255.248.0", "gateway"=>"134.6.24.1"}}: GATEWAY Specified: 134.6.24.1
+2016-06-06 04:50:22 +0000 /Stage[main]/Stx_network/Stx_network::Iface[bond0]/Stx_network::Subint[{"corp"=>{"vlan"=>1, "ipaddress"=>"134.6.31.214", "netmask"=>"255.255.248.0", "gateway"=>"134.6.24.1"}}]/Notify[{"corp"=>{"vlan"=>1, "ipaddress"=>"134.6.31.214", "netmask"=>"255.255.248.0", "gateway"=>"134.6.24.1"}}: GATEWAY Specified: 134.6.24.1]/message (notice): defined 'message' as '{"corp"=>{"vlan"=>1, "ipaddress"=>"134.6.31.214", "netmask"=>"255.255.248.0", "gateway"=>"134.6.24.1"}}: GATEWAY Specified: 134.6.24.1'
+2016-06-06 04:50:23 +0000 /Stage[main]/Profiles::Cmu_raid/Partition[/dev/md0:1]/end (notice): end changed '500GB' to '50%'
+2016-06-06 04:50:23 +0000 /Stage[main]/Profiles::Cmu_raid/Partition[/dev/md0:2]/start (notice): start changed '500GB' to '50%'
+2016-06-06 04:50:23 +0000 /Stage[main]/Profiles::Cmu_raid/Partition[/dev/md0:2]/end (notice): end changed '1000GB' to '100%'
+2016-06-06 04:50:25 +0000 Puppet (err): Could not start Service[syslog-ng]: Execution of '/usr/bin/systemctl start syslog-ng' returned 1: Job for syslog-ng.service failed. See 'systemctl status syslog-ng.service' and 'journalctl -xn' for details.
+Wrapped exception:
+Execution of '/usr/bin/systemctl start syslog-ng' returned 1: Job for syslog-ng.service failed. See 'systemctl status syslog-ng.service' and 'journalctl -xn' for details.
+2016-06-06 04:50:25 +0000 /Stage[main]/Profiles::Syslog-ng::Server/Service[syslog-ng]/ensure (err): change from stopped to running failed: Could not start Service[syslog-ng]: Execution of '/usr/bin/systemctl start syslog-ng' returned 1: Job for syslog-ng.service failed. See 'systemctl status syslog-ng.service' and 'journalctl -xn' for details.
+2016-06-06 04:50:31 +0000 Puppet (notice): Finished catalog run in 10.76 seconds

@@ -1,0 +1,122 @@
+---
+cleanup_max_time: -1
+cmd: ~
+createdata: dd if=/dev/urandom of=@tmpdir@/@target_id@ bs=1M count=100
+datafile: '@tmpdir@/@target_id@'
+ddcmd: dd bs=10M if=@tmpdir@/@target_id@ of=@client_mount_point@/@genfilename@
+ddthreads: 2
+description: 'DD in 2 threads from CMU, 100mb files, with read check'
+endtime: 1465188653
+endtime_planned: 1465188932
+executor: Xperior::Executor::CastorDDTest
+expected_time: 60
+extoptions:
+  arch: x86_64
+  branch: C-OSAINT:B2620
+  buildurl: http://es-jenkins-int.xyus.xyratex.com:8080/job/osaint-execute-tests-lco/127/
+  configuration: hw_minicluster
+  distr: OSAINT
+  executiontype: RE_Nightly
+  recipients: roman.grigoryev@seagate.com
+  release: CASTOR_1.0
+  sessionstarttime: 1465188600
+fail_reason: ''
+groupname: datapath
+id: dd-small
+log:
+  /local/build/jenkins-int-lco-mero4/workspace/osaint-execute-tests-lco/wd/datapath/dd-small.memory-info.log: dd-small.memory-info.log
+  /local/build/jenkins-int-lco-mero4/workspace/osaint-execute-tests-lco/wd/datapath/dd-small.messages.client.log: dd-small.messages.client.log
+  /local/build/jenkins-int-lco-mero4/workspace/osaint-execute-tests-lco/wd/datapath/dd-small.mount-info.log: dd-small.mount-info.log
+messages: |
+  Cannot read console file on node [client]
+  MeroReportBug started
+prepare_data: yes
+reference: https://en.wikipedia.org/wiki/Dd_%28Unix%29
+roles: MeroStoreStat StoreSyslog StoreConsole MeroReportBug StacktraceGenerator
+sandbox: /var/mero/
+schema: data/schemas/testds.yaml
+starttime: 1465188632
+status: passed
+status_code: 0
+subtests:
+  subtest_client1_thr0:
+    cmd: touch /mnt/m0t1fs/7632487:3853457 &&  setfattr -n lid -v 8 /mnt/m0t1fs/7632487:3853457 && dd bs=10M if=/tmp//client1_thr0 of=/mnt/m0t1fs/7632487:3853457 2>     /var/log/xperior/test_stderr.893605.log 1>  /var/log/xperior/test_stdout.893605.log
+    completed: yes
+    datafile: /tmp//client1_thr0
+    endtime: 1465188651
+    endtime_planned: 1465188932
+    exitcode: 0
+    id: client1_thr0
+    killed: no
+    log:
+      stderr: dd-small.client1_thr0.stderr.log
+      stdout: dd-small.client1_thr0.stdout.log
+    masterhostdown: no
+    outfile: /mnt/m0t1fs/7632487:3853457
+    starttime: 1465188632
+    status: passed
+    status_code: 0
+  subtest_client1_thr1:
+    cmd: touch /mnt/m0t1fs/7321229:2673481 &&  setfattr -n lid -v 8 /mnt/m0t1fs/7321229:2673481 && dd bs=10M if=/tmp//client1_thr1 of=/mnt/m0t1fs/7321229:2673481 2>     /var/log/xperior/test_stderr.750287.log 1>  /var/log/xperior/test_stdout.750287.log
+    completed: yes
+    datafile: /tmp//client1_thr1
+    endtime: 1465188651
+    endtime_planned: 1465188932
+    exitcode: 0
+    id: client1_thr1
+    killed: no
+    log:
+      stderr: dd-small.client1_thr1.stderr.log
+      stdout: dd-small.client1_thr1.stdout.log
+    masterhostdown: no
+    outfile: /mnt/m0t1fs/7321229:2673481
+    starttime: 1465188632
+    status: passed
+    status_code: 0
+subtests_prepare:
+  subtest_client1:
+    cmd: mkdir -p /var/log/xperior/;mkdir -p /mnt/m0t1fs
+    ddcmd:
+      thr0: dd if=/dev/urandom of=/tmp//client1_thr0 bs=1M count=100
+      thr1: dd if=/dev/urandom of=/tmp//client1_thr1 bs=1M count=100
+    ddexitcode:
+      thr0: 0
+      thr1: 0
+    exitcode: 0
+    id: client1
+    log:
+      client1_thr0.prepare.dd.stderr: dd-small.client1_thr0.prepare.dd.stderr.log
+      client1_thr0.prepare.dd.stdout: dd-small.client1_thr0.prepare.dd.stdout.log
+      client1_thr1.prepare.dd.stderr: dd-small.client1_thr1.prepare.dd.stderr.log
+      client1_thr1.prepare.dd.stdout: dd-small.client1_thr1.prepare.dd.stdout.log
+    md5sum:
+      thr0: 6e58a23ab95366ad77369e57b548a255
+      thr1: 7a33f363e2262a59a6cc6e7395746bed
+    status: passed
+    status_code: 0
+subtests_verify:
+  subtest_client1:
+    id: client1
+    md5sum:
+      thr0: 6e58a23ab95366ad77369e57b548a255
+      thr1: 7a33f363e2262a59a6cc6e7395746bed
+    md5sum_cacl_parse:
+      thr0: 1
+      thr1: 1
+    md5sum_check:
+      thr0: 1
+      thr1: 1
+    md5sum_endtime:
+      thr0: 1465188655
+      thr1: 1465188656
+    md5sum_exit_code:
+      thr0: 0
+      thr1: 0
+    md5sum_starttime:
+      thr0: 1465188653
+      thr1: 1465188655
+    status: passed
+    status_code: 0
+tags: smallio
+testname: dd-small
+timeout: 300

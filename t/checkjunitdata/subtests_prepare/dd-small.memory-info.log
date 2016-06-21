@@ -1,0 +1,40 @@
+----------------- 134.6.31.214 -----------------
+<free>
+total       used       free     shared    buffers     cached
+
+Mem:     131759828    9483356  122276472      36380      18976    4095636
+
+-/+ buffers/cache:    5368744  126391084
+
+Swap:     66559996          0   66559996
+<df>
+Filesystem                1K-blocks         Used Available Use% Mounted on
+
+/dev/mapper/stxos-root    222746352      3474100 219272252   2% /
+
+devtmpfs                   65870036            0  65870036   0% /dev
+
+tmpfs                      65879912            0  65879912   0% /dev/shm
+
+tmpfs                      65879912         1096  65878816   1% /run
+
+tmpfs                      65879912            0  65879912   0% /sys/fs/cgroup
+
+/dev/mapper/stxos-home     18569216        32988  18536228   1% /home
+
+/dev/mapper/stxos-srv      18470912        32976  18437936   1% /srv
+
+/dev/mapper/stxos-tmp      55711152        34276  55676876   1% /tmp
+
+/dev/mapper/stxos-var      55711152      1298600  54412552   3% /var
+
+/dev/sda1                    487634        96278    361660  22% /boot
+
+/dev/md0p1                457626288        73752 433120408   1% /opt/ras
+
+/dev/md0p2                457626288       151532 433042628   1% /opt/data
+
+tmpfs                        102400          216    102184   1% /tmp/dcs
+
+m0t1                   640752623704 640751062552   1561152 100% /mnt/m0t1fs
+

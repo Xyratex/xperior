@@ -50,7 +50,7 @@ setup           some_setup    => sub {
 };
 
 
-test plan => 5, s_sortTests        => sub {
+test plan => 5, s_sortLegacyTests   => sub {
         my %options = (
             testdir => 't/testcfgs/sanity/',
             workdir => '/tmp/test_wd/',
@@ -64,22 +64,22 @@ test plan => 5, s_sortTests        => sub {
         my @newtests = @{$testcore->_sortTests()};
         is( $tests[0]->{testcfg}->{id},
             $newtests[0]->{testcfg}->{id},
-            'no order changes by default #1');
+            'no order changes by default 1');
         is( $tests[10]->{testcfg}->{id},
             $newtests[10]->{testcfg}->{id},
-            'no order changes by default #2');
+            'no order changes by default 2');
         is( $tests[60]->{testcfg}->{id},
             $newtests[60]->{testcfg}->{id},
-            'no order changes by default #3');
+            'no order changes by default 3');
         is( $tests[160]->{testcfg}->{id},
             $newtests[160]->{testcfg}->{id},
-            'no order changes by default #4');
+            'no order changes by default 4');
         is( $tests[403]->{testcfg}->{id},
             $newtests[403]->{testcfg}->{id},
-            'no order changes by default #5');
+            'no order changes by default 5');
     };
 
-test plan => 4, s_sortLegacyTests        => sub {
+test plan => 4, s_sortTests        => sub {
         my %options = (
             testdir => 't/testcfgs/sanity-ww/',
             workdir => '/tmp/test_wd/',
@@ -94,16 +94,16 @@ test plan => 4, s_sortLegacyTests        => sub {
         #print Dumper @newtests;
         is( $tests[1]->{testcfg}->{id},
             $newtests[0]->{testcfg}->{id},
-            'no order changes by default 1');
+            'second became firs');
         is( $tests[0]->{testcfg}->{id},
             $newtests[403]->{testcfg}->{id},
-            'no order changes by default 2');
+            'first became last');
         is( $tests[60]->{testcfg}->{id},
             $newtests[59]->{testcfg}->{id},
-            'no order changes by default 3');
+            'all other shift to 1');
         is( $tests[160]->{testcfg}->{id},
             $newtests[159]->{testcfg}->{id},
-            'no order changes by default 4');
+            'all other shift to 1');
     };
 
 
