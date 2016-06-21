@@ -635,6 +635,7 @@ sub _reportHtml {
     @suites = grep {!/xperior.log/}
               grep {!/testexecution.log/}
               grep {!/testorderplan.lst/}
+              grep {!/testexecutionplan.log/}
                 grep {!/report/}
                 grep {!/^\.\.?$/}
                     readdir $dh;
