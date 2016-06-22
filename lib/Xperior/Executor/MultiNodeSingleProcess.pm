@@ -70,6 +70,7 @@ our $VERSION = '0.02';
 has need_verification   => ( is => 'rw', default => 1);
 
 
+
 =head3  execute
 
 Function executes processes on client and observe/control process
@@ -137,8 +138,8 @@ sub execute{
 
     #preparation status check
     my $results_prepare_nodes =
-            $self->prepare_nodes(\@test_conenctors, \@targets, );
-    my $pr = $self->NOTSET;
+            $self->prepare_nodes( \@test_conenctors, \@targets );
+    #my $pr = $self->NOTSET;
     foreach my $res (@{$results_prepare_nodes}){
         $self->accumulate_resolution(
                 $res->internal_result_code(),
@@ -183,12 +184,15 @@ sub execute{
         }
     }
 
-    #FIXME cleanup tempdir after execution
+    #FIXME cleanup data after execution
     # it should be testing safe, remove only own data
     # maybe it's good idea implement in child
     #make this removing safe!!!
     #$testproc->run( 'rm -rf ' . "$mountpoint/*" )
     #        if ($mountpoint and $mountpoint ne "");
+    if ( $self->need_verification()) {
+        $self->cleanup( \@targets );
+    }
 }
 
 sub run{
@@ -229,6 +233,7 @@ sub verify{
     }
     return \@results;
 }
+
 
 sub run_test{
     my ($self, $target, $thr_num) = @_;
@@ -328,6 +333,27 @@ sub prepare_node{
     }
     return $result;
 }
+
+sub cleanup{
+    my ($self, $targets)= @_;
+    DEBUG 'Start cleanup';
+    my @threads = ();
+    foreach my $t ( @{$targets} ) {
+        push @threads, threads->create(sub {
+                    $self->cleanup_node($t)});
+    }
+    threads->yield;
+    my @results;
+    foreach my $t (@threads){
+        my $res = $t->join();
+        $self->addYEE( 'subtests_cleanup','subtest_'.$res->yaml()->{id}, $res->yaml());
+        push @results, $res;
+        #FIXME exit codes shoudl be checked!
+    }
+    return \@results;
+}
+
+
 
 sub processSystemLog{
     #default empty implemnetation

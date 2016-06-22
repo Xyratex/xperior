@@ -270,7 +270,7 @@ sub run {
         $isTestOrderReady = $self->replanningTests();
     }
     if(not $isTestOrderReady){
-        #$self->tests($self->_sortTests());
+        $self->tests($self->_sortTests());
         $self->tests($self->_randomizeTests())
                 if ($self->options->{'random'});
         $self->saveTestPlan();
@@ -297,22 +297,6 @@ sub run {
 
     $completelist = findCompleteTests($self->options->{'workdir'})
         if ($self->options->{'continue'});
-
-    #write actual run plan
-    write_file( "$wd/".$self->testexecutionplan(),
-        { err_mode => 'croak', append => 1 },
-        time()."\tCurrent plan prepared\n" );
-    foreach my $test (@{$self->{'tests'}}) {
-        my $testName  = $test->getId();
-        my $testGroup = $test->getGroupName();
-        write_file( "$wd/".$self->testexecutionplan(),
-            { err_mode => 'croak', append => 1 },
-            "${testGroup}//${testName}\n" );
-    }
-    write_file( "$wd/".$self->testexecutionplan(),
-        { err_mode => 'croak', append => 1 },
-        "------------------------------\n" );
-
 
     foreach my $test (@{$self->{'tests'}}) {
         my $testName     = $test->getId();
@@ -354,6 +338,23 @@ sub run {
             $test->skipped(1);
         }
     }
+    #write actual run plan
+    write_file( "$wd/".$self->testexecutionplan(),
+        { err_mode => 'croak', append => 1 },
+        time()."\tPlan for current execution\n" );
+    foreach my $test (@{$self->{'tests'}}) {
+        if ($test->skipped()) {
+            next;
+        }
+        my $testName  = $test->getId();
+        my $testGroup = $test->getGroupName();
+        write_file( "$wd/".$self->testexecutionplan(),
+            { err_mode => 'croak', append => 1 },
+            "${testGroup}//${testName}\n" );
+    }
+    write_file( "$wd/".$self->testexecutionplan(),
+        { err_mode => 'croak', append => 1 },
+        "------------------------------\n" );
 
     if ($action eq 'run') {
         WARN "Starting test execution";

@@ -31,7 +31,6 @@ sub run{
    my @results;
     foreach my $t (@threads){
         my $res = $t->join();
-        DEBUG Dumper ($res);
         $self->addYEE( 'subtests','subtest_'.$res->yaml()->{id}, $res->yaml());
         push @results, $res;
     }
@@ -39,13 +38,12 @@ sub run{
 }
 
 sub verify_node{
-    my ($self, $t, $connector, $mountpoint) = @_;
+    my ($self, $t) = @_;
     my $result = Xperior::SubTestResult->new();
     my %y = ();
     $result->yaml(\%y);
     $result->owner($self);
     $result->addYE( "id", $t->{id} );
-    DEBUG Dumper $self->yaml();
     my $thr = $self->test->getParam('ddthreads');
     DEBUG "MultiNodeSingleProcess _verify_node";
     my $fullres=0;
@@ -61,10 +59,8 @@ sub verify_node{
         #  datafile:
         my $datafile = $self->yaml->{subtests}->{"subtest_$t->{id}"}->{datafile};
         my $outfile  = $self->yaml->{subtests}->{"subtest_$t->{id}"}->{outfile};
-        DEBUG $datafile;
-        DEBUG $outfile;
         #md5 calculating
-        my $dfile = $self->_replace_vars($self->test->getParam('datafile'), $t);
+        #my $dfile = $self->_replace_vars($self->test->getParam('datafile'), $t);
         my $starttime = time;
         my $rmd5 = $t->{connector}->run("md5sum $outfile",timeout=>300);
         my $endtime = time;
@@ -107,6 +103,7 @@ sub verify_node{
 
 sub _replace_vars{
     my ($self, $cmd, $target, $filename) = @_;
+    confess "cmd is undefined " unless defined $cmd;
     my $mp        = $self->env->cfg->{'client_mount_point'};
     my $tmpdir    = $self->env->cfg->{'tempdir'};
     my $target_id   =
@@ -123,12 +120,13 @@ sub _replace_vars{
 #there we are in thread, executor is copyied and should not changed.
 sub prepare_node{
     my ($self, $t, $connector, $mountpoint) = @_;
-    #my $result = Xperior::SubTestResult->new();
     my $result = $self->SUPER::prepare_node($t, $connector, $mountpoint);
-    #my %y = ();
-    #$result->yaml(\%y);
-    #$result->owner($self);
-    #$result->addYE( "id", $t->{id} );
+
+    if( not $self->need_verification() ){
+        #no file generation when verification is not needed
+        return $result;
+    }
+
     DEBUG Dumper $t;
     my $thr = $self->test->getParam('ddthreads');
     DEBUG "MultiNodeSingleProcess prepare_node";
@@ -139,12 +137,7 @@ sub prepare_node{
         # this hask is need for filing cmd template
         my $id = $t->{'id'};
         $t->{id}=$t->{id}."_thr$i";
-        my $cmd = (
-            #'mkdir -p '.$self->xp_log_dir(),
-            #"mkdir -p ${mountpoint}",
-            #"dd if=/dev/zero of=${tmpdir}/${id}_${i} bs=1M count=1"
-            $self->_replace_vars($self->test->getParam('createdata'), $t)
-        );
+        my $cmd = $self->_replace_vars($self->test->getParam('createdata'), $t);
         $result->addYEE("ddcmd","thr$i",$cmd);
         my $rr = $connector->run($cmd, timeout=>1200);
         $result->addYEE("ddexitcode","thr$i",$rr->{exitcode});
@@ -170,6 +163,37 @@ sub prepare_node{
     return $result;
 }
 
+sub cleanup_node{
+    DEBUG "MultiNodeSingleProcess cleanup_node";
+    my ($self, $t) = @_;
+    my $result = Xperior::SubTestResult->new();
+    my %y = ();
+    $result->yaml(\%y);
+    $result->owner($self);
+    $result->addYE( "id", $t->{id} );
+    #my $result = $self->SUPER::prepare_node($t, $connector, $mountpoint);
+    my $thr = $self->test->getParam('ddthreads');
+    #my $fullres=0;
+    for (my $i=0; $i < $thr; $i++) {
+        #FIXME dirty workaround, we should add one more phase
+        #'test_preparation' and do it same as for 'run' call
+        # this hask is need for filing cmd template
+
+        my $id = $t->{'id'};
+        $t->{id}=$t->{id}."_thr$i";
+        my $datafile = $self->yaml->{subtests}->{"subtest_$t->{id}"}->{datafile};
+        my $starttime = time;
+        my $rm = $t->{connector}->run("rm -f -v $datafile",timeout=>300);
+        my $endtime = time;
+        $result->addYEE("ddcleanupexitcode","thr$i",$rm->{exitcode});
+        $result->writeLogFile("$t->{id}.cleanup.dd.stdout",$rm->{stdout});
+        $result->writeLogFile("$t->{id}.cleanup.dd.stderr",$rm->{stderr});
+        $result->addYEE("cleanup_starttime","thr$i",$starttime);
+        $result->addYEE("cleanup_endtime","thr$i",$endtime);
+        $t->{id}=$id;
+    }
+    return $result;
+}
 
 __PACKAGE__->meta->make_immutable;
 
