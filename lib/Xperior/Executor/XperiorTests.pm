@@ -70,7 +70,10 @@ sub execute {
     DEBUG "Create test class [$class]";
     load $class;
     my $test = $class->new;
+    $self->addYE('class_version',$test->VERSION);
     my $method = $self->test->getParam('scenario');
+    $test->executor($self);
+    $test->testds($self->test);
     DEBUG 'Call method [$method]';
     try{
         $test->$method($self);
@@ -78,12 +81,16 @@ sub execute {
 
     }catch TestFailed Error::subs::with{
         INFO "Test [$method] failed";
+    }catch TestError Error::subs::with{
+        INFO "Test [$method] failed with error";
     }finally{
 
     };
     $self->addYE( 'completed', 'yes' );
-    if($test->failcount > 0){
-         $self->fail( $test->reason() );
+    if($test->errorcount() > 0) {
+        $self->fail( $test->reason() );
+    } elsif ( $test->failcount() > 0) {
+        $self->fail( $test->reason() );
     }else{
          $self->pass();
     }

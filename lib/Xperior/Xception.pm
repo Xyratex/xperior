@@ -63,6 +63,10 @@ package TestFailed;
 use base qw(Xperior::Xception);
 1;
 
+package TestError;
+use base qw(Xperior::Xception);
+1;
+
 package NoSchemaException;
 use base qw(Xperior::Xception);
 1;

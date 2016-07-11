@@ -120,7 +120,7 @@ variable values from the test parameters.
 sub setExtOpt{
     my ($self,$key,$value) = @_;
 
-    while ( $value =~ /\${(\w+)}/ ) {
+    while ( $value =~ /\$\{(\w+)\}/ ) {
         my $var = $1;
         my $content = $self->test->getParam($var);
         $value =~ s/\${$var}/$content/g;

@@ -270,6 +270,12 @@ sub getNodeById{
 
 }
 
+sub get_node_connector_by_id{
+    my ($self, $nodeid) = @_;
+    my $node_obj = $self->getNodeById( $nodeid );
+    my $connector   = $node_obj->getExclusiveRC();
+    return $connector;
+}
 
 __PACKAGE__->meta->make_immutable;
 1;

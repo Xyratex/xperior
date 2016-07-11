@@ -1,0 +1,24 @@
+---
+Tests:
+   - id       : fail_test
+     class    : Examples::Simple
+     scenario : fail_test
+   - id       : error_test
+     class    : Examples::Simple
+     scenario : error_test
+   - id       : contains_test
+     class    : Examples::Simple
+     scenario : contains_test
+   - id            : run_check_test
+     class         : Examples::Simple
+     scenario      : run_check_test
+     custom_field : 12345
+
+executor : Xperior::Executor::XperiorTests
+description: Simple HSM Xperior tests
+groupname: examples
+reference: none
+roles:
+schema: data/schemas/testds.yaml
+tags: examples
+timeout: 60

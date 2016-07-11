@@ -309,7 +309,7 @@ sub run {
         DEBUG "Preprocessing [$testFullName]";
         if (@includeonly) {
             DEBUG 'Include only defined, excluding check skipped';
-            $skip = 1 unless first {$testFullName =~ m/^$_(\_\_\d+)*$/} @includeonly;
+            $skip = 1 unless first {$testFullName =~ m/^$_(\_\_\d+)*$/x} @includeonly;
         }
         else {
             foreach my $tag (@{$test->getTags}) {

@@ -28,8 +28,6 @@
 
 package launcher;
 use strict;
-
-use strict;
 use warnings;
 
 use Log::Log4perl qw(:easy);
