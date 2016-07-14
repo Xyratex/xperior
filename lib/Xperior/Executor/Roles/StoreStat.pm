@@ -107,7 +107,18 @@ before 'execute' => sub {
 
     my @threads = ();
     foreach my $node ( @{ $self->env->{'nodes'} } ) {
-      push @threads, threads->create(\&collectStat, $self, $node);
+        my $count = 1;
+        my $thr = threads->create(\&collectStat, $self, $node);
+        while ( ($thr == undef) and ($count++ < 3) ){
+            sleep 1;
+            $thr = threads->create(\&collectStat, $self, $node);
+        }
+
+        if (defined $thr) {
+            push @threads, $thr;
+        }else{
+            INFO "Cannot create StoreStat thread!!!";
+        }
     }
     threads->yield;
     foreach (@threads){
