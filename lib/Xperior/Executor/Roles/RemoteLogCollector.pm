@@ -98,16 +98,16 @@ use Log::Log4perl qw(:easy);
 use File::Basename;
 use Xperior::RemoteHelper;
 use Xperior::Node;
-our $VERSION = "0.0.1";
+our $VERSION = "0.0.2";
 
 requires    'env', 'addMessage', 'getNormalizedLogName', 'registerLogFile';
 
 #has conman_file_name   => ( is => 'rw', default => '');
-has procs              => ( is => 'rw', isa => 'HashRef' );
-has logs               => ( is => 'rw', isa => 'HashRef' );
-has nodes              => ( is => 'rw', isa => 'HashRef' );
-has items              => ( is => 'rw', isa => 'HashRef' );
-has keep_lines         => ( is => 'rw', default => 100);
+has remote_collector_procs  => ( is => 'rw', isa => 'HashRef' );
+has logs                    => ( is => 'rw', isa => 'HashRef' );
+has nodes                   => ( is => 'rw', isa => 'HashRef' );
+has items                   => ( is => 'rw', isa => 'HashRef' );
+has keep_lines              => ( is => 'rw', default => 100);
 
 my $title = 'NodeLogCollector';
 
@@ -116,7 +116,7 @@ before 'execute' => sub{
     my $self    = shift;
     $self->beforeBeforeExecute($title);
     my (%h, %l, %n, %i);
-    $self->procs(\%h);
+    $self->remote_collector_procs(\%h);
     $self->logs(\%l);
     $self->nodes(\%n);
     $self->items(\%i);
@@ -158,7 +158,7 @@ before 'execute' => sub{
                         "failed with exit code ".$sp->exitcode);
                     next;
                 }
-                $self->procs->{"${id}_$name"} = $sp;
+                $self->remote_collector_procs->{"${id}_$name"} = $sp;
                 $self->logs->{"${id}_$name"}  = $log;
                 $self->nodes->{"${id}_$name"} = $n->_node();
                 $self->items->{"${id}_$name"} = $c;
@@ -168,16 +168,14 @@ before 'execute' => sub{
             DEBUG "No 'collect' defined for node [".$n->id."]";
         }
     }
-
-#    }
     $self->afterAfterExecute($title);
 };
 
 after 'execute' => sub {
     my $self = shift;
     $self->beforeAfterExecute($title);
-    foreach my $k (keys %{$self->procs()}){
-        my $proc    = $self->procs()->{$k};
+    foreach my $k (keys %{$self->remote_collector_procs()}){
+        my $proc    = $self->remote_collector_procs()->{$k};
         my $rfile   = $self->logs()->{$k};
         my $n       = $self->nodes()->{$k};
         my $i       = $self->items()->{$k};

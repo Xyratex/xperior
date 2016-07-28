@@ -119,11 +119,15 @@ variable values from the test parameters.
 
 sub setExtOpt{
     my ($self,$key,$value) = @_;
+    if(not defined($value)){
+        INFO "in setExtOpt for key [$key] value is undef, replace it ''";
+        $value = '';
+    }
 
     while ( $value =~ /\$\{(\w+)\}/ ) {
         my $var = $1;
         my $content = $self->test->getParam($var);
-        $value =~ s/\${$var}/$content/g;
+        $value =~ s/\$\{$var\}/$content/g;
     }
 
     $self->addYEE('extoptions',$key,$value)

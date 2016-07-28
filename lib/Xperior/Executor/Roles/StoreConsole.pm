@@ -40,24 +40,26 @@ See also Xperior::Executor::Roles::NetconsoleCollector
 
 package Xperior::Executor::Roles::StoreConsole;
 
+use strict;
+use warnings;
 use Moose::Role;
 use Time::HiRes;
 use Proc::Simple;
 use Xperior::Utils;
 use Log::Log4perl qw(:easy);
+our $VERSION = "0.0.2";
 
 my $title = 'StoreConsole';
-has title => (is => 'ro', default => 'StoreConsole');
-has procs => ( is =>'rw', isa => 'HashRef');
+has console_procs => ( is =>'rw', isa => 'HashRef');
 requires    'env', 'addMessage', 'getNormalizedLogName';
 
 before 'execute' => sub{
     my $self = shift;
     $self->beforeBeforeExecute($title);
     my %h;
-    $self->procs(\%h);
+    $self->console_procs(\%h);
     foreach my $n (@{$self->env->nodes}){
-        $self->procs->{$n->id}=undef;
+        $self->console_procs->{$n->id}=undef;
         unless( defined($n->console)){
             $self->addMessage(
                     "No console defined for node [".$n->id."]");
@@ -67,11 +69,14 @@ before 'execute' => sub{
         my $log  = $self->getNormalizedLogName('console.'.$n->id);
 
         my $proc = Proc::Simple->new();
+        $proc->kill_on_destroy(1);
+        $proc->signal_on_destroy("KILL");
         DEBUG "Start kvm console saving from file $console";
         $proc->start("sudo tail -f -n 0 -v $console 2>&1 > $log");
         sleep 1;
         if($proc->poll){
-            $self->procs->{$n->id}=$proc;
+            DEBUG "Started tail, pid:".$proc->pid();
+            $self->console_procs->{$n->id}=$proc;
             $self->registerLogFile('console.'.$n->id,
                      $self->getNormalizedLogName('console.'.$n->id));
 
@@ -87,13 +92,20 @@ after 'execute' => sub {
     my $self = shift;
     $self->beforeAfterExecute($title);
     foreach my $n (@{$self->env->nodes}){
-        if(defined($self->procs->{$n->id})){
-            my $proc = $self->procs->{$n->id};
+        DEBUG "Check node ".$n->id;
+        if(defined($self->console_procs->{$n->id})){
+            my $proc = $self->console_procs->{$n->id};
+            DEBUG "tail proc pid for killing:".$proc->pid();
             #$proc->kill;
             runEx("sudo kill -TERM -".$proc->pid);
-
+            DEBUG "Proc status:".$proc->poll();
+            if( $proc->poll() ){
+                runEx("sudo kill -KILL -".$proc->pid);
+            }
+            DEBUG "Proc status:".$proc->poll();
         }
     }
+
     $self->afterAfterExecute($title);
 };
 1;

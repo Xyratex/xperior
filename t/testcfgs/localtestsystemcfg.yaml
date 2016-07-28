@@ -5,6 +5,7 @@ Nodes:
      ctrlproto   : ssh
      user        : tomcat
 
+
    - id           : oss1
      ip           : 127.0.0.1
      ctrlproto    : ssh
@@ -34,6 +35,7 @@ Nodes:
      ip           : localhost
      ctrlproto    : ssh
      user         : tomcat
+     console     : /tmp/xp_local_console_file
 
    - id           : client2
      ip           : localhost

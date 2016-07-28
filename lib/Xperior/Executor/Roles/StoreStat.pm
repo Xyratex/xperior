@@ -39,6 +39,8 @@ Role define harvesting info from lustre nodes
 
 package Xperior::Executor::Roles::StoreStat;
 
+use strict;
+use warnings;
 use Moose::Role;
 use Time::HiRes;
 use Xperior::Utils;
@@ -47,6 +49,7 @@ use Data::Dumper;
 use File::Slurp;
 use threads;
 
+my $title = 'StoreStat';
 requires 'env';
 
 sub collectStat {
@@ -98,6 +101,7 @@ DATA
 
 before 'execute' => sub {
     my $self = shift;
+    $self->beforeBeforeExecute($title);
     my $lres = '';
     my $mres = '';
 
@@ -113,6 +117,7 @@ before 'execute' => sub {
     }
     $self->_saveStatusLog( 'mount-info',  $lres );
     $self->_saveStatusLog( 'memory-info', $mres );
+    $self->afterBeforeExecute($title);
 };
 
 sub _saveStatusLog {
