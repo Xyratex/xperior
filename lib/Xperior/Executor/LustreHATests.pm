@@ -195,8 +195,25 @@ sub processLogs {
              '/tmp/ha.sh*dk',
          ]}
     }
-    DEBUG Dumper $self->_getMasterNode();
-    DEBUG Dumper $self->env->getNodeById( $self->_getMasterNode()->{'node'}) ;
+    my $connector  = $self->_getMasterConnector();
+
+    if ( $file ) {
+        my $isopen = open( F, "  $file" );
+        if ( !$isopen ) {
+            INFO "Cannot open console log file [$file]";
+            return;
+        }
+        DEBUG("Processing console log file [$file]");
+
+        while ( defined( my $s = <F> ) ) {
+            chomp $s;
+            $self->_parseLog($s,$connector);
+        }
+        close(F);
+    }else {
+        INFO "No console log file to process!"; 
+    }
+
     DEBUG Dumper $halogs;
     collect_remote_files_by_mask(
         $self->env->getNodeById( $self->_getMasterNode()->{'node'}),
@@ -204,6 +221,35 @@ sub processLogs {
     return $self->PASSED;
 }
 
+sub _parseLog{
+    my $self      = shift;
+    my $str       = shift;
+    my $connector = shift;
+    DEBUG "Parsing log str [$str]";
+
+    if ( my ($dumplog) = ( $str =~ m{Dumping lctl log to\s+(.*)$}) ) {
+        DEBUG "Log files template [$dumplog] found in log";
+        my $files = $connector->createSync("ls -Aw1 $dumplog");
+        DEBUG "Found files : $files";
+        if ( ( $connector->syncexitcode != 0 ) or ( $files eq '' ) ) {
+            $self->addMessage("Cannot list lctl logs files[$dumplog]");
+        }else {
+            foreach my $file ( split( /\n/, $files ) ) {
+                next if( ($file eq '') or ($file =~ m/^\s+/));
+                INFO "Attaching log file [$file]";
+                my $sname = $file;
+                $sname =~ s/^.*\///;
+                $sname =~ s/\.log$//;
+                foreach my $node ( @{ $self->env->{'nodes'} } ) {
+                    my $rconnector = $node->getRemoteConnector();
+                    my $id = $node->id;
+                    $self->_getLog( $rconnector, $file, "lctldklog.$id.$sname" );
+                }
+            }
+         }
+    }
+    return;
+}
 
 __PACKAGE__->meta->make_immutable;
 

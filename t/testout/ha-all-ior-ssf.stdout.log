@@ -1,0 +1,107 @@
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting tar on redpill-client02
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting iozone on redpill-client02
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting tar on redpill-client03
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting dd on redpill-client02
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting iozone on redpill-client03
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting dd on redpill-client03
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting dd on redpill-client04
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting dd on redpill-client06
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting iozone on redpill-client04
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting dd on redpill-client07
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting iozone on redpill-client05
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting iozone on redpill-client07
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: ha_machine_file=/tmp/ha.sh-143728/machine_file
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting tar on redpill-client07
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting tar on redpill-client08
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting tar on redpill-client04
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting iozone on redpill-client06
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting tar on redpill-client06
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting dd on redpill-client05
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: ha_machine_file=/tmp/ha.sh-143728/machine_file
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting iozone on redpill-client08
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: Starting dd on redpill-client08
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: ha_machine_file=/tmp/ha.sh-143728/machine_file
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: ha_machine_file=/tmp/ha.sh-143728/machine_file
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: ha_machine_file=/tmp/ha.sh-143728/machine_file
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: ha_machine_file=/tmp/ha.sh-143728/machine_file
+/usr/lib64/lustre/tests/ha.sh: 10:23:11 1466072591: ha_machine_file=/tmp/ha.sh-143728/machine_file
+/usr/lib64/lustre/tests/ha.sh: 10:23:14 1466072594: Starting simul
+/usr/lib64/lustre/tests/ha.sh: 10:23:14 1466072594: Starting ior
+/usr/lib64/lustre/tests/ha.sh: 10:23:14 1466072594: Waiting for workload status
+/usr/lib64/lustre/tests/ha.sh: 10:25:11 1466072711: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:27:21 1466072841: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:28:34 1466072914: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:29:45 1466072985: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:31:31 1466073091: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:32:46 1466073166: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:33:14 1466073194: ---------------8<---------------
+/usr/lib64/lustre/tests/ha.sh: 10:33:14 1466073194: Failing redpill16
+/usr/lib64/lustre/tests/ha.sh: 10:33:14 1466073194: Sleeping for 390s
+/usr/lib64/lustre/tests/ha.sh: 10:35:08 1466073308: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:37:17 1466073437: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:37:58 1466073478: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:38:55 1466073535: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:39:44 1466073584: Powering down redpill16
+/usr/lib64/lustre/tests/ha.sh: 10:39:46 1466073586: Sleeping for 10s
+/usr/lib64/lustre/tests/ha.sh: 10:39:56 1466073596: Waiting for workload status
+/usr/lib64/lustre/tests/ha.sh: 10:40:59 1466073659: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:42:32 1466073752: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:43:53 1466073833: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:45:09 1466073909: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:46:30 1466073990: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:48:02 1466074082: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:49:12 1466074152: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:49:56 1466074196: Bringing redpill16 back
+/usr/lib64/lustre/tests/ha.sh: 10:49:56 1466074196: Sleeping for 6s
+/usr/lib64/lustre/tests/ha.sh: 10:50:02 1466074202: Powering up redpill16
+redpill00: Command completed successfully
+/usr/lib64/lustre/tests/ha.sh: 10:50:03 1466074203: Waiting for redpill16 to boot up
+/usr/lib64/lustre/tests/ha.sh: 10:50:03 1466074203: Failback resources on redpill16 in 600 sec
+/usr/lib64/lustre/tests/ha.sh: 10:50:03 1466074203: Sleeping for 600s
+/usr/lib64/lustre/tests/ha.sh: 10:50:35 1466074235: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:51:31 1466074291: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:52:32 1466074352: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:52:57 1466074377: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:53:39 1466074419: rc=0
+/usr/lib64/lustre/tests/ha.sh: 10:55:00 1466074500: rc=141
+/usr/lib64/lustre/tests/ha.sh: 10:55:00 1466074500: Dumping lctl log to /tmp/ha.sh-143728-1466074500.dk
+/usr/lib64/lustre/tests/ha.sh: 10:55:02 1466074502: rc=255
+/usr/lib64/lustre/tests/ha.sh: 10:55:03 1466074503: dd on redpill-client07 stopped: rc 1 avg loop time 1s
+/usr/lib64/lustre/tests/ha.sh: 10:55:03 1466074503: Dumping lctl log to /tmp/ha.sh-143728-1466074500.dk
+/usr/lib64/lustre/tests/ha.sh: 10:55:05 1466074505: ior stopped: rc 141 avg loop time 637
+/usr/lib64/lustre/tests/ha.sh: 10:55:05 1466074505: Dumping lctl log to /tmp/ha.sh-143728-1466074502.dk
+/usr/lib64/lustre/tests/ha.sh: 10:55:05 1466074505: simul stopped: rc 255 avg loop time 91
+/usr/lib64/lustre/tests/ha.sh: 10:55:10 1466074510: dd on redpill-client05 stopped: rc 0 avg loop time 1s
+/usr/lib64/lustre/tests/ha.sh: 10:55:10 1466074510: dd on redpill-client06 stopped: rc 0 avg loop time 1s
+/usr/lib64/lustre/tests/ha.sh: 10:55:10 1466074510: dd on redpill-client08 stopped: rc 0 avg loop time 1s
+/usr/lib64/lustre/tests/ha.sh: 10:55:10 1466074510: dd on redpill-client04 stopped: rc 0 avg loop time 1s
+/usr/lib64/lustre/tests/ha.sh: 10:55:10 1466074510: dd on redpill-client03 stopped: rc 0 avg loop time 1s
+/usr/lib64/lustre/tests/ha.sh: 10:55:15 1466074515: tar on redpill-client06 stopped: rc 0 avg loop time 58s
+/usr/lib64/lustre/tests/ha.sh: 10:55:18 1466074518: Dumping lctl log to /tmp/ha.sh-143728-1466074518.dk
+/usr/lib64/lustre/tests/ha.sh: 10:55:20 1466074520: tar on redpill-client07 stopped: rc 2 avg loop time 58s
+/usr/lib64/lustre/tests/ha.sh: 10:55:20 1466074520: tar on redpill-client03 stopped: rc 0 avg loop time 58s
+/usr/lib64/lustre/tests/ha.sh: 10:55:24 1466074524: tar on redpill-client04 stopped: rc 0 avg loop time 55s
+/usr/lib64/lustre/tests/ha.sh: 10:55:27 1466074527: tar on redpill-client02 stopped: rc 0 avg loop time 58s
+/usr/lib64/lustre/tests/ha.sh: 10:55:27 1466074527: tar on redpill-client05 stopped: rc 0 avg loop time 55s
+/usr/lib64/lustre/tests/ha.sh: 10:55:28 1466074528: tar on redpill-client08 stopped: rc 0 avg loop time 58s
+/usr/lib64/lustre/tests/ha.sh: 10:56:13 1466074573: iozone on redpill-client03 stopped: rc 0 avg loop time 180s
+/usr/lib64/lustre/tests/ha.sh: 10:56:50 1466074610: iozone on redpill-client08 stopped: rc 0 avg loop time 201s
+/usr/lib64/lustre/tests/ha.sh: 10:56:54 1466074614: iozone on redpill-client05 stopped: rc 0 avg loop time 183s
+/usr/lib64/lustre/tests/ha.sh: 10:56:59 1466074619: iozone on redpill-client04 stopped: rc 0 avg loop time 184s
+/usr/lib64/lustre/tests/ha.sh: 10:57:07 1466074627: iozone on redpill-client06 stopped: rc 0 avg loop time 185s
+/usr/lib64/lustre/tests/ha.sh: 10:57:12 1466074632: iozone on redpill-client07 stopped: rc 0 avg loop time 185s
+/usr/lib64/lustre/tests/ha.sh: 10:57:24 1466074644: iozone on redpill-client02 stopped: rc 0 avg loop time 186s
+/usr/lib64/lustre/tests/ha.sh: 11:00:04 1466074804: Sleeping for 60s
+/usr/lib64/lustre/tests/ha.sh: 11:01:04 1466074864: Waiting for workload status
+/usr/lib64/lustre/tests/ha.sh: 11:01:04 1466074864: /tmp/ha.sh-143728/stop found! Stop.
+/usr/lib64/lustre/tests/ha.sh: 11:01:04 1466074864: Sleeping for 1s
+/usr/lib64/lustre/tests/ha.sh: 11:01:05 1466074865: Loop 1 done
+/usr/lib64/lustre/tests/ha.sh: 11:01:05 1466074865: ---------------8<---------------
+/usr/lib64/lustre/tests/ha.sh: 11:01:05 1466074865: Summary:
+/usr/lib64/lustre/tests/ha.sh: 11:01:05 1466074865:     Duration: 2274s
+/usr/lib64/lustre/tests/ha.sh: 11:01:05 1466074865:     Loops: 1
+/usr/lib64/lustre/tests/ha.sh: 11:01:05 1466074865: Dumping lctl log to /tmp/ha.sh-143728-1466074865.dk
+/usr/lib64/lustre/tests/ha.sh: 11:01:06 1466074866: Waiting for workloads to stop
+/usr/lib64/lustre/tests/ha.sh: 11:01:06 1466074866: Test directory /mnt/fs1//ha.sh-143728 not removed
+/usr/lib64/lustre/tests/ha.sh: 11:01:06 1466074866: Temporary directory /tmp/ha.sh-143728 not removed
+

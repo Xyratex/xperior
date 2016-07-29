@@ -108,8 +108,33 @@ test plan => 4, cCheckHaOptions => sub {
     'Simple ha.sh cmd check #4');
 };
 
-
-
+test plan => 4, cCheckParseLogs => sub {
+    $exe = Xperior::Executor::LustreHATests->new();
+    my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
+    DEBUG Dumper $cfg->getMasterLustreClient();
+    $exe->init($test, \%options, $cfg);
+    #DEBUG Dumper $cfg;
+    $exe->_prepareCommands();
+    my $logdir = '/tmp/';
+    my $log1   = '/tmp/ha.sh-143728-1466074500.dk';
+    my $log2   = '/tmp/ha.sh-143728-1466074502.dk';
+    my $log3   = '/tmp/ha.sh-143728-1466074518.dk';
+    my $log4   = '/tmp/ha.sh-143728-1466074865.dk';
+    mkdir $logdir;
+    write_file( $log1, $logdir);
+    write_file( $log2, $logdir);
+    write_file( $log3, $logdir);
+    write_file( $log4, $logdir);
+    $exe->processLogs("t/testout/ha-all-ior-ssf.stdout.log");
+    ok( -e '/tmp/test_wd/single/1.ha.sh-143728-1466074500.dk.client1.log',
+        'check parse log1');
+    ok( -e '/tmp/test_wd/single/1.ha.sh-143728-1466074502.dk.client1.log',
+        'check parse log2');
+    ok( -e '/tmp/test_wd/single/1.ha.sh-143728-1466074518.dk.client1.log',
+        'check parse log3');
+    ok( -e '/tmp/test_wd/single/1.ha.sh-143728-1466074865.dk.client1.log',
+        'check parse log4');
+};
 
 test plan => 2, cCheckProcessLogs => sub {
     $exe = Xperior::Executor::LustreHATests->new();
@@ -125,9 +150,9 @@ test plan => 2, cCheckProcessLogs => sub {
     write_file( $log1, "log1");
     write_file( $log2, "log2");
     $exe->processLogs();
-    ok( -e '/tmp/test_wd/single/1.ha.sh_xp_test_dk.client1.log',
-        'check log1');
     ok( -e '/tmp/test_wd/single/1.test.client1.log',
+        'check log1');
+    ok( -e '/tmp/test_wd/single/1.ha.sh_xp_test_dk.client1.log',
         'check log2');
 };
 
