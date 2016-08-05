@@ -95,8 +95,20 @@ sub htime{
     my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
         = localtime(time);
     $mon++;
+    $year = $year + 1900;
     my $time = "[".time."] $year/$mon/$mday $hour:$min:$sec";
     return $time;
+}
+
+
+=head3 log
+
+=cut
+
+sub log{
+    my ($self, $message, %opts)  = @_;
+    $self->append(
+        $self->htime()." $message\n");
 }
 
 =head3 fail
@@ -124,7 +136,7 @@ sub fail{
     INFO "$message : FAILED";
     $self->failcount($self->failcount()+1);
     $self->append(
-             $time."Directive fail at $source\n"
+             $time." Directive fail at $source\n"
             ."==============================================\n"
             ."$message : FAILED\n");
     $self->reason("$message :FAILED")
@@ -402,7 +414,7 @@ sub run_check{
             ."==============================================\n"
             ."Exit code is [$run_res->{exitcode}]\n"
             ." $message :FAILED"
-            ." cms is [$cmd]"
+            ." cmd is [$cmd]"
             ." stdout is \n"
             ."-------------cut------------\n"
             . $run_res->{stdout}
