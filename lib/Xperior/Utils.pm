@@ -55,7 +55,8 @@ use Symbol 'gensym';
 use Proc::Simple;
 
 our @ISA = ("Exporter");
-our @EXPORT = qw(&shell &trim &runEx &parseFilterFile &findCompleteTests &is_path_unsafe &get_fs_root);
+our @EXPORT = qw(&shell &trim &runEx &parseFilterFile &findCompleteTests
+    &is_path_unsafe &get_fs_root &is_any_pids_alive &kill_tree);
 
 sub trim{
    my $string = shift;
@@ -423,13 +424,11 @@ sub is_path_unsafe{
 
 Generates a list of filesystem roots using mount command on the local node.
 
-Returns array reference.
+Returns string array reference.
 
-SYNOPSIS
-
-    get_fs_root ()
 
 =cut
+
 sub get_fs_root{
     my (@output, @all_words);
     @output = split(/\n/,`mount`);
@@ -438,6 +437,62 @@ sub get_fs_root{
         push(@all_words,@tmp_arr);
     }
     return [grep(/^\//, @all_words)];
+}
+
+=head2 is_any_pids_alive(@pids)
+
+Check process status for PIDs, return number of alives process
+from list.
+
+=cut
+
+sub is_any_pids_alive{
+    my @pids = @_;
+    my $alive=0;
+    foreach my $p (@pids) {
+        my $ec = runEx("sudo kill -0 $p");
+        if($ec !=0 ){
+            #DEBUG "Process [$p] is not exists";
+        }else{
+            #DEBUG "Process [$p] alive";
+            #DEBUG `ps afx | grep $p`;
+            $alive++;
+        }
+    }
+    return $alive;
+}
+
+
+=head2 kill_tree($pid, $kill_time)
+
+Send TERM to $pid, sleep $kill_time sec, check processes alive,  and if alive
+- send KILL
+
+Assumption: proc group as same pid as pid in parameters (proc tree top)
+
+=cut
+
+sub kill_tree{
+    my ($pid, $kill_time) = shift;
+    $kill_time = 1 unless $kill_time;
+    my $gcmd = "pgrep -g ".$pid;
+    my @pids = split(/\n/,`$gcmd`);
+    DEBUG "Kill pids:".join(",",@pids);
+    foreach my $p( @pids){
+        DEBUG "run [sudo kill -TERM $p]";
+        #Replace it to correct run with catching stdout/stderr
+        DEBUG `sudo kill -TERM $p`;
+    }
+    #time to system kill and cleanup for highloaded systems
+    sleep $kill_time;
+    DEBUG "Proc status after TERM:". is_any_pids_alive(@pids);
+    if( is_any_pids_alive(@pids) ){
+        foreach my $p( @pids){
+            DEBUG "run [sudo kill -KILL $p]";
+            DEBUG `sudo kill -KILL $p`;
+        }
+    }
+    DEBUG "Proc status:".is_any_pids_alive(@pids);
 }
 
 1;

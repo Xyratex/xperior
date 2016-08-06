@@ -47,6 +47,8 @@ use Time::HiRes;
 use Proc::Simple;
 use Xperior::Utils;
 use Log::Log4perl qw(:easy);
+
+
 our $VERSION = "0.0.2";
 
 my $title = 'StoreConsole';
@@ -88,6 +90,7 @@ before 'execute' => sub{
     $self->afterBeforeExecute($title);
 };
 
+
 after 'execute' => sub {
     my $self = shift;
     $self->beforeAfterExecute($title);
@@ -95,14 +98,14 @@ after 'execute' => sub {
         DEBUG "Check node ".$n->id;
         if(defined($self->console_procs->{$n->id})){
             my $proc = $self->console_procs->{$n->id};
-            DEBUG "tail proc pid for killing:".$proc->pid();
-            #$proc->kill;
-            runEx("sudo kill -TERM -".$proc->pid);
-            DEBUG "Proc status:".$proc->poll();
-            if( $proc->poll() ){
-                runEx("sudo kill -KILL -".$proc->pid);
-            }
-            DEBUG "Proc status:".$proc->poll();
+            DEBUG "tail ".$n->id." proc pid for killing:".$proc->pid();
+            #assumption - proc group has same pid as first
+            # app, e.g. in our case it is sh
+            #action - list process for pgroup based in sh pid,
+            #kill it
+            kill_tree($proc->pid());
+            $proc = undef;
+            $self->console_procs->{$n->id} = undef;
         }
     }
 
