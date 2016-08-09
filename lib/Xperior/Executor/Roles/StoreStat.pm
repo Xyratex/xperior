@@ -96,7 +96,7 @@ $df
 
 DATA
     ;
-  return ($ldata, $mdata);
+  return ( {lustre => $ldata, memory => $mdata} );
 }
 
 before 'execute' => sub {
@@ -122,9 +122,9 @@ before 'execute' => sub {
     }
     threads->yield;
     foreach (@threads){
-      my ($l, $m) = $_->join();
-      $lres = $lres . $l;
-      $mres = $mres . $m;
+        my $data = $_->join();
+        $lres = $lres . $data->{lustre};
+        $mres = $mres . $data->{memory};
     }
     $self->_saveStatusLog( 'mount-info',  $lres );
     $self->_saveStatusLog( 'memory-info', $mres );
