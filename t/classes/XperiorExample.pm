@@ -97,6 +97,9 @@ sub test_run_check{
         'Check custom sub execution check');
     like( $log, qr/param:12345/,
         'Check run_check with contains');
+    like($log, qr/\+ echo]/,
+        'Check run_check for empty output')
 }
+
 
 1;

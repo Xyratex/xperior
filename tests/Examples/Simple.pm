@@ -139,7 +139,7 @@ sub run_check_test {
 
     #get master client from GenericObjects section
     # from system config yaml
-    my $client = $env->get_master_generic_clients();
+    my $client = $env->get_master_generic_client();
     #find ssh connector by node id
     my $client_ssh = $env->get_node_connector_by_id($client->{node});
 
@@ -156,7 +156,7 @@ sub run_check_test {
     $self->run_check(
         node   => $client_ssh,
         cmd     =>"ls -la $mount/file_not_exists ",
-        sub_exec_check => sub {
+        exec_check_sub => sub {
             return 0 if $_[0];
             return 1 if $_[1] == 2;
             return 0;
@@ -171,7 +171,7 @@ sub run_check_test {
 
     my $node_failing_drive;
     foreach my $o (@{$env->cfg->{'GenericObjects'}}){
-        if( $o->{'type'} eq 'failing_drive'){
+        if( $o->{'labels'} and ($o->{'labels'} eq 'victim')){
             $node_failing_drive =  $o;
         }
     }
@@ -186,11 +186,29 @@ sub run_check_test {
     $self->run_check(
         node     => $node_failing_drive_ssh,
         cmd      => "echo 'param:$cf'",
-        contains => 'remove drive there',
+        contains => '12345',
         message  =>'run_check with contains');
 
+    # one more check for empty string
+    # use part of stderr output for more specific comparing
+    $self->run_check(
+        node     => $node_failing_drive_ssh,
+        cmd      => "echo qwerty | grep -q qazwsx",
+        #return true only if exit code is 1
+        #grep exit code is1 for empty output
+        exec_check_sub  => sub {
+                DEBUG "Own testing sub!";
+                return 0 if $_[0];
+                return 1 if $_[1] == 1;
+                return 0;},
+        contains => '\+ echo',
+        contains_check_sub => sub {
+                            my ($data,$exp) = @_;
+                            return ($data =~ m/^$exp/i)},
+        message  =>'run_check/contains for empty stdout');
 
 }
+
 
 1; #perl module end
 

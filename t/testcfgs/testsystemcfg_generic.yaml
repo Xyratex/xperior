@@ -18,9 +18,11 @@ GenericObjects:
      type        : client
      target      : yes
 
-   - id          : ssu3
-     node        : local1
-     type        : failing_drive
+   - id           : ssu3
+     node         : local1
+     type         : ssu
+     custom_field : failing_drive
+     labels       : victim
 
 client_mount_point      : /mnt/lustre/
 benchmark_tests_file    : testfile

@@ -319,7 +319,7 @@ Parameters ( hash fields):
                        not timeouted
     * should_fail    - cmd execution passed if exit code > 0 and
                        not timeouted
-    * sub_exec_check - custom check sub for exit code,
+    * exec_check_sub - custom check sub for exit code,
                         first parameter - killed parameter,
                         second parameter - expected parameter
 
@@ -350,7 +350,12 @@ Examples:
     $self->contains(
         value      => 'qwerty asdfg ZZZZ',
         expected   => 'zzzz',
-        check_sub  => sub {$_[0] =~ m/$_[1]/i},
+        exec_check_sub  => sub {
+                    return 0 if $_[0]; #false is killed
+                    return 1 if $_[1] == 255; # true if exir code 255
+                    return 0; # false in any other case
+        },
+
         message    => "custom chech sub");
 
 =cut
@@ -358,10 +363,11 @@ Examples:
 sub run_check{
     my ( $self, %opts ) = @_;
     my $node        = $opts{node}     || $self->default_node();
+    DEBUG "Node is ". Dumper $node;
     my $timeout     = $opts{timeout}  || $self->default_timeout();
     my $cmd                = $opts{cmd};
     my $should_fail        = $opts{should_fail} || '';
-    my $sub_exec_check     = $opts{sub_exec_check} || sub {
+    my $sub_exec_check     = $opts{exec_check_sub} || sub {
         return 0 if $_[0];
         return 0 if $_[1] != 0;
         return 1;
@@ -378,7 +384,6 @@ sub run_check{
             return 1;
         };
     }
-
 
     if(not $node){
          throw TestFailed("node is not set!");
@@ -397,6 +402,8 @@ sub run_check{
              $time." Check at $source\n"
             ."==============================================\n"
             ."Exit code is [$run_res->{exitcode}]\n"
+            ."Executed on [".$node->host()."]\n"
+            ."Executed cmd [".$cmd."]\n"
             ."$message : PASSED\n");
 
         $self->contains( value    => $run_res->{stdout}.$run_res->{stderr},
@@ -413,6 +420,8 @@ sub run_check{
             $time." Check at $source\n"
             ."==============================================\n"
             ."Exit code is [$run_res->{exitcode}]\n"
+            ."Killed status is [".$run_res->{killled}."]\n"
+            ."Executed on [".$node->host()."]\n"
             ." $message :FAILED"
             ." cmd is [$cmd]"
             ." stdout is \n"

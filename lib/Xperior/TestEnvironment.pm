@@ -209,6 +209,21 @@ sub get_hsm_mover_target{
 }
 
 # generic config functions
+sub get_nodes_by_label{
+    my ($self, $label) = @_;
+    my @res;
+    foreach my $lo (@{$self->cfg->{'GenericObjects'}}){
+        if($lo->{'labels'}){
+            if(grep(
+                    /^$label$/,
+                        split(/\s+/,$lo->{'labels'}))) {
+                push @res, $lo;
+            }
+        }
+    }
+    return \@res;
+}
+
 sub get_target_generic_clients{
     my $self = shift;
     my @res;
@@ -222,7 +237,21 @@ sub get_target_generic_clients{
     return \@res;
 }
 
-sub get_master_generic_clients{
+sub get_target_generic_ssus{
+    my $self = shift;
+    my @res;
+    foreach my $lo (@{$self->cfg->{'GenericObjects'}}){
+        if(( $lo->{'type'} eq 'ssu')
+            &&(defined( $lo->{'target'}))
+            &&( $lo->{'target'} eq 'yes')){
+            push @res, $lo;
+        }
+    }
+    return \@res;
+}
+
+
+sub get_master_generic_client{
     my $self = shift;
     foreach my $go (@{$self->cfg->{'GenericObjects'}}){
         if(( $go->{'type'} eq 'client')

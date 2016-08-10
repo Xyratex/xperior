@@ -76,6 +76,20 @@ sub execute {
     $test->testds($self->test);
     DEBUG 'Call method [$method]';
     try{
+        #calling CTAPI::CastorTest::prepare_env or
+        # it's inheritor threre. this often hidden call
+        # should prepare main env vars for tests
+        my $prepareenvptr = "prepare_env";
+        if($test->can($prepareenvptr)){
+            INFO "Calling [$prepareenvptr] for test";
+            $test->$prepareenvptr($self);
+        }
+
+        my $prepareptr = "${method}__prepare";
+        if($test->can($prepareptr)){
+            INFO "Calling prepare for test [$method]";
+            $test->$prepareptr($self);
+        }
         $test->$method($self);
         INFO "Test [$method] passed";
 
@@ -84,7 +98,11 @@ sub execute {
     }catch TestError Error::subs::with{
         INFO "Test [$method] failed with error";
     }finally{
-
+        my $cleanupptr = "${method}__cleanup";
+        if($test->can($cleanupptr)){
+            INFO "Calling cleanup for test [$cleanupptr]";
+            $test->$cleanupptr($self);
+        }
     };
     $self->addYE( 'completed', 'yes' );
     if($test->errorcount() > 0) {
