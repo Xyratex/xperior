@@ -39,6 +39,7 @@ use File::chdir;
 use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 use File::Slurp;
 
+use Xperior::Utils;
 use Xperior::Test;
 use Xperior::Executor::Noop;
 use Xperior::Executor::Roles::RemoteLogCollector;
@@ -70,6 +71,7 @@ my %tests = (
       inf => 'more info',
 );
 
+my $testcore;
 #######################################
 
 
@@ -82,7 +84,9 @@ startup         _startup  => sub {
 };
 setup           _setup    => sub {
     remove_tree('/tmp/test_wd');
-    my $testcore =  Xperior::Core->new();
+    DEBUG `sudo rm -fv /tmp/xperior_conman.oss*`;
+    DEBUG `sudo rm -fv /tmp/xperior_syslog.oss*`;
+    $testcore =  Xperior::Core->new();
     $testcore->options(\%options);
     $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
     $test = Xperior::Test->new;
@@ -96,8 +100,7 @@ shutdown        _shutdown => sub {
 };
 #########################################
 
-test plan => 7, cCheckCollectionPassedTest => sub {
-    $test->init(\%tests,\%group_config);
+test plan => 9, cCheckCollectionPassedTest => sub {
     $exe = Xperior::Executor::Noop->new();
     Xperior::Executor::Roles::RemoteLogCollector->meta->apply($exe);
     $exe->init($test, \%options, $cfg);
@@ -109,7 +112,8 @@ test plan => 7, cCheckCollectionPassedTest => sub {
     my @syslog = read_file($oss1_syslog_attached);
     is(scalar @syslog,2,'Check number of record in syslog/oss1');
 
-    ok( (-e $oss1_conman),
+    DEBUG "Check existence of  [$oss1_conman]";
+    ok( (-e $oss1_conman_attached),
         'check if conman log exists after test end');
     my @conman = read_file($oss1_conman_attached);
     is(scalar @conman,2,'Check number of record in conman/oss1');
@@ -122,11 +126,14 @@ test plan => 7, cCheckCollectionPassedTest => sub {
     like( $exe->yaml()->{messages},
           qr/Collection of \'\/tmp\/xperior_test_file_conman2_log\' for record \[conman2\] failed with exit code 1/,
           'fail to collect');
-    #exit 0;
+    my $conman_ec = runEx('ls -la /tmp/xperior_conman.oss1*') >> 8;
+    isnt($conman_ec,0,'No conman tail stdout should be found');
+    my $syslog_ec = runEx('ls -la /tmp/xperior_syslog.oss1*') >> 8;
+    isnt($syslog_ec,0,'No conman tail stdout should be found');
+
 };
 
-test plan => 4, aCheckCollectionFailTest => sub {
-    $test->init(\%tests,\%group_config);
+test plan => 4, kCheckCollectionFailTest => sub {
     $exe = Xperior::Executor::Noop->new();
     Xperior::Executor::Roles::RemoteLogCollector->meta->apply($exe);
     $exe->init($test, \%options, $cfg);
@@ -134,18 +141,48 @@ test plan => 4, aCheckCollectionFailTest => sub {
     $exe->yaml->{'forced_teststatus'} = 'fail';
 
     $exe->execute();
-    ok( (-e $oss1_syslog),
+    ok( (-e $oss1_syslog_attached),
         'check if syslog log exists after test end');
     my @syslog = read_file($oss1_syslog_attached);
+    DEBUG Dumper @syslog;
     is(scalar @syslog,2,'Check number of record in syslog/oss1');
 
-    ok( (-e $oss1_conman),
+    ok( (-e $oss1_conman_attached),
         'check if conman log exists after test end');
     my @conman = read_file($oss1_conman_attached);
     DEBUG Dumper @conman;
     is(scalar @conman,3,'Check number of record in conman/oss1');
 };
 
+test plan => 2, lCheckCollectionFailTestOnlyFail => sub {
+    $exe = Xperior::Executor::Noop->new();
+    $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg_only_failed.yaml');
+    Xperior::Executor::Roles::RemoteLogCollector->meta->apply( $exe );
+    $exe->init( $test, \%options, $cfg );
+    $exe->keep_lines( 1 );
+    $exe->yaml->{'forced_teststatus'} = 'fail';
+    $exe->execute();
+
+    ok( (-e $oss1_syslog_attached),
+        'check if syslog log exists after test end');
+    my @syslog = read_file($oss1_syslog_attached);
+    is(scalar @syslog, 3, 'Check number of record in syslog/oss1');
+
+};
+
+test plan => 2, mCheckCollectionOnlyFail => sub {
+    $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg_only_failed.yaml');
+    $exe = Xperior::Executor::Noop->new();
+    Xperior::Executor::Roles::RemoteLogCollector->meta->apply( $exe );
+    $exe->init( $test, \%options, $cfg );
+    $exe->keep_lines( 1 );
+    $exe->execute();
+    DEBUG   `ls -la $oss1_syslog`;
+    is ( (-e $oss1_syslog_attached), undef,
+        'check if syslog log does not exists after test end');
+    is( (-e $oss1_conman_attached),  undef,
+        'check if conman log does not exists after test end');
+};
 
 roleRemoteLogCollector->run_tests;
 

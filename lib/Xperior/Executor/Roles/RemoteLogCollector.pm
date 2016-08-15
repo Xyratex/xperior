@@ -35,6 +35,8 @@ logs from remote places which defined in system configuration
 
 =head1 DESCRIPTION
 
+Test option
+
 Logs collected based on node definition in array 'collect' under node.
 For every node should be defined separatelly.
 
@@ -49,13 +51,18 @@ For every node should be defined separatelly.
                 # mandatory
                 # fail for observing and collecting
               full_on_fail :
-                # mandatory
-                # 1(or perl true) if full log should be collected in fail case
+                # optional, 0 by default
+                # 1(or perl true) if full log should be collected in fail case,
+                # and partitial log collcted in passed case
+              only_on_fail :
+                # optional, 0 by default
+                # 1(or perl true) if full log should be collected in fail case,
+                # and no log collected in passed case
               node :
-                # optional
+                # mandatory
                 # host name or ip
               user :
-                # mandatory
+                # optional, 'root' by default
                 # user with enbaled passwordless access
 
 Example:
@@ -88,6 +95,8 @@ Logs will not be collected in  node crash case.
 
 package Xperior::Executor::Roles::RemoteLogCollector;
 
+use strict;
+use warnings;
 use Moose::Role;
 #it is needed for coverage calculation
 #use MooseX::CoverableModifiers;
@@ -128,7 +137,7 @@ before 'execute' => sub{
             foreach my $c (@{$n->_node->{collect}}){
                 my $name = $c->{name};
                 my $node = $c->{node};
-                my $user = $c->{user};
+                my $user = $c->{user} || 'root';
                 my $file = $c->{file};
 
                 if( not ( defined $name and
@@ -142,33 +151,37 @@ before 'execute' => sub{
                     next;
                 }
                 my $log    = "/tmp/xperior_$name.".$n->id.".".time;
-                DEBUG "****************************";
-                DEBUG Dumper $c;
+                #DEBUG "****************************";
+                #DEBUG Dumper $c;
+
                 #start log collection
-                my $sp =  Xperior::SshProcess->new();
-                $sp->init($node,$user);
-                my $r = $sp->create("${id}_${name}",
-                    "tail -f -n ".$self->keep_lines()
-                    ." -v  $file 2>&1 > $log");
-                my $al = $sp->isAlive();
-                if( $r != 0  or $al != 0 ){
-                    INFO "Cannot start collection for '$id:$name'";
-                    $self->addMessage(
-                        "Collection of '$file' for record [$name] ".
-                        "failed with exit code ".$sp->exitcode);
-                    next;
+                my $sp = Xperior::SshProcess->new();
+                $sp->init( $node, $user );
+                if( not ($c->{only_on_fail})) {
+                    my $r = $sp->create( "${id}_${name}",
+                                    "tail -f -n ".$self->keep_lines()
+                                    ." -v  $file 2>&1 > $log" );
+                    my $al = $sp->isAlive();
+                    if ($r != 0 or $al != 0) {
+                        INFO "Cannot start collection for '$id:$name'";
+                        $self->addMessage(
+                            "Collection of '$file' for record [$name] ".
+                                "failed with exit code ".$sp->exitcode );
+                        $sp->run("rm -fv $log");
+                        next;
+                    }
                 }
                 $self->remote_collector_procs->{"${id}_$name"} = $sp;
+                DEBUG "Started log collection for $id:$name";
                 $self->logs->{"${id}_$name"}  = $log;
                 $self->nodes->{"${id}_$name"} = $n->_node();
                 $self->items->{"${id}_$name"} = $c;
-                DEBUG "Started log collection for $id:$name";
             }
         }else{
             DEBUG "No 'collect' defined for node [".$n->id."]";
         }
     }
-    $self->afterAfterExecute($title);
+    $self->afterBeforeExecute($title);
 };
 
 after 'execute' => sub {
@@ -177,12 +190,11 @@ after 'execute' => sub {
     foreach my $k (keys %{$self->remote_collector_procs()}){
         my $proc    = $self->remote_collector_procs()->{$k};
         my $rfile   = $self->logs()->{$k};
-        my $n       = $self->nodes()->{$k};
-        my $i       = $self->items()->{$k};
+        my $i = $self->items()->{$k};
+        my $n = $self->nodes()->{$k};
         my $lcorename = $i->{name}.'.'.$n->{id};
-        my $lfile   = $self->getNormalizedLogName($lcorename);
-        $proc->kill();
-        if( $i->{full_on_fail} and $self->yaml->{status_code} == 1 ){
+        my $lfile = $self->getNormalizedLogName( $lcorename );
+        if( ($i->{full_on_fail} or $i->{only_on_fail}) and $self->yaml->{status_code} == 1 ){
             #get full log
             DEBUG "Get full log for $i->{name}";
             my $node = Xperior::Node->new(
@@ -205,6 +217,12 @@ after 'execute' => sub {
             }
 
         }
+        if( $proc->isAlive() == 0 ) {
+            DEBUG 'Cleanup';
+            $proc->kill();
+            $proc->run("rm -fv $rfile") if defined $rfile;
+        }
+
     }
     $self->afterAfterExecute($title);
 };

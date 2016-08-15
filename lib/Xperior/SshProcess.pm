@@ -929,6 +929,7 @@ sub isAlive {
     DEBUG "Xperior::SshProcess->isAlive";
     my $self = shift;
     my $pid  = $self->pid;
+    return -100 unless $pid;
     my $name = $self->appname;
     my $step     = 1;
     my $AT       = 6;
