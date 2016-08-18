@@ -107,7 +107,16 @@ sub execute {
         ERROR 'Master client obj is:' . Dumper $mclientobj;
         confess "SSH to master client is undef";
     }
-
+    if(defined($self->env()->cfg()->{'test_start_attempts'})){
+        $testproc->start_attempts(
+            $self->env->cfg()->{'test_start_attempts'}
+        );
+    }
+    if(defined($self->env()->cfg()->{'ssh_poll_timeout'})){
+        $testproc->ssh_default_timeout(
+            $self->env()->cfg()->{'ssh_poll_timeout'}
+            );
+    }
     #saving env data
     $self->addYE( 'masterclient', $mnodecfg->{id});
     DEBUG "Master Node:" . Dumper $mnodecfg;

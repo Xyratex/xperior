@@ -66,6 +66,8 @@ Function to be used: B<run> and field B<exitcode> in returned hash
 
 package Xperior::SshProcess;
 use Moose;
+use MooseX::ClassAttribute;
+
 #TODO enable after adding  package to common setup
 #use namespace::autoclean;
 use Data::Dumper;
@@ -86,9 +88,9 @@ my $UserKnownHostsFile;
 my $UserKnownHostsFileBr;
 BEGIN {
     my $f;
-    ($f, $UserKnownHostsFile)   = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
+    ($f, $UserKnownHostsFile)   = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXXXXXX");
     close $f;
-    ($f, $UserKnownHostsFileBr) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXX");
+    ($f, $UserKnownHostsFileBr) = mkstemp("/tmp/ssh_user_known_hosts_file_XXXXXXXXXXX");
     close $f;
     unlink $UserKnownHostsFile;
     unlink $UserKnownHostsFileBr;
@@ -130,6 +132,11 @@ Flag set if killed latest executed command via C<create> call.
 
 =cut
 
+class_has ssh_default_timeout
+            => ( is => 'rw', default => 30);
+class_has start_attempts
+            => ( is => 'rw', default => 5);
+
 has port           => ( is => 'rw' );
 has host           => ( is => 'rw' );
 has user           => ( is => 'rw' );
@@ -137,7 +144,7 @@ has pass           => ( is => 'rw' );
 has bridge         => ( is => 'rw' );
 has bridgeuser     => ( is => 'rw', default => 'root');
 
-has defaulttimeout => ( is => 'rw', default => 30);
+
 has pidfile        => ( is => 'rw' );
 has ecodefile      => ( is => 'rw' );
 has controlmaster  => ( is => 'rw' );
@@ -328,7 +335,7 @@ sub _getBridgeCmd{
 #do pool check status to prevent false deatch report
 sub _sshSyncExec {
     my ( $self, $cmd, $timeout, $need_tty ) = @_;
-    $timeout = $self->defaulttimeout()
+    $timeout = $self->ssh_default_timeout()
                     unless defined $timeout;
     my $step = 0;
     my $AT   = 5;
@@ -379,9 +386,9 @@ sub _sshSyncExecS {
       . " \"$cmd; ec=\\\$? ;echo -n 'Internal_exit_code:'; echo -n \\\$ec; exit 0 \"";
     DEBUG "Remote ssh sync cmd is [$cc], timeout is [$timeout]";
     my ($f,$stdout,$stderr);
-    ($f, $stdout)   = mkstemp("/tmp/ssh_sync_stdout_XXXXXXX");
+    ($f, $stdout)   = mkstemp("/tmp/ssh_sync_stdout_XXXXXXXXXXX");
     close $f;
-    ($f, $stderr)   = mkstemp("/tmp/ssh_sync_stderr_XXXXXXX");
+    ($f, $stderr)   = mkstemp("/tmp/ssh_sync_stderr_XXXXXXXXXXX");
     close $f;
     my $proc = Proc::Simple->new();
     $proc->redirect_output ($stdout, $stderr);
@@ -438,7 +445,7 @@ sub _sshSyncExecS {
 
 sub _sshAsyncExec {
     my ( $self, $cmd, $timeout ) = @_;
-    my $asyncstarttimeout = $self->defaulttimeout();
+    my $asyncstarttimeout = $self->ssh_default_timeout();
     my $sc                = 1;
     my $nonbridgeparams =
          "-o  'BatchMode=yes' "
@@ -458,7 +465,7 @@ sub _sshAsyncExec {
       . " \"$cmd\"  ";
     DEBUG "Remote cmd is [$cc]";
     my $step = 0;
-    my $AT   = 5;
+    my $AT   = $self->start_attempts();
 
     #this cycle is workaround for connection problem,
     #which observed too rare.
@@ -557,7 +564,7 @@ sub init {
     my ($ver, $unameres);
     $unameres = $self->_sshSyncExec(
                 "uname -a",
-                $self->defaulttimeout());
+                $self->ssh_default_timeout());
     if(defined($unameres)){
         $ver = trim($unameres->{stdout});
     }else{
@@ -577,7 +584,7 @@ sub init {
 
     my $h = $self->_sshSyncExec(
                     "hostname",
-                    $self->defaulttimeout());
+                    $self->ssh_default_timeout());
     if(defined($h)){
         $h = $h->{stdout};
         $h = trim $h;
@@ -601,7 +608,7 @@ sub _findPid {
     $self->pid(undef);
     my $res = $self->_sshSyncExec(
                         "cat " . $self->pidfile,
-                        $self->defaulttimeout() )
+                        $self->ssh_default_timeout() )
                             || return;
 
     foreach my $s ( split( /\n/, $res->{stdout} ) ) {
@@ -684,7 +691,7 @@ sub run{
     my $cmdarray=0;
     DEBUG "Xperior::SshProcess->run on host ". $self->host . "]";
     my $tef = $self->rscrfile;
-    my ($f, $t) = mkstemp("/tmp/ssh_remote_sync_script_XXXX");
+    my ($f, $t) = mkstemp("/tmp/ssh_remote_sync_script_XXXXXXXXXXX");
     close $f;
     if(ref($app) eq 'ARRAY'){
         $cmdarray=1;
@@ -746,7 +753,7 @@ SSCRIPT
 
     DEBUG "Uploading script:\n$sscript";
     my $tef = $self->rscrfile;
-    my ($f, $t) = mkstemp("/tmp/ssh_remote_sync_script_XXXX");
+    my ($f, $t) = mkstemp("/tmp/ssh_remote_sync_script_XXXXXXXXXXX");
     close $f;
     write_file($t, $sscript);
     $self->putFile($t, $tef);
@@ -831,7 +838,7 @@ echo \$? > $err_file
 SCRIPT
 
     DEBUG "Uploading script:\n$script";
-    my ($f, $t) = mkstemp("/tmp/ssh_remote_script_XXXX");
+    my ($f, $t) = mkstemp("/tmp/ssh_remote_script_XXXXXXXXXXX");
     close $f;
     write_file($t, $script);
     if( $self->putFile($t, $shell_file) !=0 ){
@@ -1022,7 +1029,7 @@ sub putFile {
 
 PSCRIPT
         DEBUG "Save put script:\n$script";
-        my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
+        my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXXXXXXXXX");
         close $f;
         write_file($t, $script);
         #my $res = shell("sh -e $t");
@@ -1095,7 +1102,7 @@ sub getFile {
 
 PSCRIPT
         DEBUG "Save put script:\n$script";
-        my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXX");
+        my ($f, $t) = mkstemp("/tmp/ssh_put_script_XXXXXXXXXXX");
         close $f;
         write_file($t, $script);
         #my $res = shell("sh -e $t");

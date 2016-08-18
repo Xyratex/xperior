@@ -167,7 +167,7 @@ test plan => 4, kCreateAliveKillTimeout    => sub {
     confess "Could not create socket: $!\n"
         unless $sock;
     #test core
-    $sp->defaulttimeout(5);
+    $sp->ssh_default_timeout(5);
     my $initres  = $sp->init($stucknobridgenode);
     is($initres,-99,'Check init failure');
 
