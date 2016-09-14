@@ -265,14 +265,16 @@ sub execution_result_calculation{
     my $killed     = 0;
     my $isnodedown = 0;
     my $killtime   = 0;
+    my $rc         = 0;
     my $ping       = $node->ping();
     if ( $ping and ( $testproc->isAlive() == 0 ) ) {
         WARN "SubTest is alive after end of test execution, kill it";
         my $ts = $node->getRemoteConnector();
-        DEBUG $ts->createSync('ps afx');
-        DEBUG "Owned pid is:" . $testproc->pid;
-        $testproc->kill;
-        $killed   = 1;
+        DEBUG $ts->createSync('ps afxo pid,pgid,tty,stat,time,cmd');
+
+        $testproc->kill_tree();
+        $killed = 1;
+
         $killtime = $testproc->killed;
     }
     elsif ( not defined($ping) ) {

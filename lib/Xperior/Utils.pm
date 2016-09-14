@@ -485,14 +485,15 @@ sub kill_tree{
     }
     #time to system kill and cleanup for highloaded systems
     sleep $kill_time;
-    DEBUG "Proc status after TERM:". is_any_pids_alive(@pids);
-    if( is_any_pids_alive(@pids) ){
+    my $alive_pids = is_any_pids_alive(@pids);
+    DEBUG "Proc status after TERM:". $alive_pids;
+    if( $alive_pids ){
         foreach my $p( @pids){
             DEBUG "run [sudo kill -KILL $p]";
             DEBUG `sudo kill -KILL $p`;
         }
-    }
     DEBUG "Proc status:".is_any_pids_alive(@pids);
+    }
 }
 
 1;

@@ -109,8 +109,6 @@ test plan => 3,abCreateExitCodes     => sub{
 #exit 1;
 };
 
-
-
 test plan => 3, bCreateExitCodesBridge     => sub{
     $sp->init($node);
     my $res = $sp->create('sleepbr','/bin/sleep 30');
@@ -126,7 +124,6 @@ test plan => 3, bCreateExitCodesBridge     => sub{
 
 };
 
-
 test plan => 1,bdMasterSocketCleanup     => sub{
     my $mastersocket;
     my $res = $sp->create('sleep','/bin/sleep 30');
@@ -135,6 +132,133 @@ test plan => 1,bdMasterSocketCleanup     => sub{
     ok(not(-e $mastersocket), 'Check master socket cleanup');
 };
 
+test plan => 6, kaCreateAlivekill_tree    => sub {
+    # Highlevel functional test
+    is($sp->killed, 0, 'Check status before start');
+    $sp->create('sleep', '(((/bin/sleep 60)& /bin/sleep 60)& /bin/sleep 60)');
+    pass('App started');
+    my $res = $sp->isAlive();
+    is($res, 0, 'Check live for alive app');
+    my $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $sp->kill_tree();
+    $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $res = $sp->isAlive();
+    is($res, -1, 'Check alive for exited app');
+    isnt($sp->killed, 0, 'Check status after kill');
+    isnt($sp->exitcode, 0, 'Check exit code after kill');
+};
+
+test plan => 6, kbCreatekill_treeBypass_TERM    => sub {
+    is($sp->killed, 0, 'Check status before start');
+    $sp->create('sleep', '(((/bin/sleep 60)& /bin/sleep 60)& /bin/sleep 60)');
+    pass('App started');
+    my $res = $sp->isAlive();
+    is($res, 0, 'Check live for alive app');
+    $sp->term_signal('0');
+    my $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $sp->kill_tree();
+    $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $sp->term_signal('TERM');
+    $res = $sp->isAlive();
+    is($res, -1, 'Check alive for exited app');
+    isnt($sp->killed, 0, 'Check status after kill');
+    isnt($sp->exitcode, 0, 'Check exit code after kill');
+};
+
+test plan => 6, kcCreatekill_treeBypass_KILL    => sub {
+    is($sp->killed, 0, 'Check status before start');
+    $sp->create('sleep', '(((/bin/sleep 60)& /bin/sleep 60)& /bin/sleep 60)');
+    pass('App started');
+    my $res = $sp->isAlive();
+    is($res, 0, 'Check live for alive app');
+    $sp->term_signal('0');
+    $sp->kill_signal('0');
+    my $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $sp->kill_tree();
+    $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $sp->term_signal('TERM');
+    $sp->kill_signal('KILL');
+    $res = $sp->isAlive();
+    is($res, 0, 'Check alive for exited app');
+    is($sp->killed, 0, 'Check status after kill');
+    isnt($sp->exitcode, 0, 'Check exit code after kill');
+};
+
+test plan => 6, kdCreateAliveKill_one_process    => sub {
+    # Highlevel functional test
+    is($sp->killed, 0, 'Check status before start');
+    $sp->create('sleep', '(/bin/sleep 60)');
+    pass('App started');
+    my $res = $sp->isAlive();
+    is($res, 0, 'Check live for alive app');
+    my $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $sp->kill_tree();
+    $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $res = $sp->isAlive();
+    is($res, -1, 'Check alive for exited app');
+    isnt($sp->killed, 0, 'Check status after kill');
+    isnt($sp->exitcode, 0, 'Check exit code after kill');
+};
+
+test plan => 5, keCreateApp_Not_Alivekill_tree    => sub {
+    # Highlevel functional test
+    is($sp->killed, 0, 'Check status before start');
+    $sp->create('ls', '(ls -l /tmp/)');
+    pass('App started');
+    my $res = $sp->isAlive();
+    is($res, -1, 'Check live for alive app');
+    my $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    $sp->kill_tree();
+    is($sp->killed, 0, 'Check status after kill');
+    is($sp->exitcode, 0, 'Check exit code after kill');
+};
+
+test plan => 5, kfCreateCheck_get_alive_pids_remote    => sub {
+    # Empty input check for function check_get_alive_pids_remote.
+    is($sp->killed, 0, 'Check status before start');
+    $sp->create('sleep', '(/bin/sleep 30)');
+    pass('App started');
+    my $execres = $sp->run('ps afxo pid,pgid,tty,stat,time,cmd');
+    DEBUG $execres->{stdout};
+    my $res = $sp->isAlive();
+    is($res, 0, 'Check live for alive app');
+    my $cpids = $sp->check_get_alive_pids_remote();
+    is($cpids, 0, 'Check for 0 pids after empty input');
+    isnt($sp->exitcode, 0, 'Check exit code');
+};
+
+test plan => 11, kgCreateGet_child_pids    => sub {
+    # Different functionality check for function get_child_pids.
+    is($sp->killed, 0, 'Check status before start');
+    my $cpids = $sp->get_child_pids();
+    is($cpids, -3, 'Check for pids when no app started');
+
+    $sp->create('ls', '(ls -l /tmp/)');
+    pass('App started');
+    $cpids = $sp->get_child_pids();
+    is($cpids, -3, 'Check for empty gid after app finished');
+    my $res = $sp->isAlive();
+    is($res,-1, 'Check alive for exited app');
+    is($sp->exitcode, 0, 'Check exit code');
+
+    $sp->create('sleep', '(/bin/sleep 10)');
+    pass('App started');
+    $res = $sp->isAlive();
+    is($res, 0, 'Check live for alive app');
+    $cpids = $sp->get_child_pids();
+    isnt($cpids, -3, 'Check for empty gid after app finished');
+    isnt($cpids, 0, 'Check for 0 pids after empty input');
+    isnt($sp->exitcode, 0, 'Check exit code');
+};
 
 test plan => 7, kCreateAliveKill    => sub {
     #highlevel functional test
@@ -149,9 +273,7 @@ test plan => 7, kCreateAliveKill    => sub {
     isnt($sp->killed,0, 'Check status after kill');
     isnt($sp->exitcode,undef, 'Check 1 exit code after kill');
     isnt($sp->exitcode,0, 'Check 2 exit code after kill');
-
 };
-
 
 test plan => 4, kCreateAliveKillTimeout    => sub {
 

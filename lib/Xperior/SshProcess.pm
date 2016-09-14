@@ -171,6 +171,12 @@ has stderr_delimiter => (
     is => 'ro', default =>
     '=================xperior_stderr_SshProcess_delimiter===============');
 
+has term_signal         => ( is => 'rw', default => 'TERM' );
+has kill_signal         => ( is => 'rw', default => 'KILL' );
+has kill_success        => ( is => 'ro', default => -99 );
+has error_kill_failure  => ( is => 'ro', default => -98 );
+has error_pid_exist_after_kill  => ( is => 'ro', default => -97 );
+
 =back
 
 =head2 Functions
@@ -623,13 +629,12 @@ sub _findPid {
     return 0;
 }
 
-
 =head3 run ($command, $timeout)
 
 Safe version of createSync, executes  command on remote
 node same as system. If timemout is exceeded process will
 be killed. Stdout, stderr gathered to scalar vars, this mean
-that output shoudl be comparabe small.
+that output should be comparably small.
 
 Command could be multiline shell script. 5 attempts will be done
 if ssh exit code 255.
@@ -874,6 +879,128 @@ SCRIPT
 
     return 0;
 }
+
+=head2 check_get_alive_pids_remote($pids)
+
+Check process status for PIDs on remote node from $pids, return alive pids.
+
+=cut
+
+sub check_get_alive_pids_remote {
+    my ($self, $cpids) = @_;
+    return 0 unless $cpids;
+    my @cpids = ();
+    my @alive_cpids = split(/\s+/, $cpids);
+    foreach my $p (@alive_cpids) {
+        my $execrc = $self->run("kill -0 $p 2> /dev/null; echo \$?");
+        my $ec = $execrc->{stdout};
+        if($ec != 0 ) {
+            DEBUG "Process [$p] does not exist";
+        } else {
+            DEBUG "Process [$p] alive";
+            push(@cpids, $p);
+        }
+    }
+    if(@cpids) {
+        my $alive_cpids = join(" ", @cpids);
+        return $alive_cpids;
+    } else {
+        return 0;
+    }
+}
+
+=head2 get_child_pids()
+
+Get all the cpids running on remote lustre node into a scalar var from stdout.
+Find cpids, reverse the order of cpids so that newest child is terminated
+first, return back all pids in a array.
+
+=cut
+
+sub get_child_pids {
+    my $self = shift;
+    return -3 unless $self->pid; #ESRCH 3 No such process
+    my $pid = $self->pid;
+
+    my $execres = $self->run("ps_op=\$(ps --no-heading axo pid,pgid);
+        echo \$ps_op");
+    my $ps_op = $execres->{stdout};
+    return 0 unless $ps_op;
+    my %pid_gid_map = split(/[\n\s]/, $ps_op);
+
+    # Get gid of "$pid"
+    my @expected_pid = grep { $pid == $_ } keys %pid_gid_map;
+    # There would always be one pid in array.
+    my $exp_pid = $expected_pid[0];
+    my $gid = $pid_gid_map{$exp_pid};
+    DEBUG "GID is $gid";
+
+    return -3 unless $gid;
+    # Get all pids which are related to above found GID.
+    my @pids = grep { $pid_gid_map{$_} == $gid } keys %pid_gid_map;
+    # We don't need to kill grand parent process(remote sript)
+    my @cpids_wo_gid = grep { $gid != $_ } @pids;
+
+    # Sort it so that lustre log callector process is killed last. Generally
+    # log collectors(of any application) are started in very begining for
+    # collecting all the info. So we should kill it last so that all the info
+    # is collected before it gets killed.
+    my @cpids = sort { $a <=> $b } @cpids_wo_gid;
+    my $cpids = join(' ', @cpids);
+    chomp $cpids;
+    DEBUG "cpids are $cpids Owned pid is:" . $pid;
+    return $cpids;
+}
+
+=head2 kill_tree($self, $kill_time)
+
+Send TERM to $pid on remote node, sleep $kill_time sec, check processes alive,  and if alive
+- send KILL on remote node.
+
+=cut
+
+sub kill_tree {
+    my ( $self, $kill_time ) = @_;
+    my $name = $self->appname || '';
+    my $rc = 0;
+    $kill_time = 1 unless $kill_time;
+    my $cpids = $self->get_child_pids();
+    if ($cpids == -3) {
+        WARN "App not alive";
+        return;
+    } elsif (!$cpids) {
+        WARN "Some error occured while getting ps cmd output";
+        return;
+    }
+    my $sigterm = $self->term_signal();
+    my $sigkill = $self->kill_signal();
+
+    DEBUG "cmd is- kill -$sigterm $cpids";
+    $rc = $self->_sshSyncExec("kill -$sigterm $cpids");
+    $self->exitcode($self->kill_success()) unless $rc->{sshexitcode};
+
+    # time to system kill and cleanup for highloaded systems
+    sleep $kill_time;
+    my $alive_cpids = $self->check_get_alive_pids_remote($cpids);
+    DEBUG "Proc status after TERM (pids alive):". $alive_cpids;
+    $self->exitcode($self->error_kill_failure()) if $rc->{sshexitcode};
+
+    if($alive_cpids) {
+        DEBUG "cmd is- kill -$sigkill $alive_cpids";
+        $rc = $self->_sshSyncExec("kill -$sigkill  $alive_cpids");
+        return if $rc->{sshexitcode};
+        DEBUG "***[$name:$alive_cpids]*** Killed!";
+        my $new_alive_cpids = $self->check_get_alive_pids_remote($cpids);
+        DEBUG "Proc status after KILL (pids alive):". $new_alive_cpids;
+        if($new_alive_cpids) {
+            WARN "Pids still alive after KILL:". $new_alive_cpids;
+            $self->exitcode($self->error_pid_exist_after_kill());
+            return;
+       }
+    }
+    $self->killed(time);
+}
+
 
 =head3 kill ($mode)
 
