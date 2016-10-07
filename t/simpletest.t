@@ -138,7 +138,7 @@ test plan => 4, containsCheck   => sub {
 };
 
 
-test plan => 4, run_checkCheck   => sub {
+test plan => 5, aaa_run_checkCheck   => sub {
     DEBUG "Prepare node";
     my $node = Xperior::SshProcess->new();
     $node->init('localhost','tomcat');
@@ -182,7 +182,36 @@ test plan => 4, run_checkCheck   => sub {
         DEBUG 'fin';
     };
 
+    $res = $stest->run_check(
+        node      => $node,
+        cmd       => "echo qaz wsx edc",
+        message   => 'run_check with contains check',
+        contains  => 'value hardcoded in sub',
+        contains_check_sub  => sub {
+            $_[2]->append("Custom contains check is used\n");
+            $_[0] =~ m/wsx/i
+        }
+    );
 
+
+=head1
+
+    try{
+        $res = $stest->run_check(
+            node    => $node,
+            cmd     => "echo qwerty",
+            timeout => 5,
+            message => 'run_check timeout');
+        fail ("No exception thrown for run_check");
+    }catch TestFailed Error::subs::with{
+            my $ex = shift;
+            DEBUG 'catch';
+            pass('Correct exception caught for run_check');
+    }finally{
+            DEBUG 'fin';
+    };
+
+=cut
 };
 
 #########################################

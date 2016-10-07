@@ -214,7 +214,10 @@ Examples:
     $self->contains(
         value      => 'qwerty asdfg ZZZZ',
         expected   => 'zzzz',
-        check_sub  => sub {$_[0] =~ m/$_[1]/i},
+        check_sub  => sub {
+            $_[2]->append("Custom contains check is used\n");
+            $_[0] =~ m/$_[1]/i
+            },
         message    => "custom chech sub");
 
 =cut
@@ -238,26 +241,23 @@ sub contains{
        my ($package, $filename, $line) = caller;
        $source = "$package::$filename at $line";
     }
-
-    if ( $check_sub->($data, $exp) ) {
-        INFO "[$data] contains [$exp], $message : PASSED";
-        $self->append(
-             $time." Contains check at $source\n"
+    $self->append(
+        $time." Contains check at $source\n"
             ."==============================================\n"
             .$data
-            ."==============================================\n"
-            ."contains [$exp]\n"
-            ."$message : PASSED\n");
+            ."==============================================\n" );
+
+    if ( $check_sub->($data, $exp, $self) ) {
+        INFO "[$data] contains [$exp], $message : PASSED";
+        $self->append(
+            "contains [$exp]\n" .
+            "$message : PASSED\n" );
         return 1;
     }else{
         INFO "[$data] doesn't contain [$exp], $message :FAILED";
         $self->append(
-            $time." Contains check at $source\n"
-            ."==============================================\n"
-            .$data
-            ."==============================================\n"
-            ."doesn't contain [$exp]\n"
-            ." $message :FAILED");
+            "doesn't contain [$exp]\n".
+            " $message :FAILED");
         $self->failcount($self->failcount()+1);
         $self->reason("$message :FAILED")
             unless $self->reason();
@@ -340,23 +340,24 @@ if check failed and B<dontfail> is not set, testing stopped, status
 
 Examples:
 
-    #pass
-    $self->contains(
-        value     => 'qwerty asdfg',
-        expected => 'qwerty',
-        message  => "Don't panic");
+
+    run_check(
+            cmd     => "sleep 30",
+            timeout => 5,
+            message => 'should  fail with timeout');
 
     #custom check
-    $self->contains(
-        value      => 'qwerty asdfg ZZZZ',
-        expected   => 'zzzz',
-        exec_check_sub  => sub {
-                    return 0 if $_[0]; #false is killed
-                    return 1 if $_[1] == 255; # true if exir code 255
-                    return 0; # false in any other case
-        },
-
-        message    => "custom chech sub");
+    my $node = Xperior::SshProcess->new();
+    $node->init('localhost','tomcat');
+    run_check(
+        node      => $node,
+        cmd       => "echo qaz wsx edc",
+        message   => 'run_check with custom contains check',
+        contains  => 'value hardcoded in sub',
+        contains_check_sub  => sub {
+            $_[2]->append("Custom contains check is used\n");
+            $_[0] =~ m/wsx/i
+        }
 
 =cut
 
@@ -396,7 +397,7 @@ sub run_check{
     my $time = $self->htime();
     my ($package, $filename, $line) = caller;
     my $source = "$package::$filename at $line";
-    if( $sub_exec_check->($run_res->{killled}, $run_res->{exitcode}) ){
+    if( $sub_exec_check->($run_res->{killled}, $run_res->{exitcode}, $self) ){
         INFO "Exit code [$run_res->{exitcode}], $message : PASSED";
         $self->append(
              $time." Check at $source\n"
@@ -419,18 +420,20 @@ sub run_check{
         $self->append(
             $time." Check at $source\n"
             ."==============================================\n"
-            ."Exit code is [$run_res->{exitcode}]\n"
-            ."Killed status is [".$run_res->{killled}."]\n"
+            ."Exit code is [".$run_res->{exitcode}."]\n"
+            ."Killed status is [".
+                ( (defined($run_res->{killled}))? $run_res->{killled} : '' )
+                ."]\n"
             ."Executed on [".$node->host()."]\n"
-            ." $message :FAILED"
-            ." cmd is [$cmd]"
-            ." stdout is \n"
+            ."$message :FAILED \n"
+            ."cmd is [$cmd] \n"
+            ."stdout is \n"
             ."-------------cut------------\n"
-            . $run_res->{stdout}
+            . ( defined ( $run_res->{stdout} ) ? $run_res->{stdout} : '' )
             ."\n-------------cut------------\n"
             ." stderr is \n"
             ."-------------cut------------\n"
-            . $run_res->{stderr}
+            . ( defined ( $run_res->{stderr} ) ?  $run_res->{stderr} : '' )
             ."\n-------------cut------------\n"
             );
         $self->failcount($self->failcount()+1);
