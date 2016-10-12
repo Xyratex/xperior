@@ -17,5 +17,9 @@ Tests:
    - id : format_fail
      format_fail : yes
      forced_teststatus : fail
-
+   - id : justfailed
+     teststatus : fail
+     dangerous        : no
+   - id : skip
+     teststatus : skip
 

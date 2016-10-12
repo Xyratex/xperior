@@ -61,7 +61,22 @@ has 'reason' => ( is => 'rw' );
 
 =head3  execute
 
-Function execute process on TBD
+Function which called via main xperior run cycle.
+
+Internally it implement series of calls of scenarios
+(see L<SimpleTest.pm> and inheritors as example)
+
+    ${call_name_from_testds}__prepare
+    ${call_name_from_testds}
+    ${call_name_from_testds}__cleanup
+
+For simplifying error reporting it's suggested to use exception via
+B<Error  qw(try finally except otherwise)> and L<Xperior::Xception.pm>
+
+Decision about error (high-priority falure) done via I<$self->errorcount>
+
+Decision about failure  done via I<$self->failcount>
+
 =cut
 
 sub execute {

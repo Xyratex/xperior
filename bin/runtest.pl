@@ -84,6 +84,14 @@ Print long help
 
 Show test cmd output. Default - no.
 
+=item --fail-on-failed
+
+Return 1 if one or more tests return not passed or not skipped. If not
+set return 0 if no special cases happens, see B<Exit codes> section.
+Cumulative result calculation is going through all results in workdir.
+Option is planned to use in automated test execution where true/false
+is expected by calling side.
+
 =item --tap
 
 Generate tap files in working directory
@@ -248,6 +256,10 @@ Set file path where logs will be saved. By default, logs are printed to STDOUT.
 
 Execution done successfully, all results ready
 
+=item 1
+
+Execution done successfully, all results ready, one or more tests failed(see --fail-on-failed).
+
 =item 10
 
 Execution done because of detected nodes crash or network problem
@@ -255,6 +267,7 @@ Execution done because of detected nodes crash or network problem
 =item 11
 
 Execution done because of failure of tests which are in critical tests list
+
 =item 12
 
 Execution done because test have enabled 'exitafter' property. It means that some actions must be done after test execution.
@@ -334,6 +347,7 @@ my $action=undef;
 my $helpflag;
 my $manflag;
 my $continue;
+my $failonfailed;
 my $tap;
 my $html;
 my $jjunit  = '';
@@ -343,33 +357,35 @@ my $random;
 my $logname = '';
 
 GetOptions(
-    "config:s"       => \$configfile,
-    "mode:s"         => \$mode,
-    "suites=s@"      => \@suites,
-    "skiptag=s@"     =>  \@skiptags,
-    "includeonly=s@" => \@includeonly,
-    "extopt=s@"      => \@extopt,
-    "extopt-file=s"  => \$extoptfile,
-    "tests:s"        => \$task,
-    "excludelist:s"  => \$excludelist,
-    "includelist:s"  => \$includelist,
-    "flist:s"        => \$flist,
-    "random!"        => \$random,
-    "multirun:i"     => \$multirun,
-    "workdir:s"      => \$workdir,
-    "testdir:s"      => \$testdir,
-    "debug!"         => \$debug,
-    "info!"          => \$info,
-    "error!"         => \$error,
-    "cmdout!"        => \$cmdout,
-    "help!"          => \$helpflag,
-    "man!"           => \$manflag,
-    "action:s"       => \$action,
-    "continue!"      => \$continue,
-    "tap!"           => \$tap,
-    "html!"          => \$html,
-    "jjunit:s"       => \$jjunit,
-    "log-file:s"     => \$logfile,
+    "config:s"        => \$configfile,
+    "mode:s"          => \$mode,
+    "suites=s@"       => \@suites,
+    "skiptag=s@"      =>  \@skiptags,
+    "includeonly=s@"  => \@includeonly,
+    "extopt=s@"       => \@extopt,
+    "extopt-file=s"   => \$extoptfile,
+    "tests:s"         => \$task,
+    "excludelist:s"   => \$excludelist,
+    "includelist:s"   => \$includelist,
+    "flist:s"         => \$flist,
+    "random!"         => \$random,
+    "multirun:i"      => \$multirun,
+    "workdir:s"       => \$workdir,
+    "testdir:s"       => \$testdir,
+    "testdir:s"       => \$testdir,
+    "debug!"          => \$debug,
+    "info!"           => \$info,
+    "error!"          => \$error,
+    "cmdout!"         => \$cmdout,
+    "help!"           => \$helpflag,
+    "man!"            => \$manflag,
+    "action:s"        => \$action,
+    "continue!"       => \$continue,
+    "fail-on-failed!" => \$failonfailed,
+    "tap!"            => \$tap,
+    "html!"           => \$html,
+    "jjunit:s"        => \$jjunit,
+    "log-file:s"      => \$logfile,
 );
 
 pod2usage(-verbose => 1) if ( ($helpflag) || ($nopts) );
@@ -458,22 +474,23 @@ if( $action eq 'run'){
 
 my %options = (
     xperiorbasedir => "$XPERIORBASEDIR/../lib",
-    testdir  => $testdir,
-    workdir  => $workdir,
-    cmdout   => $cmdout,
-    skiptags => \@skiptags,
-    excludelist => $excludelist,
-    includelist => $includelist,
-    includeonly => \@includeonly,
-    action   => $action,
-    continue => $continue,
-    random   => $random,
-    configfile => $configfile,
-    tap      => $tap,
-    html     => $html,
-    jjunit   => $jjunit,
-    extopt   => \@extopt,
-    extoptfile => $extoptfile,
+    testdir      => $testdir,
+    workdir      => $workdir,
+    cmdout       => $cmdout,
+    skiptags     => \@skiptags,
+    excludelist  => $excludelist,
+    includelist  => $includelist,
+    includeonly  => \@includeonly,
+    action       => $action,
+    continue     => $continue,
+    failonfailed => $failonfailed,
+    random       => $random,
+    configfile   => $configfile,
+    tap          => $tap,
+    html         => $html,
+    jjunit       => $jjunit,
+    extopt       => \@extopt,
+    extoptfile   => $extoptfile,
 );
 
 $options{'multirun'}=$multirun if($multirun);

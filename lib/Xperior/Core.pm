@@ -421,6 +421,9 @@ sub run {
                 time()."\texit\t${error}\n");
             exit ($error);
         }
+        if( $self->options->{'failonfailed'} ){
+            exit ( $self->_calculate_cumulative_exit_code() )
+        }
     }
     elsif ($action eq 'list') {
         foreach my $test (grep { ! $_->skipped() } @{$self->{'tests'}}) {
@@ -599,6 +602,61 @@ sub loadTags {
     return $cfg->{'tags'};
 }
 
+
+sub _get_group_list_from_wd{
+    my $self = shift;
+    my $wd     = $self->{options}->{workdir};
+    opendir my ($dh), $wd or confess "Couldn't open dir '$wd': $!";
+
+    #read executed test group list from workdir dir
+    # filter report dir if report was previous generated
+    my @groups = grep {!/xperior.log/}
+        grep {!/testexecution.log/}
+            grep {!/testorderplan.lst/}
+                grep {!/testexecutionplan.log/}
+                    grep {!/report/}
+                        grep {!/^\.\.?$/}
+                            readdir $dh;
+    closedir $dh;
+    return \@groups;
+}
+
+
+=head3 _calculateCumulativeExitCode
+
+Retrun 0 if all test in workdir passed or skipped.
+
+Otherwise 1
+
+=cut
+
+sub _calculate_cumulative_exit_code{
+    my $self = shift;
+    DEBUG 'Calculating exit code';
+    my $wd     = $self->{options}->{workdir};
+    my @groups = @{$self->_get_group_list_from_wd()};
+    #read yaml xperior results
+    foreach my $group ( @groups ) {
+        DEBUG "Check group [$group]";
+        opendir my ($dh), "$wd/$group"
+            or confess "Couldn't open dir '$wd/$group': $!";
+        my @yamlfiles = grep {/\.yaml/}
+            grep {!/^\.\.?$/} readdir $dh;
+        foreach my $yamlfile (@yamlfiles) {
+            DEBUG "Check file [$yamlfile]";
+            my $yaml = LoadFile("$wd/$group/$yamlfile") or confess $!;
+            DEBUG 'code is:'+$yaml->{'status_code'};
+            if ( ( $yaml->{'status_code'} != 0 ) and ( $yaml->{'status_code'} != 2 ) ) {
+                DEBUG 'Report failure';
+                return 1;
+            }
+        }
+        closedir $dh;
+    }
+    return 0;
+}
+
+
 =head3 _reportJJunit
 
 Generate Jenkins Junit report for work directory with results.
@@ -628,19 +686,7 @@ sub _reportHtml {
     my $self = shift;
     my $wd     = $self->{options}->{workdir};
     my $libdir = $self->{options}->{xperiorbasedir} . '/Xperior/html';
-    my @suites;
-    opendir my ($dh), $wd or confess "Couldn't open dir '$wd': $!";
-
-    #read executed test group list from workdir dir
-    # filter report dir if report was previous generated
-    @suites = grep {!/xperior.log/}
-              grep {!/testexecution.log/}
-              grep {!/testorderplan.lst/}
-              grep {!/testexecutionplan.log/}
-                grep {!/report/}
-                grep {!/^\.\.?$/}
-                    readdir $dh;
-    closedir $dh;
+    my @suites = @{$self->_get_group_list_from_wd()};
     my %data;
     my %etimes;
     mkdir "$wd/report";

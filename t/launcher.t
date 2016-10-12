@@ -193,26 +193,56 @@ test
 
 #########################################
 test
-  plan       => 3,
+  plan       => 6,
   ajExitCodes => sub {
-
+    remove_tree('/tmp/lwd1');
+    my $cmdpart = ' --workdir=/tmp/lwd1  --config=t/exitcodes/cfg.yaml  --testdir=t/exitcodes/ --debug ';
     DEBUG
-`bin/runtest.pl  --action=run --workdir=/tmp/lwd1  --config=t/exitcodes/cfg.yaml  --testdir=t/exitcodes/ --debug --includeonly='lustre-single/pass'`;
+        `bin/runtest.pl  --action=run $cmdpart --debug --includeonly='lustre-single/pass'`;
     my $res = ${^CHILD_ERROR_NATIVE};
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is( $res, 0, "pass exit code" );
 
     DEBUG
-`bin/runtest.pl  --action=run --workdir=/tmp/lwd1  --config=t/exitcodes/cfg.yaml  --testdir=t/exitcodes/ --debug --includeonly='lustre-single/exita.*'`;
+        `bin/runtest.pl  --action=run $cmdpart --includeonly='lustre-single/exita.*'`;
     my $resa = ${^CHILD_ERROR_NATIVE};
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is( $resa, 0xc00, "exitafter exit code" );
 
     DEBUG
-`bin/runtest.pl  --action=run --workdir=/tmp/lwd1  --config=t/exitcodes/cfg.yaml  --testdir=t/exitcodes/ --debug --includeonly='lustre-single/format.*'`;
+        `bin/runtest.pl  --action=run $cmdpart --includeonly='lustre-single/format.*'`;
     my $resf = ${^CHILD_ERROR_NATIVE};
     DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
     is( $resf, 0xd00, "format_fail exit code" );
+
+    remove_tree('/tmp/lwd1');
+    DEBUG
+        `bin/runtest.pl  --action=run $cmdpart  --fail-on-failed --includeonly='lustre-single/pass'`;
+    my $respff= ${^CHILD_ERROR_NATIVE};
+    DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
+    is( $respff, 0, "pass exit code for passed test with 'fail-on-failed'" );
+
+    DEBUG
+        `bin/runtest.pl  --action=run $cmdpart  --fail-on-failed --includeonly='lustre-single/skip'`;
+    my $respsff= ${^CHILD_ERROR_NATIVE};
+    DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
+    is( $respsff, 0, "pass + skip exit code for passed test with 'fail-on-failed'" );
+
+
+    remove_tree('/tmp/lwd1');
+    DEBUG
+        `bin/runtest.pl  --action=run $cmdpart  --fail-on-failed --includeonly='lustre-single/format.*'`;
+    my $resfff = ${^CHILD_ERROR_NATIVE};
+    DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
+    is( $resfff, 0xd00, "keep failure exit code for format_fail exit code" );
+
+    remove_tree('/tmp/lwd1');
+    DEBUG
+        `bin/runtest.pl  --action=run $cmdpart  --fail-on-failed --includeonly='lustre-single/justfailed'`;
+    my $resffr = ${^CHILD_ERROR_NATIVE};
+    DEBUG "CHILD ERROR =[${^CHILD_ERROR_NATIVE}]";
+    is( $resffr, 0x100, "exit code 1 for failed regular test" );
+
 
 };
 ##############################################

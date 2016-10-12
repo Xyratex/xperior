@@ -397,15 +397,18 @@ sub run_check{
     my $time = $self->htime();
     my ($package, $filename, $line) = caller;
     my $source = "$package::$filename at $line";
-    if( $sub_exec_check->($run_res->{killled}, $run_res->{exitcode}, $self) ){
-        INFO "Exit code [$run_res->{exitcode}], $message : PASSED";
-        $self->append(
-             $time." Check at $source\n"
+    $self->append(
+        $time." Check at $source\n"
             ."==============================================\n"
             ."Exit code is [$run_res->{exitcode}]\n"
             ."Executed on [".$node->host()."]\n"
             ."Executed cmd [".$cmd."]\n"
-            ."$message : PASSED\n");
+            ."Killed status is ["
+            .( (defined($run_res->{killled}))? $run_res->{killled} : '' )."\n");
+
+    if( $sub_exec_check->($run_res->{killled}, $run_res->{exitcode}, $self) ){
+        INFO "Exit code [$run_res->{exitcode}], $message : PASSED";
+        $self->append("$message : PASSED\n");
 
         $self->contains( value    => $run_res->{stdout}.$run_res->{stderr},
                          expected => $contains,
@@ -418,23 +421,16 @@ sub run_check{
     }else{
         INFO "Exit code is [$run_res->{exitcode}], $message :FAILED";
         $self->append(
-            $time." Check at $source\n"
-            ."==============================================\n"
-            ."Exit code is [".$run_res->{exitcode}."]\n"
-            ."Killed status is [".
-                ( (defined($run_res->{killled}))? $run_res->{killled} : '' )
-                ."]\n"
-            ."Executed on [".$node->host()."]\n"
-            ."$message :FAILED \n"
+             "$message :FAILED \n"
             ."cmd is [$cmd] \n"
             ."stdout is \n"
             ."-------------cut------------\n"
-            . ( defined ( $run_res->{stdout} ) ? $run_res->{stdout} : '' )
-            ."\n-------------cut------------\n"
-            ." stderr is \n"
+            . ( defined ( $run_res->{stdout} ) ? $run_res->{stdout} : '' ) . "\n"
             ."-------------cut------------\n"
-            . ( defined ( $run_res->{stderr} ) ?  $run_res->{stderr} : '' )
-            ."\n-------------cut------------\n"
+            ."stderr is \n"
+            ."-------------cut------------\n"
+            . ( defined ( $run_res->{stderr} ) ?  $run_res->{stderr} : '' ) . "\n"
+            ."-------------cut------------\n"
             );
         $self->failcount($self->failcount()+1);
         $self->reason("$message :FAILED")

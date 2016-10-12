@@ -146,7 +146,7 @@ test plan => 5, aaa_run_checkCheck   => sub {
 
     my $res = $stest->run_check(
                     node    => $node,
-                    cmd     => "sleep 3",
+                    cmd     => "sleep 3 &&  echo testmessage",
                     timeout => 10,
                     message => 'run_check #1');
     is($res->{exitcode},0,'run_check ok');
@@ -170,7 +170,8 @@ test plan => 5, aaa_run_checkCheck   => sub {
     try{
         $res = $stest->run_check(
                     node    => $node,
-                    cmd     => "sleep 30",
+                    cmd     => "echo testmessage_before &&".
+                                " sleep 30 && echo testmessage_after",
                     timeout => 5,
                     message => 'run_check timeout');
         fail ("No exception thrown for run_check");
