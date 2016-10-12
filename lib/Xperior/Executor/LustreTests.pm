@@ -147,7 +147,7 @@ sub _prepareCommands {
 
     my $lustre_script = "$self->{lustretestdir}/${script}";
     my @opt = (
-                "SLOW=YES",
+                "SLOW=yes",
                 "NAME=ncli",
                 $self->mgsopt(),
                 $self->mdsopt(),
