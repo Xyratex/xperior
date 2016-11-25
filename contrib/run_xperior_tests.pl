@@ -48,6 +48,7 @@ runEx("$testopt $testcmd   t/roleCustomLogCollector.t    > $WD/roleCustomLogColl
 runEx("$testopt $testcmd   t/executorLustreHA.t          > $WD/executorLustreHA.junit");
 runEx("$testopt $testcmd   t/roleVmcoreGenerator.t       > $WD/roleVmcoreGenerator.junit");
 runEx("$testopt $testcmd   t/simpletest.t                > $WD/simpletest.junit");
+runEx("$testopt $testcmd   t/testenv.t                   > $WD/t/testenv.t");
 runEx("$covercmd");
 runEx("$covercmd -report clover");
 #thereaded, calculate separately 

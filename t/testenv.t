@@ -57,6 +57,10 @@ teardown        _teardown => sub { };
 shutdown        _shutdown => sub {  };
 #########################################
 
+=head3 comment
+
+comment it because needs special env
+
 test plan => 10, aGetNodeConfiguration    => sub {
     my @osss = $cfg->getOSSs;
     my $nid  = ((@osss)[0])->{'node'};
@@ -97,14 +101,22 @@ test plan => 10, aGetNodeConfiguration    => sub {
 
 };
 
-test plan => 2, dCheckIP    => sub {
+=cut
+
+test plan => 4, dCheckIP    => sub {
     is( $cfg->getNodeAddress('mds1'),'mds');
     is( $cfg->getNodeAddress('client1'),'lclient');
+    is( $cfg->getLustreNodeAddress('mds1'),'mdslustreip');
+    is( $cfg->getLustreNodeAddress('client1'),'lclient');
 };
+
+=head3
+
+comment it because needs special env
 
 test plan => 3, nCheckRemoteControls => sub{
 
-    my $mc = $cfg->getNodeById($cfg->getMasterClient->{'id'});
+    my $mc = $cfg->getNodeById($cfg->geLustretMasterClient->{'id'});
     #test no real numbers because it can be different
     ok( $mc->getLFFreeSpace > 100,
             "Check free space:".$mc->getLFFreeSpace );
@@ -114,7 +126,7 @@ test plan => 3, nCheckRemoteControls => sub{
             "Check capacity:".$mc->getLFCapacity );
 };
 
-
+=cut
 
 
 test plan => 5, cCheckLustreObjects    => sub {
@@ -167,14 +179,18 @@ test plan => 5, cCheckLustreObjects    => sub {
     print "Clients:".Dumper $clients;
     is_deeply($clients,\@exp3,"Check getLustreClients");
 
-    my $mc = $cfg->getMasterClient;
+    my $mc = $cfg->getMasterLustreClient;
     is($mc->{'node'},'client1',"Check getMasterClient");
 
 };
 
+=head3
+
+comment it because needs special env
+
 test plan => 4, kCheckRemoteControls => sub{
 
-    my $mc = $cfg->getNodeById($cfg->getMasterClient->{'id'});
+    my $mc = $cfg->getNodeById($cfg->getMasterLustreClient->{'id'});
     my $rc     = $mc->getRemoteConnector;
     my $clone1 = $mc->getExclusiveRC;
     my $clone2 = $mc->getExclusiveRC;
@@ -185,7 +201,7 @@ test plan => 4, kCheckRemoteControls => sub{
     isnt( $clone2, $clone1, "Check clones diff");
 };
 
-
+=cut
 
 
 #########################################

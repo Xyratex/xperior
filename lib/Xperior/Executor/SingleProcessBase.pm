@@ -50,6 +50,8 @@ use Carp qw(cluck);
 use File::Path;
 use Log::Log4perl qw(:easy);
 use File::Copy;
+use Sys::Hostname;
+
 
 use Xperior::SshProcess;
 extends 'Xperior::Executor::Base';
@@ -100,6 +102,7 @@ Options of environment which are used
 sub execute {
     my $self    = shift;
     #get remote processor
+    $self->addYE( 'xperior_host', hostname);
     my $mnodecfg = $self->_getMasterNode();
     my $mclientobj = $self->env->getNodeById( $mnodecfg->{'node'} );
     my $testproc   = $mclientobj->getRemoteConnector();
@@ -119,6 +122,7 @@ sub execute {
     }
     #saving env data
     $self->addYE( 'masterclient', $mnodecfg->{id});
+    $self->addYE( 'masterclient_host', $mnodecfg->{ip});
     DEBUG "Master Node:" . Dumper $mnodecfg;
     $self->_prepareCommands($testproc);
     $self->_addCmdLogFiles;

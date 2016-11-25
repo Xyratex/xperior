@@ -336,7 +336,7 @@ sub _prepareEnvOpts {
         $c = 1;
         push @opt, "NETTYPE=$nettype";
         foreach my $m (@mdss) {
-            my $host = $self->env->getNodeAddress( $m->{'node'} );
+            my $host = $self->env->getLustreNodeAddress( $m->{'node'} );
             push @opt, "mds${c}_HOST=$host";
             push @opt, "MDSDEV$c=$m->{device}"
                 if ( $m->{'device'} );
@@ -348,7 +348,7 @@ sub _prepareEnvOpts {
                     if ( $m->{'device'} and ( $m->{'device'} ne '' ) );
             }
             if ($m->{'failover'}) {
-                my $failover = $self->env->getNodeAddress($m->{'failover'});
+                my $failover = $self->env->getLustreNodeAddress($m->{'failover'});
                 if((not $self->env->cfg->{'mgsnid'}) && ($c eq 1)){
                     $mgsnid = "MGSNID=$host\@$nettype:$failover\@$nettype";
                     DEBUG "Construct MGSNID $mgsnid";
@@ -365,14 +365,14 @@ sub _prepareEnvOpts {
         @opt = ();
         $c = 1;
         foreach my $m (@osss) {
-            my $host = $self->env->getNodeAddress( $m->{'node'} );
+            my $host = $self->env->getLustreNodeAddress( $m->{'node'} );
             push @opt, "ost${c}_HOST=$host";
             push @opt, "OSTDEV$c=" . $m->{'device'}
               if ( $m->{'device'} );
             push @opt, "ost${c}_MOUNT=\"$m->{'mount_point'}\""
               if ( $m->{'mount_point'} );
             if ($m->{'failover'}) {
-                my $failover = $self->env->getNodeAddress($m->{'failover'});
+                my $failover = $self->env->getLustreNodeAddress($m->{'failover'});
                 push @opt, "ost${c}failover_HOST=$failover";
             }
             $c++;
@@ -383,14 +383,14 @@ sub _prepareEnvOpts {
         @opt = ();
         my @mgs =  $self->env->getMGS;
         foreach my $m (@mgs) {
-            my $host = $self->env->getNodeAddress( $m->{'node'} );
+            my $host =  $self->env->getLustreNodeAddress( $m->{'node'} );
             push @opt, "mgs_HOST=$host";
             push @opt, "MGSDEV=" . $m->{'device'}
               if ( $m->{'device'} );
             push @opt, "mgs_MOUNT=\"$m->{'mount_point'}\""
               if ( $m->{'mount_point'} );
             if ($m->{'failover'}) {
-                my $failover = $self->env->getNodeAddress($m->{'failover'});
+                my $failover = $self->env->getLustreNodeAddress($m->{'failover'});
                 push @opt, "mgsfailover_HOST=$failover";
                 $mgsnid = "MGSNID=$host\@$nettype:$failover\@$nettype";
                 DEBUG "Construct MGSNID $mgsnid";
@@ -401,6 +401,7 @@ sub _prepareEnvOpts {
             $self->mgsopt( join( ' ', @opt ) );
         }else{
             DEBUG "MGS options array is empty";
+            $self->mgsopt(' ');
         }
     }
 
@@ -410,10 +411,10 @@ sub _prepareEnvOpts {
     my @rclients;
     foreach my $cl (@$clients) {
         if ( $cl->{'master'} && $cl->{'master'} eq 'yes' ) {
-            $mclient = $self->env->getNodeAddress( $cl->{'node'} );
+            $mclient = $self->env->getLustreNodeAddress( $cl->{'node'} );
         }
         else {
-            push @rclients, $self->env->getNodeAddress( $cl->{'node'} );
+            push @rclients, $self->env->getLustreNodeAddress( $cl->{'node'} );
         }
     }
     $self->clntopt(

@@ -81,7 +81,6 @@ has 'bridge'       => ( is => 'rw' );
 has 'bridgeuser'   => ( is => 'rw', default =>'root' );
 has 'nodetype'     => ( is => 'rw' );
 has 'pingport'     => ( is => 'rw', default =>22 );
-
 #has '_ssh'         => ( is => 'rw'); # isa => 'Xperior::SshProcess');
 has '_pinger'      => ( is => 'rw', isa => 'Net::Ping');
 has '_node'        => ( is => 'rw' );
@@ -121,7 +120,6 @@ sub BUILD {
                 unless defined $self->ctrlproto;
     $self->nodetype(DEFAULT_NODE)
                         unless defined $self->nodetype;
-
     DEBUG "Apply role [".$self->nodetype."]";
     if($self->nodetype eq 'KVMNode'){
         Xperior::Nodes::KVMNode->meta->apply($self);

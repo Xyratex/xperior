@@ -1,7 +1,8 @@
 ---
 Nodes:
    - id          : mds1 
-     ip          : mds    
+     ip          : mds
+     lustreip    : mdslustreip
      ctrlproto   : ssh
      user        : root
 

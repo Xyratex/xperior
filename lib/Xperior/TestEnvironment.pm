@@ -181,10 +181,11 @@ interface(e.g. ib).This is not used by Lustre test framework.sh based tests.
 sub getLustreNodeAddress{
     my ($self, $id) = @_;
     foreach my $n (@{$self->nodes}){
-        return $n->lustreip
-            if(($n->id eq $id)and
-                (defined($n->lustreip)));
-        return $n->ip    if( $n->id eq $id);
+        if ( $n->id eq $id ) {
+            return $n->_node()->{lustreip}
+                if ($n->_node()->{lustreip});
+            return $n->ip;
+        }
     }
     return undef;
 }
