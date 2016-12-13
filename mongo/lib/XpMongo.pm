@@ -50,6 +50,7 @@ use Data::Dumper;
 use MongoDB;
 use MongoDB::OID;
 use MongoDB::GridFS;
+use MongoDB::Connection;
 use JSON;
 use DateTime;    #fix for faliure
 
