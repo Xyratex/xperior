@@ -1,0 +1,23 @@
+== sanity-mlhsm test 1: lfs hsm flags root/non-root access =========================================== 16:03:44 (1484150624)
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [touch] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_state] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_set] [--norelease] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_state] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_clear] [--norelease] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_state] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_set] [--exists] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+Can't change hsm flags for /mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm: Operation not permitted
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_state] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_state] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+running as uid/gid/euid/egid 11/11/11/11, groups:
+ [/usr/bin/lfs] [hsm_state] [/mnt/lustre/d1.sanity-mlhsm/f1.sanity-mlhsm]
+Resetting fail_loc and fail_val on all nodes...done.

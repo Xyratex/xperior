@@ -1,0 +1,47 @@
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_common.c:508:ml_ct_import_socket_create_bind	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_common.c:533:ml_ct_import_socket_addr_fill	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_common.c:549:ml_ct_import_socket_addr_fill	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_common.c:528:ml_ct_import_socket_create_bind	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_tool.c:108:ml_ct_setup	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fs.c:74:ml_ct_fs_id_file_init	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fs.c:27:ct_fs_config_write	> 
+mlhsmtool[26656]: TID 26656: FS config file '/mnt/m0t1fs/4000000:0' already exist
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fs.c:67:ct_fs_config_write	< rc=-17
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_util.c:141:ml_ct_fs_id_file_read	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_util.c:213:ml_ct_is_file_header_compatible	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_util.c:233:ml_ct_is_file_header_compatible	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_util.c:194:ml_ct_fs_id_file_read	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fs.c:82:ml_ct_fs_id_file_init	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:280:ml_ct_fid_gen_init	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:33:ct_cpuinfo_get	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:37:ct_cpuinfo_get	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:50:ct_mac_addresses_get	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:85:ct_mac_addresses_get	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:92:ct_nodename_get	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:100:ct_nodename_get	< Nodename: 'vmc-rekvm-dm-1-1.xy01.xyratex.com'
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:209:ct_client_id_get	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_util.c:213:ml_ct_is_file_header_compatible	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_util.c:233:ml_ct_is_file_header_compatible	< rc=0
+mlhsmtool[26656]: TID 26656: Got 1024 client_id
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:270:ct_client_id_get	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_fid_gen.c:306:ml_ct_fid_gen_init	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_tool.c:153:ml_ct_setup	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_tool.c:207:ml_ct_action_execute	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_basic.c:306:ml_ct_basic	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_basic.c:620:ct_health_init	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_basic.c:625:ct_health_init	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_basic.c:415:ml_ct_thr_start	> 
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_basic.c:442:ml_ct_thr_start	< rc=0
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_basic.c:640:ct_import_msg_dispatcher_setup	> 
+mlhsmtool[26656]: TID 26656: Import message dispatcher set up successfully
+mlhsmtool[26656]: TID 26656: mlhsm/mlhsm_basic.c:670:ct_import_msg_dispatcher_setup	< rc=0
+mlhsmtool[26656]: TID 26656: waiting for message from Lustre
+mlhsmtool[26656]: TID 26668: mlhsm/mlhsm_basic.c:492:ml_ct_action_thr_execute	> 
+mlhsmtool[26656]: TID 26670: mlhsm/mlhsm_basic.c:492:ml_ct_action_thr_execute	> 
+mlhsmtool[26656]: TID 26672: mlhsm/mlhsm_basic.c:717:ct_import_msg_dispatcher_thr_execute	> 
+mlhsmtool[26656]: TID 26673: mlhsm/mlhsm_basic.c:215:ct_task_dispatcher	> 
+mlhsmtool[26656]: TID 26671: mlhsm/mlhsm_basic.c:492:ml_ct_action_thr_execute	> 
+mlhsmtool[26656]: TID 26669: mlhsm/mlhsm_basic.c:492:ml_ct_action_thr_execute	> 
+mlhsmtool[26656]: TID 26667: mlhsm/mlhsm_basic.c:572:ct_health_monitor_thr_exec	> 
+exiting: Interrupt
+mlhsmtool[26656]: IEC: 999001001: mlhsmtool stopped by signal: {"signal": 2, "time": 1484150625.338943252}

@@ -85,7 +85,7 @@ after 'cleanup' => sub {
     my $mclient = $self->_getMasterNode();
     my $mclientobj = $self->env->getNodeById( $mclient->{'node'} );
     my $testproc   = $mclientobj->getRemoteConnector();
-    $testproc->createSync('rm -rf /tmp/test_logs')
+    #$testproc->createSync('rm -rf /tmp/test_logs')
 };
 
 =head3 _getTestName
@@ -268,6 +268,9 @@ sub processLogs {
                 $result = $self->SKIPPED;
                 $reason = $1 if $1;
                 $is_completed = 1;
+            }
+            if( $s =~ /Logging\sto\slocal\sdirectory\:\s([\w\d\\]+)$/ ) {
+
             }
         }
 

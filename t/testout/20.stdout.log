@@ -1,0 +1,33 @@
+Logging to local directory: /tmp/test_logs/1484152303
+Starting client vmc-rekvm-dm-1-1.xy01.xyratex.com:  -o user_xattr,flock 172.18.1.201@tcp:/lustre /mnt/lustre2
+Started clients vmc-rekvm-dm-1-1.xy01.xyratex.com: 
+172.18.1.201@tcp:/lustre on /mnt/lustre2 type lustre (rw,flock,user_xattr)
+vmc-rekvm-dm-1-1.xy01.xyratex.com: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients vmc-rekvm-dm-1-1.xy01.xyratex.com environments
+Using TIMEOUT=20
+disable quota as required
+osd-ldiskfs.track_declares_assert=1
+excepting tests: 34 35 36 40
+Killing existing copytools on vmc-rekvm-dm-1-1.xy01.xyratex.com
+Set HSM on and start
+Start copytool
+Purging archive on vmc-rekvm-dm-1-1.xy01.xyratex.com
+Starting copytool agt1 on vmc-rekvm-dm-1-1.xy01.xyratex.com
+Set sanity-mlhsm HSM policy
+
+
+== sanity-mlhsm test 20: Release is not permitted ==================================================== 16:32:07 (1484152327)
+Cannot send HSM request (use of /mnt/lustre/d20.sanity-mlhsm/f20.sanity-mlhsm): Operation not permitted
+Cannot send HSM request (use of /mnt/lustre/d20.sanity-mlhsm/f20.sanity-mlhsm): Operation not permitted
+Cannot send HSM request (use of /mnt/lustre/d20.sanity-mlhsm/f20.sanity-mlhsm): Operation not permitted
+Cannot send HSM request (use of /mnt/lustre/d20.sanity-mlhsm/f20.sanity-mlhsm): Operation not permitted
+Resetting fail_loc and fail_val on all nodes...done.
+PASS 20 (1s)
+Copytool is stopped on vmc-rekvm-dm-1-1.xy01.xyratex.com
+mdt.lustre-MDT0000.hsm_control=shutdown
+Waiting 20 secs for update
+mdt.lustre-MDT0000.hsm_control=enabled
+== sanity-mlhsm test complete, duration 28 sec ======================================================= 16:32:11 (1484152331)
+Stopping clients: vmc-rekvm-dm-1-1.xy01.xyratex.com /mnt/lustre2 (opts:)
+Stopping client vmc-rekvm-dm-1-1.xy01.xyratex.com /mnt/lustre2 opts:
