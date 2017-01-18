@@ -113,6 +113,12 @@ sub execute {
     }catch TestError Error::subs::with{
         INFO "Test [$method] failed with error";
     }finally{
+        my $cleanupenvptr = "cleanup_env";
+        if($test->can($cleanupenvptr)){
+            INFO "Calling [$cleanupenvptr] for test";
+            $test->$cleanupenvptr($self);
+        }
+
         my $cleanupptr = "${method}__cleanup";
         if($test->can($cleanupptr)){
             INFO "Calling cleanup for test [$cleanupptr]";
