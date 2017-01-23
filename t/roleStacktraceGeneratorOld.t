@@ -27,7 +27,7 @@
 #
 
 #!/usr/bin/perl -w
-package roleStacktraceGenerator;
+package roleStacktraceGeneratorOld;
 use strict;
 use Test::Able;
 use Test::More;
@@ -101,4 +101,4 @@ test plan =>2, eCheckSimpleLog => sub{
 
 
 #########################################
-roleStacktraceGenerator->run_tests;
+roleStacktraceGeneratorOld->run_tests;

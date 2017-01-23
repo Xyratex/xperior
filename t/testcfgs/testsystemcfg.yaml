@@ -1,49 +1,59 @@
 ---
 Nodes:
-   - id          : mds1 
+   - id          : mds1
      ip          : mds
      lustreip    : mdslustreip
      ctrlproto   : ssh
      user        : root
+     netconsole  : yes
+     netconsole_autoconfig   : yes
 
    - id           : oss1
 #     ip           : 192.168.200.110
-     ip           : 192.168.200.102    
+     ip           : 192.168.200.102
      ctrlproto    : ssh
      user         : root
+     netconsole  : yes
+     netconsole_autoconfig   : yes
 
    - id          : oss2
      ip          : 192.168.200.102
      user        : root
+     netconsole  : yes
+     netconsole_autoconfig   : yes
 
    - id           : client1
-     ip           : lclient 
+     ip           : lclient
 #     ip           : 192.168.200.150
      ctrlproto    : ssh
-     user         : root 
+     user         : root
+     netconsole  : yes
+     netconsole_autoconfig   : yes
 
    - id           : client2
-     ip           : mds 
+     ip           : mds
 #    ip           : 192.168.200.102
      ctrlproto    : ssh
      user         : root
+     netconsole  : yes
+     netconsole_autoconfig   : yes
 
 
 
 
 LustreObjects:
-   - id          : mds1 
-     device      : /dev/loop0 
+   - id          : mds1
+     device      : /dev/loop0
      node        : mds1
      type        : mds
-   
-   - id          : oos1 
-     device      : /dev/loop1 
+
+   - id          : oos1
+     device      : /dev/loop1
      node        : oss1
      type        : oss
 
-   - id          : oos2 
-     device      : /dev/loop2 
+   - id          : oos2
+     device      : /dev/loop2
      node        : oss2
      type        : oss
 
@@ -60,4 +70,3 @@ LustreObjects:
 client_mount_point      : /mnt/lustre/
 benchmark_tests_file    : testfile
 tempdir                 : /tmp/
-

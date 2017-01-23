@@ -313,8 +313,6 @@ before 'execute' => sub {
             DEBUG "No netconsole defined for node  ${n}->id() ";
         }
     }
-#exit 0;
-
     my $udpserver = IO::Socket::INET->new(
         LocalPort => $self->netconsole_remote_port(),
         Proto     => "udp"
