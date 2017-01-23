@@ -244,38 +244,33 @@ sub processLogs {
     DEBUG("Processing log file [$file]");
     open( F, "  $file" );
 
-    my $result    = $self->NOTSET;
-    my $defreason = 'No_status_found';
-    my $reason    = $defreason;
-    my $is_completed = 0;
-    my @results;
+    my $result     = $self->NOTSET;
+    my $reason     = 'No_status_found';
+    my $pass_found = 0;
 
     while ( defined( my $s = <F> ) ) {
         chomp $s;
         $self->_parseLogFile($s,$connector);
-        if ( not $is_completed ) {
-            if ( $s =~ m/^PASS/ ) {
-                $result = $self->PASSED;
-                $reason = '';
-                $is_completed = 1;
-            }
-            if ( $s =~ m/^FAIL(.*)/ ) {
-                $result = $self->FAILED;
-                $reason = $1 if defined $1;
-                $is_completed = 1;
-            }
-            if ( $s =~ /^\s*SKIP(.*)/ ) {
-                $result = $self->SKIPPED;
-                $reason = $1 if $1;
-                $is_completed = 1;
-            }
-            if( $s =~ /Logging\sto\slocal\sdirectory\:\s([\w\d\\]+)$/ ) {
-
-            }
+        if ( $s =~ m/@@@@@@ FAIL:(.*)/ ) {
+            $result = $self->FAILED;
+            $reason = $1 if defined $1;
+            last;
         }
-
+        elsif ( $s =~ m/^ SKIP:(.*)/ ) {
+            $result = $self->SKIPPED;
+            $reason = $1 if defined $1;
+            last;
+        }
+        elsif ( $s =~ m/PASS .*? \([0-9]+s\)/) {
+            $pass_found = 1;
+        }
+        elsif ( $s =~ m/test complete,/ && $pass_found == 1) {
+            $result = $self->PASSED;
+            $reason = '';
+            last;
+        }
     }
-    if ($result) {
+    if ( $result != $self->PASSED ) {
         $self->reason($reason);
     }
     close(F);

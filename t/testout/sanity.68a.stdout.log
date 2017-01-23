@@ -1,0 +1,96 @@
+Logging to local directory: /tmp/test_logs/1481298391
+fre0320: Checking config lustre mounted on /mnt/lustre
+fre0319: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients fre0319,fre0320 environments
+Using TIMEOUT=20
+enable quota as required
+[HOST:fre0319] [old_mdt_qtype:ug] [old_ost_qtype:ug] [new_qtype:ug3]
+Total disk size: 1377952  block-softlimit: 1378976 block-hardlimit: 1447924 inode-softlimit: 87369 inode-hardlimit: 91737
+Setting up quota on fre0319:/mnt/lustre for quota_usr...
++ /usr/bin/lfs setquota -u quota_usr -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_usr -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
+Quota settings for quota_usr : 
+Disk quotas for user quota_usr (uid 60000):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87369   91737       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0319:/mnt/lustre for quota_2usr...
++ /usr/bin/lfs setquota -u quota_2usr -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_2usr -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
+Quota settings for quota_2usr : 
+Disk quotas for user quota_2usr (uid 60001):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87369   91737       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0319:/mnt/lustre for sanityusr...
++ /usr/bin/lfs setquota -u sanityusr -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
+Quota settings for sanityusr : 
+Disk quotas for user sanityusr (uid 500):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87369   91737       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -   16384       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 16384, total allocated block limit: 0
+Setting up quota on fre0319:/mnt/lustre for sanityusr1...
++ /usr/bin/lfs setquota -u sanityusr1 -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr1 -b 1378976 -B 1447924 -i 87369 -I 91737 /mnt/lustre
+Quota settings for sanityusr1 : 
+Disk quotas for user sanityusr1 (uid 501):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87369   91737       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -   16384       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 16384, total allocated block limit: 0
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+excepting tests: 76 42a 42b 42c 42d 45 51d 68b
+preparing for tests involving mounts
+
+debug=-1
+
+
+== sanity test 68a: lloop driver - basic test ========================== 15:46:37 (1481298397)
+
+ SKIP: sanity test_68a llite_lloop module disabled
+Resetting fail_loc and fail_val on all nodes...done.
+15:46:37 (1481298397) waiting for fre0317 network 5 secs ...
+15:46:37 (1481298397) network interface is UP
+15:46:37 (1481298397) waiting for fre0318 network 5 secs ...
+15:46:37 (1481298397) network interface is UP
+15:46:38 (1481298398) waiting for fre0319 network 5 secs ...
+15:46:38 (1481298398) network interface is UP
+15:46:38 (1481298398) waiting for fre0320 network 5 secs ...
+15:46:38 (1481298398) network interface is UP
+SKIP 68a (1s)
+== sanity test complete, duration 7 sec == 15:46:38 (1481298398)
+debug=super ioctl neterror warning dlmtrace error emerg ha rpctrace vfstrace config console lfsck

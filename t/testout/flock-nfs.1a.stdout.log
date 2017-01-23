@@ -1,0 +1,154 @@
+Logging to local directory: /tmp/test_logs/1477011027
+excepting tests: 
+fre1307: Checking config lustre mounted on /mnt/lustre
+fre1308: Checking config lustre mounted on /mnt/lustre
+Checking servers environments
+Checking clients fre1307,fre1308 environments
+Using TIMEOUT=20
+enable quota as required
+[HOST:fre1307] [old_mdt_qtype:ug] [old_ost_qtype:ug] [new_qtype:ug3]
+Total disk size: 1377952  block-softlimit: 1378976 block-hardlimit: 1447924 inode-softlimit: 87362 inode-hardlimit: 91730
+Setting up quota on fre1307:/mnt/lustre for quota_usr...
++ /usr/bin/lfs setquota -u quota_usr -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_usr -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
+Quota settings for quota_usr : 
+Disk quotas for user quota_usr (uid 60000):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87362   91730       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre1307:/mnt/lustre for quota_2usr...
++ /usr/bin/lfs setquota -u quota_2usr -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_2usr -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
+Quota settings for quota_2usr : 
+Disk quotas for user quota_2usr (uid 60001):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87362   91730       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre1307:/mnt/lustre for sanityusr...
++ /usr/bin/lfs setquota -u sanityusr -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
+Quota settings for sanityusr : 
+Disk quotas for user sanityusr (uid 500):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87362   91730       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre1307:/mnt/lustre for sanityusr1...
++ /usr/bin/lfs setquota -u sanityusr1 -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr1 -b 1378976 -B 1447924 -i 87362 -I 91730 /mnt/lustre
+Quota settings for sanityusr1 : 
+Disk quotas for user sanityusr1 (uid 501):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  1378976 1447924       -       0   87362   91730       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+Stopping clients: fre1307,fre1308 /mnt/lustre (opts:)
+Stopping client fre1307 /mnt/lustre opts:
+Stopping client fre1308 /mnt/lustre opts:
+Starting client fre1305:  -o user_xattr,flock fre1305@tcp:/lustre /mnt/lustre
+Started clients fre1305: 
+fre1305@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+
+== flock-nfs test 1a: LTP testsuite == 00:50:40 (1477011040)
+umount2: Invalid argument
+umount: /mnt/lustre: not mounted
+Exporting Lustre filesystem...
+Shutting down NFS daemon: [FAILED]
+Shutting down NFS mountd: [FAILED]
+Starting NFS services:  [  OK  ]
+Starting NFS mountd: [  OK  ]
+Starting NFS daemon: [  OK  ]
+Starting RPC idmapd: [  OK  ]
+Stopping NFS locking: [  OK  ]
+Stopping NFS statd: [  OK  ]
+Starting NFS statd: [  OK  ]
+/mnt/lustre   	<world>(rw,async,wdelay,no_root_squash,no_subtree_check,sec=sys,rw,no_root_squash,no_all_squash)
+
+Mounting NFS clients (version 3)...
+NFS server and client are mounted
+test lock obtained
+flock01     1  TPASS  :  flock() succeeded with Shared Lock
+flock01     2  TPASS  :  flock() succeeded with Unlock
+flock01     3  TPASS  :  flock() succeeded with Exclusive Lock
+flock02     1  TPASS  :  flock failed as expected with EBADF
+flock02     2  TPASS  :  flock failed as expected with EINVAL
+flock02     3  TPASS  :  flock failed as expected with EINVAL
+CHILD: File locked by parent unlocked
+CHILD: Locking after unlock passed
+flock03     1  TPASS  :  Parent: Initial attempt to flock() passed
+flock03     2  TPASS  :  flock03 Passed
+flock04     1  TPASS  :  flock() PASSED in acquiring shared lock on Share Locked file
+flock04     1  TPASS  :  flock() failed to acquire exclusive lock on existing share locked file as expected
+flock05     1  TPASS  :  flock() failed to acquire shared lock on an alreadyexclusive locked file as expected
+flock05     1  TPASS  :  flock() failed to acquire exclusive lock on existing  exclusive locked file as expected
+flock06     1  TPASS  :  First attempt to flock() passed
+flock06     2  TPASS  :  Second attempt to flock() denied
+flock06     3  TPASS  :  Unlocked fd1
+flock06     4  TPASS  :  Third attempt to flock() succeeded
+fcntl02     1  TPASS  :  fcntl(tfile_13181, F_DUPFD, 0) returned 4
+fcntl03     1  TPASS  :  fcntl(tfile_13186, F_GETFD, 0) returned 0
+fcntl04     1  TPASS  :  fcntl returned 32770
+fcntl05     1  TPASS  :  fcntl returned 0
+fcntl06     1  TCONF  :  fcntl06.c:109: system doesn't have LINUX_LOCK_FILE_REGION support
+
+Unmounting NFS clients...
+
+Unexporting Lustre filesystem...
+Shutting down NFS daemon: [  OK  ]
+Shutting down NFS mountd: [  OK  ]
+Shutting down NFS services:  [  OK  ]
+Shutting down RPC idmapd: [  OK  ]
+Stopping NFS statd: [  OK  ]
+NFS stopped
+Stopping client fre1305 /mnt/lustre (opts:-f)
+pdsh@fre1307: fre1305: ssh exited with exit code 1
+ flock-nfs test_1a: @@@@@@ FAIL: /opt/ltp/testcases/bin/fcntl06_64 failed: rc=32 
+  Trace dump:
+  = /usr/lib64/lustre/tests/test-framework.sh:4687:error()
+  = /usr/lib64/lustre/tests/flock-nfs.sh:97:test_1a()
+  = /usr/lib64/lustre/tests/test-framework.sh:4947:run_one()
+  = /usr/lib64/lustre/tests/test-framework.sh:4983:run_one_logged()
+  = /usr/lib64/lustre/tests/test-framework.sh:4789:run_test()
+  = /usr/lib64/lustre/tests/flock-nfs.sh:99:main()
+Dumping lctl log to /tmp/test_logs/1477011027/flock-nfs.test_1a.*.1477011150.log
+fre1305: Warning: Permanently added 'fre1307,192.168.113.7' (RSA) to the list of known hosts.
+fre1306: Warning: Permanently added 'fre1307,192.168.113.7' (RSA) to the list of known hosts.
+fre1308: Warning: Permanently added 'fre1307,192.168.113.7' (RSA) to the list of known hosts.
+fre1306: error: set_param: setting debug=: Invalid argument
+pdsh@fre1307: fre1306: ssh exited with exit code 22
+fre1305: error: set_param: setting debug=: Invalid argument
+pdsh@fre1307: fre1305: ssh exited with exit code 22
+Resetting fail_loc and fail_val on all nodes...done.
+FAIL 1a (112s)

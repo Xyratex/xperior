@@ -293,7 +293,7 @@ test
   };
 
 test
-  plan             => 3,
+  plan             => 8,
   dCheckLogParsing => sub {
     my $exe  = Xperior::Executor::LustreTests->new();
     my $test = Xperior::Test->new;
@@ -304,13 +304,28 @@ test
     $exe->init( $test, \%options, $cfg );
 
     my $res = $exe->processLogs('t/testout/sanity.1a.stdout.log');
-    is( $res, 0, 'Check PASS log' );
+    is( $res, 0, 'Check PASSED status' );
+
+    $res = $exe->processLogs('t/testout/sanity.68a.stdout.log');
+    is( $res, 1, 'Check SKIPPED status' );
+
     $res = $exe->processLogs('t/testout/sanity.1a.f.stdout.log');
-    is( $res, 100, 'Check no PASS log' );
+    is( $res, 100, 'Check NOTSET status' );
 
     $res = $exe->processLogs('t/testout/recovery-small.24b.stdout.log');
-    is( $res, 0, 'Check PASS log, special case "DEBUG MARKER"' );
+    is( $res, 0, 'Check PASSED status, special case "DEBUG MARKER"' );
 
+    $res = $exe->processLogs('t/testout/fail_client_mds.stdout.log');
+    is( $res, 0, 'Check PASSED status with word "FAIL" as part of stdout' );
+
+    $res = $exe->processLogs('t/testout/flock-nfs.1a.stdout.log');
+    is( $res, 10, 'Check FAILED status with word "TPASS" as part of stdout' );
+
+    $res = $exe->processLogs('t/testout/sanity-scrub.1c.stdout.log');
+    is( $res, 100, 'Check NOTSET status with test result as PASSED but without "test complete," string' );
+
+    $res = $exe->processLogs('t/testout/conf-sanity.28.stdout.log');
+    is( $res, 1, 'Check SKIPPED status for multiple test results in same stdout' );
   };
 
 test

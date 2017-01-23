@@ -1,0 +1,123 @@
+Logging to local directory: /tmp/test_logs/1477016277
+excepting tests: 32newtarball 59 64 24b
+Stopping clients: fre1323,fre1324 /mnt/lustre (opts:)
+Stopping clients: fre1323,fre1324 /mnt/lustre2 (opts:)
+Loading modules from /usr/lib64/lustre/tests/..
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+debug=-1
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Formatting mgs, mds, osts
+Format mgs: /dev/vdd
+Format mds1: /dev/vdb
+Format mds2: /dev/vdc
+Format ost1: /dev/vdb
+Format ost2: /dev/vdc
+start mgs service on fre1321
+Starting mgs:   /dev/vdd /mnt/mgs
+Started MGS
+start mds service on fre1321
+Starting mds1: -o rw,user_xattr  /dev/vdb /mnt/mds1
+Started lustre-MDT0000
+start mds service on fre1321
+Starting mds2: -o rw,user_xattr  /dev/vdc /mnt/mds2
+Started lustre-MDT0001
+start ost1 service on fre1322
+Starting ost1: -o user_xattr  /dev/vdb /mnt/ost1
+Started lustre-OST0000
+fre1321: osc.lustre-OST0000-osc-MDT0000.ost_server_uuid in FULL state after 9 sec
+fre1321: osc.lustre-OST0000-osc-MDT0001.ost_server_uuid in FULL state after 0 sec
+stop ost1 service on fre1322
+Stopping /mnt/ost1 (opts:-f) on fre1322
+stop mds service on fre1321
+Stopping /mnt/mds1 (opts:-f) on fre1321
+stop mds service on fre1321
+Stopping /mnt/mds2 (opts:-f) on fre1321
+umount lustre on /mnt/lustre.....
+stop ost1 service on fre1322
+stop mds service on fre1321
+stop mds service on fre1321
+modules unloaded.
+
+
+== conf-sanity test 28: permanent parameter setting == 02:18:49 (1477016329)
+Loading modules from /usr/lib64/lustre/tests/..
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+../libcfs/libcfs/libcfs options: 'cpu_npartitions=2'
+debug=-1
+subsystem_debug=all -lnet -lnd -pinger
+../lnet/lnet/lnet options: 'accept=all'
+../lnet/klnds/socklnd/ksocklnd options: 'sock_timeout=10'
+gss/krb5 is not supported
+quota/lquota options: 'hash_lqs_cur_bits=3'
+start mds service on fre1321
+Starting mds1: -o rw,user_xattr  /dev/vdb /mnt/mds1
+fre1321: mount.lustre: set /sys/block/vdb/queue/max_sectors_kb to 2147483647
+fre1321: 
+Started lustre-MDT0000
+start mds service on fre1321
+Starting mds2: -o rw,user_xattr  /dev/vdc /mnt/mds2
+fre1321: mount.lustre: set /sys/block/vdc/queue/max_sectors_kb to 2147483647
+fre1321: 
+Started lustre-MDT0001
+start ost1 service on fre1322
+Starting ost1: -o user_xattr  /dev/vdb /mnt/ost1
+fre1322: mount.lustre: set /sys/block/vdb/queue/max_sectors_kb to 2147483647
+fre1322: 
+Started lustre-OST0000
+mount lustre on /mnt/lustre.....
+Starting client: fre1323:  -o user_xattr,flock fre1321@tcp:/lustre /mnt/lustre
+Setting lustre.llite.max_read_ahead_whole_mb from 2 to 3
+Setting lustre.llite.max_read_ahead_whole_mb from 3 to 4
+umount lustre on /mnt/lustre.....
+Stopping client fre1323 /mnt/lustre (opts:)
+mount lustre on /mnt/lustre.....
+Starting client: fre1323:  -o user_xattr,flock fre1321@tcp:/lustre /mnt/lustre
+New config success: got 4
+Setting lustre.llite.max_read_ahead_whole_mb from 4 to 2
+umount lustre on /mnt/lustre.....
+Stopping client fre1323 /mnt/lustre (opts:)
+stop ost1 service on fre1322
+Stopping /mnt/ost1 (opts:-f) on fre1322
+stop mds service on fre1321
+Stopping /mnt/mds1 (opts:-f) on fre1321
+stop mds service on fre1321
+Stopping /mnt/mds2 (opts:-f) on fre1321
+modules unloaded.
+Resetting fail_loc and fail_val on all nodes...pdsh@fre1323: fre1323: ssh exited with exit code 3
+done.
+PASS 28 (50s)
+
+== conf-sanity test 28a: set symlink parameters permanently with conf_param == 02:19:39 (1477016379)
+Loading modules from /usr/lib64/lustre/tests/..
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+../libcfs/libcfs/libcfs options: 'cpu_npartitions=2'
+debug=-1
+subsystem_debug=all -lnet -lnd -pinger
+../lnet/lnet/lnet options: 'accept=all'
+../lnet/klnds/socklnd/ksocklnd options: 'sock_timeout=10'
+gss/krb5 is not supported
+quota/lquota options: 'hash_lqs_cur_bits=3'
+
+ SKIP: conf-sanity test_28a Need OST version >= 2.5.52 or = 2.5.0
+Resetting fail_loc and fail_val on all nodes...done.
+SKIP 28a (12s)
+Stopping /mnt/mgs (opts:) on fre1321
+Stopping clients: fre1323,fre1324 /mnt/lustre (opts:)
+Stopping clients: fre1323,fre1324 /mnt/lustre2 (opts:)
+Loading modules from /usr/lib64/lustre/tests/..
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+debug=-1
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Formatting mgs, mds, osts
+Format mgs: /dev/vdd
+Format mds1: /dev/vdb
+Format mds2: /dev/vdc
+Format ost1: /dev/vdb
+Format ost2: /dev/vdc
+== conf-sanity test complete, duration 134 sec == 02:20:11 (1477016411)

@@ -1,0 +1,392 @@
+Logging to local directory: /tmp/test_logs/1480037776
+Stopping clients: fre0119,fre0120 /mnt/lustre (opts:)
+Stopping clients: fre0119,fre0120 /mnt/lustre2 (opts:)
+Loading modules from /usr/lib64/lustre
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+debug=vfstrace rpctrace dlmtrace neterror ha config 		      ioctl super lfsck
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Formatting mgs, mds, osts
+Format mgs: /dev/vdb
+Format mds1: /dev/vdc
+Format mds2: /dev/vdd
+Format ost1: /dev/vdb
+Format ost2: /dev/vdc
+Checking servers environments
+Checking clients fre0119,fre0120 environments
+Loading modules from /usr/lib64/lustre
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+debug=vfstrace rpctrace dlmtrace neterror ha config 		      ioctl super lfsck
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Setup mgs, mdt, osts
+Starting mgs:   /dev/vdb /mnt/mgs
+Started MGS
+Starting mds1: -o rw,user_xattr  /dev/vdc /mnt/mds1
+Started lustre-MDT0000
+Starting mds2: -o rw,user_xattr  /dev/vdd /mnt/mds2
+Started lustre-MDT0001
+Starting ost1: -o user_xattr  /dev/vdb /mnt/ost1
+Started lustre-OST0000
+Starting ost2: -o user_xattr  /dev/vdc /mnt/ost2
+Started lustre-OST0001
+Starting client: fre0119:  -o user_xattr,flock fre0117@tcp:/lustre /mnt/lustre
+Starting client fre0119,fre0120:  -o user_xattr,flock fre0117@tcp:/lustre /mnt/lustre
+Started clients fre0119,fre0120: 
+fre0117@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+fre0117@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+Using TIMEOUT=20
+enable quota as required
+[HOST:fre0119] [old_mdt_qtype:none] [old_ost_qtype:none] [new_qtype:ug3]
+Total disk size: 187464  block-softlimit: 188488 block-hardlimit: 197912 inode-softlimit: 49784 inode-hardlimit: 52273
+Setting up quota on fre0119:/mnt/lustre for quota_usr...
++ /usr/bin/lfs setquota -u quota_usr -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_usr -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
+Quota settings for quota_usr : 
+Disk quotas for user quota_usr (uid 60000):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49784   52273       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for quota_2usr...
++ /usr/bin/lfs setquota -u quota_2usr -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_2usr -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
+Quota settings for quota_2usr : 
+Disk quotas for user quota_2usr (uid 60001):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49784   52273       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for sanityusr...
++ /usr/bin/lfs setquota -u sanityusr -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
+Quota settings for sanityusr : 
+Disk quotas for user sanityusr (uid 500):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49784   52273       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for sanityusr1...
++ /usr/bin/lfs setquota -u sanityusr1 -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr1 -b 188488 -B 197912 -i 49784 -I 52273 /mnt/lustre
+Quota settings for sanityusr1 : 
+Disk quotas for user sanityusr1 (uid 501):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49784   52273       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+excepting tests: 
+
+
+== sanity-scrub test 1c: Auto detect kinds of OI file(s) removed/recreated cases == 01:36:49 (1480037809)
+preparing... Fri Nov 25 01:36:49 UTC 2016
+creating 0 files on mds1
+creating 0 files on mds2
+prepared Fri Nov 25 01:36:50 UTC 2016.
+stop mds1
+stop mds2
+removing OI files on mds1: idx=0
+removed `/mnt/brpt/oi.16.0'
+removing OI files on mds2: idx=0
+removed `/mnt/brpt/oi.16.0'
+start MDTs with OI scrub disabled
+fre0117: mount.lustre: set /sys/block/vdc/queue/max_sectors_kb to 2147483647
+fre0117: 
+fre0117: mount.lustre: set /sys/block/vdd/queue/max_sectors_kb to 2147483647
+fre0117: 
+Started LFSCK on the device lustre-MDT0000.
+Started LFSCK on the device lustre-MDT0001.
+Checking servers environments
+Checking clients fre0119,fre0120 environments
+Loading modules from /usr/lib64/lustre
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+debug=vfstrace rpctrace dlmtrace neterror ha config 		      ioctl super lfsck
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Setup mgs, mdt, osts
+Starting mgs:   /dev/vdb /mnt/mgs
+fre0117: mount.lustre: according to /etc/mtab /dev/vdb is already mounted on /mnt/mgs
+pdsh@fre0119: fre0117: ssh exited with exit code 17
+Start of /dev/vdb on mgs failed 17
+Starting mds1: -o rw,user_xattr  /dev/vdc /mnt/mds1
+fre0117: mount.lustre: according to /etc/mtab /dev/vdc is already mounted on /mnt/mds1
+pdsh@fre0119: fre0117: ssh exited with exit code 17
+Start of /dev/vdc on mds1 failed 17
+Starting mds2: -o rw,user_xattr  /dev/vdd /mnt/mds2
+fre0117: mount.lustre: according to /etc/mtab /dev/vdd is already mounted on /mnt/mds2
+pdsh@fre0119: fre0117: ssh exited with exit code 17
+Start of /dev/vdd on mds2 failed 17
+Starting ost1: -o user_xattr  /dev/vdb /mnt/ost1
+fre0118: mount.lustre: according to /etc/mtab /dev/vdb is already mounted on /mnt/ost1
+pdsh@fre0119: fre0118: ssh exited with exit code 17
+Start of /dev/vdb on ost1 failed 17
+Starting ost2: -o user_xattr  /dev/vdc /mnt/ost2
+fre0118: mount.lustre: according to /etc/mtab /dev/vdc is already mounted on /mnt/ost2
+pdsh@fre0119: fre0118: ssh exited with exit code 17
+Start of /dev/vdc on ost2 failed 17
+Starting client: fre0119:  -o user_xattr,flock fre0117@tcp:/lustre /mnt/lustre
+Starting client fre0119,fre0120:  -o user_xattr,flock fre0117@tcp:/lustre /mnt/lustre
+Started clients fre0119,fre0120: 
+fre0117@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+fre0117@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+Using TIMEOUT=20
+enable quota as required
+[HOST:fre0119] [old_mdt_qtype:ug] [old_ost_qtype:ug] [new_qtype:ug3]
+Total disk size: 187464  block-softlimit: 188488 block-hardlimit: 197912 inode-softlimit: 49826 inode-hardlimit: 52317
+Setting up quota on fre0119:/mnt/lustre for quota_usr...
++ /usr/bin/lfs setquota -u quota_usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for quota_usr : 
+Disk quotas for user quota_usr (uid 60000):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for quota_2usr...
++ /usr/bin/lfs setquota -u quota_2usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_2usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for quota_2usr : 
+Disk quotas for user quota_2usr (uid 60001):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for sanityusr...
++ /usr/bin/lfs setquota -u sanityusr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for sanityusr : 
+Disk quotas for user sanityusr (uid 500):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for sanityusr1...
++ /usr/bin/lfs setquota -u sanityusr1 -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr1 -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for sanityusr1 : 
+Disk quotas for user sanityusr1 (uid 501):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+preparing... Fri Nov 25 01:37:19 UTC 2016
+creating 0 files on mds1
+creating 0 files on mds2
+prepared Fri Nov 25 01:37:20 UTC 2016.
+stop mds1
+stop mds2
+removing OI files on mds1: idx=2
+removed `/mnt/brpt/oi.16.2'
+removed `/mnt/brpt/oi.16.4'
+removed `/mnt/brpt/oi.16.8'
+removed `/mnt/brpt/oi.16.16'
+removed `/mnt/brpt/oi.16.32'
+removing OI files on mds2: idx=2
+removed `/mnt/brpt/oi.16.2'
+removed `/mnt/brpt/oi.16.4'
+removed `/mnt/brpt/oi.16.8'
+removed `/mnt/brpt/oi.16.16'
+removed `/mnt/brpt/oi.16.32'
+start MDTs with OI scrub disabled
+fre0117: mount.lustre: set /sys/block/vdc/queue/max_sectors_kb to 2147483647
+fre0117: 
+fre0117: mount.lustre: set /sys/block/vdd/queue/max_sectors_kb to 2147483647
+fre0117: 
+Started LFSCK on the device lustre-MDT0000.
+Started LFSCK on the device lustre-MDT0001.
+Checking servers environments
+Checking clients fre0119,fre0120 environments
+Loading modules from /usr/lib64/lustre
+detected 2 online CPUs by sysfs
+Force libcfs to create 2 CPU partitions
+debug=vfstrace rpctrace dlmtrace neterror ha config 		      ioctl super lfsck
+subsystem_debug=all -lnet -lnd -pinger
+gss/krb5 is not supported
+Setup mgs, mdt, osts
+Starting mgs:   /dev/vdb /mnt/mgs
+fre0117: mount.lustre: according to /etc/mtab /dev/vdb is already mounted on /mnt/mgs
+pdsh@fre0119: fre0117: ssh exited with exit code 17
+Start of /dev/vdb on mgs failed 17
+Starting mds1: -o rw,user_xattr  /dev/vdc /mnt/mds1
+fre0117: mount.lustre: according to /etc/mtab /dev/vdc is already mounted on /mnt/mds1
+pdsh@fre0119: fre0117: ssh exited with exit code 17
+Start of /dev/vdc on mds1 failed 17
+Starting mds2: -o rw,user_xattr  /dev/vdd /mnt/mds2
+fre0117: mount.lustre: according to /etc/mtab /dev/vdd is already mounted on /mnt/mds2
+pdsh@fre0119: fre0117: ssh exited with exit code 17
+Start of /dev/vdd on mds2 failed 17
+Starting ost1: -o user_xattr  /dev/vdb /mnt/ost1
+fre0118: mount.lustre: according to /etc/mtab /dev/vdb is already mounted on /mnt/ost1
+pdsh@fre0119: fre0118: ssh exited with exit code 17
+Start of /dev/vdb on ost1 failed 17
+Starting ost2: -o user_xattr  /dev/vdc /mnt/ost2
+fre0118: mount.lustre: according to /etc/mtab /dev/vdc is already mounted on /mnt/ost2
+pdsh@fre0119: fre0118: ssh exited with exit code 17
+Start of /dev/vdc on ost2 failed 17
+Starting client: fre0119:  -o user_xattr,flock fre0117@tcp:/lustre /mnt/lustre
+Starting client fre0119,fre0120:  -o user_xattr,flock fre0117@tcp:/lustre /mnt/lustre
+Started clients fre0119,fre0120: 
+fre0117@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+fre0117@tcp:/lustre on /mnt/lustre type lustre (rw,user_xattr,flock)
+Using TIMEOUT=20
+enable quota as required
+[HOST:fre0119] [old_mdt_qtype:ug] [old_ost_qtype:ug] [new_qtype:ug3]
+Total disk size: 187464  block-softlimit: 188488 block-hardlimit: 197912 inode-softlimit: 49826 inode-hardlimit: 52317
+Setting up quota on fre0119:/mnt/lustre for quota_usr...
++ /usr/bin/lfs setquota -u quota_usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for quota_usr : 
+Disk quotas for user quota_usr (uid 60000):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for quota_2usr...
++ /usr/bin/lfs setquota -u quota_2usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g quota_2usr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for quota_2usr : 
+Disk quotas for user quota_2usr (uid 60001):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for sanityusr...
++ /usr/bin/lfs setquota -u sanityusr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for sanityusr : 
+Disk quotas for user sanityusr (uid 500):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on fre0119:/mnt/lustre for sanityusr1...
++ /usr/bin/lfs setquota -u sanityusr1 -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
++ /usr/bin/lfs setquota -g sanityusr1 -b 188488 -B 197912 -i 49826 -I 52317 /mnt/lustre
+Quota settings for sanityusr1 : 
+Disk quotas for user sanityusr1 (uid 501):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+    /mnt/lustre       0  188488  197912       -       0   49826   52317       -
+lustre-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+lustre-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+lustre-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+lustre-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+preparing... Fri Nov 25 01:37:48 UTC 2016
+creating 0 files on mds1
+creating 0 files on mds2
+prepared Fri Nov 25 01:37:48 UTC 2016.
+stop mds1
+stop mds2
+removing OI files on mds1: idx=3
+removed `/mnt/brpt/oi.16.3'
+removed `/mnt/brpt/oi.16.9'
+removed `/mnt/brpt/oi.16.27'
+removing OI files on mds2: idx=3
+removed `/mnt/brpt/oi.16.3'
+removed `/mnt/brpt/oi.16.9'
+removed `/mnt/brpt/oi.16.27'
+start MDTs with OI scrub disabled
+fre0117: mount.lustre: set /sys/block/vdc/queue/max_sectors_kb to 2147483647
+fre0117: 
+fre0117: mount.lustre: set /sys/block/vdd/queue/max_sectors_kb to 2147483647
+fre0117: 
+Started LFSCK on the device lustre-MDT0000.
+Started LFSCK on the device lustre-MDT0001.
+Resetting fail_loc and fail_val on all nodes...done.
+01:37:53 (1480037873) waiting for fre0117 network 5 secs ...
+01:37:53 (1480037873) network interface is UP
+01:37:53 (1480037873) waiting for fre0118 network 5 secs ...
+01:37:53 (1480037873) network interface is UP
+01:37:53 (1480037873) waiting for fre0119 network 5 secs ...
+01:37:53 (1480037873) network interface is UP
+01:37:53 (1480037873) waiting for fre0120 network 5 secs ...
+01:37:53 (1480037873) network interface is UP
+PASS 1c (64s)
+Stopping clients: fre0119,fre0120 /mnt/lustre (opts:)
+Stopping clients: fre0119,fre0120 /mnt/lustre2 (opts:)
+Stopping /mnt/mds1 (opts:-f) on fre0117
+Stopping /mnt/mds2 (opts:-f) on fre0117

@@ -288,9 +288,6 @@ sub execution_result_calculation{
     $result->addYE( 'completed', 'yes' );
     DEBUG "${msg_prefix}*****After crash check:" . $testproc->exitcode;
 
-    #FIXME why stderr log is ignored but result is stored?
-    $result->_getLog( $testproc, $result->remote_err,
-                                        'stderr',"${id_prefix}stderr" );
     my $pr = $self->NOTSET;
     my $getlogres = $result->_getLog( $testproc, $result->remote_out,
                                         'stdout',"${id_prefix}stdout" );
@@ -299,6 +296,15 @@ sub execution_result_calculation{
     }else {
         $result->reason(
             "Cannot get log file [" . $result->remote_out . "]: $getlogres" );
+    }
+    $getlogres = $result->_getLog( $testproc, $result->remote_err,
+                                              'stderr',"${id_prefix}stderr" );
+    if ( $pr == $self->NOTSET && $getlogres == 0) {
+        $pr = $self->processLogs($self->getNormalizedLogName('stderr'));
+    }
+    elsif ( $getlogres != 0 ) {
+        $result->reason(
+            "Cannot get log file [" . $result->remote_err . "]: $getlogres" );
     }
 
     #calculate results status
