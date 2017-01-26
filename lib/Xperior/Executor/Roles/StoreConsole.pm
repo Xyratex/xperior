@@ -84,7 +84,9 @@ before 'execute' => sub{
 
         }else{
             $self->addMessage(
-                    "Cannot read console file on node [".$n->id."]");
+                    "Cannot read console file on node [".
+                        $n->id().":".$n->console().
+                        "]");
         }
     }
     $self->afterBeforeExecute($title);

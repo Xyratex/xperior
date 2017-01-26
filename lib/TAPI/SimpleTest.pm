@@ -404,9 +404,9 @@ sub run_check{
             ."Executed on [".$node->host()."]\n"
             ."Executed cmd [".$cmd."]\n"
             ."Killed status is ["
-            .( (defined($run_res->{killled}))? $run_res->{killled} : '' )."\n");
+            .( (defined($run_res->{killed}))? $run_res->{killed} : '' )."]\n");
 
-    if( $sub_exec_check->($run_res->{killled}, $run_res->{exitcode}, $self) ){
+    if( $sub_exec_check->($run_res->{killed}, $run_res->{exitcode}, $self) ){
         INFO "Exit code [$run_res->{exitcode}], $message : PASSED";
         $self->append("$message : PASSED\n");
 
