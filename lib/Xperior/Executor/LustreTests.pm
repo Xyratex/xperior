@@ -99,6 +99,18 @@ sub _getTestName{
     return  $self->test->testcfg->{testname};
 }
 
+=head3 getClientCount
+
+Return count of lustre clients
+
+=cut
+
+sub getClientCount {
+    my $self = shift;
+    my $clients = $self->env->getLustreClients();
+    return scalar( @$clients );
+}
+
 =over 12
 
 =item * B<_prepareCommands> - generate command line for Lustre test based on

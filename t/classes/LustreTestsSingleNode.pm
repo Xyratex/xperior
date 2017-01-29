@@ -9,6 +9,7 @@ use File::Copy::Recursive qw(fcopy rcopy dircopy fmove rmove dirmove);
 use Log::Log4perl qw(:easy);
 use File::Slurp;
 
+use Xperior::Core;
 use Xperior::Test;
 use Xperior::Executor::LustreTests;
 use Xperior::Executor::LustreSingleTests;
@@ -282,5 +283,18 @@ sub test_check_cmd_processlogs_1 {
 
 };
 
+sub test_check_result_yaml {
+    my $exe  = Xperior::Executor::LustreTests->new();
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
+    $exe->init( $test, \%options, $cfg );
+    $exe->_prepareCommands;
+    $exe->execute;
+
+    is( $exe->yaml->{'client_count'}, '2', 'Check client count' );
+};
 
 1;

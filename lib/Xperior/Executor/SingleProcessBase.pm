@@ -124,6 +124,9 @@ sub execute {
     $self->addYE( 'masterclient', $mnodecfg->{id});
     $self->addYE( 'masterclient_host', $mnodecfg->{ip});
     DEBUG "Master Node:" . Dumper $mnodecfg;
+    if($self->can('getClientCount')){
+        $self->addYE('client_count', $self->getClientCount());
+    }
     $self->_prepareCommands($testproc);
     $self->_addCmdLogFiles;
     $self->addYE( 'cmd', $self->cmd );

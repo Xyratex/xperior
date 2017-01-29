@@ -79,6 +79,18 @@ has 'script'              => ( is => 'rw', default => 'ha.sh');
 has 'cleanup_before_run'  => ( is => 'rw', default => 1);
 has 'lustretestdir'       => ( is => 'rw', default => '/usr/lib64/lustre/tests/');
 
+=head3 getClientCount
+
+Return count of lustre clients
+
+=cut
+
+sub getClientCount {
+    my $self = shift;
+    my $clients = $self->env->getLustreClients();
+    return scalar( @$clients );
+}
+
 =over 12
 
 =item B<_prepareCommands> - generate command line for Lustre ha.sh test
