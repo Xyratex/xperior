@@ -22,8 +22,8 @@ my $perldir   = $ENV{PERLBIN} || confess "No PERLBIN set";
 my $xpextlibs  = $ENV{XPEXTLIBS} || DEBUG "XPEXTLIBS not found";
 #'/opt/ActivePerl-5.14/';
 my $covercmd  = "$perldir/bin/cover";
-my $testcmd   = "$perldir/bin/prove  -v --timer --normalize --formatter=TAP::Formatter::JUnit -l ";
-my $testopt   = "PERL5OPT=-MDevel::Cover=+inc PERL5LIB=lib:t/lib:$xpextlibs";
+my $testcmd   = "$perldir/bin/prove  -v --normalize --formatter=TAP::Formatter::JUnit -l ";
+my $testopt   = "PERL5OPT=-MDevel::Cover=+inc PERL5LIB=lib:tests:t/lib:$xpextlibs";
 my $criticcmd = "perlcritic";
 runEx("$criticcmd  -3  bin  lib/Xperior > $WD/critic.txt");
 runEx("$covercmd --delete");
@@ -48,8 +48,8 @@ runEx("$testopt $testcmd   t/roleCustomLogCollector.t    > $WD/roleCustomLogColl
 runEx("$testopt $testcmd   t/executorLustreHA.t          > $WD/executorLustreHA.junit");
 runEx("$testopt $testcmd   t/roleVmcoreGenerator.t       > $WD/roleVmcoreGenerator.junit");
 runEx("$testopt $testcmd   t/simpletest.t                > $WD/simpletest.junit");
-runEx("$testopt $testcmd   t/testenv.t                   > $WD/t/testenv.t");
-runEx("$testopt $testcmd   t/example_xperior_test.t      > $WD/t/example_xperior_test.t");
+runEx("$testopt $testcmd   t/testenv.t                   > $WD/testenv.junit");
+runEx("$testopt $testcmd   t/xperior_test.t              > $WD/xperior_test.junit");
 runEx("$covercmd");
 runEx("$covercmd -report clover");
 #thereaded, calculate separately 

@@ -251,15 +251,18 @@ sub processLogs {
     while ( defined( my $s = <F> ) ) {
         chomp $s;
         $self->_parseLogFile($s,$connector);
+        if( $result != $self->NOTSET){
+            next;
+        }
         if ( $s =~ m/@@@@@@ FAIL:(.*)/ ) {
             $result = $self->FAILED;
             $reason = $1 if defined $1;
-            last;
+            next;
         }
         elsif ( $s =~ m/^ SKIP:(.*)/ ) {
             $result = $self->SKIPPED;
             $reason = $1 if defined $1;
-            last;
+            next;
         }
         elsif ( $s =~ m/PASS .*? \([0-9]+s\)/) {
             $pass_found = 1;
@@ -267,7 +270,7 @@ sub processLogs {
         elsif ( $s =~ m/test complete,/ && $pass_found == 1) {
             $result = $self->PASSED;
             $reason = '';
-            last;
+            next;
         }
     }
     if ( $result != $self->PASSED ) {
@@ -281,6 +284,7 @@ sub _parseLogFile{
     my $self      = shift;
     my $str       = shift;
     my $connector = shift;
+    DEBUG "Str=[$str]";
     if ( my ($dumplog) = ( $str =~ m/Dumping lctl log to\s+(.*)$/ ) ) {
         DEBUG "Log files template [$dumplog] found in log";
         my $files = $connector->createSync("ls -Aw1 $dumplog");
