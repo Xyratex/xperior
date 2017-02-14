@@ -75,7 +75,10 @@ sub initNodes {
     my $self = shift;
     my $nodeArrayRef = shift;
     foreach my $n (@{$nodeArrayRef}) {
-        my $node = Xperior::Node->new;
+        my $node = Xperior::Node->new($n);
+        #FIXME Unify initialization between initNodes
+        # and BUILD of Node and Moose constructor
+        # this code is disgusting
         $node->_node($n);
         $node->id($n->{'id'});
         $node->ip($n->{'ip'});

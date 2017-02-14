@@ -49,6 +49,7 @@ use Moose::Util::TypeConstraints;
 use POSIX 'isdigit';
 use Net::Ping;
 use Log::Log4perl qw(:easy);
+use Data::Dumper;
 
 use Xperior::Utils;
 use Xperior::SshProcess;
@@ -118,6 +119,8 @@ sub BUILD {
     my $params = shift;
     $self->ctrlproto(DEFAULT_PROTO)
                 unless defined $self->ctrlproto;
+    $self->nodetype($params->{nodetype})
+                        if defined $params->{nodetype};
     $self->nodetype(DEFAULT_NODE)
                         unless defined $self->nodetype;
     DEBUG "Apply role [".$self->nodetype."]";
@@ -128,7 +131,10 @@ sub BUILD {
         $self->restoretimeout( $params->{'restoretimeout'})
             if defined $params ->{'restoretimeout'};
 
-    }elsif($self->nodetype eq 'BasicNode'){
+    }elsif( ($self->nodetype eq 'BasicNode')
+        or ($self->nodetype eq 'Basic') # legacy for old scripts
+        ){
+
         Xperior::Nodes::BasicNode->meta->apply($self);
     }elsif($self->nodetype eq 'IPMINode'){
         Xperior::Nodes::IPMINode->meta->apply($self);
