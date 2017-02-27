@@ -164,14 +164,17 @@ sub execute {
     $self->execution_result_calculation($self, $testproc, $mclientobj, $starttime);
     #cleanup tempdir after execution
     #TODO make this removing safe!!!
-    $testproc->run( 'rm -rf ' . "$mountpoint/*" )
+    my $no_lustre_fs_cleanup = $self->env->cfg->{'no_lustre_fs_cleanup'};
+    if ( defined($no_lustre_fs_cleanup) && $no_lustre_fs_cleanup eq "true" ) {
+        $self->addMessage( "no_lustre_fs_cleanup option selected" );
+    }
+    else {
+        $testproc->run( 'rm -rf ' . "$mountpoint/*" )
             if ($mountpoint and $mountpoint ne "");
-
-
-    #$self->test->tap     ( $self->tap);
+        $self->cleanup($testproc);
+        $self->clean_nodes();
+    }
     $self->test->results( $self->yaml );
-    $self->cleanup($testproc);
-    $self->clean_nodes();
     #no idea what is good result there, so no return
     return;
 }
