@@ -60,8 +60,7 @@ sub collectStat {
                 'lctl dl',
                 'lfs df',
                 'mount | grep lustre',
-                'rpm -qi lustre',
-                'rpm -qi lustre-client',
+                'rpm -qi $(rpm -qa | grep lustre)',
                 'free',
                 'df'
             );
