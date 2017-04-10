@@ -105,7 +105,7 @@ after 'execute' => sub {
             # app, e.g. in our case it is sh
             #action - list process for pgroup based in sh pid,
             #kill it
-            kill_tree($proc->pid());
+            kill_local_tree($proc->pid());
             $proc = undef;
             $self->console_procs->{$n->id} = undef;
         }

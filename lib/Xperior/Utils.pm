@@ -53,10 +53,39 @@ use IPC::Open3;
 use POSIX ":sys_wait_h";
 use Symbol 'gensym';
 use Proc::Simple;
+use Scalar::Util qw( isvstring looks_like_number);
 
 our @ISA = ("Exporter");
 our @EXPORT = qw(&shell &trim &runEx &parseFilterFile &findCompleteTests
-    &is_path_unsafe &get_fs_root &is_any_pids_alive &kill_tree);
+    &is_path_unsafe &get_fs_root &is_any_pids_alive &kill_local_tree &xp_boolean);
+
+=head2 xp_boolean
+
+ This function return boolean value for logical parameters in xperior cli
+ parameters or config files options
+
+SYNOPSIS xp_boolean($var)
+
+ The fucntion retrun 1 (perl logical true) if:
+ * value is non zero integer
+ * value is 'yes' or 'true' string with spaces before or afer words
+
+=cut
+
+sub xp_boolean{
+    my $value = shift;
+    if( defined($value) ){
+        if ( looks_like_number($value)){
+            return $value;
+        }
+        if( ( trim($value) eq 'yes' )
+                or ( trim($value) eq 'true' ) ){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 sub trim{
    my $string = shift;
@@ -276,7 +305,7 @@ Parameters:
 #TODO return result should be context-dependet, in hash context
 #return same as in shell call
 sub runEx{
-    my ($cmd, $die_on_fail,$fail_message ) = @_;
+    my ($cmd, $die_on_fail,$fail_message, $ptimeout ) = @_;
     my $timeout = 60*60*24; #set default timeout to 24h, magic!
     my $sleeptime = 1;
     DEBUG "Cmd is [$cmd]";
@@ -284,6 +313,7 @@ sub runEx{
 
     $die_on_fail  = 0 if ( !( defined $die_on_fail ) );
     $fail_message = '' if ( !( defined $fail_message ) );
+    $timeout      = $ptimeout if ( $ptimeout );
 
     my $proc = Proc::Simple->new();
     $proc->kill_on_destroy(1);
@@ -463,16 +493,21 @@ sub is_any_pids_alive{
 }
 
 
-=head2 kill_tree($pid, $kill_time)
+=head2 kill_local_tree($pid, $kill_time)
 
 Send TERM to $pid, sleep $kill_time sec, check processes alive,  and if alive
 - send KILL
 
 Assumption: proc group as same pid as pid in parameters (proc tree top)
 
-=cut
+*kill_tree* is local and not exported anymore
 
+=cut
 sub kill_tree{
+    kill_local_tree(@_);
+}
+
+sub kill_local_tree{
     my ($pid, $kill_time) = shift;
     $kill_time = 1 unless $kill_time;
     my $gcmd = "pgrep -g ".$pid;

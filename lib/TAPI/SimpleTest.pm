@@ -322,6 +322,13 @@ Parameters ( hash fields):
     * exec_check_sub - custom check sub for exit code,
                         first parameter - killed parameter,
                         second parameter - expected parameter
+    * dontfail       - if set (logical true) test will be not ended on
+                        that check. For full avoiding influence of
+                        failed check to test result also *dontcount*
+                        should be set
+    * dontcount      -  if set failure count will be not increased.
+                        With *dontfail* is useful for legal failures
+                        e.g. in env preparation time.
 
     return value should be perl boolean
 
@@ -432,9 +439,11 @@ sub run_check{
             . ( defined ( $run_res->{stderr} ) ?  $run_res->{stderr} : '' ) . "\n"
             ."-------------cut------------\n"
             );
-        $self->failcount($self->failcount()+1);
-        $self->reason("$message :FAILED")
-            unless $self->reason();
+        if( not $opts{dontcount} ) {
+            $self->failcount( $self->failcount() + 1 );
+            $self->reason( "$message :FAILED" )
+                unless $self->reason();
+        }
         throw TestFailed("$message : FAILED")
             unless defined $opts{dontfail};
     }

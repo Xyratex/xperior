@@ -553,7 +553,7 @@ sub loadTests {
     find(
         sub {
             push(@testNames, $File::Find::name)
-                if ($File::Find::name =~ m/tests.yaml/);
+                if ($File::Find::name =~ m/tests.yaml$/);
         },
         $self->{'options'}->{'testdir'}
     );
@@ -595,10 +595,12 @@ sub loadTags {
     DEBUG 'Xperior::Core->loadTestSuites';
     my $self = shift;
     my $file = $self->{'options'}->{'testdir'} . '/tags.yaml';
+    if( not -s $file ){
+        ERROR "Not tag file [$file] found";
+        return 1;
+    }
     INFO "Load tag file [ $file ]";
-    my $cfg = LoadFile($file) or confess $!;
-
-    #DEBUG Dumper $cfg;
+    my $cfg = LoadFile($file) or ERROR $!;
     return $cfg->{'tags'};
 }
 

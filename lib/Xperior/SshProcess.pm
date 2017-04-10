@@ -70,6 +70,7 @@ use MooseX::ClassAttribute;
 
 #TODO enable after adding  package to common setup
 #use namespace::autoclean;
+use English;
 use Data::Dumper;
 use Cwd qw(chdir);
 use File::chdir;
@@ -1110,16 +1111,17 @@ sub isAlive {
     return -1;
 }
 
-=head3 putFile ($local_file, $remote_file)
+=head3 putFile ($local_file, $remote_file [, $timeout])
 
 Put fileto remote system.
+Timeout is optional, in secs, default is 10 min
 
 Return 0 if file copied and scp exit code if error occurred.
 
 =cut
 
 sub putFile {
-    my ( $self, $local_file, $remote_file ) = @_;
+    my ( $self, $local_file, $remote_file, $timeout) = @_;
 
     my($filename, $dirs, $suffix) = fileparse("$remote_file");
     my $tmp_file = $self->bridgetmpdir().'/'.$filename;
@@ -1128,6 +1130,7 @@ sub putFile {
         ERROR "Remote target is incorrect or not set:[$remote_file]";
         return 110;
     }
+    $timeout = 600 if not $timeout;
 
     my $targethost  = $self->user.'@'.$self->host;
     my $destination = $targethost.':'.$remote_file;
@@ -1160,7 +1163,7 @@ PSCRIPT
         close $f;
         write_file($t, $script);
         #my $res = shell("sh -e $t");
-        my $res = runEx("sh -e $t");
+        my $res = runEx("sh -e $t", 0, "", $timeout);
         unlink $t;
         return $res;
 
@@ -1182,7 +1185,7 @@ PSCRIPT
             " -o 'ConnectTimeout=25' ".
             $self->_getMasterCmd().
             $self->_getPortScpCmd('yes').
-            " $local_file $destination" );
+            " $local_file $destination", 0, "", $timeout );
 
         return $e;
     }
@@ -1191,15 +1194,17 @@ PSCRIPT
 =head3 getFile ($remote_file, $local_file)
 
 Copy file from remote system to local.
+Timeout is optional, in secs, default is 10 min
 
 Return 0 if file copied and scp exit code if error occurred.
 
 =cut
 
 sub getFile {
-    my ( $self, $remote_file, $local_file ) = @_;
+    my ( $self, $remote_file, $local_file, $timeout ) = @_;
     my($filename, $dirs, $suffix) = fileparse("$remote_file");
     my $tmp_file = $self->bridgetmpdir().'/'.$filename;
+    $timeout = 600 if not $timeout;
     my $source  = $self->user . '@' . $self->host . ':' . $remote_file;
     $self->_supportMasterProcess();
     if( $self->bridge() ){
@@ -1233,7 +1238,7 @@ PSCRIPT
         close $f;
         write_file($t, $script);
         #my $res = shell("sh -e $t");
-        my $res = runEx("sh -e $t");
+        my $res = runEx("sh -e $t", 0, "", $timeout);
         unlink $t;
         return $res;
 
@@ -1253,7 +1258,7 @@ PSCRIPT
             " -o 'ConnectTimeout=25' ".
             $self->_getMasterCmd().
             $self->_getPortScpCmd('yes').
-            " $source $local_file" );
+            " $source $local_file", 0, "", $timeout );
         return $e;
     }
 }
