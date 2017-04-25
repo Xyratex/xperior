@@ -1,0 +1,6 @@
+Using TIMEOUT=300
+running as uid/gid/euid/egid 500/500/500/500, groups:
+ [touch] [/mnt/fs1/d0_runas_test/f35739]
+excepting tests: 253 400a 401 76 42a 42b 42c 42d 45 51d 68b
+mke2fs 1.42.13.x2 (29-Sep-2016)
+== sanity test complete, duration 39 sec ============================================================= 12:10:00 (1492949400)

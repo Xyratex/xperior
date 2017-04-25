@@ -1,0 +1,474 @@
+Logging to local directory: /tmp/test_logs/1492949361
+redpill-client01.ext: Checking config lustre mounted on /mnt/fs1
+Checking servers environments
+Checking clients redpill-client01.ext environments
+keeping jobstats as 
+enable quota as required
+[HOST:redpill-client01.ext] [old_mdt_qtype:none] [old_ost_qtype:none] [new_qtype:ug3]
+Total disk size: 2181806876928  block-softlimit: 2181806877952 block-hardlimit: 2290897221849 inode-softlimit: 2130376420 inode-hardlimit: 2236895241
+Setting up quota on redpill-client01.ext:/mnt/fs1 for quota_usr...
++ /usr/bin/lfs setquota -u quota_usr -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
++ /usr/bin/lfs setquota -g quota_usr -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
+Quota settings for quota_usr : 
+Disk quotas for user quota_usr (uid 60000):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+       /mnt/fs1       0  2181806877952 2290897221849       -       0  2130376420 2236895241       -
+fs1-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0002_UUID
+                      0       -       0       -       0       -       0       -
+fs1-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0002_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0003_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0004_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0005_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0006_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0007_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0008_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0009_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0010_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0011_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0012_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0013_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0014_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0015_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0016_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0017_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0018_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0019_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0020_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0021_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0022_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0023_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0024_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0025_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0026_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0027_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0028_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0029_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002f_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on redpill-client01.ext:/mnt/fs1 for quota_2usr...
++ /usr/bin/lfs setquota -u quota_2usr -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
++ /usr/bin/lfs setquota -g quota_2usr -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
+Quota settings for quota_2usr : 
+Disk quotas for user quota_2usr (uid 60001):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+       /mnt/fs1       0  2181806877952 2290897221849       -       0  2130376420 2236895241       -
+fs1-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0002_UUID
+                      0       -       0       -       0       -       0       -
+fs1-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0002_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0003_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0004_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0005_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0006_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0007_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0008_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0009_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0010_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0011_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0012_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0013_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0014_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0015_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0016_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0017_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0018_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0019_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0020_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0021_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0022_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0023_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0024_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0025_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0026_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0027_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0028_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0029_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002f_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on redpill-client01.ext:/mnt/fs1 for sanityusr...
++ /usr/bin/lfs setquota -u sanityusr -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
++ /usr/bin/lfs setquota -g sanityusr -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
+Quota settings for sanityusr : 
+Disk quotas for user sanityusr (uid 500):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+       /mnt/fs1       0  2181806877952 2290897221849       -       0  2130376420 2236895241       -
+fs1-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0002_UUID
+                      0       -       0       -       0       -       0       -
+fs1-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0002_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0003_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0004_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0005_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0006_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0007_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0008_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0009_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0010_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0011_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0012_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0013_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0014_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0015_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0016_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0017_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0018_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0019_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0020_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0021_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0022_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0023_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0024_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0025_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0026_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0027_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0028_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0029_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002f_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+Setting up quota on redpill-client01.ext:/mnt/fs1 for sanityusr1...
++ /usr/bin/lfs setquota -u sanityusr1 -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
++ /usr/bin/lfs setquota -g sanityusr1 -b 2181806877952 -B 2290897221849 -i 2130376420 -I 2236895241 /mnt/fs1
+Quota settings for sanityusr1 : 
+Disk quotas for user sanityusr1 (uid 501):
+     Filesystem  kbytes   quota   limit   grace   files   quota   limit   grace
+       /mnt/fs1       0  2181806877952 2290897221849       -       0  2130376420 2236895241       -
+fs1-MDT0000_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0001_UUID
+                      0       -       0       -       0       -       0       -
+fs1-MDT0002_UUID
+                      0       -       0       -       0       -       0       -
+fs1-OST0000_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0001_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0002_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0003_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0004_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0005_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0006_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0007_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0008_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0009_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST000f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0010_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0011_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0012_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0013_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0014_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0015_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0016_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0017_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0018_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0019_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST001f_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0020_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0021_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0022_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0023_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0024_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0025_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0026_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0027_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0028_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST0029_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002a_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002b_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002c_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002d_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002e_UUID
+                      0       -       0       -       -       -       -       -
+fs1-OST002f_UUID
+                      0       -       0       -       -       -       -       -
+Total allocated inode limit: 0, total allocated block limit: 0
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+osd-ldiskfs.track_declares_assert=1
+preparing for tests involving mounts
+
+debug=-1
+
+
+== sanity test 1: mkdir; remkdir; rmdir ============================================================== 12:09:58 (1492949398)
+mkdir: cannot create directory '/mnt/fs1/d1.sanity/d2': File exists
+/mnt/fs1/d1.sanity/d2 has type dir OK
+/mnt/fs1/d1.sanity: absent OK
+Resetting fail_loc on all nodes...done.
+PASS 1 (1s)
+debug=super ioctl neterror warning dlmtrace error emerg ha rpctrace vfstrace config console lfsck

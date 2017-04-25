@@ -302,7 +302,7 @@ test
     $testcore->options( \%options );
     my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
     $exe->init( $test, \%options, $cfg );
-
+ 
     my $res = $exe->processLogs('t/testout/sanity.1a.stdout.log');
     is( $res, 0, 'Check PASSED status' );
 
@@ -326,6 +326,22 @@ test
 
     $res = $exe->processLogs('t/testout/conf-sanity.28.stdout.log');
     is( $res, 1, 'Check SKIPPED status for multiple test results in same stdout' );
+  };
+
+test
+  plan             => 1,
+  dCheckMultiLogParsing => sub {
+    my $exe  = Xperior::Executor::LustreTests->new();
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
+    $exe->init( $test, \%options, $cfg );
+
+    my $res = $exe->processLogs('t/testout/1.stdout.log');
+    $res = $exe->processLogs('t/testout/1.stderr.log');
+    is( $res, 0, 'Check PASSED status' );
   };
 
 test

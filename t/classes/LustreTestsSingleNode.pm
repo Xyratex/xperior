@@ -283,6 +283,20 @@ sub test_check_cmd_processlogs_1 {
 
 };
 
+sub test_check_cmd_processlogs_2 {
+    my $exe  = Xperior::Executor::LustreTests->new();
+    my $test = Xperior::Test->new;
+    $test->init( \%th, \%gh );
+    my $testcore = Xperior::Core->new();
+    $testcore->options( \%options );
+    my $cfg = $testcore->loadEnv('t/testcfgs/localtestsystemcfg.yaml');
+    $exe->init( $test, \%options, $cfg );
+
+    my $res = $exe->processLogs('t/testout/1.stdout.log');
+    $res = $exe->processLogs('t/testout/1.stderr.log');
+    is( $res, 0, 'Check PASSED status' );
+}
+
 sub test_check_result_yaml {
     my $exe  = Xperior::Executor::LustreTests->new();
     my $test = Xperior::Test->new;

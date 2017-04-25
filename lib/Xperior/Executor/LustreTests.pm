@@ -73,6 +73,7 @@ has 'mdsopt'        => ( is => 'rw' );
 has 'ossopt'        => ( is => 'rw' );
 has 'clntopt'       => ( is => 'rw' );
 has 'lustretestdir' => ( is => 'rw', default => '/usr/lib64/lustre/tests');
+has 'passfound'     => ( is => 'rw', default => 0 );
 
 after 'init' => sub {
     my $self = shift;
@@ -258,7 +259,6 @@ sub processLogs {
 
     my $result     = $self->NOTSET;
     my $reason     = 'No_status_found';
-    my $pass_found = 0;
 
     while ( defined( my $s = <F> ) ) {
         chomp $s;
@@ -277,10 +277,11 @@ sub processLogs {
             next;
         }
         elsif ( $s =~ m/PASS .*? \([0-9]+s\)/) {
-            $pass_found = 1;
+            $self->passfound(1);
         }
-        elsif ( $s =~ m/test complete,/ && $pass_found == 1) {
+        elsif ( $s =~ m/test complete,/ && $self->passfound == 1 ) {
             $result = $self->PASSED;
+            $self->passfound(0);
             $reason = '';
             next;
         }
