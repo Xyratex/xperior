@@ -135,7 +135,14 @@ sub generateJunit {
         }
 
         my $adir = $junitpath . "/" . $obj{'classname'};
-        make_path($adir);
+        if (-e $adir and -d $adir) {
+            DEBUG "[$adir] is exist and it is directory, ignore it";
+        } elsif ( -e $adir ) {
+            ERROR
+            confess "[$adir] is not a directory! " ;
+        }else{
+            make_path($adir);
+        }
         #this is hack
         #correct way is getting filenames from yaml file
         $stdout = $stdout."\n---jenkins metadata---\n";

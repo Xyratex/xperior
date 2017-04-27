@@ -537,9 +537,32 @@ sub initTemp {
     return;
 }
 
-=head3 init ($host, $user, $port)
+=head3 init ([\Xperior::Node] || [$host, $user, $port])
 
-Initialize module. Only ssh is supported.
+Initialize module, attempt to connect it. Only ssh is supported.
+Master channel is create also there (for bridge-less env)
+
+Parameters:
+        Xperior::Node
+    or
+        host, user, port
+
+Exit codes:
+    0   - success
+    -99 - initialization failed or host unreachable
+
+Notes
+    Port is not used now
+
+Example:
+
+    my $sc = Xperior::SshProcess->new();
+
+    if ($sc->init($self) < 0){
+        $self->rconnector(undef);
+        return undef;
+    }
+
 
 =cut
 
