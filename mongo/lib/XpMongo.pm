@@ -245,16 +245,16 @@ REDUCE
     #very strange woraround. need deep investigation in mongodb driver
     #TODO avoid this direct setting
     my %dh =  (
-  branch   => $targetextopt->{branch},
-  arch     => $targetextopt->{arch},
-  buildurl => $targetextopt->{buildurl},
-  configuration => $targetextopt->{configuration},
-  distr         => $targetextopt->{distr},
-  executiontype => $targetextopt->{executiontype},
-  ofed          => $targetextopt->{ofed},
-  release       => $targetextopt->{release},
-  sessionstarttime => $targetextopt->{sessionstarttime},
-  type          => $targetextopt->{type}
+        branch   => $targetextopt->{branch},
+        arch     => $targetextopt->{arch},
+        buildurl => $targetextopt->{buildurl},
+        configuration => $targetextopt->{configuration},
+        distr         => $targetextopt->{distr},
+        executiontype => $targetextopt->{executiontype},
+        ofed          => $targetextopt->{ofed},
+        release       => $targetextopt->{release},
+        sessionstarttime => $targetextopt->{sessionstarttime},
+          type          => $targetextopt->{type}
   );
     print Dumper \%dh;
     print "\n-------\n";
