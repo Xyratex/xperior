@@ -245,7 +245,7 @@ sub _attach_logs {
 sub _doTextSafe {
     my ( $self, $s ) = @_;
     # replace low ascii symbols
-    $s =~ s/[\x00\x01\x02\x03\x04\x05\x06\x07\x08\x0c\x13\x14\x12\x17]+/\?/g;
+    $s =~ s/[\x00-\x1f]+/\?/g;
     $s =~ s/0x/&#48; x/g;                                    #0x->
     return $s;
 }
