@@ -218,7 +218,7 @@ sub _isDomainActive {
             next;
         }
         if ($lf) {
-            if ( $str =~ m/^\s*\d+\s+([\w\d]+)\s+/ ) {
+            if ( $str =~ m/^\s*\d+\s+([\w\-\_\d]+)\s+/ ) {
                 push @adomains, $1;
                 if ( $vm eq $1 ) {
                     $status = 1;
@@ -226,7 +226,7 @@ sub _isDomainActive {
                 }
             }
 
-            if ( $str =~ m/^\s+\-\s+([\w\d]+)\s+/ ) {
+            if ( $str =~ m/^\s+\-\s+([\w\-\_\d]+)\s+/ ) {
                 push @idomains, $1;
                 if ( $vm eq $1 ) {
                     $status = 0;
