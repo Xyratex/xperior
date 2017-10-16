@@ -142,6 +142,7 @@ has port           => ( is => 'rw' );
 has host           => ( is => 'rw' );
 has user           => ( is => 'rw' );
 has pass           => ( is => 'rw' );
+has cert           => ( is => 'rw' );
 has bridge         => ( is => 'rw' );
 has bridgeuser     => ( is => 'rw', default => 'root');
 
@@ -244,6 +245,7 @@ sub _supportMasterProcess{
       . " -o 'ControlMaster=yes' "
       . " -o 'ControlPath=".$self->controlmaster()."' "
       . $self->_getPortSshCmd()
+      . $self->_getCertSshCmd()
       . $self->user . "@"
       . $self->host;
     DEBUG "Master cmd is [$mc]";
@@ -266,6 +268,22 @@ sub _getPortSshCmd{
     }
     return ' ';
 }
+
+
+=head3 _getPortSshCmd
+
+Return ssh cmd part for port parameter
+
+=cut
+
+sub _getCertSshCmd{
+    my ($self) = @_;
+    if($self->cert()){
+        return ' -i '.$self->cert().' ';
+    }
+    return ' ';
+}
+
 
 
 =head3 _getPortScpCmd
@@ -388,6 +406,7 @@ sub _sshSyncExecS {
       . "-o 'ServerAliveInterval=600' "
       . "-o 'ServerAliveCountMax=15' " #. " -f "
       . $self->_getPortSshCmd()
+      . $self->_getCertSshCmd()
       . $self->user . "@"
       . $self->host
       . " \"$cmd; ec=\\\$? ;echo -n 'Internal_exit_code:'; echo -n \\\$ec; exit 0 \"";
@@ -466,6 +485,7 @@ sub _sshAsyncExec {
       . "-o 'UserKnownHostsFile=$UserKnownHostsFile' "
       . "-o 'StrictHostKeyChecking=no' "
       . "-o 'ConnectTimeout=25' "
+      . $self->_getCertSshCmd()
       . $self->_getPortSshCmd()
       . $self->user . "@"
       . $self->host
@@ -579,6 +599,7 @@ sub init {
         $self->port($node->port());
         $self->bridge($node->bridge());
         $self->bridgeuser($node->bridgeuser()) if $node->bridgeuser();
+        $self->cert($node->cert()) if $node->cert();
     }else{
         DEBUG "Xperior::SshUnixProcess->init, old initialization";
         $self->host($param1);

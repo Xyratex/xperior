@@ -7,4 +7,5 @@ Test::Class::Moose::Runner->new(
     #{include => qr/check_collection/,}
     #{include => qr/check_copytool_collection/,}
     #{include => qr/test_check_cmd/,}
+    {include => qr/test_alive_stop_start/,}
         )->runtests;

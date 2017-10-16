@@ -53,6 +53,14 @@ use Moose::Role;
 has 'nodedescriptor' => ( is => 'rw', isa => 'Str');
 has 'console'        => ( is => 'rw');
 
+has 'user'         => ( is => 'rw' );
+has 'pass'         => ( is => 'rw' );
+has 'ip'           => ( is => 'rw' );
+has 'id'           => ( is => 'rw' );
+has 'port'         => ( is => 'rw' );
+has 'cert'         => ( is => 'rw' );
+
+
 
 =head3  halt
 

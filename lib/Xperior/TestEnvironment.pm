@@ -75,10 +75,13 @@ sub initNodes {
     my $self = shift;
     my $nodeArrayRef = shift;
     foreach my $n (@{$nodeArrayRef}) {
+
         my $node = Xperior::Node->new($n);
+=heads
         #FIXME Unify initialization between initNodes
         # and BUILD of Node and Moose constructor
         # this code is disgusting
+
         $node->_node($n);
         $node->id($n->{'id'});
         $node->ip($n->{'ip'});
@@ -97,6 +100,11 @@ sub initNodes {
             $node->pingport(0)
                 unless $n->{'pingport'} ;
         }
+=cut
+        #override for some debug. actually should not be
+        #  important and could be removed
+        $node->_node($n);
+
         push @{$self->{'nodes'}}, $node;
     }
 }

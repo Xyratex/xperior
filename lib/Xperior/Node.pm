@@ -56,6 +56,7 @@ use Xperior::SshProcess;
 use Xperior::Nodes::KVMNode;
 use Xperior::Nodes::BasicNode;
 use Xperior::Nodes::IPMINode;
+use Xperior::Nodes::EC2Node;
 
 with qw(MooseX::Clone);
 
@@ -72,11 +73,6 @@ check that node is reachable via ssh (pdsh - TBI), and Lustre basic liveness (Lu
 =cut
 
 has 'ctrlproto'    => ( is => 'rw' );
-has 'user'         => ( is => 'rw' );
-has 'pass'         => ( is => 'rw' );
-has 'ip'           => ( is => 'rw' );
-has 'port'         => ( is => 'rw' );
-has 'id'           => ( is => 'rw' );
 has 'console'      => ( is => 'rw' );
 has 'bridge'       => ( is => 'rw' );
 has 'bridgeuser'   => ( is => 'rw', default =>'root' );
@@ -124,30 +120,54 @@ sub BUILD {
     $self->nodetype(DEFAULT_NODE)
                         unless defined $self->nodetype;
     DEBUG "Apply role [".$self->nodetype."]";
-    if($self->nodetype eq 'KVMNode'){
+    if( $self->nodetype eq 'KVMNode' ){
         Xperior::Nodes::KVMNode->meta->apply($self);
         $self->kvmdomain($params->{'kvmdomain'});
         $self->kvmimage($params->{'kvmimage'});
         $self->restoretimeout( $params->{'restoretimeout'})
             if defined $params ->{'restoretimeout'};
-
-    }elsif( ($self->nodetype eq 'BasicNode')
+    }elsif( ( $self->nodetype eq 'BasicNode')
         or ($self->nodetype eq 'Basic') # legacy for old scripts
         ){
-
         Xperior::Nodes::BasicNode->meta->apply($self);
-    }elsif($self->nodetype eq 'IPMINode'){
-        Xperior::Nodes::IPMINode->meta->apply($self);
-        $self->ipmi($params->{'ipmi'});
-        $self->ipmidrv($params->{'ipmidrv'})
-                if defined $params->{'ipmidrv'};
-        $self->ipmiuser($params->{'ipmiuser'})
-                if defined $params->{'ipmiuser'};
-        $self->ipmipass($params->{'ipmipass'})
-                if defined $params->{'ipmipass'};
+    }elsif( $self->nodetype eq 'IPMINode' ) {
+        Xperior::Nodes::IPMINode->meta->apply( $self );
+        $self->ipmi( $params->{'ipmi'} );
+        $self->ipmidrv( $params->{'ipmidrv'} )
+            if defined $params->{'ipmidrv'};
+        $self->ipmiuser( $params->{'ipmiuser'} )
+            if defined $params->{'ipmiuser'};
+        $self->ipmipass( $params->{'ipmipass'} )
+            if defined $params->{'ipmipass'};
+    }elsif( $self->nodetype eq 'EC2Node' ){
+        Xperior::Nodes::EC2Node->meta->apply( $self );
+        $self->access_key( $params->{'access_key'} );
+        $self->secret_key( $params->{'secret_key'} );
+        $self->instance  ( $params->{'instance'} );
+        $self->init();
+
     }else{
         confess "Cannot find nodetype [".$self->nodetype."]";
     }
+    $self->user     ( $params->{'user'} );
+    $self->pass     ( $params->{'pass'} );
+    $self->ip       ( $params->{'ip'}   );
+    $self->id       ( $params->{'id'}   );
+    $self->port     ( $params->{'port'} );
+    $self->cert     ( $params->{'cert'} )   if $params->{'cert'};
+    $self->console  ( $params->{'console'} ) if $params->{'console'};
+    $self->pingport ( $params->{'pingport'})
+        if $params->{'pingport'};
+    if($params->{'bridge'}){
+        $self->bridge($params->{'bridge'});
+        #switch off ping for case when ssh
+        #bridge is used for access to node
+        #and node cannot be simple reached
+        $self->pingport(0)
+            unless $params->{'pingport'} ;
+    }
+
+
 }
 
 =head3 isReachable
@@ -402,7 +422,7 @@ default timeout is 300 sec
 
 Exit code:
 
-0 - host is down until timeout is exceed
+0 - host is down
 
 1 - host is up after timeout
 
@@ -410,19 +430,35 @@ Exit code:
 =cut
 
 sub waitDown{
-    my ($self,$timeout) = @_;
+    my ($self,$timeout, $hardtimeout, $polltime) = @_;
+    $timeout =  $timeout     // 300;
+    $timeout =  $hardtimeout // 300;
+    $polltime =  $polltime   // 10;
+    #mean wait while kore dumped, vm stopping, etc ...
+    if ( $self->_wait_down_cycle($timeout, $polltime ) == 1 ){
+        DEBUG "Call forcing stop";
+        $self->halt(1);
+        if ( $self->_wait_down_cycle($hardtimeout, $polltime) == 0 ) {
+            return 0;
+        }
+    } else {
+        return 0;
+    }
+    ERROR "System still up";
+    return 1;
+}
+
+sub _wait_down_cycle{
+    my ($self, $timeout, $polltime) = @_;
     my $starttime = time;
-    $timeout = 300 unless defined $timeout;
-    #mean wait while kore dumped
     while(( $starttime + $timeout ) > time ){
         unless($self->isAlive){
             last;
             DEBUG "Host is down";
             return 0;
         }
-        sleep 10;
+        sleep $polltime;
     }
-    ERROR "System still up";
     return 1;
 }
 
@@ -436,7 +472,21 @@ If node is not up until $timeout or ssh connection failed return undef.
 sub waitUp {
     my ($self, $timeout) = @_;
     $timeout = DEFAULT_UP_TIME_SEC unless defined $timeout;
-    $self->rconnector($self->_waitForNodeUp( $self->ip,$self->user, $timeout ));
+    my $time = time;
+    my $alive;
+    while ( ( $time+ $timeout ) > time ) {
+        $alive = $self->isAlive();
+        if ( $alive ) {
+            DEBUG "Node is alive, connecting";
+            last;
+        }
+        sleep 5;
+    }
+    unless ( $alive ) {
+        INFO "WaitUp failed, node is not alive";
+        return undef;
+    }
+    $self->rconnector( $self->_waitForNodeUp( $self->ip, $self->user, $timeout ) );
     return $self->rconnector;
 }
 
@@ -490,7 +540,8 @@ sub _waitForNodeUp {
         if ( $self->ping ) {
             INFO "host is alive, check ssh\n";
             $sp = Xperior::SshProcess->new();
-            my $ss = $sp->init( $node, $user, 22, 1 );
+            #my $ss = $sp->init( $node, $user, 22, 1 );
+            my $ss = $sp->init( $self );
             if ( $ss == 0 ) {
                 INFO "ssh is up\n";
                 $up = 1;
