@@ -85,7 +85,7 @@ test plan => 3, cVmcoreGeneratorTests => sub {
     Xperior::Executor::Roles::VmcoreGenerator->meta->apply($exe);
     $exe->init($test, \%options, $cfg);
     my $testfile = "/tmp/vmcoregenerator-trigger";
-    unlink($testfile);
+    `sudo rm $testfile -f`;
     is(  !-e $testfile, 1,"file does not exists");
     is($exe->sysrqccmd, 'echo c > /proc/sysrq-trigger');
     $exe->sysrqccmd("echo -n c > $testfile");

@@ -1,0 +1,87 @@
+m0t1fs:  INFO:   Running m0setup cleanup
+m0t1fs:  INFO:   --------------- m0t1fs test with 1 ioservice(s)  ---------------
+m0t1fs:  INFO:   /var/mero cleanup
+m0t1fs:  INFO:   Running m0setup cleanup
+m0t1fs:  INFO:   Running m0setup
+m0t1fs:  INFO:   Running mero-mkfs
+m0t1fs:  INFO:   Starting Mero
+m0t1fs:  INFO:   Performing m0t1fs test
+m0t1fs:  INFO:   m0t1fs write test
+m0t1fs:  DEBUG:  do_m0t1fs_system_test: start dd
+m0t1fs:  DEBUG:  using /dev/sda as a source file
+12+0 records in
+12+0 records out
+50331648 bytes (50 MB) copied, 1.06122 s, 47.4 MB/s
+24+0 records in
+24+0 records out
+100663296 bytes (101 MB) copied, 2.05112 s, 49.1 MB/s
+37+0 records in
+36+0 records out
+150994944 bytes (151 MB) copied, 3.05447 s, 49.4 MB/s
+49+0 records in
+49+0 records out
+205520896 bytes (206 MB) copied, 4.1003 s, 50.1 MB/s
+61+0 records in
+61+0 records out
+255852544 bytes (256 MB) copied, 5.09121 s, 50.3 MB/s
+73+0 records in
+73+0 records out
+306184192 bytes (306 MB) copied, 6.11947 s, 50.0 MB/s
+85+0 records in
+84+0 records out
+352321536 bytes (352 MB) copied, 7.11561 s, 49.5 MB/s
+97+0 records in
+96+0 records out
+402653184 bytes (403 MB) copied, 8.13976 s, 49.5 MB/s
+109+0 records in
+108+0 records out
+452984832 bytes (453 MB) copied, 9.14284 s, 49.5 MB/s
+120+0 records in
+120+0 records out
+503316480 bytes (503 MB) copied, 10.16 s, 49.5 MB/s
+132+0 records in
+132+0 records out
+553648128 bytes (554 MB) copied, 11.2081 s, 49.4 MB/s
+144+0 records in
+144+0 records out
+603979776 bytes (604 MB) copied, 12.2386 s, 49.4 MB/s
+155+0 records in
+155+0 records out
+650117120 bytes (650 MB) copied, 13.2162 s, 49.2 MB/s
+166+0 records in
+166+0 records out
+696254464 bytes (696 MB) copied, 14.2373 s, 48.9 MB/s
+178+0 records in
+178+0 records out
+746586112 bytes (747 MB) copied, 15.2838 s, 48.8 MB/s
+189+0 records in
+189+0 records out
+792723456 bytes (793 MB) copied, 16.2598 s, 48.8 MB/s
+200+0 records in
+200+0 records out
+838860800 bytes (839 MB) copied, 17.2746 s, 48.6 MB/s
+211+0 records in
+211+0 records out
+884998144 bytes (885 MB) copied, 18.2959 s, 48.4 MB/s
+223+0 records in
+223+0 records out
+935329792 bytes (935 MB) copied, 19.3636 s, 48.3 MB/s
+234+0 records in
+234+0 records out
+981467136 bytes (981 MB) copied, 20.3345 s, 48.3 MB/s
+240+0 records in
+240+0 records out
+1006632960 bytes (1.0 GB) copied, 20.8906 s, 48.2 MB/s
+m0t1fs:  DEBUG:  do_m0t1fs_system_test: sleep 30 sec
+m0t1fs:  DEBUG:  do_m0t1fs_system_test: syncing data
+m0t1fs:  INFO:   Stopping Mero
+m0t1fs:  DEBUG:    stopping mero-singlenode.. (Thu Jan 11 19:42:55 UTC 2018)
+m0t1fs:  DEBUG:    [done] (Thu Jan 11 19:42:55 UTC 2018)
+m0t1fs:  DEBUG:    stopping mero-kernel.. (Thu Jan 11 19:43:00 UTC 2018)
+m0t1fs: WARNING: not clean exit detected, performing a clean-up
+m0t1fs:  INFO:   stopping mero-kernel
+./st/m0t1fs: line 245: 52073 Terminated              systemctl stop mero-kernel
+m0t1fs:  INFO:   m0setup cleanup
+m0t1fs:  INFO:   rpm cleanup
+m0t1fs:  INFO:   Removing rpm: 
+rpm: no packages given for erase

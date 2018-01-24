@@ -93,6 +93,8 @@ sub generateJunit {
         my $stderr = '';
         # show stdout via junit stdout
         if ( defined( $yaml->{'log'}->{'stdout'} ) ) {
+            #TODO could take too much memory on real hw logs
+            #replace to line by line reading from file
             my @lines = read_file( "$wd/$testclass/" . $yaml->{'log'}->{'stdout'},
                 err_mode => 'carp');
             if(defined $lines[0]){
@@ -244,9 +246,8 @@ sub _attach_logs {
 
 sub _doTextSafe {
     my ( $self, $s ) = @_;
-    # replace low ascii symbols
-    $s =~ s/[\x00-\x1f]+/\?/g;
-    $s =~ s/0x/&#48; x/g;                                    #0x->
+    # replace low ascii symbols and DEL exclude \n
+    $s =~ s/[\x00-\x09\x0B-\x1F\x7F]+/\?/g;
     return $s;
 }
 

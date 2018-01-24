@@ -139,6 +139,7 @@ test
 
     my $data = read_file("$resdir/junittest.junit", err_mode => 'carp' );
     ok((scalar(split(/\n/,$data) >10 )), 'Check size');
+        print "[".$data."]\n";
     ok($data =~ m/d0\.sanity\/d56w\/\.\?\:VOLATILE\:\:/,
          'Check skip xml N5 reg' );
 };
@@ -166,7 +167,7 @@ test
 
 test
     plan      => 3,
-    aaak_dir_alredy_exist_check => sub {
+    k_dir_alredy_exist_check => sub {
         my $wd  = '--workdir=$wd';
         my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
         for my $file (glob 't/checkjunitdata/24h/*.*') {
@@ -243,5 +244,28 @@ test
             'Check subtest record' );
     };
 
+
+test
+    plan      => 3,
+    aaaCASTRO_2565_Checks => sub {
+        my $wd  = '--workdir=$wd';
+        my $cfg = '--config=t/testcfgs/localtestsystemcfg.yaml';
+        for my $file (glob 't/checkjunitdata/CASTOR-2565/*.*') {
+            print "$file\n";
+            fcopy ($file, $jwd) or confess $!;
+        }
+        my $junitReport = Xperior::Reports::JenkinsJunit->new();
+        $junitReport->generateJunit($options, 'junittest');
+
+        ok(-e "$resdir/junittest.junit",
+            "Check file [$resdir/junittest.junit] existence");
+
+        my @adata = read_file("$resdir/junittest.junit", err_mode => 'carp' );
+        ok((scalar(@adata) >180 ), 'Check size for long output');
+        my $str = 'removed &#226;&#128;&#152;/etc/mero/disks-ios.conf&#226;&#128;&#153;';
+
+        ok($adata[104] =~ m/$str/,
+            'Check xml data with special symbols' );
+    };
 
 jenkinsjunit->run_tests;

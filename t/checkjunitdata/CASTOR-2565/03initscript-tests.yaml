@@ -1,0 +1,48 @@
+---
+cmd: ' /root/mero/mero_test_gerrit_workdir/workdir/src/st//initscripts 2>     /var/log/xperior/test_stderr.383276.log 1>  /var/log/xperior/test_stdout.383276.log'
+completed: yes
+dangerous: yes
+description: Set of Mero  tests
+dir: src/st/
+endtime: 1515692726
+endtime_planned: 1515692722
+executor: Xperior::Executor::MeroTest
+expected_time: 300
+extoptions:
+  arch: x86_64
+  branch: 'stob/ioq: fix segfault in ioq_io_error'
+  buildurl: http://jenkins-sage.dco.colo.seagate.com:8080/job/mero-test-gerrit/9296/
+  cli_hash_id: I7b99fa7c91c18e5c94f82e13b8b623a59f1ee156
+  configuration: hw_single
+  distr: SLX6x
+  executiontype: IT
+  recipients: 'roman.grigoryev@seagate.com, dmitriy.chumak@seagate.com, max.medved@seagate.com'
+  sessionstarttime: 1515689445
+  srv_hash_id: I7b99fa7c91c18e5c94f82e13b8b623a59f1ee156
+fail_reason: 'Killed by timeout after [728] sec of execution'
+groupname: mero-single-node
+id: 03initscript-tests
+killed: yes
+log:
+  /storage/fsroots/mero-remote-controller-cl22/workspace/mero-test-gerrit/workdir/mero-single-node/03initscript-tests.messages.testnode0.log: 03initscript-tests.messages.testnode0.log
+  stderr: 03initscript-tests.stderr.log
+  stdout: 03initscript-tests.stdout.log
+masterclient: allinonenode
+masterclient_host: ~
+masterhostdown: no
+messages: ''
+polltime: 30
+reference: none
+result: 'not ok 1  #Killed by timeout after [728] sec of execution'
+result_code: 1
+roles: StoreSyslog  CustomLogCollector
+schema: data/schemas/testds.yaml
+script: initscripts
+starttime: 1515692002
+status: failed
+status_code: 1
+tags: mero
+testname: 03initscript-tests
+timeout: 720
+weight: 50
+xperior_host: jenkins-sage

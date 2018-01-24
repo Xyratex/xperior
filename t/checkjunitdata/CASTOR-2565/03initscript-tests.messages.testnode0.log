@@ -1,0 +1,535 @@
+==> /var/log/messages <==
+Jan 11 19:31:19 client-22 systemd-logind: New session 38 of user root.
+Jan 11 19:31:19 client-22 systemd: Started Session 38 of user root.
+Jan 11 19:31:19 client-22 systemd: Starting Session 38 of user root.
+Jan 11 19:31:19 client-22 systemd: Reloading.
+Jan 11 19:31:20 client-22 systemd: Reloading.
+Jan 11 19:31:21 client-22 systemd: Starting Mero mkfs...
+Jan 11 19:31:21 client-22 systemd: Created slice system-mero\x2dtrace.slice.
+Jan 11 19:31:21 client-22 systemd: Starting system-mero\x2dtrace.slice.
+Jan 11 19:31:21 client-22 systemd: Created slice system-mero\x2dmkfs.slice.
+Jan 11 19:31:21 client-22 systemd: Starting system-mero\x2dmkfs.slice.
+Jan 11 19:31:21 client-22 systemd: Starting LNet service...
+Jan 11 19:31:21 client-22 lnet: LNET configured
+Jan 11 19:31:21 client-22 systemd: Started LNet service.
+Jan 11 19:31:21 client-22 systemd: Starting Mero kernel module...
+Jan 11 19:31:21 client-22 mero-kernel: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:21 client-22 mero-kernel: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:22 client-22 kernel: mero: init
+Jan 11 19:31:22 client-22 kernel: mero: Mero 1.1.0 built on Thu Jan 11 18:40:26 UTC 2018  by root@client-22 at /root/mero/mero_test_gerrit_workdir/workdir/src for 3.10.0-693.5.2.el7.x86_64 kernel
+Jan 11 19:31:22 client-22 kernel: mero: 
+Jan 11 19:31:22 client-22 kernel: mero: Git branch   : HEAD
+Jan 11 19:31:22 client-22 kernel: mero: Git describe : jenkins-OSAINT_mero-1400-54-ge7fe2ca
+Jan 11 19:31:22 client-22 kernel: mero: Git revision : e7fe2ca10e9ed2cf3fcda2949dcd9addcc500af5
+Jan 11 19:31:22 client-22 kernel: mero: 
+Jan 11 19:31:22 client-22 kernel: mero: xcode      protocol checksum: 0062cada37ac4850a04a5a1f64912d60
+Jan 11 19:31:22 client-22 kernel: mero: xcode BE   protocol checksum: 61d6ca66dd8807f8e5d79fb1f2a6a07a
+Jan 11 19:31:22 client-22 kernel: mero: xcode CONF protocol checksum: 1e2fd4433b5aadb91270c4be7efd2821
+Jan 11 19:31:22 client-22 kernel: mero: xcode RPC  protocol checksum: f276b8dcb252536114fe5f11b18d1158
+Jan 11 19:31:22 client-22 kernel: mero: 
+Jan 11 19:31:22 client-22 kernel: mero: Copyright (C) 2018 Xyratex Technology Limited
+Jan 11 19:31:22 client-22 kernel: mero: 
+Jan 11 19:31:22 client-22 kernel: mero: toolchain: gcc version 4.8.5 20150623 (Red Hat 4.8.5-16)  
+Jan 11 19:31:22 client-22 kernel: mero: CONFIGURE OPTS:  '--enable-detailed-backtrace'
+Jan 11 19:31:22 client-22 kernel: mero: KCFLAGS: -DM0_INTERNAL='' -DM0_EXTERN=extern -include'/root/mero/mero_test_gerrit_workdir/workdir/src/config.h' -iquote '/root/mero/mero_test_gerrit_workdir/workdir/src' -iquote '/root/mero/mero_test_gerrit_workdir/workdir/src' -I/usr/src/lustre-2.7.19.12-headers/lnet/include -I/usr/src/lustre-2.7.19.12-headers/libcfs/include -I/usr/src/lustre-2.7.19.12-headers/lustre/include -I/root/mero/mero_test_gerrit_workdir/workdir/src/extra-libs/gf-complete/include -Wall -Werror -Wno-attributes -fno-omit-frame-pointer -g -O2 -Wno-unused-but-set-variable 
+Jan 11 19:31:22 client-22 kernel: mero: 
+Jan 11 19:31:22 client-22 kernel: mero: Lustre: /usr/src/lustre-2.7.19.12-headers
+Jan 11 19:31:22 client-22 kernel: mero: Lustre version: 2.7
+Jan 11 19:31:22 client-22 kernel: mero: module address: 0xffffffffc0c80160
+Jan 11 19:31:22 client-22 kernel: mero: module core address: 0xffffffffc0973000
+Jan 11 19:31:22 client-22 kernel: mero: module core size: 13626762
+Jan 11 19:31:22 client-22 kernel: mero: trace header address: 0xffffc90004600000
+Jan 11 19:31:22 client-22 kernel: mero: trace buffer address: 0xffffc90004601000
+Jan 11 19:31:22 client-22 kernel: Mero m0lnet registered with minor 56
+Jan 11 19:31:22 client-22 kernel: mero: max CPUs for parity calcs: 8
+Jan 11 19:31:22 client-22 kernel: mero/m0ctl: init
+Jan 11 19:31:22 client-22 systemd: Started Mero kernel module.
+Jan 11 19:31:22 client-22 systemd: Started Mero trace daemon for kernel.
+Jan 11 19:31:22 client-22 systemd: Starting Mero trace daemon for kernel...
+Jan 11 19:31:22 client-22 systemd: Starting Mero mkfs helper for ha service...
+Jan 11 19:31:22 client-22 mero-mkfs: WARN: query not existing genders var 'm0_be_segment_size'
+Jan 11 19:31:22 client-22 mero-mkfs: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:31:22 client-22 mero-mkfs: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:22 client-22 mero-mkfs: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:22 client-22 mero-mkfs: vm.max_map_count = 30000000
+Jan 11 19:31:22 client-22 mero-mkfs: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/utils/mkfs/m0mkfs -e lnet:10.230.45.175@tcp:12345:35:1 -f '<0x7200000000000001:0>' -T linux -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc -F -u 20ef1ec2-150f-4261-9bc4-d889fa845a11 -z 536870912
+Jan 11 19:31:24 client-22 mero-mkfs: mero[48290]:  54b0   WARN  [ha/ha.c:950:m0_ha_process_failed]  disconnecting local link
+Jan 11 19:31:24 client-22 systemd: Started Mero mkfs helper for ha service.
+Jan 11 19:31:24 client-22 systemd: Starting Mero server helper for ha service...
+Jan 11 19:31:24 client-22 mero-server: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:31:24 client-22 mero-server: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:24 client-22 mero-server: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:24 client-22 mero-server: vm.max_map_count = 30000000
+Jan 11 19:31:24 client-22 mero-server: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/mero/m0d -e lnet:10.230.45.175@tcp:12345:45:1 -f '<0x7200000000000001:0>' -T linux -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc
+Jan 11 19:31:25 client-22 mero-server: lt-m0d: systemd READY notification successfull
+Jan 11 19:31:25 client-22 systemd: Started Mero server helper for ha service.
+Jan 11 19:31:25 client-22 systemd: Started Mero trace daemon for ha.
+Jan 11 19:31:25 client-22 systemd: Starting Mero trace daemon for ha...
+Jan 11 19:31:25 client-22 systemd: Starting Mero mkfs helper for confd service...
+Jan 11 19:31:25 client-22 mero-server: mero[49006]:  57e0   WARN  [setup.c:1139:cs_service_init]  Service fdmi (<730000000000000d:0>) is already registered for reqh 0x7fffec9cbc20
+Jan 11 19:31:25 client-22 mero-server: Started
+Jan 11 19:31:25 client-22 mero-server: Press CTRL+C to quit.
+Jan 11 19:31:25 client-22 mero-mkfs: WARN: query not existing genders var 'm0_be_segment_size'
+Jan 11 19:31:25 client-22 mero-mkfs: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:31:25 client-22 mero-mkfs: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:25 client-22 mero-mkfs: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:25 client-22 mero-mkfs: vm.max_map_count = 30000000
+Jan 11 19:31:25 client-22 mero-mkfs: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/utils/mkfs/m0mkfs -e lnet:10.230.45.175@tcp:12345:35:101 -f '<0x7200000000000001:1>' -T linux -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc -H 10.230.45.175@tcp:12345:45:1 -F -u 20ef1ec2-150f-4261-9bc4-d889fa845a11 -z 536870912
+Jan 11 19:31:26 client-22 systemd: Started Mero mkfs helper for confd service.
+Jan 11 19:31:26 client-22 systemd: Starting Mero server helper for confd service...
+Jan 11 19:31:27 client-22 mero-server: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:31:27 client-22 mero-server: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:27 client-22 mero-server: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:27 client-22 mero-server: vm.max_map_count = 30000000
+Jan 11 19:31:27 client-22 mero-server: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/mero/m0d -e lnet:10.230.45.175@tcp:12345:44:101 -f '<0x7200000000000001:1>' -T linux -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc -H 10.230.45.175@tcp:12345:45:1
+Jan 11 19:31:27 client-22 mero-server: lt-m0d: systemd READY notification successfull
+Jan 11 19:31:27 client-22 systemd: Started Mero server helper for confd service.
+Jan 11 19:31:27 client-22 systemd: Started Mero trace daemon for confd.
+Jan 11 19:31:27 client-22 systemd: Starting Mero trace daemon for confd...
+Jan 11 19:31:27 client-22 systemd: Starting Mero mkfs helper for mds service...
+Jan 11 19:31:27 client-22 mero-mkfs: WARN: query not existing genders var 'm0_be_segment_size'
+Jan 11 19:31:27 client-22 mero-mkfs: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:31:27 client-22 mero-server: mero[49454]:  d4a0   WARN  [setup.c:1139:cs_service_init]  Service fdmi (<730000000000000d:1>) is already registered for reqh 0x7ffd17fa38e0
+Jan 11 19:31:27 client-22 mero-mkfs: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:27 client-22 mero-mkfs: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:27 client-22 mero-server: Started
+Jan 11 19:31:27 client-22 mero-server: Press CTRL+C to quit.
+Jan 11 19:31:27 client-22 mero-mkfs: vm.max_map_count = 30000000
+Jan 11 19:31:27 client-22 mero-mkfs: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/utils/mkfs/m0mkfs -e lnet:10.230.45.175@tcp:12345:35:201 -f '<0x7200000000000001:2>' -T ad -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc -H 10.230.45.175@tcp:12345:45:1 -F -u 20ef1ec2-150f-4261-9bc4-d889fa845a11 -z 536870912
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  7940  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:28 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:29 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 systemd: Started Mero mkfs helper for mds service.
+Jan 11 19:31:30 client-22 systemd: Starting Mero mkfs helper for ios1 service...
+Jan 11 19:31:30 client-22 mero-mkfs: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:31:30 client-22 mero-mkfs: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:30 client-22 mero-mkfs: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:30 client-22 mero-mkfs: vm.max_map_count = 30000000
+Jan 11 19:31:30 client-22 mero-mkfs: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/utils/mkfs/m0mkfs -e lnet:10.230.45.175@tcp:12345:35:401 -f '<0x7200000000000001:3>' -T ad -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -H 10.230.45.175@tcp:12345:45:1 -d /etc/mero/disks-ios1.conf -F -u 20ef1ec2-150f-4261-9bc4-d889fa845a11 -z 4294967296
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:30 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:31 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:32 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:33 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:34 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:35 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:36 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:37 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 systemd: Started Mero mkfs helper for ios1 service.
+Jan 11 19:31:38 client-22 systemd: Starting Mero mkfs helper for cas1 service...
+Jan 11 19:31:38 client-22 mero-mkfs: WARN: query not existing genders var 'm0_be_segment_size'
+Jan 11 19:31:38 client-22 mero-mkfs: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:31:38 client-22 mero-mkfs: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:31:38 client-22 mero-mkfs: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:31:38 client-22 mero-mkfs: vm.max_map_count = 30000000
+Jan 11 19:31:38 client-22 mero-mkfs: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/utils/mkfs/m0mkfs -e lnet:10.230.45.175@tcp:12345:35:501 -f '<0x7200000000000001:4>' -T ad -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -H 10.230.45.175@tcp:12345:45:1 -F -u 20ef1ec2-150f-4261-9bc4-d889fa845a11 -z 536870912
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:38 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:39 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:40 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 systemd: Started Mero mkfs helper for cas1 service.
+Jan 11 19:31:41 client-22 mero-server: lt-m0d: got signal 1
+Jan 11 19:31:41 client-22 systemd: Stopping Mero server helper for confd service...
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  e1a0  ERROR  [reqh/reqh_service.c:948:m0_reqh_service_ctxs_shutdown_prepare]  <! rc=-1
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  e1a0  ERROR  [reqh/reqh_service.c:948:m0_reqh_service_ctxs_shutdown_prepare]  <! rc=-1
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  e1a0  ERROR  [reqh/reqh_service.c:948:m0_reqh_service_ctxs_shutdown_prepare]  <! rc=-1
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:41 client-22 mero-server: mero[49454]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:31:46 client-22 mero-server: mero[49454]:  ab40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=912982067200000003 svc_fid=<0:0>
+Jan 11 19:31:46 client-22 mero-server: mero[49454]:  dde0  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=48101498880000003 svc_fid=<0:0>
+Jan 11 19:31:46 client-22 systemd: Stopped Mero server helper for confd service.
+Jan 11 19:31:46 client-22 mero-server: lt-m0d: got signal 1
+Jan 11 19:31:46 client-22 systemd: Stopping Mero server helper for ha service...
+Jan 11 19:31:47 client-22 mero-server: mero[49006]:  62d0   WARN  [ha/ha.c:950:m0_ha_process_failed]  disconnecting local link
+Jan 11 19:31:52 client-22 mero-server: mero[49006]:  ab40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=555363769344000001 svc_fid=<0:0>
+Jan 11 19:31:52 client-22 mero-server: mero[49006]:  9a70  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=685018776576000001 svc_fid=<0:0>
+Jan 11 19:31:52 client-22 mero-server: mero[49006]:  79e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:35:101
+Jan 11 19:31:52 client-22 mero-server: mero[49006]:  79e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:44:101
+Jan 11 19:31:57 client-22 mero-server: mero[49006]:  ab40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=129076162560000001 svc_fid=<0:0>
+Jan 11 19:31:57 client-22 mero-server: mero[49006]:  79e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:35:201
+Jan 11 19:32:02 client-22 mero-server: mero[49006]:  ab40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=865171752960000001 svc_fid=<0:0>
+Jan 11 19:32:02 client-22 mero-server: mero[49006]:  79e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:35:401
+Jan 11 19:32:07 client-22 mero-server: mero[49006]:  ab40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=1021633544192000001 svc_fid=<0:0>
+Jan 11 19:32:07 client-22 mero-server: mero[49006]:  79e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:35:501
+Jan 11 19:32:07 client-22 systemd: mero-server-ha.service stop-sigterm timed out. Killing.
+Jan 11 19:32:07 client-22 systemd: mero-server-ha.service: main process exited, code=killed, status=9/KILL
+Jan 11 19:32:07 client-22 systemd: Stopped Mero server helper for ha service.
+Jan 11 19:32:07 client-22 systemd: Unit mero-server-ha.service entered failed state.
+Jan 11 19:32:07 client-22 systemd: mero-server-ha.service failed.
+Jan 11 19:32:07 client-22 systemd: Stopping Mero kernel module...
+Jan 11 19:32:07 client-22 systemd: Started Mero mkfs.
+Jan 11 19:32:07 client-22 systemd: Starting Mero server helper...
+Jan 11 19:32:07 client-22 kernel: mero/m0ctl: cleanup
+Jan 11 19:32:07 client-22 kernel: mero: cleanup
+Jan 11 19:32:07 client-22 kernel: Mero m0lnet deregistered
+Jan 11 19:32:07 client-22 systemd: Starting Mero kernel module...
+Jan 11 19:32:07 client-22 mero-kernel: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:32:07 client-22 mero-kernel: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:32:07 client-22 kernel: mero: init
+Jan 11 19:32:07 client-22 kernel: mero: Mero 1.1.0 built on Thu Jan 11 18:40:26 UTC 2018  by root@client-22 at /root/mero/mero_test_gerrit_workdir/workdir/src for 3.10.0-693.5.2.el7.x86_64 kernel
+Jan 11 19:32:07 client-22 kernel: mero: 
+Jan 11 19:32:07 client-22 kernel: mero: Git branch   : HEAD
+Jan 11 19:32:07 client-22 kernel: mero: Git describe : jenkins-OSAINT_mero-1400-54-ge7fe2ca
+Jan 11 19:32:07 client-22 kernel: mero: Git revision : e7fe2ca10e9ed2cf3fcda2949dcd9addcc500af5
+Jan 11 19:32:07 client-22 kernel: mero: 
+Jan 11 19:32:07 client-22 kernel: mero: xcode      protocol checksum: 0062cada37ac4850a04a5a1f64912d60
+Jan 11 19:32:07 client-22 kernel: mero: xcode BE   protocol checksum: 61d6ca66dd8807f8e5d79fb1f2a6a07a
+Jan 11 19:32:07 client-22 kernel: mero: xcode CONF protocol checksum: 1e2fd4433b5aadb91270c4be7efd2821
+Jan 11 19:32:07 client-22 kernel: mero: xcode RPC  protocol checksum: f276b8dcb252536114fe5f11b18d1158
+Jan 11 19:32:07 client-22 kernel: mero: 
+Jan 11 19:32:07 client-22 kernel: mero: Copyright (C) 2018 Xyratex Technology Limited
+Jan 11 19:32:07 client-22 kernel: mero: 
+Jan 11 19:32:07 client-22 kernel: mero: toolchain: gcc version 4.8.5 20150623 (Red Hat 4.8.5-16)  
+Jan 11 19:32:07 client-22 kernel: mero: CONFIGURE OPTS:  '--enable-detailed-backtrace'
+Jan 11 19:32:07 client-22 kernel: mero: KCFLAGS: -DM0_INTERNAL='' -DM0_EXTERN=extern -include'/root/mero/mero_test_gerrit_workdir/workdir/src/config.h' -iquote '/root/mero/mero_test_gerrit_workdir/workdir/src' -iquote '/root/mero/mero_test_gerrit_workdir/workdir/src' -I/usr/src/lustre-2.7.19.12-headers/lnet/include -I/usr/src/lustre-2.7.19.12-headers/libcfs/include -I/usr/src/lustre-2.7.19.12-headers/lustre/include -I/root/mero/mero_test_gerrit_workdir/workdir/src/extra-libs/gf-complete/include -Wall -Werror -Wno-attributes -fno-omit-frame-pointer -g -O2 -Wno-unused-but-set-variable 
+Jan 11 19:32:07 client-22 kernel: mero: 
+Jan 11 19:32:07 client-22 kernel: mero: Lustre: /usr/src/lustre-2.7.19.12-headers
+Jan 11 19:32:07 client-22 kernel: mero: Lustre version: 2.7
+Jan 11 19:32:07 client-22 kernel: mero: module address: 0xffffffffc0c80160
+Jan 11 19:32:07 client-22 kernel: mero: module core address: 0xffffffffc0973000
+Jan 11 19:32:07 client-22 kernel: mero: module core size: 13626762
+Jan 11 19:32:07 client-22 kernel: mero: trace header address: 0xffffc90004600000
+Jan 11 19:32:07 client-22 kernel: mero: trace buffer address: 0xffffc90004601000
+Jan 11 19:32:07 client-22 kernel: Mero m0lnet registered with minor 56
+Jan 11 19:32:07 client-22 kernel: mero: max CPUs for parity calcs: 8
+Jan 11 19:32:07 client-22 kernel: mero/m0ctl: init
+Jan 11 19:32:07 client-22 systemd: Started Mero kernel module.
+Jan 11 19:32:07 client-22 systemd: Started Mero trace daemon for kernel.
+Jan 11 19:32:07 client-22 systemd: Starting Mero trace daemon for kernel...
+Jan 11 19:32:07 client-22 systemd: Starting Mero server helper for ha service...
+Jan 11 19:32:07 client-22 mero-server: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:32:07 client-22 mero-server: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:32:07 client-22 mero-server: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:32:07 client-22 mero-server: vm.max_map_count = 30000000
+Jan 11 19:32:07 client-22 mero-server: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/mero/m0d -e lnet:10.230.45.175@tcp:12345:45:1 -f '<0x7200000000000001:0>' -T linux -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc
+Jan 11 19:32:08 client-22 mero-server: lt-m0d: systemd READY notification successfull
+Jan 11 19:32:08 client-22 systemd: Started Mero server helper for ha service.
+Jan 11 19:32:08 client-22 mero-server: mero[50537]:   8b0   WARN  [setup.c:1139:cs_service_init]  Service fdmi (<730000000000000d:0>) is already registered for reqh 0x7ffd4b866cf0
+Jan 11 19:32:08 client-22 mero-server: Started
+Jan 11 19:32:08 client-22 mero-server: Press CTRL+C to quit.
+Jan 11 19:32:08 client-22 systemd: Started Mero trace daemon for ha.
+Jan 11 19:32:08 client-22 systemd: Starting Mero trace daemon for ha...
+Jan 11 19:32:08 client-22 systemd: Starting Mero server helper for confd service...
+Jan 11 19:32:08 client-22 mero-server: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:32:08 client-22 mero-server: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:32:08 client-22 mero-server: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:32:08 client-22 mero-server: vm.max_map_count = 30000000
+Jan 11 19:32:08 client-22 mero-server: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/mero/m0d -e lnet:10.230.45.175@tcp:12345:44:101 -f '<0x7200000000000001:1>' -T linux -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc -H 10.230.45.175@tcp:12345:45:1
+Jan 11 19:32:08 client-22 mero-server: lt-m0d: systemd READY notification successfull
+Jan 11 19:32:08 client-22 systemd: Started Mero server helper for confd service.
+Jan 11 19:32:08 client-22 systemd: Started Mero trace daemon for confd.
+Jan 11 19:32:08 client-22 systemd: Starting Mero trace daemon for confd...
+Jan 11 19:32:08 client-22 systemd: Created slice system-mero\x2dserver.slice.
+Jan 11 19:32:08 client-22 systemd: Starting system-mero\x2dserver.slice.
+Jan 11 19:32:08 client-22 systemd: Starting Mero server helper for mds service...
+Jan 11 19:32:08 client-22 mero-server: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:32:08 client-22 mero-server: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:32:08 client-22 mero-server: mero[50750]:  d630   WARN  [setup.c:1139:cs_service_init]  Service fdmi (<730000000000000d:1>) is already registered for reqh 0x7ffd8dc53a70
+Jan 11 19:32:08 client-22 mero-server: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:32:08 client-22 mero-server: Started
+Jan 11 19:32:08 client-22 mero-server: Press CTRL+C to quit.
+Jan 11 19:32:08 client-22 mero-server: vm.max_map_count = 30000000
+Jan 11 19:32:08 client-22 mero-server: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/mero/m0d -e lnet:10.230.45.175@tcp:12345:41:201 -f '<0x7200000000000001:2>' -T ad -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -c /etc/mero/conf.xc -H 10.230.45.175@tcp:12345:45:1
+Jan 11 19:32:09 client-22 mero-server: lt-m0d: systemd READY notification successfull
+Jan 11 19:32:09 client-22 systemd: Started Mero server helper for mds service.
+Jan 11 19:32:09 client-22 systemd: Started Mero trace daemon for mds.
+Jan 11 19:32:09 client-22 systemd: Starting Mero trace daemon for mds...
+Jan 11 19:32:09 client-22 systemd: Starting Mero server helper for ios1 service...
+Jan 11 19:32:09 client-22 mero-server: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:32:09 client-22 mero-server: mero[50975]:  c070   WARN  [setup.c:1139:cs_service_init]  Service fdmi (<730000000000000d:2>) is already registered for reqh 0x7ffdabcf24b0
+Jan 11 19:32:09 client-22 mero-server: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:32:09 client-22 mero-server: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:32:09 client-22 mero-server: Started
+Jan 11 19:32:09 client-22 mero-server: Press CTRL+C to quit.
+Jan 11 19:32:09 client-22 mero-server: vm.max_map_count = 30000000
+Jan 11 19:32:09 client-22 mero-server: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/mero/m0d -e lnet:10.230.45.175@tcp:12345:42:401 -f '<0x7200000000000001:3>' -T ad -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -H 10.230.45.175@tcp:12345:45:1 -d /etc/mero/disks-ios1.conf
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  bb50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  bb50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a9d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  bb50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a9c0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a920  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a9d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a9d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  bb50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a9d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: mero[50750]:  a850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:09 client-22 mero-server: lt-m0d: systemd READY notification successfull
+Jan 11 19:32:09 client-22 systemd: Started Mero server helper for ios1 service.
+Jan 11 19:32:09 client-22 systemd: Started Mero trace daemon for ios1.
+Jan 11 19:32:09 client-22 systemd: Starting Mero trace daemon for ios1...
+Jan 11 19:32:09 client-22 systemd: Starting Mero server helper for cas1 service...
+Jan 11 19:32:09 client-22 mero-server: /sys/kernel/mm/transparent_hugepage/defrag: always madvise [never]
+Jan 11 19:32:09 client-22 mero-server: WARN: query not existing genders var 'm0_max_rpc_msg_size'
+Jan 11 19:32:09 client-22 mero-server: WARN: query not existing genders var 'm0_min_rpc_recvq_len'
+Jan 11 19:32:09 client-22 mero-server: vm.max_map_count = 30000000
+Jan 11 19:32:09 client-22 mero-server: + exec /root/mero/mero_test_gerrit_workdir/workdir/src/mero/m0d -e lnet:10.230.45.175@tcp:12345:46:501 -f '<0x7200000000000001:4>' -T ad -S stobs -D db -A linuxstob:addb-stobs -P '<0x7000000000000001:0>' -m 65536 -q 16 -w 8 -H 10.230.45.175@tcp:12345:45:1
+Jan 11 19:32:09 client-22 mero-server: mero[51199]:  2170   WARN  [setup.c:1139:cs_service_init]  Service fdmi (<730000000000000d:3>) is already registered for reqh 0x7ffda55685b0
+Jan 11 19:32:09 client-22 mero-server: Started
+Jan 11 19:32:09 client-22 mero-server: Press CTRL+C to quit.
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  9a80  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  99c0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  96b0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50975]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: lt-m0d: systemd READY notification successfull
+Jan 11 19:32:10 client-22 systemd: Started Mero server helper for cas1 service.
+Jan 11 19:32:10 client-22 systemd: Started Mero server helper.
+Jan 11 19:32:10 client-22 systemd: Started Mero trace daemon for cas1.
+Jan 11 19:32:10 client-22 systemd: Starting Mero trace daemon for cas1...
+Jan 11 19:32:10 client-22 systemd: Starting Mero client service...
+Jan 11 19:32:10 client-22 mero-client: MERO_PROCESS_FID: <0x7200000000000000:0>
+Jan 11 19:32:10 client-22 mero-client: MERO_M0T1FS_EP:
+Jan 11 19:32:10 client-22 mero-client: MERO_HA_EP:
+Jan 11 19:32:10 client-22 mero-client: MERO_PROFILE_FID:
+Jan 11 19:32:10 client-22 mero-client: + mount -t m0t1fs -o 'pfid=<0x7200000000000000:0>,profile=<0x7000000000000001:0>,ha=10.230.45.175@tcp:12345:45:1,oostore,verify' m0t1 /mnt/m0t1fs
+Jan 11 19:32:10 client-22 mero-server: mero[51426]:  4880   WARN  [setup.c:1139:cs_service_init]  Service fdmi (<730000000000000d:4>) is already registered for reqh 0x7fff9f6cacc0
+Jan 11 19:32:10 client-22 mero-server: Started
+Jan 11 19:32:10 client-22 mero-server: Press CTRL+C to quit.
+Jan 11 19:32:10 client-22 mero-client: + set +x
+Jan 11 19:32:10 client-22 systemd: Started Mero client service.
+Jan 11 19:32:10 client-22 systemd: Starting Mero singlenode configuration...
+Jan 11 19:32:10 client-22 systemd: Started Mero singlenode configuration.
+Jan 11 19:32:10 client-22 mero-server: mero[50750]:  bb50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50750]:  a850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50750]:  bb50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50750]:  a9d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[50750]:  a850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[51199]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[51199]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[51199]:  9850  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[51199]:  9920  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:10 client-22 mero-server: mero[51199]:  99c0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:11 client-22 mero-server: mero[50975]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:11 client-22 mero-server: mero[50975]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:11 client-22 mero-server: mero[50975]:  ab50  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:11 client-22 mero-server: mero[50975]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:11 client-22 mero-server: mero[50975]:  99d0  ERROR  [rpc/conn.c:937:m0_rpc_conn_establish_reply_received]  <! rc=-110
+Jan 11 19:32:15 client-22 kernel: mero[51702]:  f990  ERROR  [mero_test_gerrit_workdir/workdir/src/m0t1fs/linux_kernel/dir.c:464:m0t1fs_getxattr]  <! rc=-95
+Jan 11 19:42:55 client-22 systemd: Stopped Mero singlenode configuration.
+Jan 11 19:42:55 client-22 systemd: Stopping Mero singlenode configuration...
+Jan 11 19:42:55 client-22 systemd: Stopping Mero client service...
+Jan 11 19:42:55 client-22 systemd: Stopped Mero client service.
+Jan 11 19:42:55 client-22 mero-server: lt-m0d: got signal 1
+Jan 11 19:42:55 client-22 systemd: Stopping Mero server helper for ios1 service...
+Jan 11 19:42:55 client-22 mero-server: lt-m0d: got signal 1
+Jan 11 19:42:55 client-22 systemd: Stopping Mero server helper for mds service...
+Jan 11 19:42:55 client-22 mero-server: lt-m0d: got signal 1
+Jan 11 19:42:55 client-22 systemd: Stopping Mero server helper...
+Jan 11 19:42:55 client-22 systemd: Stopping Mero server helper for cas1 service...
+Jan 11 19:42:55 client-22 systemd: Stopped Mero server helper for mds service.
+Jan 11 19:42:55 client-22 systemd: Stopped Mero server helper for ios1 service.
+Jan 11 19:42:55 client-22 systemd: Stopped Mero server helper for cas1 service.
+Jan 11 19:42:55 client-22 mero-server: lt-m0d: got signal 1
+Jan 11 19:42:55 client-22 systemd: Stopping Mero server helper for confd service...
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=712064568320000030 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=712874354688000032 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=711707357184000029 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=709872181248000026 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=709577884672000025 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=706317265920000004 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=704847304704000003 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=709058674688000008 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=707661873152000006 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=708663067648000007 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=704358821888000010 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=705350335488000011 svc_fid=<0:0>
+Jan 11 19:42:58 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=703854545920000009 svc_fid=<0:0>
+Jan 11 19:43:03 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=339309369344000003 svc_fid=<0:0>
+Jan 11 19:43:03 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=561036190720000003 svc_fid=<0:0>
+Jan 11 19:43:03 client-22 mero-server: mero[50750]:  bb40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=745382585344000013 svc_fid=<0:0>
+Jan 11 19:43:04 client-22 systemd: Stopped Mero server helper for confd service.
+Jan 11 19:43:04 client-22 mero-server: lt-m0d: got signal 1
+Jan 11 19:43:04 client-22 systemd: Stopping Mero server helper for ha service...
+Jan 11 19:43:04 client-22 systemd: Stopped Mero server helper.
+Jan 11 19:43:04 client-22 mero-server: mero[50537]:  13a0   WARN  [ha/ha.c:950:m0_ha_process_failed]  disconnecting local link
+Jan 11 19:43:09 client-22 mero-server: mero[50537]:  8b40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=618545734656000001 svc_fid=<0:0>
+Jan 11 19:43:09 client-22 mero-server: mero[50537]:  59e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:44:101
+Jan 11 19:43:14 client-22 mero-server: mero[50537]:  8b40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=144188958720000001 svc_fid=<0:0>
+Jan 11 19:43:14 client-22 mero-server: mero[50537]:  59e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:41:201
+Jan 11 19:43:19 client-22 mero-server: mero[50537]:  8b40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=697394111488000001 svc_fid=<0:0>
+Jan 11 19:43:19 client-22 mero-server: mero[50537]:  59e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:42:401
+Jan 11 19:43:24 client-22 mero-server: mero[50537]:  8b40  ERROR  [rpc/conn.c:1135:m0_rpc_conn_terminate_reply_received]  <! rc=-110 sender_id=285632390144000001 svc_fid=<0:0>
+Jan 11 19:43:24 client-22 mero-server: mero[50537]:  59e0   WARN  [ha/link.c:1399:ha_link_outgoing_fom_tick]  rlk_rc=-110 endpoint=10.230.45.175@tcp:12345:46:501
+Jan 11 19:43:24 client-22 systemd: mero-server-ha.service stop-sigterm timed out. Killing.
+Jan 11 19:43:24 client-22 systemd: mero-server-ha.service: main process exited, code=killed, status=9/KILL
+Jan 11 19:43:24 client-22 systemd: Stopped Mero server helper for ha service.
+Jan 11 19:43:24 client-22 systemd: Unit mero-server-ha.service entered failed state.
+Jan 11 19:43:24 client-22 systemd: mero-server-ha.service failed.
+Jan 11 19:43:24 client-22 systemd: Stopping Mero kernel module...
+Jan 11 19:43:24 client-22 kernel: mero/m0ctl: cleanup
+Jan 11 19:43:24 client-22 kernel: mero: cleanup
+Jan 11 19:43:24 client-22 kernel: Mero m0lnet deregistered
+Jan 11 19:43:24 client-22 systemd: Stopped Mero kernel module.
+Jan 11 19:43:25 client-22 systemd-logind: Removed session 38.

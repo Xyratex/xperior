@@ -1,0 +1,70 @@
+removed ‘/etc/sysconfig/mero’
+removed ‘/etc/mero/disks-ios.conf’
+removed ‘/usr/libexec/mero/mero-service.functions’
+removed ‘/usr/libexec/mero/mero-trace’
+removed ‘/usr/libexec/mero/mero-kernel’
+removed ‘/usr/libexec/mero/mero-cleanup’
+removed ‘/usr/libexec/mero/mero-mkfs’
+removed ‘/usr/libexec/mero/mero-server’
+removed ‘/usr/libexec/mero/mero’
+removed ‘/usr/libexec/mero/mero-client’
+removed ‘/usr/lib/systemd/system/mero-trace@.service’
+removed ‘/usr/lib/systemd/system/mero-kernel.service’
+removed ‘/usr/lib/systemd/system/mero-cleanup.service’
+removed ‘/usr/lib/systemd/system/mero-mkfs.service’
+removed ‘/usr/lib/systemd/system/mero-mkfs@.service’
+removed ‘/usr/lib/systemd/system/mero-server-confd.service’
+removed ‘/usr/lib/systemd/system/mero-server-ha.service’
+removed ‘/usr/lib/systemd/system/mero-server@.service’
+removed ‘/usr/lib/systemd/system/m0d@.service’
+removed ‘/usr/lib/systemd/system/m0t1fs@.service’
+removed ‘/usr/lib/systemd/system/mero.service’
+removed ‘/usr/lib/systemd/system/mero-client.service’
+removed ‘/usr/lib/systemd/system/mero-singlenode.service’
+rmdir: removing directory, ‘/etc/mero’
+rmdir: removing directory, ‘/usr/libexec/mero’
+‘/etc/sysconfig/mero’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/etc/sysconfig/mero’
+‘/usr/lib/systemd/system/mero-trace@.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-trace@.service’
+‘/usr/lib/systemd/system/mero-kernel.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-kernel.service’
+‘/usr/lib/systemd/system/mero-cleanup.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-cleanup.service’
+‘/usr/lib/systemd/system/mero-mkfs.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-mkfs.service’
+‘/usr/lib/systemd/system/mero-mkfs@.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-mkfs@.service’
+‘/usr/lib/systemd/system/mero-server-confd.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-server-confd.service’
+‘/usr/lib/systemd/system/mero-server-ha.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-server-ha.service’
+‘/usr/lib/systemd/system/mero-server@.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-server@.service’
+‘/usr/lib/systemd/system/m0d@.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/m0d@.service’
+‘/usr/lib/systemd/system/m0t1fs@.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/m0t1fs@.service’
+‘/usr/lib/systemd/system/mero.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero.service’
+‘/usr/lib/systemd/system/mero-client.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-client.service’
+‘/usr/lib/systemd/system/mero-singlenode.service’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/lib/systemd/system/mero-singlenode.service’
+mkdir: created directory ‘/etc/mero’
+‘/etc/mero/disks-ios.conf’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/etc/mero/disks-ios.conf’
+‘/etc/mero/genders’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/etc/mero/genders’
+mkdir: created directory ‘/usr/libexec/mero’
+‘/usr/libexec/mero/mero-service.functions’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero-service.functions’
+‘/usr/libexec/mero/mero-trace’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero-trace’
+‘/usr/libexec/mero/mero-cleanup’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero-cleanup’
+‘/usr/libexec/mero/mero-kernel’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero-kernel’
+‘/usr/libexec/mero/mero-mkfs’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero-mkfs’
+‘/usr/libexec/mero/mero-server’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero-server’
+‘/usr/libexec/mero/mero’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero’
+‘/usr/libexec/mero/mero-client’ -> ‘/root/mero/mero_test_gerrit_workdir/workdir/src/scripts/install/usr/libexec/mero/mero-client’
+--->  Removing loop devices
+--->  Removing file images
+--->  Removing disks-*.conf files
+--->  Removing /etc/mero/* files
+--->  Removing loop devices
+--->  Removing file images
+--->  Removing disks-*.conf files
+--->  Removing /etc/mero/* files
+--->  Requested configuration: [P=8 N=2 K=1] with 1 ioservice(s), [P=4 N=1 K=1] with 1 CAS service, 64GiB disks in '/var/mero'
+--->  Removing loop devices
+--->  Removing file images
+--->  Creating 12 file images, 64GiB each, in '/var/mero'
+--->  Setting up loop devices
+--->  Generating genders file '/etc/mero/genders'
+--->  Generating disks-*.conf files
+--->  Removing loop devices
+--->  Removing file images
+--->  Removing disks-*.conf files
+--->  Removing /etc/mero/* files
